@@ -4,9 +4,9 @@ package ua.com.it_st.ordersmanagers.models;
  * Created by Gens on 19.07.2015.
  */
 public class Category {
-    String mName;
-    int mId;
-    byte mLevel;
+    private String mName;
+    private int mId;
+    private byte mLevel;
 
     public Category(final String name, final int id, final byte level) {
         mName = name;

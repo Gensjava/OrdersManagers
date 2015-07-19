@@ -5,9 +5,9 @@ package ua.com.it_st.ordersmanagers.models;
  */
 public class Product {
 
-    String mName;
-    double mPrice;
-    int mId;
+    private String mName;
+    private double mPrice;
+    private int mId;
 
     public Product(final String name, final double price, final int id) {
         mName = name;
