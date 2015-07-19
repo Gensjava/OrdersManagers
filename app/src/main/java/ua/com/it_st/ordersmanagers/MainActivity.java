@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
+
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = BlankFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = ExchangeFragment.class;
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = BlankFragment.class;
