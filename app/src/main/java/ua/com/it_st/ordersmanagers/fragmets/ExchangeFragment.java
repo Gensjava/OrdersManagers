@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.GetFileList;
 import ua.com.it_st.ordersmanagers.utils.SocketUtils;
 
 /**
@@ -47,8 +48,13 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(final View view) {
-        FtpTask ftpTask = new FtpTask();
-        ftpTask.execute();
+        // FtpTask ftpTask = new FtpTask();
+        // ftpTask.execute();
+        // FtpTask ftpTask = new FtpTask();
+        GetFileList getFileList = new GetFileList();
+        String[] args = new String[1];
+        args[0] = "";
+        getFileList.main(args);
     }
 
 

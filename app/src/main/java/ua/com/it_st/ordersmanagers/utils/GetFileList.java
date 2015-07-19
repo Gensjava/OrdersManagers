@@ -27,19 +27,20 @@ public class GetFileList {
 
     }
 
+
     public boolean startFTP(String propertiesFile) {
 
         props = new Properties();
 
         try {
 
-            props.load(new FileInputStream("properties/" + propertiesFile));
+            props.load(new FileInputStream("root/" + propertiesFile));
 
-            String serverAddress = props.getProperty("serverAddress").trim();
-            String userId = props.getProperty("userId").trim();
-            String password = props.getProperty("password").trim();
-            String remoteDirectory = props.getProperty("remoteDirectory").trim();
-            String localDirectory = props.getProperty("localDirectory").trim();
+            String serverAddress = props.getProperty("94.158.158.177").trim();
+            String userId = props.getProperty("root").trim();
+            String password = props.getProperty("G@h0km").trim();
+            String remoteDirectory = props.getProperty("root").trim();
+            String localDirectory = props.getProperty("root").trim();
 
             //new ftp client
             FTPClient ftp = new FTPClient();
