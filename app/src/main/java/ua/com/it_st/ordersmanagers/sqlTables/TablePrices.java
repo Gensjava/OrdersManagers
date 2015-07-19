@@ -14,7 +14,7 @@ public class TablePrices {
     public static final String COLUMN_VIEW_ID = "view_id";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_PRODUCT_ID = "product_id";
-    public static final String COLUMN_COMPANY_ID = "company_id";//компания
+    public static final String COLUMN_COMPANY_ID = "company_id";
 
     private static final String TAG = TablePrices.class.getSimpleName();
 

@@ -5,6 +5,7 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableInformations;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
@@ -17,8 +18,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.sqlTables.TableViewPrices;
-import ua.com.it_st.ordersmanagers.sqlTables.Table—hat;
-import ua.com.it_st.ordersmanagers.sqlTables.Table—ompanys;
+
 
 /**
  * Created by Gens on 27.04.2015.
@@ -78,8 +78,8 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
         TableTypePrioritiesTasks.createTable(db);
         TableUsers.createTable(db);
         TableViewPrices.createTable(db);
-        Table—hat.createTable(db);
-        Table—ompanys.createTable(db);
+        TableCompanies.createTable(db);
+
     }
 
     @Override

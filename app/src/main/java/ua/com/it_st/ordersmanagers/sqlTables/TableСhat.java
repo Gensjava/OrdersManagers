@@ -29,7 +29,4 @@ public class TableСhat {
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
 
     }
-
-
 }
-

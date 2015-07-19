@@ -16,9 +16,9 @@ public class TableTasks {
     public static final String COLUMN_SUM = "sum";
     public static final String COLUMN_PRODUCT_ID = "product_id";
     public static final String COLUMN_CONTRAGENT_ID = "counteragent_id";
-    public static final String COLUMN_AMOUT = "amount";//количество
-    public static final String COLUMN_PRIORITET_ID = "priorities_id";//приоритет задач
-    public static final String COLUMN_COMPANY_ID = "company_id";//компания
+    public static final String COLUMN_AMOUT = "amount";
+    public static final String COLUMN_PRIORITET_ID = "priorities_id";
+    public static final String COLUMN_COMPANY_ID = "company_id";
 
     private static final String TAG = TableTasks.class.getSimpleName();
 

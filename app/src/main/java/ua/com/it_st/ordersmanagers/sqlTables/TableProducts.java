@@ -14,7 +14,7 @@ public class TableProducts {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_NAME_FULL = "name_full";
     public static final String COLUMN_KOD = "kod";
-    public static final String COLUMN_MEASURING_ID = "measuring_id";//единица измерения
+    public static final String COLUMN_MEASURING_ID = "measuring_id";
 
     private static final String TAG = TableProducts.class.getSimpleName();
 

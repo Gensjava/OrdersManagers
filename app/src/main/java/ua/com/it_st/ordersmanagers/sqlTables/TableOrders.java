@@ -17,10 +17,10 @@ public class TableOrders {
     public static final String COLUMN_SUM = "sum";
     public static final String COLUMN_PRODUCT_ID = "product_id";
     public static final String COLUMN_CONTRAGENT_ID = "counteragent_id";
-    public static final String COLUMN_AMOUT = "amount";//количество
-    public static final String COLUMN_MEASURING_ID = "measuring_id";//единица измерения
-    public static final String COLUMN_TYPE_ID = "type_id";//тип заказа
-    public static final String COLUMN_COMPANY_ID = "company_id";//компания
+    public static final String COLUMN_AMOUT = "amount";
+    public static final String COLUMN_MEASURING_ID = "measuring_id";
+    public static final String COLUMN_TYPE_ID = "type_id";
+    public static final String COLUMN_COMPANY_ID = "company_id";
 
     private static final String TAG = TableOrders.class.getSimpleName();
 

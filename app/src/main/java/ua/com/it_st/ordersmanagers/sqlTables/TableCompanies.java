@@ -7,14 +7,14 @@ import android.util.Log;
 /**
  * Created by Gens on 19.07.2015.
  */
-public class TableСompanys {
+public class TableCompanies {
     public static final String TABLE_NAME = "Сompanys";
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_NAME_FULL = "name_full";
     public static final String COLUMN_KOD = "kod";
 
-    private static final String TAG = TableСompanys.class.getSimpleName();
+    private static final String TAG = TableCompanies.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");
@@ -31,7 +31,4 @@ public class TableСompanys {
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
 
     }
-
-
 }
-
