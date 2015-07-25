@@ -15,6 +15,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableViewPrices.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableСhat.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/AppDeliveriMan.java" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/ErrorInfo.java" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/FTPUploader.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/UtilSQLiteOpenHelper.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/header.jpg" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/main_list.xml" charset="windows-1251" />

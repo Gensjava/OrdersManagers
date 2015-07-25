@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.setDrawerListener(drawerToggle);
 
         final ActionBar ab = getSupportActionBar();
+
         ab.setHomeAsUpIndicator(R.mipmap.ic_drawer);
         ab.setDisplayHomeAsUpEnabled(true);
-
 
 
     }

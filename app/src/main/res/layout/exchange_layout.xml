@@ -1,42 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FTP-сервер"/>
-
-    <EditText
-        android:id="@+id/editHost"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10">
-
-        <requestFocus/>
-    </EditText>
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="setContentView"
-        android:text="Установить связь"/>
-
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tvInfo"
-            android:layout_width="match_parent"
+            android:id="@+id/exchege_text_string_status"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/exchege_text_data"
+            android:text="Строка состояния:"/>
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/exchege_text_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="91dp"
+            android:text="Загрузка..."/>
 
+        <ImageView
+            android:id="@+id/exchege_image_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignLeft="@+id/exchege_text_data"
+            android:layout_alignStart="@+id/exchege_text_data"
+            android:layout_below="@+id/exchege_text_data"
+            android:layout_marginTop="119dp"
+            android:background="#ffa4ee"
+            android:src="@drawable/abc_ic_go_search_api_mtrl_alpha"/>
+
+    </RelativeLayout>
 </LinearLayout>

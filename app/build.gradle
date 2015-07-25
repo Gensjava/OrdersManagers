@@ -27,4 +27,5 @@ dependencies {
         transitive = true
     }
     compile files('libs/commons-net-3.3.jar')
+    compile 'com.loopj.android:android-async-http:1.4.8'
 }
