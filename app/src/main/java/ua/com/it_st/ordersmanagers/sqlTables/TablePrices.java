@@ -22,7 +22,7 @@ public class TablePrices {
         Log.i(TAG, "createTable");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
-                + " ," + COLUMN_KOD + "text"
+                + " ," + COLUMN_KOD + " text"
                 + " ," + COLUMN_PRICE_CATEGORY_KOD + " text"
                 + " ," + COLUMN_PRICE + " real"
                 + ");");
