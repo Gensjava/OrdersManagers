@@ -23,7 +23,7 @@ public class UtilsWorkFiles {
     // функция для чтения текстового файла
     static public void getContent(final File file, final String fileName, final SQLiteDatabase db) {
 
-        final String mCvsSplitBy = "\",";
+        final String mCvsSplitBy = ",\"";
 
         try {
             // Считываем по одной строке
