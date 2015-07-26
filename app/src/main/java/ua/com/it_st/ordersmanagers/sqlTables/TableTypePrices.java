@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Gens on 27.04.2015.
  */
 public class TableTypePrices {
-    public static final String TABLE_NAME = "ViewPrices";
+    public static final String TABLE_NAME = "TypePrices";
     public static final String FILE_NAME = "NameFile=ref_pricecategories.csv";
 
     public static final String COLUMN_NAME = "name";

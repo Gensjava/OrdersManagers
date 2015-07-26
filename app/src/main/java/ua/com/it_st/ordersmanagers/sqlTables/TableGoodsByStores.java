@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Gens on 27.04.2015.
  */
 public class TableGoodsByStores {
-    public static final String TABLE_NAME = "ViewPrices";
+    public static final String TABLE_NAME = "GoodsByStores";
     public static final String FILE_NAME = "NameFile=ref_goodsbystores.csv";
 
     public static final String COLUMN_COODS_KOD = "kod_coods";
@@ -40,7 +40,7 @@ public class TableGoodsByStores {
 
         data.put(COLUMN_COODS_KOD, sData[0]);
         data.put(COLUMN_STORES_KOD, sData[1]);
-        data.put(COLUMN_STORES_KOD, sData[2]);
+        data.put(COLUMN_AMOUNT, sData[2]);
 
         db.beginTransaction();
         try {

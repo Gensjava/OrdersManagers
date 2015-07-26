@@ -8,7 +8,7 @@ import android.util.Log;
  * Created by Gens on 27.04.2015.
  */
 public class TableTypeMeasuring {
-    public static final String TABLE_NAME = "TypeInformations";
+    public static final String TABLE_NAME = "TypeMeasuring";
 
     public static final String COLUMN_NAME = "name";
 

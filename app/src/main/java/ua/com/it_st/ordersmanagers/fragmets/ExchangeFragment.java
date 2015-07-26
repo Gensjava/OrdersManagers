@@ -11,14 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
+
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.ResponseHandlerInterface;
 
-import org.apache.http.Header;
-import org.apache.http.HttpStatus;
-
-import java.io.File;
 
 import ua.com.it_st.ordersmanagers.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
@@ -38,11 +33,9 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
-import ua.com.it_st.ordersmanagers.sqlTables.TableСhat;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.UtilAsyncHttpClient;
 import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
-import ua.com.it_st.ordersmanagers.utils.UtilsWorkFiles;
+
 
 /**
  * Created by Gens on 19.07.2015.
@@ -131,7 +124,6 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         TableTypePrioritiesTasks.onDeleteValueTable(db);
         TableTypeStores.onDeleteValueTable(db);
         TableUsers.onDeleteValueTable(db);
-        TableСhat.onDeleteValueTable(db);
         TableGoodsByStores.onDeleteValueTable(db);
 
     }
