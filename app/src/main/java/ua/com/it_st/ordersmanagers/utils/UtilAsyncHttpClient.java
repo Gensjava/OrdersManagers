@@ -1,15 +1,12 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-import android.util.Log;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
-import org.json.JSONException;
-
 import java.io.File;
 
 import ua.com.it_st.ordersmanagers.MainActivity;
@@ -26,7 +23,7 @@ public class UtilAsyncHttpClient extends AsyncHttpClient {
         mMainActivity = mainActivity;
     }
 
-    public void getDownloadFiles(final RequestParams params) throws Exception {
+    public void getDownloadFiles(final RequestParams params, final SQLiteDatabase db) throws Exception {
 
         get(BASE_URL, params, new FileAsyncHttpResponseHandler(mMainActivity) {
             @Override
@@ -40,7 +37,7 @@ public class UtilAsyncHttpClient extends AsyncHttpClient {
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
-                    UtilsWorkFiles.getContent(response);
+                    UtilsWorkFiles.getContent(response, params.toString(), db);
                 } else {
                     ErrorInfo.showErrorAlertDialog("Данные не загрузились! имя файла " + params.toString(), mMainActivity);
                 }

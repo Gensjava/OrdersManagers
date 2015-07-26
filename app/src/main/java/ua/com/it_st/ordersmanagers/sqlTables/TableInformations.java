@@ -9,6 +9,7 @@ import android.util.Log;
  */
 public class TableInformations {
     public static final String TABLE_NAME = "Informations";
+    public static final String FILE_NAME = "NameFile=ref_firms.csv";
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SORT_ID = "sort_id";

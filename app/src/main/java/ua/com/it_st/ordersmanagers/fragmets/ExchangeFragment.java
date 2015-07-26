@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import ua.com.it_st.ordersmanagers.R;
 
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.UtilAsyncHttpClient;
+import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
 import ua.com.it_st.ordersmanagers.utils.UtilsWorkFiles;
 
 /**
@@ -31,8 +33,7 @@ import ua.com.it_st.ordersmanagers.utils.UtilsWorkFiles;
  */
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
-    TextView exchegeData;
-    TextView exchegeStatus;
+    private SQLiteDatabase db;
 
     @Nullable
     @Override
@@ -40,10 +41,11 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
         View rootView = inflater.inflate(R.layout.exchange_layout, container,
                 false);
-        exchegeData = (TextView) rootView.findViewById(R.id.exchege_text_data);
-        exchegeStatus = (TextView) rootView.findViewById(R.id.exchege_text_string_status);
+        final TextView exchegeData = (TextView) rootView.findViewById(R.id.exchege_text_data);
+        final TextView exchegeStatus = (TextView) rootView.findViewById(R.id.exchege_text_string_status);
 
         ImageView BHost = (ImageView) rootView.findViewById(R.id.exchege_image_button);
+        db = UtilSQLiteOpenHelper.getInstance().getDatabase();
         BHost.setOnClickListener(this);
 
         return rootView;
@@ -57,7 +59,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                 UtilAsyncHttpClient utilAsyncHttpClient = new UtilAsyncHttpClient((MainActivity) getActivity());
                 utilAsyncHttpClient.setBasicAuth("admin", "123");
 
-                String[] nameFile = getResources().getStringArray(R.array.name_file_data);
+                String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
                 for (String i : nameFile) {
 
@@ -65,10 +67,16 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     params.put("NameFile", i.toString());
 
                     try {
-                        utilAsyncHttpClient.getDownloadFiles(params);
+                        utilAsyncHttpClient.getDownloadFiles(params, db);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        if (db != null) {
+                            // db.close();
+                        }
                     }
+                }
+                if (db != null) {
+                    // db.close();
                 }
 
                 break;
@@ -77,5 +85,11 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            db.close();
+        }
+    }
 }

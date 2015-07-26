@@ -7,13 +7,14 @@ import android.util.Log;
 /**
  * Created by Gens on 27.04.2015.
  */
-public class TableViewPrices {
+public class TableTypePrices {
     public static final String TABLE_NAME = "ViewPrices";
+    public static final String FILE_NAME = "NameFile=ref_pricecategories.csv";
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_KOD = "kod";
 
-    private static final String TAG = TableViewPrices.class.getSimpleName();
+    private static final String TAG = TableTypePrices.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");

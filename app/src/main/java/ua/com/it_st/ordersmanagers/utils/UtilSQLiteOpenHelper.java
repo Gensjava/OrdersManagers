@@ -17,7 +17,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeMeasuring;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
-import ua.com.it_st.ordersmanagers.sqlTables.TableViewPrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 
 
 /**
@@ -25,7 +25,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableViewPrices;
  */
 public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "db_courier.db";
+    public static final String DATABASE_NAME = "db_courier_orders.db";
     public static final int DATABASE_VERSION = 1;
 
     private static volatile UtilSQLiteOpenHelper sInstance = null;
@@ -77,7 +77,7 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
         TableTypeOrders.createTable(db);
         TableTypePrioritiesTasks.createTable(db);
         TableUsers.createTable(db);
-        TableViewPrices.createTable(db);
+        TableTypePrices.createTable(db);
         TableCompanies.createTable(db);
 
     }
