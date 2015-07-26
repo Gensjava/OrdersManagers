@@ -25,6 +25,19 @@ import ua.com.it_st.ordersmanagers.R;
 
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableInformations;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTasks;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeInformations;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeMeasuring;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
+import ua.com.it_st.ordersmanagers.sqlTables.TableСhat;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.UtilAsyncHttpClient;
 import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
@@ -58,9 +71,10 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.exchege_image_button:
 
+                //подключаемся через HTTP к базе и загужаем данные
                 UtilAsyncHttpClient utilAsyncHttpClient = new UtilAsyncHttpClient((MainActivity) getActivity());
                 utilAsyncHttpClient.setBasicAuth("admin", "123");
-
+                //список файлов
                 String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
                 for (String i : nameFile) {
@@ -69,10 +83,9 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     params.put("NameFile", i.toString());
 
                     try {
-                        //удаляем все записи с таблиц
-                        TableCompanies.onDeleteValueTable(db);
-                        TableCounteragents.onDeleteValueTable(db);
-
+                        //удаляем все записи из таблиц
+                        onDeleteValueTables();
+                        //загружаем файл
                         utilAsyncHttpClient.getDownloadFiles(params, db);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -97,5 +110,27 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         if (db != null) {
             db.close();
         }
+    }
+
+
+    //чистим таблицы 
+    private void onDeleteValueTables() {
+
+        TableCompanies.onDeleteValueTable(db);
+        TableCounteragents.onDeleteValueTable(db);
+        TableInformations.onDeleteValueTable(db);
+        TableOrders.onDeleteValueTable(db);
+        TablePrices.onDeleteValueTable(db);
+        TableProducts.onDeleteValueTable(db);
+        TableTasks.onDeleteValueTable(db);
+        TableTypeInformations.onDeleteValueTable(db);
+        TableTypeMeasuring.onDeleteValueTable(db);
+        TableTypeOrders.onDeleteValueTable(db);
+        TableTypePrices.onDeleteValueTable(db);
+        TableTypePrioritiesTasks.onDeleteValueTable(db);
+        TableTypeStores.onDeleteValueTable(db);
+        TableUsers.onDeleteValueTable(db);
+        TableСhat.onDeleteValueTable(db);
+
     }
 }

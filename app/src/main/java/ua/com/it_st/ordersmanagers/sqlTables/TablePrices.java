@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.sqlTables;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -9,13 +10,11 @@ import android.util.Log;
  */
 public class TablePrices {
     public static final String TABLE_NAME = "Prices";
-    public static final String FILE_NAME = "NameFile=ref_firms.csv";
+    public static final String FILE_NAME = "NameFile=ref_price.csv";
 
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_VIEW_ID = "view_id";
+    public static final String COLUMN_KOD = "kod";
+    public static final String COLUMN_PRICE_CATEGORY_KOD = "price_category_kod";
     public static final String COLUMN_PRICE = "price";
-    public static final String COLUMN_PRODUCT_ID = "product_id";
-    public static final String COLUMN_COMPANY_ID = "company_id";
 
     private static final String TAG = TablePrices.class.getSimpleName();
 
@@ -23,11 +22,9 @@ public class TablePrices {
         Log.i(TAG, "createTable");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
-                + " ," + COLUMN_NAME + " text"
-                + " ," + COLUMN_VIEW_ID + " integer"
+                + " ," + COLUMN_KOD + "text"
+                + " ," + COLUMN_PRICE_CATEGORY_KOD + " text"
                 + " ," + COLUMN_PRICE + " real"
-                + " ," + COLUMN_PRODUCT_ID + " integer"
-                + " ," + COLUMN_COMPANY_ID + " integer"
                 + ");");
     }
 
@@ -37,6 +34,23 @@ public class TablePrices {
 
     }
 
+    public static void onInsert(String sData[], SQLiteDatabase db) {
+
+        final ContentValues data = new ContentValues();
+
+        data.put(COLUMN_KOD, sData[0]);
+        data.put(COLUMN_PRICE_CATEGORY_KOD, sData[1]);
+        data.put(COLUMN_PRICE, sData[2]);
+
+        db.beginTransaction();
+        try {
+            db.insert(TABLE_NAME, null, data);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+    }
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");
         db.execSQL("DELETE FROM " + TABLE_NAME + ";");

@@ -1,18 +1,18 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import ua.com.it_st.ordersmanagers.MainActivity;
-import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 
 /**
  * Created by Gens on 25.07.2015.
@@ -60,6 +60,18 @@ public class UtilsWorkFiles {
                 break;
             case TableCompanies.FILE_NAME:
                 TableCompanies.onInsert(country, db);
+                break;
+            case TablePrices.FILE_NAME:
+                TablePrices.onInsert(country, db);
+                break;
+            case TableProducts.FILE_NAME:
+                TableProducts.onInsert(country, db);
+                break;
+            case TableTypePrices.FILE_NAME:
+                TableTypePrices.onInsert(country, db);
+                break;
+            case TableTypeStores.FILE_NAME:
+                TableTypeStores.onInsert(country, db);
                 break;
             default:
                 break;
