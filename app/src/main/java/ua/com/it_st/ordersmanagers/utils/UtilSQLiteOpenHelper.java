@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableInformations;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
@@ -16,6 +17,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeInformations;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeMeasuring;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 
@@ -66,6 +68,7 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
+
         TableCounteragents.createTable(db);
         TableInformations.createTable(db);
         TableOrders.createTable(db);
@@ -79,6 +82,8 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
         TableUsers.createTable(db);
         TableTypePrices.createTable(db);
         TableCompanies.createTable(db);
+        TableGoodsByStores.createTable(db);
+        TableTypeStores.createTable(db);
 
     }
 

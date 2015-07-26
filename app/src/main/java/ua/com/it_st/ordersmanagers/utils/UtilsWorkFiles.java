@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
@@ -72,6 +73,9 @@ public class UtilsWorkFiles {
                 break;
             case TableTypeStores.FILE_NAME:
                 TableTypeStores.onInsert(country, db);
+                break;
+            case TableGoodsByStores.FILE_NAME:
+                TableGoodsByStores.onInsert(country, db);
                 break;
             default:
                 break;

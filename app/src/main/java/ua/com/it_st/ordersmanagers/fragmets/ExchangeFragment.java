@@ -25,6 +25,7 @@ import ua.com.it_st.ordersmanagers.R;
 
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableInformations;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
@@ -131,6 +132,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         TableTypeStores.onDeleteValueTable(db);
         TableUsers.onDeleteValueTable(db);
         TableСhat.onDeleteValueTable(db);
+        TableGoodsByStores.onDeleteValueTable(db);
 
     }
 }
