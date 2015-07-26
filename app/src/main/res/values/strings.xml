@@ -25,5 +25,6 @@
 
     <string-array name="name_file_data_test">
         <item>ref_firms.csv</item>
+        <item>ref_clients.csv</item>
     </string-array>
 </resources>

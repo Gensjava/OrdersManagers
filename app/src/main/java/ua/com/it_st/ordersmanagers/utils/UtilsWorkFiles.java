@@ -12,6 +12,7 @@ import java.io.IOException;
 import ua.com.it_st.ordersmanagers.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 
 /**
  * Created by Gens on 25.07.2015.
@@ -21,9 +22,7 @@ public class UtilsWorkFiles {
     // функция для чтения текстового файла
     static public void getContent(final File file, final String fileName, final SQLiteDatabase db) {
 
-        final String mCvsSplitBy = ",";
-
-        // StringBuilder content = new StringBuilder();
+        final String mCvsSplitBy = "\",";
 
         try {
             // Считываем по одной строке
@@ -34,14 +33,10 @@ public class UtilsWorkFiles {
                 input.readLine();
                 while ((line = input.readLine()) != null) {
                     // прочитанную строку добавляем в буфер
-                    // после каждой строки добавляем разделитель строк
-                    // content.append(line);
-                    //content.append(System.getProperty("line.separator"));
                     Log.i("appendappend", "" + fileName);
 
                     // use comma as separator
                     String[] country = line.split(mCvsSplitBy);
-
                     onInsertTable(country, fileName, db);
 
                     System.out.println("Country [code= " + country[0]
@@ -60,8 +55,19 @@ public class UtilsWorkFiles {
         String lNameTable = null;
 
         switch (fileName) {
+            case TableCounteragents.FILE_NAME:
+                TableCounteragents.onInsert(country, db);
+                break;
             case TableCompanies.FILE_NAME:
                 TableCompanies.onInsert(country, db);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
 
 //                Cursor cursor = db.query(TableCompanies.TABLE_NAME, // table name
 //                         null, // columns
@@ -76,11 +82,4 @@ public class UtilsWorkFiles {
 //                            Log.i("TABLE_NAME",""+catName);
 //        }
 //                cursor.close();
-                break;
-            default:
-                break;
-        }
-
-
-    }
 }

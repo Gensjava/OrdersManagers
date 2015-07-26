@@ -23,6 +23,8 @@ import java.io.File;
 import ua.com.it_st.ordersmanagers.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
 
+import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.UtilAsyncHttpClient;
 import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
@@ -67,6 +69,10 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     params.put("NameFile", i.toString());
 
                     try {
+                        //удаляем все записи с таблиц
+                        TableCompanies.onDeleteValueTable(db);
+                        TableCounteragents.onDeleteValueTable(db);
+
                         utilAsyncHttpClient.getDownloadFiles(params, db);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -86,6 +86,7 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
 
         TableUsers.upgradeTable(db, oldVersion, newVersion);
+        TableCounteragents.upgradeTable(db, oldVersion, newVersion);
 
     }
 

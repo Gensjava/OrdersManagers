@@ -31,5 +31,9 @@ public class TableTypePrices {
 
     }
 
+    public static void onDeleteValueTable(final SQLiteDatabase db) {
+        Log.i(TAG, "DeleteTable");
+        db.execSQL("DELETE FROM " + TABLE_NAME + ";");
+    }
 
 }
