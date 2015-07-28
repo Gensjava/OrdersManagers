@@ -70,6 +70,10 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
         return lContentValues;
     }
 
+    @Override
+    public void bind(final int index, final boolean value) {
+        super.bind(index, value);
+    }
 
     @Override
     public long insert(final ContentValues values) {
