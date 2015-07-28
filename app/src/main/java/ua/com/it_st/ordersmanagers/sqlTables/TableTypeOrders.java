@@ -32,4 +32,5 @@ public class TableTypeOrders {
         Log.i(TAG, "DeleteTable");
         db.execSQL("DELETE FROM " + TABLE_NAME + ";");
     }
+
 }

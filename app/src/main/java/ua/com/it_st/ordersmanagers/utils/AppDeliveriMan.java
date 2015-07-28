@@ -10,6 +10,6 @@ public class AppDeliveriMan extends Application {
     public void onCreate() {
         super.onCreate();
 
-        UtilSQLiteOpenHelper.init(this);
+        SQLiteOpenHelperUtil.init(this);
     }
 }

@@ -39,7 +39,7 @@ public class TableProducts {
 
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 
@@ -49,14 +49,7 @@ public class TableProducts {
         data.put(COLUMN_LEVEL, sData[3]);
         data.put(COLUMN_NAME, sData[4]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
+        return data;
     }
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");

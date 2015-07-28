@@ -8,18 +8,19 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import java.io.File;
+import java.io.IOException;
 
 import ua.com.it_st.ordersmanagers.MainActivity;
 
 /**
  * Created by Gens on 25.07.2015.
  */
-public class UtilAsyncHttpClient extends AsyncHttpClient {
+public class AsyncHttpClientUtil extends AsyncHttpClient {
 
     private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
     private MainActivity mMainActivity;
 
-    public UtilAsyncHttpClient(final MainActivity mainActivity) {
+    public AsyncHttpClientUtil(final MainActivity mainActivity) {
         mMainActivity = mainActivity;
     }
 
@@ -37,7 +38,11 @@ public class UtilAsyncHttpClient extends AsyncHttpClient {
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
-                    UtilsWorkFiles.getContent(response, params.toString(), db);
+                    try {
+                        WorkFilesUtil.onInsertTable(response, params.toString(), db);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     ErrorInfo.showErrorAlertDialog("Данные не загрузились! имя файла " + params.toString(), mMainActivity);
                 }

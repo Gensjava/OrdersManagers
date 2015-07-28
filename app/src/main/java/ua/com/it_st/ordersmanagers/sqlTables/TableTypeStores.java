@@ -32,20 +32,14 @@ public class TableTypeStores {
 
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues onInsert(String sData[], SQLiteDatabase db) {
 
         final ContentValues data = new ContentValues();
 
         data.put(COLUMN_KOD, sData[0]);
         data.put(COLUMN_NAME, sData[1]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
+        return data;
 
     }
     public static void onDeleteValueTable(final SQLiteDatabase db) {

@@ -34,7 +34,7 @@ public class TablePrices {
 
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 
@@ -42,14 +42,7 @@ public class TablePrices {
         data.put(COLUMN_PRICE_CATEGORY_KOD, sData[1]);
         data.put(COLUMN_PRICE, sData[2]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
+        return data;
     }
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");

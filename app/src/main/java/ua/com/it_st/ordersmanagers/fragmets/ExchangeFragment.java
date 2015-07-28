@@ -2,9 +2,11 @@ package ua.com.it_st.ordersmanagers.fragmets;
 
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,10 @@ import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
@@ -33,8 +39,8 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
-import ua.com.it_st.ordersmanagers.utils.UtilAsyncHttpClient;
-import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
+import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 
 /**
@@ -43,6 +49,7 @@ import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     private SQLiteDatabase db;
+
 
     @Nullable
     @Override
@@ -54,7 +61,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         final TextView exchegeStatus = (TextView) rootView.findViewById(R.id.exchege_text_string_status);
 
         ImageView BHost = (ImageView) rootView.findViewById(R.id.exchege_image_button);
-        db = UtilSQLiteOpenHelper.getInstance().getDatabase();
+        db = SQLiteOpenHelperUtil.getInstance().getDatabase();
         BHost.setOnClickListener(this);
 
         return rootView;
@@ -65,31 +72,39 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.exchege_image_button:
 
-                //подключаемся через HTTP к базе и загужаем данные
-                UtilAsyncHttpClient utilAsyncHttpClient = new UtilAsyncHttpClient((MainActivity) getActivity());
-                utilAsyncHttpClient.setBasicAuth("admin", "123");
+                //удаляем все записи из таблиц
+                onDeleteValueTables();
                 //список файлов
                 String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
+                long msTime = System.currentTimeMillis();
+                Date curDateTime = new Date(msTime);
+                Log.i("currentTimeMillis", "" + curDateTime);
+                //подключаемся через HTTP к базе и загужаем данные
+
+                AsyncHttpClientUtil utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity());
+                utilAsyncHttpClient.setBasicAuth("admin", "123");
+
+                db.beginTransaction();
                 for (String i : nameFile) {
 
                     RequestParams params = new RequestParams();
                     params.put("NameFile", i.toString());
 
                     try {
-                        //удаляем все записи из таблиц
-                        onDeleteValueTables();
                         //загружаем файл
                         utilAsyncHttpClient.getDownloadFiles(params, db);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        if (db != null) {
-                            // db.close();
-                        }
+                    } finally {
+
                     }
                 }
+
                 if (db != null) {
-                    // db.close();
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    //  db.close();
                 }
 
                 break;
@@ -106,25 +121,17 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     //чистим таблицы 
     private void onDeleteValueTables() {
 
         TableCompanies.onDeleteValueTable(db);
         TableCounteragents.onDeleteValueTable(db);
-        TableInformations.onDeleteValueTable(db);
-        TableOrders.onDeleteValueTable(db);
         TablePrices.onDeleteValueTable(db);
         TableProducts.onDeleteValueTable(db);
-        TableTasks.onDeleteValueTable(db);
-        TableTypeInformations.onDeleteValueTable(db);
-        TableTypeMeasuring.onDeleteValueTable(db);
-        TableTypeOrders.onDeleteValueTable(db);
         TableTypePrices.onDeleteValueTable(db);
-        TableTypePrioritiesTasks.onDeleteValueTable(db);
         TableTypeStores.onDeleteValueTable(db);
-        TableUsers.onDeleteValueTable(db);
         TableGoodsByStores.onDeleteValueTable(db);
 
     }
 }
+

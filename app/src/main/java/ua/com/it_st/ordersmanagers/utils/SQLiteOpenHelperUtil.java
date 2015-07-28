@@ -25,30 +25,30 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 /**
  * Created by Gens on 27.04.2015.
  */
-public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
+public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
     public static final int DATABASE_VERSION = 1;
 
-    private static volatile UtilSQLiteOpenHelper sInstance = null;
+    private static volatile SQLiteOpenHelperUtil sInstance = null;
 
     private SQLiteDatabase mDatabase;
 
-    public UtilSQLiteOpenHelper(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version) {
+    public SQLiteOpenHelperUtil(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version) {
         super(context, name, factory, version);
     }
 
-    public UtilSQLiteOpenHelper(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version, final DatabaseErrorHandler errorHandler) {
+    public SQLiteOpenHelperUtil(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version, final DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
     }
 
-    public UtilSQLiteOpenHelper(final Context context) {
+    public SQLiteOpenHelperUtil(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         mDatabase = getWritableDatabase();
     }
 
-    public static UtilSQLiteOpenHelper getInstance() {
+    public static SQLiteOpenHelperUtil getInstance() {
         if (sInstance == null) {
             throw new IllegalStateException("init not called");
         }
@@ -58,9 +58,9 @@ public class UtilSQLiteOpenHelper extends SQLiteOpenHelper {
     public static void init(final Context context) {
 
         if (sInstance == null) {
-            synchronized (UtilSQLiteOpenHelper.class) {
+            synchronized (SQLiteOpenHelperUtil.class) {
                 if (sInstance == null) {
-                    sInstance = new UtilSQLiteOpenHelper(context);
+                    sInstance = new SQLiteOpenHelperUtil(context);
                 }
             }
         }

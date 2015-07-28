@@ -34,7 +34,7 @@ public class TableGoodsByStores {
 
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[], SQLiteDatabase db) {
 
         final ContentValues data = new ContentValues();
 
@@ -42,14 +42,7 @@ public class TableGoodsByStores {
         data.put(COLUMN_STORES_KOD, sData[1]);
         data.put(COLUMN_AMOUNT, sData[2]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
+        return data;
     }
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {

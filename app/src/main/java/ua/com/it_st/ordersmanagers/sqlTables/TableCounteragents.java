@@ -40,23 +40,14 @@ public class TableCounteragents {
                 + ");");
     }
 
-    public static void createTableV2(final SQLiteDatabase db) {
-        Log.i(TAG, "createTable");
-        db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN "
-                + " " + COLUMN_CATEGORY_KOD + " text"
-
-                + ";");
-    }
-
     public static void upgradeTable(final SQLiteDatabase db,
                                     final int oldVersion, final int newVersion) {
 
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
 
-
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 
@@ -69,13 +60,7 @@ public class TableCounteragents {
         data.put(COLUMN_DISCOUNT, sData[6]);
         data.put(COLUMN_ADDRESS, sData[7]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
+        return data;
 
     }
 

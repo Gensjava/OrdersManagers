@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ua.com.it_st.ordersmanagers.utils.UtilSQLiteOpenHelper;
-
 /**
  * Created by Gens on 19.07.2015.
  */
@@ -36,7 +34,7 @@ public class TableCompanies {
 
     }
 
-    public static void onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 
@@ -44,14 +42,7 @@ public class TableCompanies {
         data.put(COLUMN_NAME, sData[1]);
         data.put(COLUMN_NAME_FULL, sData[1]);
 
-        db.beginTransaction();
-        try {
-            db.insert(TABLE_NAME, null, data);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
+        return data;
     }
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {
