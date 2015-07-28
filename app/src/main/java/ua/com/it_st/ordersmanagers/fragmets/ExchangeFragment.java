@@ -81,7 +81,6 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                 Date curDateTime = new Date(msTime);
                 Log.i("currentTimeMillis", "" + curDateTime);
                 //подключаемся через HTTP к базе и загужаем данные
-
                 AsyncHttpClientUtil utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity());
                 utilAsyncHttpClient.setBasicAuth("admin", "123");
 
@@ -104,7 +103,6 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                 if (db != null) {
                     db.setTransactionSuccessful();
                     db.endTransaction();
-                    //  db.close();
                 }
 
                 break;

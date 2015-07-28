@@ -32,7 +32,7 @@ public class TableTypeStores {
 
     }
 
-    public static ContentValues onInsert(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 

@@ -34,7 +34,7 @@ public class TableGoodsByStores {
 
     }
 
-    public static ContentValues getContentValues(String sData[], SQLiteDatabase db) {
+    public static ContentValues getContentValues(String sData[]) {
 
         final ContentValues data = new ContentValues();
 

@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -28,37 +29,41 @@ public class WorkFilesUtil {
     public static void onInsertTable(final File file, final String fileName, final SQLiteDatabase db) throws IOException {
 
 
-        switch (fileName) {
-            case TableCounteragents.FILE_NAME:
-
-                break;
-            case TableCompanies.FILE_NAME:
-
-                break;
-            case TablePrices.FILE_NAME:
-                DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListTableName().get(fileName), db, file);
+//        switch (fileName) {
+//            case TableCounteragents.FILE_NAME:
+//                DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
+//                downloadAsyncFile.execute();
+//
+//                break;
+//            case TableCompanies.FILE_NAME:
+//                 downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
+//                downloadAsyncFile.execute();
+//
+//                break;
+//            case TablePrices.FILE_NAME:
+        DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
                 downloadAsyncFile.execute();
 
-                break;
-            case TableProducts.FILE_NAME:
-
-
-                break;
-            case TableTypePrices.FILE_NAME:
-
-
-                break;
-            case TableTypeStores.FILE_NAME:
-
-
-                break;
-            case TableGoodsByStores.FILE_NAME:
-
-
-                break;
-            default:
-                break;
-        }
+//                break;
+//            case TableProducts.FILE_NAME:
+//
+//
+//                break;
+//            case TableTypePrices.FILE_NAME:
+//
+//
+//                break;
+//            case TableTypeStores.FILE_NAME:
+//
+//
+//                break;
+//            case TableGoodsByStores.FILE_NAME:
+//
+//
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     private static class DownloadAsyncFile extends AsyncTask<String, String, String> {
@@ -89,7 +94,8 @@ public class WorkFilesUtil {
                     while ((line = input.readLine()) != null) {
                         // use comma as separator
                         String[] country = line.split(mCvsSplitBy);
-                        dbHelperUtil.insert(TablePrices.getContentValues(country));
+                        // Log.i("mNameTable00000", "" + mNameTable);
+                        dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, country));
                     }
                 } finally {
                     input.close();

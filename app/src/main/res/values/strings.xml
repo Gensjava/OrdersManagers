@@ -20,13 +20,15 @@
         <item>ref_goods.csv</item>
         <item>ref_firms.csv</item>
         <item>ref_stores.csv</item>
-        <item>ref_debtext.csv</item>
     </string-array>
 
     <string-array name="name_file_data_test">
-
-
-    <item>ref_price.csv</item>
-
+        <item>ref_price.csv</item>
+        <item>ref_goodsbystores.csv</item>
+        <item>ref_pricecategories.csv</item>
+        <item>ref_clients.csv</item>
+        <item>ref_goods.csv</item>
+        <item>ref_firms.csv</item>
+        <item>ref_stores.csv</item>
     </string-array>
 </resources>

@@ -24,26 +24,73 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
         super(db, tableName);
     }
 
-    public static Map getListTableName() {
+    public static Map getListHashMapTableName() {
 
-        Map<String, String> hTableName = new HashMap<String, String>();
+        Map<String, String> lTableName = new HashMap<String, String>();
 
-        hTableName.put(TableCompanies.FILE_NAME, TableCompanies.TABLE_NAME);
-        hTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.TABLE_NAME);
-        hTableName.put(TablePrices.FILE_NAME, TablePrices.TABLE_NAME);
-        hTableName.put(TableProducts.FILE_NAME, TableProducts.TABLE_NAME);
-        hTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.TABLE_NAME);
-        hTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.TABLE_NAME);
-        hTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.TABLE_NAME);
+        lTableName.put(TableCompanies.FILE_NAME, TableCompanies.TABLE_NAME);
+        lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.TABLE_NAME);
+        lTableName.put(TablePrices.FILE_NAME, TablePrices.TABLE_NAME);
+        lTableName.put(TableProducts.FILE_NAME, TableProducts.TABLE_NAME);
+        lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.TABLE_NAME);
+        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.TABLE_NAME);
+        lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.TABLE_NAME);
 
-        return hTableName;
+        return lTableName;
     }
+
+    public static ContentValues getListContentValuesTableName(String nameTable, String[] sData) {
+
+        ContentValues lContentValues = new ContentValues();
+        switch (nameTable) {
+            case TableCompanies.TABLE_NAME:
+                lContentValues = TableCompanies.getContentValues(sData);
+                break;
+            case TableCounteragents.TABLE_NAME:
+                lContentValues = TableCounteragents.getContentValues(sData);
+                break;
+            case TablePrices.TABLE_NAME:
+                lContentValues = TablePrices.getContentValues(sData);
+                break;
+            case TableProducts.TABLE_NAME:
+                lContentValues = TableProducts.getContentValues(sData);
+                break;
+            case TableTypePrices.TABLE_NAME:
+                lContentValues = TableTypePrices.getContentValues(sData);
+                break;
+            case TableTypeStores.TABLE_NAME:
+                lContentValues = TableTypeStores.getContentValues(sData);
+                break;
+            case TableGoodsByStores.TABLE_NAME:
+                lContentValues = TableGoodsByStores.getContentValues(sData);
+                break;
+            default:
+                break;
+        }
+        return lContentValues;
+    }
+
 
     @Override
     public long insert(final ContentValues values) {
         return super.insert(values);
     }
 
+
+    //    public static Map getListContentValuesTableName(String [] sData) {
+//
+//        Map<String, ContentValues> lContentValues = new HashMap<String, ContentValues>();
+//
+//        lContentValues.put(TableCompanies.TABLE_NAME, TableCompanies.getContentValues(sData));
+//        lContentValues.put(TableCounteragents.TABLE_NAME, TableCounteragents.getContentValues(sData));
+//        lContentValues.put(TablePrices.TABLE_NAME, TablePrices.getContentValues(sData));
+//        lContentValues.put(TableProducts.TABLE_NAME, TableProducts.getContentValues(sData));
+//        lContentValues.put(TableTypePrices.TABLE_NAME, TableTypePrices.getContentValues(sData));
+//        lContentValues.put(TableTypeStores.TABLE_NAME, TableTypeStores.getContentValues(sData));
+//        lContentValues.put(TableGoodsByStores.TABLE_NAME, TableGoodsByStores.getContentValues(sData));
+//
+//        return lContentValues;
+//    }
     //                Cursor cursor = db.query(TableCompanies.TABLE_NAME, // table name
 //                         null, // columns
 //                         null, // selection
