@@ -18,6 +18,7 @@ import ua.com.it_st.ordersmanagers.MainActivity;
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
     private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
+    private final String TEG = getClass().getName();
     private MainActivity mMainActivity;
 
     public AsyncHttpClientUtil(final MainActivity mainActivity) throws Exception {
@@ -30,7 +31,8 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             @Override
             public void onFailure(final int statusCode, final Header[] headers, final Throwable throwable, final File file) {
                 if (statusCode != HttpStatus.SC_OK) {
-                    ErrorInfo.showErrorAlertDialog("Данные не загрузились! имя файла " + params.toString(), mMainActivity);
+                    //Log
+                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + ": Код ошибки " + statusCode);
                 }
             }
 
@@ -44,7 +46,8 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         e.printStackTrace();
                     }
                 } else {
-                    ErrorInfo.showErrorAlertDialog("Данные не загрузились! имя файла " + params.toString(), mMainActivity);
+                    //Log
+                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + ": Код ошибки " + statusCode);
                 }
             }
         });

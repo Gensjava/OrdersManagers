@@ -26,48 +26,16 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 public class WorkFilesUtil {
 
 
+
     public static void onInsertTable(final File file, final String fileName, final SQLiteDatabase db) throws IOException {
 
-
-//        switch (fileName) {
-//            case TableCounteragents.FILE_NAME:
-//                DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
-//                downloadAsyncFile.execute();
-//
-//                break;
-//            case TableCompanies.FILE_NAME:
-//                 downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
-//                downloadAsyncFile.execute();
-//
-//                break;
-//            case TablePrices.FILE_NAME:
         DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
                 downloadAsyncFile.execute();
-
-//                break;
-//            case TableProducts.FILE_NAME:
-//
-//
-//                break;
-//            case TableTypePrices.FILE_NAME:
-//
-//
-//                break;
-//            case TableTypeStores.FILE_NAME:
-//
-//
-//                break;
-//            case TableGoodsByStores.FILE_NAME:
-//
-//
-//                break;
-//            default:
-//                break;
-//        }
     }
 
     private static class DownloadAsyncFile extends AsyncTask<String, String, String> {
 
+        private final String TEG = getClass().getName();
         private String mCvsSplitBy = ",\"";
         private String mNameTable;
         private SQLiteDatabase mDatabase;
@@ -94,18 +62,16 @@ public class WorkFilesUtil {
                     while ((line = input.readLine()) != null) {
                         // use comma as separator
                         String[] country = line.split(mCvsSplitBy);
-                        // Log.i("mNameTable00000", "" + mNameTable);
                         dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, country));
                     }
                 } finally {
                     input.close();
-                    long msTime = System.currentTimeMillis();
-                    Date curDateTime = new Date(msTime);
-                    Log.i("currentTimeMillis_4", "" + curDateTime);
 
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                //Log
+                ErrorInfo.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
             }
 
             return null;

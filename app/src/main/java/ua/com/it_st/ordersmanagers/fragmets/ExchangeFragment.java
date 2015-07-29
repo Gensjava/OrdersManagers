@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,35 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
 import com.loopj.android.http.RequestParams;
-
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import ua.com.it_st.ordersmanagers.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
-
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TableInformations;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTasks;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeInformations;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeMeasuring;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
-import ua.com.it_st.ordersmanagers.utils.DBHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 
@@ -49,8 +31,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
+    private final String TEG = getClass().getName();
     private SQLiteDatabase db;
-
 
     @Nullable
     @Override
@@ -75,11 +57,11 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                 //удаляем все записи из таблиц
                 onDeleteValueTables();
-                //список файлов
+                //список файлов для загрузки
                 String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
                 //Log
-                DBHelperUtil.setmLogLine("Начало загрузки");
+                ErrorInfo.setmLogLine("Начало загрузки");
 
                 //подключаемся через HTTP к базе и загужаем данные
                 AsyncHttpClientUtil utilAsyncHttpClient = null;
@@ -92,7 +74,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                     lConnect = false;
                     //Log
-                    DBHelperUtil.setmLogLine("Подключение к базе", true, e.toString());
+                    ErrorInfo.setmLogLine("Подключение к базе", true, TEG + ": " + e.toString());
                 }
 
                 //начинаем загрузку
@@ -104,7 +86,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         RequestParams params = new RequestParams();
                         params.put("NameFile", i.toString());
                         //Log
-                        DBHelperUtil.setmLogLine("Загрузка файла", i.toString());
+                        ErrorInfo.setmLogLine("Загрузка файла", i.toString());
 
                         try {
                             //загружаем файл
@@ -112,7 +94,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                             //Log
-                            DBHelperUtil.setmLogLine("Загрузка файла", i.toString(), true, e.toString());
+                            ErrorInfo.setmLogLine("Загрузка файла", i.toString(), true, TEG + ": " + e.toString());
                         }
                     }
                     if (db != null) {
@@ -122,7 +104,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     }
                 } else {
                     //Log
-                    DBHelperUtil.setmLogLine("Подключение к базе", true, "логин пароль не верный или нет подключенгия к интернету");
+                    ErrorInfo.setmLogLine("Подключение к базе", true, TEG + ": Логин или пароль не верный или нет подключенгия к интернету!");
                 }
 
                 break;

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.EditText;
 
+import java.util.Date;
+
 import ua.com.it_st.ordersmanagers.R;
 
 
@@ -13,6 +15,7 @@ import ua.com.it_st.ordersmanagers.R;
  */
 public class ErrorInfo {
 
+    public static String mLogLine;
 
     public static void showErrorAlertDialog(String errMessage, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -44,5 +47,45 @@ public class ErrorInfo {
             }
         }
         return check;
+    }
+
+    public static String getmLogLine() {
+        return mLogLine;
+    }
+
+    public static void setmLogLine(final String lAction) {
+
+        long lsTime = System.currentTimeMillis();
+        Date lCurDateTime = new Date(lsTime);
+        //Log
+        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + "/n ";
+    }
+
+    public static void setmLogLine(final String lAction, final String lLogLine, final boolean lbErr, final String lsError) {
+
+        long lsTime = System.currentTimeMillis();
+        Date lCurDateTime = new Date(lsTime);
+
+        String lerr = lbErr ? "Error: " + lsError + "/n " : "";
+        //Log
+        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + " - " + lLogLine + "/n " + lerr;
+    }
+
+    public static void setmLogLine(final String lAction, final boolean lbErr, final String lsError) {
+
+        long lsTime = System.currentTimeMillis();
+        Date lCurDateTime = new Date(lsTime);
+
+        String lerr = lbErr ? "Error: " + lsError + "/n " : "";
+        //Log
+        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + "/n " + lerr;
+    }
+
+    public static void setmLogLine(final String lAction, final String lLogLine) {
+
+        long lsTime = System.currentTimeMillis();
+        Date lCurDateTime = new Date(lsTime);
+        //Log
+        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + " - " + lLogLine + "/n ";
     }
 }
