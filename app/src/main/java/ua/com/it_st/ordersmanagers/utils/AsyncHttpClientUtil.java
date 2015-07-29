@@ -20,7 +20,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
     private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
     private MainActivity mMainActivity;
 
-    public AsyncHttpClientUtil(final MainActivity mainActivity) {
+    public AsyncHttpClientUtil(final MainActivity mainActivity) throws Exception {
         mMainActivity = mainActivity;
     }
 

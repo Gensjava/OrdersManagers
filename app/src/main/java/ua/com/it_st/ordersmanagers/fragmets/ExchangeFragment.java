@@ -40,6 +40,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrioritiesTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.DBHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 
@@ -77,32 +78,51 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                 //список файлов
                 String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
-                long msTime = System.currentTimeMillis();
-                Date curDateTime = new Date(msTime);
-                Log.i("currentTimeMillis", "" + curDateTime);
+                //Log
+                DBHelperUtil.setmLogLine("Начало загрузки");
+
                 //подключаемся через HTTP к базе и загужаем данные
-                AsyncHttpClientUtil utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity());
-                utilAsyncHttpClient.setBasicAuth("admin", "123");
-
-                db.beginTransaction();
-                for (String i : nameFile) {
-
-                    RequestParams params = new RequestParams();
-                    params.put("NameFile", i.toString());
-
-                    try {
-                        //загружаем файл
-                        utilAsyncHttpClient.getDownloadFiles(params, db);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-
-                    }
+                AsyncHttpClientUtil utilAsyncHttpClient = null;
+                boolean lConnect;
+                try {
+                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity());
+                    utilAsyncHttpClient.setBasicAuth("admin", "123");
+                    lConnect = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    lConnect = false;
+                    //Log
+                    DBHelperUtil.setmLogLine("Подключение к базе", true, e.toString());
                 }
 
-                if (db != null) {
-                    db.setTransactionSuccessful();
-                    db.endTransaction();
+                //начинаем загрузку
+                if (lConnect) {
+                    //начинаем транзакцию
+                    db.beginTransaction();
+                    for (String i : nameFile) {
+
+                        RequestParams params = new RequestParams();
+                        params.put("NameFile", i.toString());
+                        //Log
+                        DBHelperUtil.setmLogLine("Загрузка файла", i.toString());
+
+                        try {
+                            //загружаем файл
+                            utilAsyncHttpClient.getDownloadFiles(params, db);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            //Log
+                            DBHelperUtil.setmLogLine("Загрузка файла", i.toString(), true, e.toString());
+                        }
+                    }
+                    if (db != null) {
+                        //заканчиваем транзакцию
+                        db.setTransactionSuccessful();
+                        db.endTransaction();
+                    }
+                } else {
+                    //Log
+                    DBHelperUtil.setmLogLine("Подключение к базе", true, "логин пароль не верный или нет подключенгия к интернету");
                 }
 
                 break;
