@@ -3,11 +3,8 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.content.ContentValues;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;

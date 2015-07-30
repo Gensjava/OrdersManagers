@@ -1,31 +1,16 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
-
-import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
-import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 
 /**
  * Created by Gens on 25.07.2015.
  */
 public class WorkFilesUtil {
-
-
 
     public static void onInsertTable(final File file, final String fileName, final SQLiteDatabase db) throws IOException {
 
@@ -45,6 +30,11 @@ public class WorkFilesUtil {
             mNameTable = nameTable;
             mDatabase = database;
             mFile = file;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
         @Override
@@ -76,6 +66,14 @@ public class WorkFilesUtil {
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(final String s) {
+            super.onPostExecute(s);
+            //Log
+            ErrorInfo.setmLogLine("Загрузка в таблицу закончено", mNameTable);
+        }
+
 
     }
 

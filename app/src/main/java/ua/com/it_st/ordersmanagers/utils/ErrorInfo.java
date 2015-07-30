@@ -3,6 +3,7 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.EditText;
 
 import java.util.Date;
@@ -15,6 +16,8 @@ import ua.com.it_st.ordersmanagers.R;
  */
 public class ErrorInfo {
 
+    private static final String TEG_ERROR = "ErrorInfo";
+    private static final String TEG_INFO = "Info";
     public static String mLogLine;
 
     public static void showErrorAlertDialog(String errMessage, Context context) {
@@ -57,8 +60,10 @@ public class ErrorInfo {
 
         long lsTime = System.currentTimeMillis();
         Date lCurDateTime = new Date(lsTime);
+        String lLog = lCurDateTime + ": " + lAction + "\n ";
         //Log
-        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + "/n ";
+        mLogLine = mLogLine + " " + lLog;
+        Log.i(TEG_INFO, lLog);
     }
 
     public static void setmLogLine(final String lAction, final String lLogLine, final boolean lbErr, final String lsError) {
@@ -66,9 +71,11 @@ public class ErrorInfo {
         long lsTime = System.currentTimeMillis();
         Date lCurDateTime = new Date(lsTime);
 
-        String lerr = lbErr ? "Error: " + lsError + "/n " : "";
+        String lerr = lbErr ? "Error: " + lsError + "\n " : "";
+        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n " + lerr;
         //Log
-        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + " - " + lLogLine + "/n " + lerr;
+        mLogLine = mLogLine + " " + lLog;
+        Log.i(TEG_ERROR, lLog);
     }
 
     public static void setmLogLine(final String lAction, final boolean lbErr, final String lsError) {
@@ -76,16 +83,20 @@ public class ErrorInfo {
         long lsTime = System.currentTimeMillis();
         Date lCurDateTime = new Date(lsTime);
 
-        String lerr = lbErr ? "Error: " + lsError + "/n " : "";
+        String lerr = lbErr ? "Error: " + lsError + "\n " : "";
+        String lLog = lCurDateTime + ": " + lAction + "\n " + lerr;
         //Log
-        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + "/n " + lerr;
+        mLogLine = mLogLine + " " + lLog;
+        Log.i(TEG_ERROR, lLog);
     }
 
     public static void setmLogLine(final String lAction, final String lLogLine) {
 
         long lsTime = System.currentTimeMillis();
         Date lCurDateTime = new Date(lsTime);
+        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n ";
         //Log
-        mLogLine = mLogLine + " " + lCurDateTime + ": " + lAction + " - " + lLogLine + "/n ";
+        mLogLine = mLogLine + " " + lLog;
+        Log.i(TEG_INFO, lLog);
     }
 }

@@ -32,7 +32,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             public void onFailure(final int statusCode, final Header[] headers, final Throwable throwable, final File file) {
                 if (statusCode != HttpStatus.SC_OK) {
                     //Log
-                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + ": Код ошибки " + statusCode);
+                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
                 }
             }
 
@@ -44,10 +44,12 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         WorkFilesUtil.onInsertTable(response, params.toString(), db);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        //Log
+                        ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " " + e.toString());
                     }
                 } else {
                     //Log
-                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + ": Код ошибки " + statusCode);
+                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + "Success: Код ошибки " + statusCode);
                 }
             }
         });
