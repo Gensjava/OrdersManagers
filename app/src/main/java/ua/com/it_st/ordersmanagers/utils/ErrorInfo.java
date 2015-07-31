@@ -66,6 +66,16 @@ public class ErrorInfo {
         Log.i(TEG_INFO, lLog);
     }
 
+    public static void setmLogLine(final String lAction, final String lLogLine) {
+
+        long lsTime = System.currentTimeMillis();
+        Date lCurDateTime = new Date(lsTime);
+        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n ";
+        //Log
+        mLogLine = mLogLine + " " + lLog;
+        Log.i(TEG_INFO, lLog);
+    }
+
     public static void setmLogLine(final String lAction, final String lLogLine, final boolean lbErr, final String lsError) {
 
         long lsTime = System.currentTimeMillis();
@@ -90,13 +100,5 @@ public class ErrorInfo {
         Log.i(TEG_ERROR, lLog);
     }
 
-    public static void setmLogLine(final String lAction, final String lLogLine) {
 
-        long lsTime = System.currentTimeMillis();
-        Date lCurDateTime = new Date(lsTime);
-        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n ";
-        //Log
-        mLogLine = mLogLine + " " + lLog;
-        Log.i(TEG_INFO, lLog);
-    }
 }

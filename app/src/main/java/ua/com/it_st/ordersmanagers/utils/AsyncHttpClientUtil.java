@@ -10,7 +10,7 @@ import org.apache.http.HttpStatus;
 import java.io.File;
 import java.io.IOException;
 
-import ua.com.it_st.ordersmanagers.MainActivity;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 /**
  * Created by Gens on 25.07.2015.

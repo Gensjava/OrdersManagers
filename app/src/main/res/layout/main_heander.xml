@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/main_heander_text_JurnalOrders"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/main_grey"
+        android:gravity="center"
+        android:paddingBottom="60dp"
+        android:text="@string/JurnalOrders"
+        android:textColor="@android:color/background_light"
+        android:textSize="25sp"/>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/main_heander_image_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="right"
+            android:layout_marginEnd="52dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="175dp"
+            android:src="@mipmap/ic_launcher_plus"/>
+
+        <TextView
+            android:id="@+id/main_heander_period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="86dp"
+            android:text="@string/period"
+            android:textColor="@color/main_sub_grey"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

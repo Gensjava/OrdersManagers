@@ -1,4 +1,4 @@
-package ua.com.it_st.ordersmanagers;
+package ua.com.it_st.ordersmanagers.activiteies;
 
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -14,11 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ua.com.it_st.ordersmanagers.BlankFragment;
+import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
+import ua.com.it_st.ordersmanagers.fragmets.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
 
 
     @Override
@@ -27,11 +30,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        mToolbar.setTitle("");
+        // mToolbar.setSubtitle("Sub");
+        // mToolbar.setLogo(R.drawable.abc_btn_borderless_material);
+        setSupportActionBar(mToolbar);
+
+//        if (mToolbar != null) {
+//            setSupportActionBar(mToolbar);
+//            mToolbar.setNavigationIcon(R.drawable.ic_action_back);
+//            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    onBackPressed();
+//                }
+//            });
+//        }
+
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 
         // Set the menu icon instead of the launcher icon.
 
@@ -42,16 +63,17 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle drawerToggle = setupDrawerToggle();
         mDrawer.setDrawerListener(drawerToggle);
 
-        final ActionBar ab = getSupportActionBar();
+        //drawerToggle.setDrawerIndicatorEnabled(true);
 
-        ab.setHomeAsUpIndicator(R.mipmap.ic_drawer);
-        ab.setDisplayHomeAsUpEnabled(true);
+        //final ActionBar ab = getSupportActionBar();
+        //ab.setHomeAsUpIndicator(R.mipmap.ic_drawer);
+        // ab.setDisplayHomeAsUpEnabled(true);
 
 
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -73,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = MainFragment.class;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = ExchangeFragment.class;
@@ -113,16 +135,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-//        drawerToggle.syncState();
+    public Toolbar getToolbar() {
+        return mToolbar;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        //drawerToggle.onConfigurationChanged(newConfig);
+    public void setToolbar(final Toolbar toolbar) {
+        mToolbar = toolbar;
     }
 }

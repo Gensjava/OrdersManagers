@@ -1,18 +1,17 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.loopj.android.http.RequestParams;
-import ua.com.it_st.ordersmanagers.MainActivity;
+
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -47,6 +46,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         db = SQLiteOpenHelperUtil.getInstance().getDatabase();
         BHost.setOnClickListener(this);
 
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getToolbar().setMinimumHeight(80);
         return rootView;
     }
 
