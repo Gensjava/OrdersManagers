@@ -46,8 +46,6 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         db = SQLiteOpenHelperUtil.getInstance().getDatabase();
         BHost.setOnClickListener(this);
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getToolbar().setMinimumHeight(80);
         return rootView;
     }
 
@@ -75,7 +73,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                     lConnect = false;
                     //Log
-                    ErrorInfo.setmLogLine("Подключение к базе", true, TEG + ": " + e.toString());
+                    ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
                 }
 
                 //начинаем загрузку
@@ -85,9 +83,9 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     for (String i : nameFile) {
 
                         RequestParams params = new RequestParams();
-                        params.put("NameFile", i.toString());
+                        params.put(getString(R.string.name_file), i.toString());
                         //Log
-                        ErrorInfo.setmLogLine("Загрузка файла", i.toString());
+                        ErrorInfo.setmLogLine(getString(R.string.action_download_file), i.toString());
 
                         try {
                             //загружаем файл
@@ -95,7 +93,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                             //Log
-                            ErrorInfo.setmLogLine("Загрузка файла", i.toString(), true, TEG + ": " + e.toString());
+                            ErrorInfo.setmLogLine(getString(R.string.action_download_file), i.toString(), true, TEG + ": " + e.toString());
                         }
                     }
                     if (db != null) {
@@ -105,7 +103,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     }
                 } else {
                     //Log
-                    ErrorInfo.setmLogLine("Подключение к базе", true, TEG + ": Логин или пароль не верный или нет подключенгия к интернету!");
+                    ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
                 }
 
                 break;

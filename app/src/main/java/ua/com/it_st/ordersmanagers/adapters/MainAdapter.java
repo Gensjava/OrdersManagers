@@ -20,7 +20,7 @@ public class MainAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(final int i) {
-        return 0;
+        return i;
     }
 
     @Override
