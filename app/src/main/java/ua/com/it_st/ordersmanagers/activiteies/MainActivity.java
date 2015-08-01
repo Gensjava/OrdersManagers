@@ -1,26 +1,23 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
-import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.onEventListener {
     private DrawerLayout mDrawer;
@@ -155,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.onEv
 
         switch (tagAction) {
             case MainFragment.PLUS_ORDER:
-                fragmentClass = OrderNewFragment.class;
+                fragmentClass = OrderNewHeaderFragment.class;
                 break;
             default:
                 break;

@@ -20,18 +20,18 @@ import ua.com.it_st.ordersmanagers.R;
 /**
  * Created by Gens on 01.08.2015.
  */
-public class OrderNewFragment extends Fragment implements View.OnClickListener {
+public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.order_header_list, container,
+        View rootView = inflater.inflate(R.layout.order_new_header_list, container,
                 false);
         //
 
         SimpleAdapter adapter;
         adapter = new SimpleAdapter(getActivity(), createSensorsList(),
-                R.layout.order_header_list_item,
+                R.layout.order_new_header_list_item,
                 new String[]{"title", "imageAvatar"},
                 new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
 
@@ -60,7 +60,7 @@ public class OrderNewFragment extends Fragment implements View.OnClickListener {
                         R.mipmap.ic_launcher_stores,
                         R.mipmap.ic_launcher_client,
                         R.mipmap.ic_launcher_tipe_price,
-                        R.mipmap.ic_launcher_sub_arrow_right
+                        R.mipmap.ic_launcher_coment
                 };
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         byte x = 0;

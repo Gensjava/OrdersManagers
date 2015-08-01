@@ -5,13 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import ua.com.it_st.ordersmanagers.R;
 
@@ -24,7 +17,7 @@ public class OrderSelectedListFragment extends Fragment implements View.OnClickL
                              Bundle savedInstanceState) {
 
 
-        View rootView = inflater.inflate(R.layout.order_header_list, container,
+        View rootView = inflater.inflate(R.layout.order_new_header_list, container,
                 false);
         //
 //        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
