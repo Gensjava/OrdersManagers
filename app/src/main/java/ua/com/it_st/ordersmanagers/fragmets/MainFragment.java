@@ -1,37 +1,122 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
  * Created by Gens on 30.07.2015.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+
+    public static final String PLUS_ORDER = "PLUS_ORDER";
+    private static SQLiteDatabase DB;
+    private ListView lvData;
+    private SimpleCursorAdapter scAdapter;
+    private onEventListener someEventListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
-        View rootView = inflater.inflate(R.layout.main_list, container,
+        View rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
 
-//        String[] strings = new String[]{"One", "Two", "Three"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-//                android.R.layout.simple_list_item_1, android.R.id.text1, strings);
-//
-////        // настраиваем список
-//        ListView lvMain = (ListView) rootView.findViewById(R.id.lvMain);
-//        lvMain.setAdapter(adapter);
-//
-//        MainActivity mainActivity = (MainActivity) getActivity();
-//        mainActivity.getToolbar().setMinimumHeight(300);
+        // открываем подключение к БД
+        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+
+        // формируем столбцы сопоставления
+        String[] from = new String[]{TableCounteragents.COLUMN_NAME};
+        int[] to = new int[]{R.id.main_list_item_text_client};
+
+        // создааем адаптер и настраиваем список
+        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
+        lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
+        lvData.setAdapter(scAdapter);
+
+        // добавляем контекстное меню к списку
+        registerForContextMenu(lvData);
+
+        // создаем лоадер для чтения данных
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        //
+        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
+        imViewAdd.setOnClickListener(this);
         return rootView;
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+        return new MyCursorLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+        scAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(final Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onClick(final View view) {
+        switch (view.getId()) {
+
+            case R.id.main_heander_image_plus:
+                someEventListener = (onEventListener) getActivity();
+                someEventListener.someEvent(PLUS_ORDER);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // закрываем подключение при выходе
+        DB.close();
+    }
+
+    public interface onEventListener {
+        public void someEvent(String tagAction);
+    }
+
+    private static class MyCursorLoader extends CursorLoader {
+
+        public MyCursorLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            return DB
+                    .query(TableCounteragents.TABLE_NAME, // table name
+                            null, // columns
+                            null, // selection
+                            null, // selectionArgs
+                            null, // groupBy
+                            null, // having
+                            null);// orderBy
+        }
+    }
 }

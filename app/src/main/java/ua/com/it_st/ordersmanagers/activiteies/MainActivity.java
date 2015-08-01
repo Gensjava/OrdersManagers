@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,8 +20,9 @@ import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.onEventListener {
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
 
@@ -141,5 +144,44 @@ public class MainActivity extends AppCompatActivity {
 
     public void setToolbar(final Toolbar toolbar) {
         mToolbar = toolbar;
+    }
+
+
+    @Override
+    public void someEvent(final String tagAction) {
+
+        Fragment fragment = null;
+        Class fragmentClass = null;
+
+        switch (tagAction) {
+            case MainFragment.PLUS_ORDER:
+                fragmentClass = OrderNewFragment.class;
+                break;
+            default:
+                break;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        onOpenFragment(fragment);
+    }
+
+    void onOpenFragment(Fragment fragment) {
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+
+            ft.addToBackStack(fragment.getClass().toString());
+
+            ft.replace(R.id.flContent, fragment, fragment.getClass().toString());
+            ft.commit();
+        } else {
+            // Error
+            Log.e(this.getClass().getName(), "Error. Fragment is not created");
+        }
     }
 }

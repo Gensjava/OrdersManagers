@@ -84,6 +84,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                         RequestParams params = new RequestParams();
                         params.put(getString(R.string.name_file), i.toString());
+                        //params.put("login", "admin");
+                        //params.put("password", "123");
                         //Log
                         ErrorInfo.setmLogLine(getString(R.string.action_download_file), i.toString());
 
@@ -115,9 +117,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (db != null) {
             db.close();
-        }
     }
 
     //чистим таблицы 

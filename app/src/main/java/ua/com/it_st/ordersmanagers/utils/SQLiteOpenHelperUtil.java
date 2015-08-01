@@ -98,4 +98,11 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
     public SQLiteDatabase getDatabase() {
         return mDatabase;
     }
+
+    @Override
+    public synchronized void close() {
+        if (mDatabase != null) {
+            mDatabase.close();
+        }
+    }
 }

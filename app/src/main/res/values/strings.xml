@@ -17,6 +17,11 @@
     <string name="action_conect_base">Подключение к базе</string>
     <string name="action_download_file">Загрузка файла</string>
     <string name="name_file">NameFile</string>
+    <string name="header_date">Дата</string>
+    <string name="header_client">Клиент</string>
+    <string name="header_sum">Сумма</string>
+    <string name="header_address">адрес</string>
+    <string name="new_order">Новый заказ</string>
 
     <string-array name="name_file_data">
         <item>ref_price.csv</item>
@@ -36,5 +41,13 @@
         <item>ref_goods.csv</item>
         <item>ref_firms.csv</item>
         <item>ref_stores.csv</item>
+    </string-array>
+
+    <string-array name="header_orders">
+        <item>Организация</item>
+        <item>Склад</item>
+        <item>Клиент</item>
+        <item>Тип цены</item>
+        <item>Комментарий</item>
     </string-array>
 </resources>
