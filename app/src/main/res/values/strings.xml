@@ -50,6 +50,7 @@
         <item>Тип цены</item>
         <item>Комментарий</item>
     </string-array>
+
     <string name="ic_access_alarms">&#xe000;</string>
     <string name="ic_access_time">&#xe001;</string>
     <string name="ic_accessibility">&#xe002;</string>

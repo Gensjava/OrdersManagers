@@ -24,6 +24,9 @@ import android.widget.TextView;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
@@ -61,27 +64,26 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         statusBar = (TextView) rootView.findViewById(R.id.status_bar);
 
         TreeNode root = TreeNode.root();
-        TreeNode computerRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "My Computer"));
+        TreeNode computerRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "Корень"));
 
-        TreeNode myDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "My Documents"));
-        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Downloads"));
-        TreeNode file1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 1"));
-        TreeNode file2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 2"));
-        TreeNode file3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 3"));
-        TreeNode file4 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 4"));
-        fillDownloadsFolder(downloads);
-        downloads.addChildren(file1, file2, file3, file4);
+        TreeNode myDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров"));
 
-        TreeNode myMedia = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo_library, "Photos"));
-        TreeNode photo1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 1"));
-        TreeNode photo2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 2"));
-        TreeNode photo3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 3"));
-        myMedia.addChildren(photo1, photo2, photo3);
+        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Селектив"));
+        TreeNode downloads1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Косметика"));
+        TreeNode downloads2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Масмаркет"));
+        TreeNode downloads3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Schwarzkopf"));
 
-        myDocuments.addChild(downloads);
-        computerRoot.addChildren(myDocuments, myMedia);
+        fillDownloadsFolderMyDocuments(downloads);
 
-        root.addChildren(computerRoot);
+        AbstractList<TreeNode> treeNodes = new ArrayList<TreeNode>();
+        treeNodes.add(downloads);
+        treeNodes.add(downloads1);
+        treeNodes.add(downloads2);
+        treeNodes.add(downloads3);
+
+        myDocuments.addChildren(treeNodes);
+        computerRoot.addChildren(myDocuments);
+        root.addChildren(myDocuments);
 
         tView = new AndroidTreeView(getActivity(), root);
         tView.setDefaultAnimation(true);
@@ -129,6 +131,25 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             fillDownloadsFolder(downloads);
         }
     }
+
+    private void fillDownloadsFolderMyDocuments(TreeNode node) {
+        TreeNode MyDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "My Documents" + (counter++)));
+        node.addChild(MyDocuments);
+        if (counter < 5) {
+            fillDownloadsFolderMyDocuments(MyDocuments);
+        }
+    }
+
+    private TreeNode[] fullGoodsTree(byte namberLevel) {
+
+        TreeNode[] arrGoods = new TreeNode[namberLevel];
+        for (int i = 0; i < arrGoods.length; i++) {
+            // arrGoods[] =
+        }
+
+        return arrGoods;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
