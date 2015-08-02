@@ -105,4 +105,5 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
             mDatabase.close();
         }
     }
+
 }

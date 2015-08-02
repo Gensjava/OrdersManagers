@@ -5,7 +5,7 @@
                 android:orientation="vertical">
 
     <TextView
-        android:id="@+id/order_new_goods_text_JurnalOrders"
+        android:id="@+id/order_new_goods_text_catalog"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:background="@color/main_grey"
@@ -43,7 +43,7 @@
             android:textColor="@color/main_sub_grey"/>
 
         <RelativeLayout
-            android:id="@+id/relativeLayout2"
+            android:id="@+id/order_new_goods_relativeLayout2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
@@ -53,7 +53,7 @@
             >
 
             <TextView
-                android:id="@+id/order_heander_text_client"
+                android:id="@+id/order_new_goods_text_client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -68,7 +68,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_new_goods_space"/>
+            android:layout_below="@+id/order_new_goods_relativeLayout2"/>
 
         <TextView
             android:id="@+id/order_new_goods_space"

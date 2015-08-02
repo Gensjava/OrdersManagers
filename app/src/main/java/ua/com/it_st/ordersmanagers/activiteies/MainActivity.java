@@ -17,9 +17,16 @@ import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.onEventListener {
+public class MainActivity extends AppCompatActivity
+
+        implements
+        MainFragment.onEventListener,
+        OrderNewHeaderFragment.onEventListener {
+
+
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
 
@@ -154,6 +161,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.onEv
             case MainFragment.PLUS_ORDER:
                 fragmentClass = OrderNewHeaderFragment.class;
                 break;
+            case OrderNewHeaderFragment.ACTION_ARROW_RIGHT:
+                fragmentClass = OrderNewGoodsFragment.class;
+                break;
             default:
                 break;
         }
@@ -163,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.onEv
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //Открывепем фрагмент
         onOpenFragment(fragment);
     }
 

@@ -21,21 +21,24 @@ import ua.com.it_st.ordersmanagers.R;
  * Created by Gens on 01.08.2015.
  */
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
+
+    public static final String ACTION_ARROW_RIGHT = "ACTION_ARROW_RIGHT";
+    private onEventListener someEventListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.order_new_header_list, container,
                 false);
-        //
 
         SimpleAdapter adapter;
-        adapter = new SimpleAdapter(getActivity(), createSensorsList(),
+        adapter = new SimpleAdapter(getActivity(), createList(),
                 R.layout.order_new_header_list_item,
                 new String[]{"title", "imageAvatar"},
                 new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
 
-        ListView lv = (ListView) rootView.findViewById(R.id.order_heander_list_position);
+        ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -45,13 +48,13 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             }
         });
 
-        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_heander_image_plus);
+        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
         imViewAdd.setOnClickListener(this);
 
         return rootView;
     }
 
-    private List<Map<String, ?>> createSensorsList() {
+    private List<Map<String, ?>> createList() {
 
         String[] sensors = getResources().getStringArray(R.array.header_orders);
 
@@ -67,7 +70,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         for (String s : sensors) {
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("title", s.toString());
+            map.put("title", s);
             map.put("imageAvatar", mPictures[x]);
             x++;
             items.add(map);
@@ -80,12 +83,17 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     public void onClick(final View view) {
         switch (view.getId()) {
 
-            case R.id.order_heander_image_plus:
-
+            case R.id.order_new_header_list_image_arrow_right:
+                someEventListener = (onEventListener) getActivity();
+                someEventListener.someEvent(ACTION_ARROW_RIGHT);
                 break;
             default:
                 break;
         }
 
+    }
+
+    public interface onEventListener {
+        void someEvent(String tagAction);
     }
 }

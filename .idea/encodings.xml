@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/fonts" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableCounteragents.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableGoodsByStores.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableInformations.java" charset="windows-1251" />
@@ -15,10 +16,13 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypePrioritiesTasks.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypeStores.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableUsers.java" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/treeElements/IconTreeItemHolder.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/AppDeliveriMan.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/ErrorInfo.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/SQLiteOpenHelperUtil.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/header.jpg" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/fonts/material-icon-font.ttf" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/layout_icon_node.xml" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/main_list.xml" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_client.png" charset="windows-1251" />

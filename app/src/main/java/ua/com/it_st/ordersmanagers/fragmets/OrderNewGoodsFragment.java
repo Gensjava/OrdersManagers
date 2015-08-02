@@ -9,15 +9,25 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleCursorTreeAdapter;
+import android.widget.TextView;
+
+import com.unnamed.b.atv.model.TreeNode;
+import com.unnamed.b.atv.view.AndroidTreeView;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.treeElements.IconTreeItemHolder;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
@@ -25,48 +35,115 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    public static final String NEW_ORDER = "NEW_ORDER";
-    private static SQLiteDatabase DB;
-    private SimpleCursorAdapter scAdapter;
+    private TextView statusBar;
+    private AndroidTreeView tView;
+    private int counter = 0;
+    private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
+        @Override
+        public void onClick(TreeNode node, Object value) {
+            IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
+            statusBar.setText("Last clicked: " + item.text);
+        }
+    };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_default, null, false);
+        ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
+
+        statusBar = (TextView) rootView.findViewById(R.id.status_bar);
+
+        TreeNode root = TreeNode.root();
+        TreeNode computerRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "My Computer"));
+
+        TreeNode myDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "My Documents"));
+        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Downloads"));
+        TreeNode file1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 1"));
+        TreeNode file2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 2"));
+        TreeNode file3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 3"));
+        TreeNode file4 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_drive_file, "Folder 4"));
+        fillDownloadsFolder(downloads);
+        downloads.addChildren(file1, file2, file3, file4);
+
+        TreeNode myMedia = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo_library, "Photos"));
+        TreeNode photo1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 1"));
+        TreeNode photo2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 2"));
+        TreeNode photo3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_photo, "Folder 3"));
+        myMedia.addChildren(photo1, photo2, photo3);
+
+        myDocuments.addChild(downloads);
+        computerRoot.addChildren(myDocuments, myMedia);
+
+        root.addChildren(computerRoot);
+
+        tView = new AndroidTreeView(getActivity(), root);
+        tView.setDefaultAnimation(true);
+        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+        tView.setDefaultViewHolder(IconTreeItemHolder.class);
+        tView.setDefaultNodeClickListener(nodeClickListener);
+
+        containerView.addView(tView.getView());
+
+        if (savedInstanceState != null) {
+            String state = savedInstanceState.getString("tState");
+            if (!TextUtils.isEmpty(state)) {
+                tView.restoreState(state);
+            }
+        }
 
 
-        View rootView = inflater.inflate(R.layout.order_new_goods_list, container,
-                false);
-
-        // открываем подключение к БД
-        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        // формируем столбцы сопоставления
-        String[] from = new String[]{TableProducts.COLUMN_NAME};
-        int[] to = new int[]{R.id.main_list_item_text_client};
-
-        // создааем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
-        final ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
-        lvData.setAdapter(scAdapter);
-
-        // добавляем контекстное меню к списку
-        registerForContextMenu(lvData);
-
-        // создаем лоадер для чтения данных
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        //
-        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
-        imViewAdd.setOnClickListener(this);
         return rootView;
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.expandAll:
+                tView.expandAll();
+                break;
+
+            case R.id.collapseAll:
+                tView.collapseAll();
+                break;
+        }
+        return true;
+    }
+
+    private void fillDownloadsFolder(TreeNode node) {
+        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Downloads" + (counter++)));
+        node.addChild(downloads);
+        if (counter < 5) {
+            fillDownloadsFolder(downloads);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("tState", tView.getSaveState());
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
+        return null;
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        scAdapter.swapCursor(data);
+
     }
 
     @Override
@@ -76,45 +153,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onClick(final View view) {
-        switch (view.getId()) {
 
-            case R.id.main_heander_image_plus:
-                final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(NEW_ORDER);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // закрываем подключение при выходе
-        DB.close();
-    }
-
-    public interface onEventListener {
-        void someEvent(String tagAction);
-    }
-
-    private static class MyCursorLoader extends CursorLoader {
-
-        public MyCursorLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-            return DB
-                    .query(TableProducts.TABLE_NAME, // table name
-                            null, // columns
-                            null, // selection
-                            null, // selectionArgs
-                            null, // groupBy
-                            null, // having
-                            null);// orderBy
-        }
     }
 }
