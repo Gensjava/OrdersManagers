@@ -52,7 +52,13 @@ public class WorkFilesUtil {
                     while ((line = input.readLine()) != null) {
                         // use comma as separator
                         String[] country = line.split(mCvsSplitBy);
-                        dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, country));
+                        String[] pCountry = new String[country.length];
+                        //убираем симов "
+                        for (byte s = 0; s < country.length; s++) {
+                            pCountry[s] = country[s].replace('\"', ' ');
+                            pCountry[s] = pCountry[s].trim();
+                        }
+                        dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, pCountry));
                     }
                 } finally {
                     input.close();

@@ -79,7 +79,7 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
     public long insert(final ContentValues values) {
         return super.insert(values);
     }
-
+    //  db.addRec("sometext " + (scAdapter.getCount() + 1), R.drawable.ic_launcher);
 
     //    public static Map getListContentValuesTableName(String [] sData) {
 //
