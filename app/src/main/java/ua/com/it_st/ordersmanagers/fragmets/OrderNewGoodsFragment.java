@@ -10,15 +10,14 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 
 import com.unnamed.b.atv.model.TreeNode;
@@ -38,14 +37,25 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    private static SQLiteDatabase DB;
+    private static String mSelectionArgs;
     private TextView statusBar;
     private AndroidTreeView tView;
     private int counter = 0;
+    private Loader ld;
+
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
         public void onClick(TreeNode node, Object value) {
             IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
             statusBar.setText("Last clicked: " + item.text);
+            mSelectionArgs = "";
+            // new MyCursorLoader(getActivity()).loadInBackground();
+            // создаем лоадер для чтения данных
+            //  db.addRec("sometext " + (scAdapter.getCount() + 1), R.drawable.ic_launcher);
+
+            //обновляем курсор
+            getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
         }
     };
 
@@ -61,17 +71,24 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_default, null, false);
         ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
+
+        // открываем подключение к БД
+        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        // создаем лоадер для чтения данных
+        ld = getActivity().getSupportLoaderManager().initLoader(1, null, this);
+
         statusBar = (TextView) rootView.findViewById(R.id.status_bar);
 
+
         TreeNode root = TreeNode.root();
-        TreeNode computerRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "Корень"));
+        TreeNode computerRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "Корень", ""));
 
-        TreeNode myDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров"));
+        TreeNode myDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров", ""));
 
-        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Селектив"));
-        TreeNode downloads1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Косметика"));
-        TreeNode downloads2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Масмаркет"));
-        TreeNode downloads3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Schwarzkopf"));
+        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Селектив", "1"));
+        TreeNode downloads1 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Косметика", "2"));
+        TreeNode downloads2 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Масмаркет", "3"));
+        TreeNode downloads3 = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Schwarzkopf", "4"));
 
         fillDownloadsFolderMyDocuments(downloads);
 
@@ -100,7 +117,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             }
         }
 
-
         return rootView;
     }
 
@@ -125,7 +141,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void fillDownloadsFolder(TreeNode node) {
-        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Downloads" + (counter++)));
+        TreeNode downloads = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Downloads" + (counter++), "" + (counter++)));
         node.addChild(downloads);
         if (counter < 5) {
             fillDownloadsFolder(downloads);
@@ -133,7 +149,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void fillDownloadsFolderMyDocuments(TreeNode node) {
-        TreeNode MyDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "My Documents" + (counter++)));
+        TreeNode MyDocuments = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "My Documents" + (counter++), "" + (counter++)));
         node.addChild(MyDocuments);
         if (counter < 5) {
             fillDownloadsFolderMyDocuments(MyDocuments);
@@ -159,21 +175,65 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return null;
+        return new MyCursorLoader(getActivity());
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
+        while (data.moveToNext()) {
+            String catName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
+            Log.i("TABLE_NAME", "" + catName);
+        }
+        //data.close();
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-
+        new MyCursorLoader(getActivity());
     }
 
     @Override
     public void onClick(final View view) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // закрываем подключение при выходе
+        DB.close();
+    }
+    // TableProducts.COLUMN_ID_CATEGORY + "= ?", // selection
+    //     new String[] { "" }, // selectionArgs
+
+    private static class MyCursorLoader extends CursorLoader {
+        //String mSelectionArgs;
+
+        public MyCursorLoader(Context context) {
+            super(context);
+            //  mSelectionArgs  = selectionArgs;
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+
+            String lSpase = "\"";
+
+            return DB
+                    .query(TableProducts.TABLE_NAME, // table name
+                            null, // columns
+                            TableProducts.COLUMN_ID_CATEGORY + " = ?", // selection
+                            new String[]{lSpase}, // selectionArgs
+                            null, // groupBy
+                            null, // having
+                            null);// orderBy
+        }
+
+        @Override
+        public void onCanceled(final Cursor cursor) {
+            super.onCanceled(cursor);
+            cursor.close();
+        }
     }
 }
