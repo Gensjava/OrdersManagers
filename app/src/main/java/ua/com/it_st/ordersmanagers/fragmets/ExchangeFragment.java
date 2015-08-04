@@ -25,12 +25,9 @@ import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 
-/**
- * Created by Gens on 19.07.2015.
- */
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
-    private final String TEG = getClass().getName();
+    private final String TEG = ExchangeFragment.class.getSimpleName();
     private SQLiteDatabase db;
 
     @Nullable
@@ -83,11 +80,11 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     for (String i : nameFile) {
 
                         RequestParams params = new RequestParams();
-                        params.put(getString(R.string.name_file), i.toString());
+                        params.put(getString(R.string.name_file), i);
                         //params.put("login", "admin");
                         //params.put("password", "123");
                         //Log
-                        ErrorInfo.setmLogLine(getString(R.string.action_download_file), i.toString());
+                        ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
 
                         try {
                             //загружаем файл
@@ -95,7 +92,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                             //Log
-                            ErrorInfo.setmLogLine(getString(R.string.action_download_file), i.toString(), true, TEG + ": " + e.toString());
+                            ErrorInfo.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
                         }
                     }
                     if (db != null) {

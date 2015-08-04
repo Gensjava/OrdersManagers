@@ -12,13 +12,10 @@ import java.io.IOException;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
-/**
- * Created by Gens on 25.07.2015.
- */
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
     private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
-    private final String TEG = getClass().getName();
+    private final String TEG = AsyncHttpClientUtil.class.getSimpleName();
     private MainActivity mMainActivity;
 
     public AsyncHttpClientUtil(final MainActivity mainActivity) throws Exception {

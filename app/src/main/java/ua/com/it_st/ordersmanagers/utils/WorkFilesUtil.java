@@ -7,20 +7,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- * Created by Gens on 25.07.2015.
- */
 public class WorkFilesUtil {
 
     public static void onInsertTable(final File file, final String fileName, final SQLiteDatabase db) throws IOException {
 
         DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile((String) DBHelperUtil.getListHashMapTableName().get(fileName), db, file);
-                downloadAsyncFile.execute();
+        downloadAsyncFile.execute();
     }
 
     private static class DownloadAsyncFile extends AsyncTask<String, String, String> {
 
-        private final String TEG = getClass().getName();
+        private final String TEG = WorkFilesUtil.class.getSimpleName();
+
         private String mCvsSplitBy = ",\"";
         private String mNameTable;
         private SQLiteDatabase mDatabase;
@@ -46,24 +44,21 @@ public class WorkFilesUtil {
                 // Считываем по одной строке
                 BufferedReader input = new BufferedReader(new FileReader(mFile));
 
-                try {
-                    String line;
-                    input.readLine();
-                    while ((line = input.readLine()) != null) {
-                        // use comma as separator
-                        String[] country = line.split(mCvsSplitBy);
-                        String[] pCountry = new String[country.length];
-                        //убираем симов "
-                        for (byte s = 0; s < country.length; s++) {
-                            pCountry[s] = country[s].replace('\"', ' ');
-                            pCountry[s] = pCountry[s].trim();
-                        }
-                        dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, pCountry));
+                String line;
+                input.readLine();
+                while ((line = input.readLine()) != null) {
+                    // use comma as separator
+                    String[] country = line.split(mCvsSplitBy);
+                    String[] pCountry = new String[country.length];
+                    //убираем симов "
+                    for (byte s = 0; s < country.length; s++) {
+                        pCountry[s] = country[s].replace('\"', ' ');
+                        pCountry[s] = pCountry[s].trim();
                     }
-                } finally {
-                    input.close();
-
+                    dbHelperUtil.insert(DBHelperUtil.getListContentValuesTableName(mNameTable, pCountry));
                 }
+                input.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 //Log

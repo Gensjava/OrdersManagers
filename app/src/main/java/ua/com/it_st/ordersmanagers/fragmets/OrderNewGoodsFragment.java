@@ -20,13 +20,11 @@ import android.widget.TextView;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.treeElements.IconTreeItemHolder;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-/**
- * Created by Gens on 30.07.2015.
- */
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private static SQLiteDatabase DB;
@@ -38,6 +36,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
         public void onClick(TreeNode node, Object value) {
+
             IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
             statusBar.setText("Last clicked: " + item.text);
 
@@ -67,8 +66,8 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         statusBar = (TextView) rootView.findViewById(R.id.status_bar);
 
         TreeNode root = TreeNode.root();
-        TreeNode myRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_laptop, "Корень", "", true));
-        TreeNode myCatalog = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров", "", true));
+        TreeNode myRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+        TreeNode myCatalog = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
 
         myRoot.addChildren(myCatalog);
         root.addChildren(myCatalog);
@@ -134,9 +133,19 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
             String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
             String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
+            String cBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
 
-            Integer ic_icon = isCategory.equals("true") ? R.string.ic_folder : null;
-            TreeNode newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(ic_icon, cName, cKod, false));
+            final TreeNode newFolder;
+
+            switch (isCategory) {
+                case "true":
+                    newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, cName, cKod, false, true));
+                    break;
+                default:
+                    newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(cName, cKod, false, cBalance, null, false));
+
+            }
+
             tView.addNode(mNode, newFolder);
         }
         //data.close();
@@ -169,13 +178,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         public Cursor loadInBackground() {
 
             return DB
-                    .query(TableProducts.TABLE_NAME, // table name
-                            null, // columns
-                            TableProducts.COLUMN_ID_CATEGORY + " = ?", // selection
-                            new String[]{mSelectionArgs}, // selectionArgs
-                            null, // groupBy
-                            null, // having
-                            null);// orderBy
+                    .rawQuery("Select Products.name, Products.kod, Products.id_category, Products.is_category," +
+                            "GoodsByStores.Amount, GoodsByStores.kod_stores\n" +
+                            "FROM Products\n" +
+                            "LEFT OUTER JOIN GoodsByStores ON Products.kod = GoodsByStores.kod_coods\n" +
+                            "WHERE Products.id_category = ? ", new String[]{mSelectionArgs});
+
         }
 
         @Override

@@ -4,9 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-/**
- * Created by Gens on 27.04.2015.
- */
 public class TableOrders {
     public static final String TABLE_NAME = "Orders";
 
@@ -15,7 +12,6 @@ public class TableOrders {
     public static final String COLUMN_VIEW_ID = "view_id";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_SUM = "sum";
-    public static final String COLUMN_PRODUCT_ID = "product_id";
     public static final String COLUMN_CONTRAGENT_ID = "counteragent_id";
     public static final String COLUMN_AMOUT = "amount";
     public static final String COLUMN_MEASURING_ID = "measuring_id";
@@ -33,7 +29,6 @@ public class TableOrders {
                 + " ," + COLUMN_VIEW_ID + " integer"
                 + " ," + COLUMN_PRICE + " real"
                 + " ," + COLUMN_SUM + " real"
-                + " ," + COLUMN_PRODUCT_ID + " integer"
                 + " ," + COLUMN_CONTRAGENT_ID + " integer"
                 + " ," + COLUMN_AMOUT + " real"
                 + " ," + COLUMN_MEASURING_ID + " integer"
