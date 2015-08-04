@@ -7,16 +7,18 @@ import android.util.Log;
 public class TableOrders {
     public static final String TABLE_NAME = "Orders";
 
-    public static final String COLUMN_NAMBER = "number";
-    public static final String COLUMN_DATE = "date";
     public static final String COLUMN_VIEW_ID = "view_id";
-    public static final String COLUMN_PRICE = "price";
-    public static final String COLUMN_SUM = "sum";
-    public static final String COLUMN_CONTRAGENT_ID = "counteragent_id";
-    public static final String COLUMN_AMOUT = "amount";
-    public static final String COLUMN_MEASURING_ID = "measuring_id";
-    public static final String COLUMN_TYPE_ID = "type_id";
+    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_DATE = "date";
+    public static final String COLUMN_NUMBER = "number";
+    public static final String COLUMN_COMPLETED = "completed";
+    public static final String COLUMN_AGENT_ID = "agent_id";
     public static final String COLUMN_COMPANY_ID = "company_id";
+    public static final String COLUMN_STORE_ID = "store_id";
+    public static final String COLUMN_CLIENT_ID = "client_id";
+    public static final String COLUMN_PRICE_CATEGORY_ID = "price_id";
+    public static final String COLUMN_TOTAL = "total";
+    public static final String COLUMN_NOTE = "note";
 
     private static final String TAG = TableOrders.class.getSimpleName();
 
@@ -24,16 +26,18 @@ public class TableOrders {
         Log.i(TAG, "createTable");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
-                + " ," + COLUMN_NAMBER + " text"
-                + " ," + COLUMN_DATE + " text"
                 + " ," + COLUMN_VIEW_ID + " integer"
-                + " ," + COLUMN_PRICE + " real"
-                + " ," + COLUMN_SUM + " real"
-                + " ," + COLUMN_CONTRAGENT_ID + " integer"
-                + " ," + COLUMN_AMOUT + " real"
-                + " ," + COLUMN_MEASURING_ID + " integer"
-                + " ," + COLUMN_TYPE_ID + " integer"
+                + " ," + COLUMN_TYPE + " text"
+                + " ," + COLUMN_DATE + " text"
+                + " ," + COLUMN_NUMBER + " text"
+                + " ," + COLUMN_COMPLETED + " text"
+                + " ," + COLUMN_AGENT_ID + " integer"
                 + " ," + COLUMN_COMPANY_ID + " integer"
+                + " ," + COLUMN_STORE_ID + " integer"
+                + " ," + COLUMN_CLIENT_ID + " integer"
+                + " ," + COLUMN_PRICE_CATEGORY_ID + " integer"
+                + " ," + COLUMN_TOTAL + " real"
+                + " ," + COLUMN_NOTE + " text"
                 + ");");
     }
 

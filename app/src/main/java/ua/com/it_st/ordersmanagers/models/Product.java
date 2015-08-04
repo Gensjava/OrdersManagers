@@ -15,6 +15,10 @@ public class Product {
         mId = id;
     }
 
+    public Product() {
+
+    }
+
     public String getName() {
         return mName;
     }

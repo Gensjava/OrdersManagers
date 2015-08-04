@@ -40,7 +40,8 @@ public class TablePrices {
 
         data.put(COLUMN_KOD, sData[0]);
         data.put(COLUMN_PRICE_CATEGORY_KOD, sData[1]);
-        data.put(COLUMN_PRICE, sData[2]);
+        String b = sData[2].replace(',', ' ');
+        data.put(COLUMN_PRICE, b.trim());
 
         return data;
     }

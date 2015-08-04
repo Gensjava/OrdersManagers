@@ -11,7 +11,6 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTasks;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
@@ -66,7 +65,6 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TablePrices.createTable(db);
         TableProducts.createTable(db);
         TableTasks.createTable(db);
-        TableTypeOrders.createTable(db);
         TableUsers.createTable(db);
         TableTypePrices.createTable(db);
         TableCompanies.createTable(db);

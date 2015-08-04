@@ -1,4 +1,4 @@
-package ua.com.it_st.ordersmanagers.treeElements;
+package ua.com.it_st.ordersmanagers.models;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,17 +10,17 @@ import com.unnamed.b.atv.model.TreeNode;
 
 import ua.com.it_st.ordersmanagers.R;
 
-public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
+public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeProductCategoryHolder.TreeItem> {
 
     private PrintView arrowView;
     private boolean isCategory;
 
-    public IconTreeItemHolder(Context context) {
+    public TreeProductCategoryHolder(Context context) {
         super(context);
     }
 
     @Override
-    public View createNodeView(final TreeNode node, IconTreeItem value) {
+    public View createNodeView(final TreeNode node, TreeItem value) {
 
         View view;
         final LayoutInflater inflater = LayoutInflater.from(context);
@@ -49,25 +49,6 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
             orderTvValue.setText("1");
         }
 
-//        view.findViewById(R.id.btn_addFolder).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                TreeNode newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "New Folder", "", false));
-//                getTreeView().addNode(node, newFolder);
-//            }
-//        });
-//
-//        view.findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getTreeView().removeNode(node);
-//            }
-//        });
-
-        //if (node.getLevel() == 1) {
-        // view.findViewById(R.id.btn_delete).setVisibility(View.GONE);
-        //  }
-
         return view;
     }
 
@@ -78,7 +59,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         }
     }
 
-    public static class IconTreeItem {
+    public static class TreeItem {
         public Integer icon;
         public String text;
         public String id;
@@ -86,8 +67,15 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         public String balance;
         public String order;
         public boolean isCategory;
+        public double price;
 
-        public IconTreeItem(Integer icon, String text, String id, boolean click, boolean isCategory) {
+        //категория
+        public TreeItem(Integer icon,
+                        String text,
+                        String id,
+                        boolean click,
+                        boolean isCategory) {
+
             this.icon = icon;
             this.text = text;
             this.id = id;
@@ -95,13 +83,86 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
             this.isCategory = isCategory;
         }
 
-        public IconTreeItem(final String text, final String id, final boolean click, final String balance, final String order, boolean isCategory) {
+        //товар
+        public TreeItem(final String text,
+                        final String id,
+                        final boolean click,
+                        final String balance,
+                        final String order,
+                        boolean isCategory,
+                        double price) {
+
             this.text = text;
             this.id = id;
             this.click = click;
             this.balance = balance;
             this.order = order;
             this.isCategory = isCategory;
+            this.price = price;
+        }
+
+        public Integer getIcon() {
+            return icon;
+        }
+
+        public void setIcon(final Integer icon) {
+            this.icon = icon;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(final String text) {
+            this.text = text;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(final String id) {
+            this.id = id;
+        }
+
+        public boolean isClick() {
+            return click;
+        }
+
+        public void setClick(final boolean click) {
+            this.click = click;
+        }
+
+        public String getBalance() {
+            return balance;
+        }
+
+        public void setBalance(final String balance) {
+            this.balance = balance;
+        }
+
+        public String getOrder() {
+            return order;
+        }
+
+        public void setOrder(final String order) {
+            this.order = order;
+        }
+
+        public boolean isCategory() {
+            return isCategory;
+        }
+
+        public void setIsCategory(final boolean isCategory) {
+            this.isCategory = isCategory;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(final double price) {
+            this.price = price;
         }
     }
 }

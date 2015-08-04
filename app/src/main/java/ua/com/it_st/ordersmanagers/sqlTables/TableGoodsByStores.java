@@ -14,7 +14,7 @@ public class TableGoodsByStores {
 
     public static final String COLUMN_COODS_KOD = "kod_coods";
     public static final String COLUMN_STORES_KOD = "kod_stores";
-    public static final String COLUMN_AMOUNT = "Amount";
+    public static final String COLUMN_AMOUNT = "amount";
 
     private static final String TAG = TableGoodsByStores.class.getSimpleName();
 
@@ -40,7 +40,8 @@ public class TableGoodsByStores {
 
         data.put(COLUMN_COODS_KOD, sData[0]);
         data.put(COLUMN_STORES_KOD, sData[1]);
-        data.put(COLUMN_AMOUNT, sData[2]);
+        String b = sData[2].replace(',', ' ');
+        data.put(COLUMN_AMOUNT, b.trim());
 
         return data;
     }

@@ -9,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +19,12 @@ import android.widget.TextView;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.Product;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.treeElements.IconTreeItemHolder;
+import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
+import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
@@ -37,16 +39,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         @Override
         public void onClick(TreeNode node, Object value) {
 
-            IconTreeItemHolder.IconTreeItem item = (IconTreeItemHolder.IconTreeItem) value;
+            TreeProductCategoryHolder.TreeItem item = (TreeProductCategoryHolder.TreeItem) value;
             statusBar.setText("Last clicked: " + item.text);
 
             mNode = node;
-
-            if (!item.click) {
-                item.click = true;
-                mSelectionArgs = item.id;
-                //обновляем курсор
-                getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+            if (item.isCategory) {
+                if (!item.click) {
+                    item.click = true;
+                    mSelectionArgs = item.id;
+                    //обновляем курсор
+                    getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+                }
+            } else {
+                Product product = new Product();
+                Dialogs.showCustomAlertDialogEnterNumber("Добавить в корзину", getActivity(), item);
             }
         }
     };
@@ -65,18 +71,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
         statusBar = (TextView) rootView.findViewById(R.id.status_bar);
 
+        //Это корень
         TreeNode root = TreeNode.root();
-        TreeNode myRoot = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-        TreeNode myCatalog = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+        TreeNode myRoot = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+        TreeNode myCatalog = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
 
         myRoot.addChildren(myCatalog);
         root.addChildren(myCatalog);
         mNode = myCatalog;
 
+        //создаем древо
         tView = new AndroidTreeView(getActivity(), root);
-        //tView.setDefaultAnimation(true);
+        // tView.setDefaultAnimation(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-        tView.setDefaultViewHolder(IconTreeItemHolder.class);
+        tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
 
         containerView.addView(tView.getView());
@@ -87,6 +95,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 tView.restoreState(state);
             }
         }
+        //у корня дерева ИД = ""
         mSelectionArgs = "";
         // открываем подключение к БД
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
@@ -133,20 +142,22 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
             String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
             String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
-            String cBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
 
-            final TreeNode newFolder;
+            final TreeNode newTreeItem;
 
             switch (isCategory) {
                 case "true":
-                    newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, cName, cKod, false, true));
+                    newTreeItem = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, cName, cKod, false, true));
                     break;
                 default:
-                    newFolder = new TreeNode(new IconTreeItemHolder.IconTreeItem(cName, cKod, false, cBalance, null, false));
+                    String cBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    double cPrice = Double.parseDouble(data.getString(data.getColumnIndex(TablePrices.COLUMN_PRICE)));
+
+                    newTreeItem = new TreeNode(new TreeProductCategoryHolder.TreeItem(cName, cKod, false, cBalance, null, false, cPrice));
 
             }
 
-            tView.addNode(mNode, newFolder);
+            tView.addNode(mNode, newTreeItem);
         }
         //data.close();
     }
@@ -179,10 +190,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
             return DB
                     .rawQuery("Select Products.name, Products.kod, Products.id_category, Products.is_category," +
-                            "GoodsByStores.Amount, GoodsByStores.kod_stores\n" +
+                            "GoodsByStores.Amount, GoodsByStores.kod_stores, Prices.price\n" +
                             "FROM Products\n" +
                             "LEFT OUTER JOIN GoodsByStores ON Products.kod = GoodsByStores.kod_coods\n" +
-                            "WHERE Products.id_category = ? ", new String[]{mSelectionArgs});
+                            "LEFT OUTER JOIN Prices ON Products.kod = Prices.kod\n" +
+                            "WHERE Products.id_category = ? \n" +
+                            "GROUP by Products.kod", new String[]{mSelectionArgs});
 
         }
 
