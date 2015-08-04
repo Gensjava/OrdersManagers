@@ -15,7 +15,6 @@ import ua.com.it_st.ordersmanagers.R;
  * Created by Bogdan Melnychuk on 2/12/15.
  */
 public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
-    private TextView tvValue;
     private PrintView arrowView;
 
     public IconTreeItemHolder(Context context) {
@@ -28,6 +27,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         View view = null;
         final LayoutInflater inflater = LayoutInflater.from(context);
 
+        final TextView tvValue;
         if (value.icon != null) {
 
             view = inflater.inflate(R.layout.layout_icon_node, null, false);
@@ -40,8 +40,13 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
             arrowView = (PrintView) view.findViewById(R.id.arrow_icon);
         } else {
             view = inflater.inflate(R.layout.layout_icon_node_item, null, false);
+
             tvValue = (TextView) view.findViewById(R.id.node_value);
             tvValue.setText(value.text);
+            TextView balanceTvValue = (TextView) view.findViewById(R.id.balance_value);
+            balanceTvValue.setText("10");
+            TextView orderTvValue = (TextView) view.findViewById(R.id.order_value);
+            orderTvValue.setText("1");
         }
 
 //        view.findViewById(R.id.btn_addFolder).setOnClickListener(new View.OnClickListener() {
@@ -58,10 +63,10 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
 //                getTreeView().removeNode(node);
 //            }
 //        });
-        
-        if (node.getLevel() == 1) {
-            view.findViewById(R.id.btn_delete).setVisibility(View.GONE);
-        }
+
+        //if (node.getLevel() == 1) {
+        // view.findViewById(R.id.btn_delete).setVisibility(View.GONE);
+        //  }
 
         return view;
     }
