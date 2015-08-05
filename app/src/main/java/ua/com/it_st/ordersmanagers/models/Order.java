@@ -40,6 +40,10 @@ public class Order {
         mNote = note;
     }
 
+    public Order() {
+
+    }
+
     public String getId() {
         return mId;
     }
@@ -138,23 +142,27 @@ public class Order {
 
 
     //табличная часть заказа
-    public class OrderLines {
+    public static class OrderLines {
         private String mDocId;
         private String mGoodsId;
-        private String mRate;
-        private String mAmount;
-        private String mPrice;
+        private int mRate;
+        private double mAmount;
+        private double mPrice;
 
         public OrderLines(final String docId,
                           final String goodsId,
-                          final String rate,
-                          final String amount,
-                          final String price) {
+                          final int rate,
+                          final double amount,
+                          final double price) {
             mDocId = docId;
             mGoodsId = goodsId;
             mRate = rate;
             mAmount = amount;
             mPrice = price;
+        }
+
+        public OrderLines() {
+
         }
 
         public String getDocId() {
@@ -173,28 +181,29 @@ public class Order {
             mGoodsId = goodsId;
         }
 
-        public String getRate() {
+        public int getRate() {
             return mRate;
         }
 
-        public void setRate(final String rate) {
+        public void setRate(final int rate) {
             mRate = rate;
         }
 
-        public String getAmount() {
+        public double getAmount() {
             return mAmount;
         }
 
-        public void setAmount(final String amount) {
+        public void setAmount(final double amount) {
             mAmount = amount;
         }
 
-        public String getPrice() {
+        public double getPrice() {
             return mPrice;
         }
 
-        public void setPrice(final String price) {
+        public void setPrice(final double price) {
             mPrice = price;
         }
     }
+
 }

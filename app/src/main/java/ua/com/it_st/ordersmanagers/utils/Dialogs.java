@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.models.Order;
 import ua.com.it_st.ordersmanagers.models.Product;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
@@ -24,7 +27,6 @@ import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 public class Dialogs {
 
     private static TextView number, sum;
-    private static TreeProductCategoryHolder.TreeItem mProduct;
 
     //Создаем открываем диалог
     public static void showCustomAlertDialogEnterNumber(final String title, final Context context, final TreeProductCategoryHolder.TreeItem product) {
@@ -33,9 +35,8 @@ public class Dialogs {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         final View numberView;
 
-        mProduct = product;
 
-        if (mProduct == null) {
+        if (product == null) {
             return;
         }
 
@@ -48,8 +49,8 @@ public class Dialogs {
         number = (TextView) numberView.findViewById(R.id.dialog_number_number);
         sum = (TextView) numberView.findViewById(R.id.dialog_number_sum);
 
-        price.setText(String.valueOf(mProduct.getPrice()));
-        sum.setText(String.valueOf(mProduct.getPrice()));
+        price.setText(String.valueOf(product.getPrice()));
+        sum.setText(String.valueOf(product.getPrice()));
 
         final double[] numberD = {1.0};
         final Animation animScale = AnimationUtils.loadAnimation(context, R.anim.scale_button);
@@ -59,7 +60,8 @@ public class Dialogs {
             public void onClick(View v) {
                 numberD[0]++;
                 number.setText(String.valueOf(numberD[0]));
-                sum.setText(String.valueOf(mProduct.getPrice() * numberD[0]));
+                double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
+                sum.setText(String.valueOf(newSum));
                 v.startAnimation(animScale);
             }
         });
@@ -70,7 +72,8 @@ public class Dialogs {
                 if (numberD[0] > 1) {
                     numberD[0]--;
                     number.setText(String.valueOf(numberD[0]));
-                    sum.setText(String.valueOf(mProduct.getPrice() * numberD[0]));
+                    double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
+                    sum.setText(String.valueOf(newSum));
                     v.startAnimation(animScale);
                 }
             }
@@ -88,24 +91,23 @@ public class Dialogs {
                     public void onClick(DialogInterface dialog,
                                         int id) {
 
-                        // if (title == MainActivity.TITLE_DIALOG_ADD_CART) {
-
                         double numberInDialog = Double.parseDouble(String.valueOf(number.getText()));
                         //заказ
                         //Cart cart = new Cart(mProduct, String.valueOf(getDate()), mProduct.getPrice(), numberInDialog, mProduct.getPrice() * numberInDialog);
                         //Cart.setmCart(cart);
+                        Order.OrderLines orderLines = new Order.OrderLines(
+                                ConstantsUtil.currentOrder.getId(),
+                                product.getId(),
+                                1,
+                                numberInDialog,
+                                product.getPrice());
+
                         dialog.cancel();
 
 
-                        // } else {
-
-                        //  Сonstants.hashMapProductRating.put(mProduct.getKod(), ratingBar.getRating());
-
-                        // }
-
                     }
-                })
-                .setNegativeButton("Отмена", null);
+                });
+        builder.setNegativeButton("Отмена", null);
 
         final AlertDialog alert = builder.create();
         alert.show();

@@ -78,7 +78,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         return items;
     }
 
-
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
@@ -90,7 +89,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             default:
                 break;
         }
-
     }
 
     public interface onEventListener {
