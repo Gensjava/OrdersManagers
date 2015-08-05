@@ -91,20 +91,23 @@ public class Dialogs {
                     public void onClick(DialogInterface dialog,
                                         int id) {
 
+                        //Количество товара
                         double numberInDialog = Double.parseDouble(String.valueOf(number.getText()));
-                        //заказ
-                        //Cart cart = new Cart(mProduct, String.valueOf(getDate()), mProduct.getPrice(), numberInDialog, mProduct.getPrice() * numberInDialog);
-                        //Cart.setmCart(cart);
+                        //Количество товара
+                        double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
+
+                        //строка ТЧ заказа
                         Order.OrderLines orderLines = new Order.OrderLines(
-                                ConstantsUtil.currentOrder.getId(),
+                                ConstantsUtil.mCurrentOrder.getId(),
                                 product.getId(),
                                 1,
                                 numberInDialog,
-                                product.getPrice());
-
+                                product.getPrice(),
+                                sumInDialog);
+                        //добавляем в табличную часть заказа
+                        ConstantsUtil.setListOrderLines(orderLines);
+                        //
                         dialog.cancel();
-
-
                     }
                 });
         builder.setNegativeButton("Отмена", null);

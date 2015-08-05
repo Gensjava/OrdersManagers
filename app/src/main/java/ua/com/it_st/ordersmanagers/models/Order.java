@@ -148,17 +148,20 @@ public class Order {
         private int mRate;
         private double mAmount;
         private double mPrice;
+        private double mSum;
 
         public OrderLines(final String docId,
                           final String goodsId,
                           final int rate,
                           final double amount,
-                          final double price) {
+                          final double price,
+                          final double sum) {
             mDocId = docId;
             mGoodsId = goodsId;
             mRate = rate;
             mAmount = amount;
             mPrice = price;
+            mSum = sum;
         }
 
         public OrderLines() {
@@ -203,6 +206,25 @@ public class Order {
 
         public void setPrice(final double price) {
             mPrice = price;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            final OrderLines that = (OrderLines) o;
+
+            if (mDocId != null ? !mDocId.equals(that.mDocId) : that.mDocId != null) return false;
+            return !(mGoodsId != null ? !mGoodsId.equals(that.mGoodsId) : that.mGoodsId != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = mDocId != null ? mDocId.hashCode() : 0;
+            result = 31 * result + (mGoodsId != null ? mGoodsId.hashCode() : 0);
+            return result;
         }
     }
 
