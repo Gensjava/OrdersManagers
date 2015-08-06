@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity
 
         implements
         MainFragment.onEventListener,
-        OrderNewHeaderFragment.onEventListener {
+        OrderNewHeaderFragment.onEventListener,
+        OrderNewGoodsFragment.onEventListener {
 
 
     private DrawerLayout mDrawer;

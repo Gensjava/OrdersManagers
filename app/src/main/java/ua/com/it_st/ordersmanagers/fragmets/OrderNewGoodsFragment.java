@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -23,6 +24,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -30,11 +32,11 @@ import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
 
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static TextView ui_cart;
     private static SQLiteDatabase DB;
     private static String mSelectionArgs;
     private AndroidTreeView tView;
     private TreeNode mNode;
-
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
         public void onClick(final TreeNode node, final Object value) {
@@ -56,6 +58,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             }
         }
     };
+
+    //определяем показывать к-во товара в корзине или нет
+    //если больше 0 тогда показываем
+    public static void updateCartCount() {
+
+        if (ui_cart == null) return;
+
+        if (ConstantsUtil.mCart.size() == 0) {
+            ui_cart.setVisibility(View.INVISIBLE);
+        } else {
+            ui_cart.setVisibility(View.VISIBLE);
+            ui_cart.setText(Integer.toString(ConstantsUtil.mCart.size()));
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,8 +121,32 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //
+        updateCartCount();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+
+        //inflater.inflate(R.menu.menu_main, menu);
+        //корзина
+        final MenuItem customCart = menu.add(0, R.id.menu_cart, 0, "");
+        customCart.setActionView(R.layout.main_tool_bar_cart);
+        customCart.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final View menu_cart = menu.findItem(R.id.menu_cart).getActionView();
+        //клик на корзине
+        menu_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final onEventListener someEventListener = (onEventListener) getActivity();
+                someEventListener.someEvent(OrderNewCartFragment.class);
+            }
+        });
+
+        ui_cart = (TextView) menu_cart.findViewById(R.id.main_tool_bar_cart_text);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -170,6 +210,10 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         super.onDestroy();
         // закрываем подключение при выходе
         DB.close();
+    }
+
+    public interface onEventListener {
+        void someEvent(Class<?> tClass);
     }
 
     private static class MyCursorLoader extends CursorLoader {

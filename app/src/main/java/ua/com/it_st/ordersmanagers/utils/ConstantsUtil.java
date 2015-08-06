@@ -17,10 +17,21 @@ public class ConstantsUtil {
     //если есть такой товар тогда делаем замену
     public static void setListOrderLines(Order.OrderLines item) {
 
+        //удаляем товар
+        onListOrderLinesDelete(item);
+
+        //добавляем только если больше чем 0
+        if (item.getAmount() > 0) {
+            mCart.add(item);
+        }
+    }
+
+    //если есть в ТЧ товар такой удаляем его
+    public static void onListOrderLinesDelete(Order.OrderLines item) {
+
         if (mCart.contains(item)) {
             mCart.remove(item);
         }
-        mCart.add(item);
     }
 
     // Получаем текущее дату системы

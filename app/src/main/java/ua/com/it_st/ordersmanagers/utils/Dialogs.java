@@ -21,6 +21,7 @@ import java.util.Date;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.models.Order;
 import ua.com.it_st.ordersmanagers.models.Product;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
@@ -103,17 +104,21 @@ public class Dialogs {
                                 numberInDialog,
                                 product.getPrice(),
                                 sumInDialog);
-                        //добавляем в табличную часть заказа
-                        ConstantsUtil.setListOrderLines(orderLines);
-                        //
+
+                        //к-во заказа
                         final TextView orderTvValue = (TextView) node.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);
 
+                        //делаем проверку товара на остатке
                         if (product.getBalance() >= numberInDialog) {
                             if (numberInDialog > 0) {
                                 orderTvValue.setVisibility(View.VISIBLE);
                                 orderTvValue.setText(String.valueOf(numberInDialog));
+                                //добавляем в табличную часть заказа
+                                ConstantsUtil.setListOrderLines(orderLines);
                             } else {
                                 orderTvValue.setVisibility(View.INVISIBLE);
+                                //удаляем из табличной части заказа
+                                ConstantsUtil.onListOrderLinesDelete(orderLines);
                             }
                         } else {
                             //
@@ -123,6 +128,8 @@ public class Dialogs {
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
+                        //обновляем корзину
+                        OrderNewGoodsFragment.updateCartCount();
                         //
                         dialog.cancel();
                     }

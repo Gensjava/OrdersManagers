@@ -103,7 +103,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public interface onEventListener {
-        public void someEvent(Class<?> tClass);
+        void someEvent(Class<?> tClass);
     }
 
     private static class MyCursorLoader extends CursorLoader {
