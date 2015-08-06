@@ -30,8 +30,8 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
 
         if (isCategory) {
 
-            view = inflater.inflate(R.layout.layout_icon_node, null, false);
-            tvValue = (TextView) view.findViewById(R.id.node_value);
+            view = inflater.inflate(R.layout.order_new_goods_node, null, false);
+            tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_value);
             tvValue.setText(value.text);
 
             final PrintView iconView = (PrintView) view.findViewById(R.id.icon);
@@ -39,14 +39,14 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             iconView.setIconText(context.getResources().getString(value.icon));
             arrowView = (PrintView) view.findViewById(R.id.arrow_icon);
         } else {
-            view = inflater.inflate(R.layout.layout_icon_node_item, null, false);
+            view = inflater.inflate(R.layout.order_new_goods_node_item, null, false);
 
-            tvValue = (TextView) view.findViewById(R.id.node_value);
+            tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_node_value);
             tvValue.setText(value.text);
-            TextView balanceTvValue = (TextView) view.findViewById(R.id.balance_value);
-            balanceTvValue.setText(value.balance);
-            TextView orderTvValue = (TextView) view.findViewById(R.id.order_value);
-            orderTvValue.setText("1");
+            TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
+            balanceTvValue.setText(String.valueOf(value.balance));
+            TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
+            orderTvValue.setText(String.valueOf(value.order));
         }
 
         return view;
@@ -60,16 +60,16 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
     }
 
     public static class TreeItem {
-        public Integer icon;
-        public String text;
-        public String id;
-        public boolean click;
-        public String balance;
-        public String order;
-        public boolean isCategory;
-        public double price;
+        private Integer icon;
+        private String id;
+        private double balance;
+        private double order;
+        private double price;
+        private String text;
+        private boolean isCategory;
+        private boolean click;
 
-        //категория
+        //category
         public TreeItem(Integer icon,
                         String text,
                         String id,
@@ -83,12 +83,12 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.isCategory = isCategory;
         }
 
-        //товар
+        //goods
         public TreeItem(final String text,
                         final String id,
                         final boolean click,
-                        final String balance,
-                        final String order,
+                        final double balance,
+                        final double order,
                         boolean isCategory,
                         double price) {
 
@@ -100,6 +100,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.isCategory = isCategory;
             this.price = price;
         }
+
 
         public Integer getIcon() {
             return icon;
@@ -133,19 +134,19 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.click = click;
         }
 
-        public String getBalance() {
+        public double getBalance() {
             return balance;
         }
 
-        public void setBalance(final String balance) {
+        public void setBalance(final double balance) {
             this.balance = balance;
         }
 
-        public String getOrder() {
+        public double getOrder() {
             return order;
         }
 
-        public void setOrder(final String order) {
+        public void setOrder(final double order) {
             this.order = order;
         }
 

@@ -208,6 +208,14 @@ public class Order {
             mPrice = price;
         }
 
+        public double getSum() {
+            return mSum;
+        }
+
+        public void setSum(final double sum) {
+            mSum = sum;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) return true;

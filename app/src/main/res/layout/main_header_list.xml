@@ -30,7 +30,7 @@
             android:layout_marginTop="40dp"
             android:layout_toEndOf="@+id/main_heander_period"
             android:layout_toRightOf="@+id/main_heander_period"
-            android:src="@mipmap/ic_launcher_plus"/>
+            android:src="@mipmap/ic_plus"/>
 
         <TextView
             android:id="@+id/main_heander_period"

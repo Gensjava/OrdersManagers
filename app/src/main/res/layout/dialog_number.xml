@@ -61,7 +61,7 @@
             android:layout_height="35dp"
             android:gravity="center"
             android:onClick="onClick"
-            android:src="@mipmap/ic_launcher_dialog_minus"/>
+            android:src="@mipmap/ic_dialog_minus"/>
 
         <TextView
             android:id="@+id/dialog_number_number"
@@ -77,7 +77,7 @@
             android:layout_height="35dp"
             android:gravity="center"
             android:onClick="onClick"
-            android:src="@mipmap/ic_launcher_dialog_plus"/>
+            android:src="@mipmap/ic_dialog_plus"/>
 
         <TextView
             android:id="@+id/dialog_number_sum"

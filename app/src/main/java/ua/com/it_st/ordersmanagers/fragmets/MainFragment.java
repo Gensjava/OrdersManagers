@@ -25,11 +25,9 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    public static final String PLUS_ORDER = "PLUS_ORDER";
     private static SQLiteDatabase DB;
     private ListView lvData;
     private SimpleCursorAdapter scAdapter;
-    private onEventListener someEventListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,8 +80,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (view.getId()) {
 
             case R.id.main_heander_image_plus:
-                someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(PLUS_ORDER);
+                final onEventListener someEventListener = (onEventListener) getActivity();
+                someEventListener.someEvent(OrderNewHeaderFragment.class);
                 break;
             default:
                 break;
@@ -105,7 +103,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public interface onEventListener {
-        public void someEvent(String tagAction);
+        public void someEvent(Class<?> tClass);
     }
 
     private static class MyCursorLoader extends CursorLoader {

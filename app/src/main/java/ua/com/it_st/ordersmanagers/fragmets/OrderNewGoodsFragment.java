@@ -15,11 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.models.Product;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
@@ -27,32 +26,33 @@ import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
+
+public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static SQLiteDatabase DB;
     private static String mSelectionArgs;
-    private TextView statusBar;
     private AndroidTreeView tView;
     private TreeNode mNode;
 
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
-        public void onClick(TreeNode node, Object value) {
+        public void onClick(final TreeNode node, final Object value) {
 
-            TreeProductCategoryHolder.TreeItem item = (TreeProductCategoryHolder.TreeItem) value;
-            statusBar.setText("Last clicked: " + item.text);
-
+            final TreeItem item = (TreeItem) value;
+            //Текущая позиция дерева
             mNode = node;
-            if (item.isCategory) {
-                if (!item.click) {
-                    item.click = true;
-                    mSelectionArgs = item.id;
+            if (item.isCategory()) {
+                if (!item.isClick()) {
+                    //записываем клик на позиции чтоб два раза не строить ветки
+                    item.setClick(true);
+                    //параметр для запроса
+                    mSelectionArgs = item.getId();
                     //обновляем курсор
                     getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
                 }
             } else {
-                Product product = new Product();
-                Dialogs.showCustomAlertDialogEnterNumber("Добавить в корзину", getActivity(), item);
+                Dialogs.showCustomAlertDialogEnterNumber("Добавить в корзину", getActivity(), item, mNode);
             }
         }
     };
@@ -66,16 +66,14 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_default, null, false);
-        ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
-
-        statusBar = (TextView) rootView.findViewById(R.id.status_bar);
+        final View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
+        final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
         //Это корень
         TreeNode root = TreeNode.root();
-        TreeNode myRoot = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-        TreeNode myCatalog = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
-
+        TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+        TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+        //создаем ветки
         myRoot.addChildren(myCatalog);
         root.addChildren(myCatalog);
         mNode = myCatalog;
@@ -87,6 +85,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
 
+        //загружаем дерево
         containerView.addView(tView.getView());
 
         if (savedInstanceState != null) {
@@ -147,14 +146,13 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
             switch (isCategory) {
                 case "true":
-                    newTreeItem = new TreeNode(new TreeProductCategoryHolder.TreeItem(R.string.ic_folder, cName, cKod, false, true));
+                    newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
                     break;
                 default:
-                    String cBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    double cBalance = Double.parseDouble(data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT)));
                     double cPrice = Double.parseDouble(data.getString(data.getColumnIndex(TablePrices.COLUMN_PRICE)));
 
-                    newTreeItem = new TreeNode(new TreeProductCategoryHolder.TreeItem(cName, cKod, false, cBalance, null, false, cPrice));
-
+                    newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, cBalance, 0, false, cPrice));
             }
 
             tView.addNode(mNode, newTreeItem);
@@ -165,11 +163,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         new MyCursorLoader(getActivity());
-    }
-
-    @Override
-    public void onClick(final View view) {
-
     }
 
     @Override
@@ -197,12 +190,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                             "WHERE Products.id_category = ? \n" +
                             "GROUP by Products.kod", new String[]{mSelectionArgs});
 
-        }
-
-        @Override
-        public void onCanceled(final Cursor cursor) {
-            super.onCanceled(cursor);
-            cursor.close();
         }
     }
 }

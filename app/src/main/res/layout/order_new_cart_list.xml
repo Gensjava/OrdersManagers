@@ -5,13 +5,13 @@
                 android:orientation="vertical">
 
     <TextView
-        android:id="@+id/order_new_goods_text_catalog"
+        android:id="@+id/order_new_cart_list_header_root"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:background="@color/main_grey"
         android:gravity="center"
         android:paddingBottom="60dp"
-        android:text="Каталог товаров"
+        android:text="@string/cart"
         android:textColor="@android:color/background_light"
         android:textSize="25sp"/>
 
@@ -21,39 +21,39 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/order_new_goods_image_new"
+            android:id="@+id/order_new_cart_list_image_arrow_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/order_new_goods_title"
+            android:layout_below="@+id/order_new_cart_period"
             android:layout_gravity="right"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="40dp"
-            android:layout_toEndOf="@+id/order_new_goods_title"
-            android:layout_toRightOf="@+id/order_new_goods_title"
-            android:src="@mipmap/ic_launcher_arrow_right"/>
+            android:layout_toEndOf="@+id/order_new_cart_period"
+            android:layout_toRightOf="@+id/order_new_cart_period"
+            android:src="@mipmap/ic_arrow_right"/>
 
         <TextView
-            android:id="@+id/order_new_goods_title"
+            android:id="@+id/order_new_cart_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="47dp"
-            android:text="Выбор товара"
+            android:text="Заказ №001 от 01-08-15"
             android:textColor="@color/main_sub_grey"/>
 
         <RelativeLayout
-            android:id="@+id/order_new_goods_relativeLayout2"
+            android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_new_goods_image_new"
+            android:layout_below="@+id/order_new_cart_list_image_arrow_right"
             android:layout_marginTop="5dp"
             >
 
             <TextView
-                android:id="@+id/order_new_goods_text_client"
+                android:id="@+id/order_new_cart_list_text_client"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -61,17 +61,16 @@
 
         </RelativeLayout>
 
-        <ExpandableListView
-            android:id="@+id/order_new_goods_list_position"
+        <ListView
+            android:id="@+id/order_new_cart_list_position"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_new_goods_relativeLayout2"/>
+            android:layout_below="@+id/order_new_cart_list_space"/>
 
         <TextView
-            android:id="@+id/order_new_goods_space"
+            android:id="@+id/order_new_cart_list_space"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/relativeLayout2"

@@ -3,6 +3,7 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -10,6 +11,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.unnamed.b.atv.model.TreeNode;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,16 +33,11 @@ public class Dialogs {
     private static TextView number, sum;
 
     //Создаем открываем диалог
-    public static void showCustomAlertDialogEnterNumber(final String title, final Context context, final TreeProductCategoryHolder.TreeItem product) {
+    public static void showCustomAlertDialogEnterNumber(final String title, final Context context, final TreeProductCategoryHolder.TreeItem product, final TreeNode node) {
 
         //получаем Inflater
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        final LayoutInflater layoutInflater = LayoutInflater.from(context);
         final View numberView;
-
-
-        if (product == null) {
-            return;
-        }
 
         //каст макет
         numberView = layoutInflater.inflate(R.layout.dialog_number, null);
@@ -69,7 +68,7 @@ public class Dialogs {
         numberMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberD[0] > 1) {
+                if (numberD[0] > 0) {
                     numberD[0]--;
                     number.setText(String.valueOf(numberD[0]));
                     double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
@@ -81,7 +80,7 @@ public class Dialogs {
 
 
         //открываем диалог
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setView(numberView);
         //кнопки
@@ -92,9 +91,9 @@ public class Dialogs {
                                         int id) {
 
                         //Количество товара
-                        double numberInDialog = Double.parseDouble(String.valueOf(number.getText()));
-                        //Количество товара
-                        double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
+                        final double numberInDialog = Double.parseDouble(String.valueOf(number.getText()));
+                        //Сумма товара
+                        final double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
 
                         //строка ТЧ заказа
                         Order.OrderLines orderLines = new Order.OrderLines(
@@ -107,6 +106,24 @@ public class Dialogs {
                         //добавляем в табличную часть заказа
                         ConstantsUtil.setListOrderLines(orderLines);
                         //
+                        final TextView orderTvValue = (TextView) node.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);
+
+                        if (product.getBalance() >= numberInDialog) {
+                            if (numberInDialog > 0) {
+                                orderTvValue.setVisibility(View.VISIBLE);
+                                orderTvValue.setText(String.valueOf(numberInDialog));
+                            } else {
+                                orderTvValue.setVisibility(View.INVISIBLE);
+                            }
+                        } else {
+                            //
+                            final Toast toast = Toast.makeText(context,
+                                    "Недостаточно остатка товара на складе!",
+                                    Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
+                        //
                         dialog.cancel();
                     }
                 });
@@ -117,15 +134,5 @@ public class Dialogs {
 
     }
 
-    // Получаем текущее дату системы
-    // Возвращаем дату "текущюю дату"
-    private static Date getDate() {
-        //текущая дата
-        long curTime = System.currentTimeMillis();
-        Date date = new Date(curTime);
-        return date;
-    }
 
-    public static void showCustomAlertDialogEnterNumber() {
-    }
 }

@@ -32,7 +32,7 @@
         app:iconText="@string/ic_email"/>
 
     <TextView
-        android:id="@+id/node_value"
+        android:id="@+id/order_new_goods_node_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

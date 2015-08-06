@@ -16,17 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 /**
  * Created by Gens on 01.08.2015.
  */
-public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
+public class OrderNewCartFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.order_new_header_list, container,
+        View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
 
         SimpleAdapter adapter;
@@ -45,7 +46,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             }
         });
 
-        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
+        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_cart_list_image_arrow_right);
         imViewAdd.setOnClickListener(this);
 
         return rootView;
@@ -53,22 +54,15 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
     public List<Map<String, ?>> createList() {
         //параметры шапки
-        String[] headerOrders = getResources().getStringArray(R.array.header_orders);
+        String[] headerOrders = (String[]) ConstantsUtil.mCart.toArray();
 
-        Integer[] mPictures = new Integer[]
-                {R.mipmap.ic_organization,
-                        R.mipmap.ic_stores,
-                        R.mipmap.ic_client,
-                        R.mipmap.ic_tipe_price,
-                        R.mipmap.ic_coment
-                };
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         byte x = 0;
         for (String s : headerOrders) {
 
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("title", s);
-            map.put("imageAvatar", mPictures[x]);
+            map.put("imageAvatar", R.mipmap.ic_coment);
             x++;
             items.add(map);
         }
@@ -81,7 +75,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             case R.id.order_new_header_list_image_arrow_right:
                 final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(OrderNewGoodsFragment.class);
+                someEventListener.someEvent(MainFragment.class);
                 break;
             default:
                 break;
@@ -89,6 +83,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     }
 
     public interface onEventListener {
-        void someEvent(Class<?> tClass);
+        void someEvent(Class tClass);
     }
 }

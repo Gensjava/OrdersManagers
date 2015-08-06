@@ -2,16 +2,17 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
+
     <item android:id="@+id/action_settings"
           android:orderInCategory="100"
           android:title="@string/action_settings"
           app:showAsAction="never"/>
     <item
         android:id="@+id/expandAll"
-        android:title="ExpandAll"
+        android:title="@string/expandAll"
         app:showAsAction="never"/>
     <item
         android:id="@+id/collapseAll"
-        android:title="CollapseAll"
+        android:title="@string/collapseAll"
         app:showAsAction="never"/>
 </menu>

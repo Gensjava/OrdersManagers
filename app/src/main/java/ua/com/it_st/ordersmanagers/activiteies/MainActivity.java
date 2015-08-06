@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the planet to show based on
         // position
-        Fragment fragment = null;
 
         Class fragmentClass;
         switch (menuItem.getItemId()) {
@@ -114,16 +113,8 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = BlankFragment.class;
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        //Открываем фрагмент
+        onOpenFragment(fragmentClass);
 
         // Highlight the selected item, update the title, and close the drawer
         menuItem.setChecked(true);
@@ -152,32 +143,20 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void someEvent(final String tagAction) {
+    public void someEvent(final Class<?> tFragmentClass) {
+
+        //Открываем фрагмент
+        onOpenFragment(tFragmentClass);
+    }
+
+    void onOpenFragment(final Class<?> fragmentClass) {
 
         Fragment fragment = null;
-        Class fragmentClass = null;
-
-        switch (tagAction) {
-            case MainFragment.PLUS_ORDER:
-                fragmentClass = OrderNewHeaderFragment.class;
-                break;
-            case OrderNewHeaderFragment.ACTION_ARROW_RIGHT:
-                fragmentClass = OrderNewGoodsFragment.class;
-                break;
-            default:
-                break;
-        }
-
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //Открывепем фрагмент
-        onOpenFragment(fragment);
-    }
-
-    void onOpenFragment(Fragment fragment) {
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
