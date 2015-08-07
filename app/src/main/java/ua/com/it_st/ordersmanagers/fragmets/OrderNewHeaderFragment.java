@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,9 @@ import ua.com.it_st.ordersmanagers.R;
  */
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
 
+    public static final String KEY_ITEM = "KEY_ITEM";
+    String[] headerOrders;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,6 +33,9 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.order_new_header_list, container,
                 false);
 
+        //параметры шапки
+        headerOrders = getResources().getStringArray(R.array.header_orders);
+        //создаем адаптер
         SimpleAdapter adapter;
         adapter = new SimpleAdapter(getActivity(), createList(),
                 R.layout.order_new_header_list_item,
@@ -42,6 +49,14 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             @Override
             public void onItemClick(final AdapterView<?> adapterView, final View view, final int i, final long l) {
 
+                TextView textView = (TextView) view.findViewById(R.id.order_header_list_item_text);
+                textView.setText("sssssssss");
+
+                Bundle bundleItem = new Bundle();
+                bundleItem.putString(KEY_ITEM, headerOrders[i]);
+
+                final onEventListener someEventListener = (onEventListener) getActivity();
+                someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
             }
         });
 
@@ -52,9 +67,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     }
 
     public List<Map<String, ?>> createList() {
-        //параметры шапки
-        String[] headerOrders = getResources().getStringArray(R.array.header_orders);
-
+        //иконки к шапке заказа
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
                         R.mipmap.ic_stores,
@@ -62,6 +75,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                         R.mipmap.ic_tipe_price,
                         R.mipmap.ic_coment
                 };
+        //список параметров шапки заказа
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         byte x = 0;
         for (String s : headerOrders) {
@@ -81,7 +95,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             case R.id.order_new_header_list_image_arrow_right:
                 final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(OrderNewGoodsFragment.class);
+                someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
                 break;
             default:
                 break;
@@ -89,6 +103,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     }
 
     public interface onEventListener {
-        void someEvent(Class<?> tClass);
+        void onOpenFragmentClass(Class<?> fClass);
+
+        void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 }

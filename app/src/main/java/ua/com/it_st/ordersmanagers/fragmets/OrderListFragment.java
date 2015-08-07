@@ -18,15 +18,15 @@ import android.widget.ListView;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
  * Created by Gens on 30.07.2015.
  */
-public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class OrderListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private static SQLiteDatabase DB;
-    private ListView lvData;
     private SimpleCursorAdapter scAdapter;
 
     @Override
@@ -37,23 +37,23 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         View rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
 
-//        // открываем подключение к БД
-//        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-//
-//        // формируем столбцы сопоставления
-//        String[] from = new String[]{TableCounteragents.COLUMN_NAME};
-//        int[] to = new int[]{R.id.main_list_item_text_client};
-//
-//        // создааем адаптер и настраиваем список
-//        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
-//        lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
-//        lvData.setAdapter(scAdapter);
-//
-//        // добавляем контекстное меню к списку
-//        registerForContextMenu(lvData);
-//
-//        // создаем лоадер для чтения данных
-//        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        // открываем подключение к БД
+        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+
+        // формируем столбцы сопоставления
+        String[] from = new String[]{TableOrders.COLUMN_CLIENT_ID};
+        int[] to = new int[]{R.id.main_list_item_text_client};
+
+        // создааем адаптер и настраиваем список
+        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
+        final ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
+        lvData.setAdapter(scAdapter);
+
+        // добавляем контекстное меню к списку
+        registerForContextMenu(lvData);
+
+        // создаем лоадер для чтения данных
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
         //
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
         imViewAdd.setOnClickListener(this);
@@ -81,7 +81,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             case R.id.main_heander_image_plus:
                 final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(OrderNewHeaderFragment.class);
+                someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
                 break;
             default:
                 break;
@@ -103,7 +103,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public interface onEventListener {
-        void someEvent(Class<?> tClass);
+        void onOpenFragmentClass(Class<?> fClass);
     }
 
     private static class MyCursorLoader extends CursorLoader {
@@ -115,7 +115,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         @Override
         public Cursor loadInBackground() {
             return DB
-                    .query(TableCounteragents.TABLE_NAME, // table name
+                    .query(TableOrders.TABLE_NAME, // table name
                             null, // columns
                             null, // selection
                             null, // selectionArgs

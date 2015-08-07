@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.Order;
+import ua.com.it_st.ordersmanagers.models.Order.OrderLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 /**
@@ -36,7 +38,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 new String[]{"title", "imageAvatar"},
                 new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
 
-        ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
+        ListView lv = (ListView) rootView.findViewById(R.id.order_new_cart_list_position);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,17 +55,16 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     }
 
     public List<Map<String, ?>> createList() {
-        //параметры шапки
-        String[] headerOrders = (String[]) ConstantsUtil.mCart.toArray();
+        //корзина
+        Order.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderLines[ConstantsUtil.mCart.size()]);
 
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
-        byte x = 0;
-        for (String s : headerOrders) {
+
+        for (Order.OrderLines s : cartOrders) {
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("title", s);
+            map.put("title", s.getName());
             map.put("imageAvatar", R.mipmap.ic_coment);
-            x++;
             items.add(map);
         }
         return items;
@@ -75,7 +76,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
             case R.id.order_new_header_list_image_arrow_right:
                 final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(MainFragment.class);
+                someEventListener.onOpenFragmentClass(OrderListFragment.class);
                 break;
             default:
                 break;
@@ -83,6 +84,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     }
 
     public interface onEventListener {
-        void someEvent(Class tClass);
+        void onOpenFragmentClass(Class fClass);
     }
 }

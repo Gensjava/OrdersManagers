@@ -149,23 +149,34 @@ public class Order {
         private double mAmount;
         private double mPrice;
         private double mSum;
+        private String mName;
 
         public OrderLines(final String docId,
                           final String goodsId,
                           final int rate,
                           final double amount,
                           final double price,
-                          final double sum) {
+                          final double sum,
+                          final String name) {
             mDocId = docId;
             mGoodsId = goodsId;
             mRate = rate;
             mAmount = amount;
             mPrice = price;
             mSum = sum;
+            mName = name;
         }
 
         public OrderLines() {
 
+        }
+
+        public String getName() {
+            return mName;
+        }
+
+        public void setName(final String name) {
+            mName = name;
         }
 
         public String getDocId() {

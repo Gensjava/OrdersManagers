@@ -16,14 +16,15 @@ import android.view.MenuItem;
 import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
-import ua.com.it_st.ordersmanagers.fragmets.MainFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
+import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity
 
         implements
-        MainFragment.onEventListener,
+        OrderListFragment.onEventListener,
         OrderNewHeaderFragment.onEventListener,
         OrderNewGoodsFragment.onEventListener {
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = MainFragment.class;
+                fragmentClass = OrderListFragment.class;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = ExchangeFragment.class;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Открываем фрагмент
-        onOpenFragment(fragmentClass);
+        WorkFragment.onNewInstanceFragment(fragmentClass, this);
 
         // Highlight the selected item, update the title, and close the drawer
         menuItem.setChecked(true);
@@ -142,34 +143,15 @@ public class MainActivity extends AppCompatActivity
         mToolbar = toolbar;
     }
 
-
     @Override
-    public void someEvent(final Class<?> tFragmentClass) {
-
+    public void onOpenFragmentClass(final Class<?> fClass) {
         //Открываем фрагмент
-        onOpenFragment(tFragmentClass);
+        WorkFragment.onNewInstanceFragment(fClass, this);
     }
 
-    void onOpenFragment(final Class<?> fragmentClass) {
-
-        Fragment fragment = null;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-
-            ft.addToBackStack(fragment.getClass().toString());
-
-            ft.replace(R.id.flContent, fragment, fragment.getClass().toString());
-            ft.commit();
-        } else {
-            // Error
-            Log.e(this.getClass().getName(), "Error. Fragment is not created");
-        }
+    @Override
+    public void onOpenFragmentClassBundle(final Class<?> fClass, final Bundle bundleItem) {
+        //Открываем фрагмент
+        WorkFragment.onNewInstanceFragment(fClass, bundleItem, this);
     }
 }

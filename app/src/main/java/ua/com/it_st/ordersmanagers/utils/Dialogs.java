@@ -103,7 +103,8 @@ public class Dialogs {
                                 1,
                                 numberInDialog,
                                 product.getPrice(),
-                                sumInDialog);
+                                sumInDialog,
+                                product.getText());
 
                         //к-во заказа
                         final TextView orderTvValue = (TextView) node.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);

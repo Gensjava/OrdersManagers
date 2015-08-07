@@ -26,6 +26,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
@@ -141,7 +142,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             @Override
             public void onClick(final View view) {
                 final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.someEvent(OrderNewCartFragment.class);
+                someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
             }
         });
 
@@ -213,7 +214,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     }
 
     public interface onEventListener {
-        void someEvent(Class<?> tClass);
+        void onOpenFragmentClass(Class<?> fClass);
     }
 
     private static class MyCursorLoader extends CursorLoader {
@@ -226,13 +227,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         public Cursor loadInBackground() {
 
             return DB
-                    .rawQuery("Select Products.name, Products.kod, Products.id_category, Products.is_category," +
-                            "GoodsByStores.Amount, GoodsByStores.kod_stores, Prices.price\n" +
-                            "FROM Products\n" +
-                            "LEFT OUTER JOIN GoodsByStores ON Products.kod = GoodsByStores.kod_coods\n" +
-                            "LEFT OUTER JOIN Prices ON Products.kod = Prices.kod\n" +
-                            "WHERE Products.id_category = ? \n" +
-                            "GROUP by Products.kod", new String[]{mSelectionArgs});
+                    .rawQuery(SQLQuery.queryGoods("Products.id_category = ?"), new String[]{mSelectionArgs});
 
         }
     }
