@@ -19,6 +19,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:hint="text"
+
         android:textColor="@color/space"
         android:textIsSelectable="true"
         android:textSize="14dp"/>

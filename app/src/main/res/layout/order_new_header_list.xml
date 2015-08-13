@@ -24,16 +24,16 @@
             android:id="@+id/order_new_header_list_image_arrow_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/order_heander_period"
+            android:layout_below="@+id/order_new_heander_period"
             android:layout_gravity="right"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="40dp"
-            android:layout_toEndOf="@+id/order_heander_period"
-            android:layout_toRightOf="@+id/order_heander_period"
+            android:layout_toEndOf="@+id/order_new_heander_period"
+            android:layout_toRightOf="@+id/order_new_heander_period"
             android:src="@mipmap/ic_arrow_right"/>
 
         <TextView
-            android:id="@+id/order_heander_period"
+            android:id="@+id/order_new_heander_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

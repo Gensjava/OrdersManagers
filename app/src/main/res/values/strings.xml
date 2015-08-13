@@ -51,6 +51,14 @@
         <item>Комментарий</item>
     </string-array>
 
+    <string-array name="header_orders_table">
+        <item>Сompanys</item>
+        <item>TypeStores</item>
+        <item>Counteragents</item>
+        <item>TypePrices</item>
+    </string-array>
+
+
     <string name="ic_access_alarms">&#xe000;</string>
     <string name="ic_access_time">&#xe001;</string>
     <string name="ic_accessibility">&#xe002;</string>
@@ -484,8 +492,14 @@
     <string name="ic_whatshot">&#xe1ae;</string>
     <string name="ic_wifi_tethering">&#xe1af;</string>
     <string name="ic_work">&#xe1b0;</string>
+
     <string name="root">Корень</string>
     <string name="cart">Корзина</string>
     <string name="expandAll">Развернуть все</string>
     <string name="collapseAll">Свернуть все</string>
+    <string name="name">name</string>
+    <string name="kod">kod</string>
+    <string name="title">title</string>
+    <string name="imageAvatar">imageAvatar</string>
+
 </resources>

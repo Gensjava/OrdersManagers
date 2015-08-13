@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
@@ -19,6 +20,7 @@ import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -26,7 +28,10 @@ public class MainActivity extends AppCompatActivity
         implements
         OrderListFragment.onEventListener,
         OrderNewHeaderFragment.onEventListener,
-        OrderNewGoodsFragment.onEventListener {
+        OrderNewGoodsFragment.onEventListener,
+        OrderNewSelectHeaderFragment.OnFragmentSelectListener
+
+{
 
 
     private DrawerLayout mDrawer;
@@ -153,5 +158,21 @@ public class MainActivity extends AppCompatActivity
     public void onOpenFragmentClassBundle(final Class<?> fClass, final Bundle bundleItem) {
         //Открываем фрагмент
         WorkFragment.onNewInstanceFragment(fClass, bundleItem, this);
+    }
+
+    @Override
+    public void OnFragmentSelectListener(final String[] link) {
+//        DetailFragment fragment = (DetailFragment) getFragmentManager()
+//                .findFragmentById(R.id.detailFragment);
+//        if (fragment != null && fragment.isInLayout()) {
+//            fragment.setText(link);
+//        }
+        OrderNewHeaderFragment fragment = (OrderNewHeaderFragment) getSupportFragmentManager().findFragmentByTag(OrderNewHeaderFragment.class.toString());
+        if (fragment != null) {
+            //Открываем фрагмент
+            fragment.SetSelectUpdate(link);
+
+//            ((TextView)  fragment.getView().findViewById(R.id.order_new_heander_period)).setText("zxdczsdcx");
+        }
     }
 }

@@ -11,7 +11,7 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 public class WorkFragment {
 
-    public static void onNewInstanceFragment(final Class<?> fragmentClass, final Bundle bundleItem, MainActivity context) {
+    public static void onNewInstanceFragment(final Class<?> fragmentClass, final Bundle bundleItem, final MainActivity context) {
 
         Fragment fragment = null;
         try {
@@ -24,7 +24,7 @@ public class WorkFragment {
         onOpenFragment(fragment, context);
     }
 
-    public static void onNewInstanceFragment(final Class<?> fragmentClass, MainActivity context) {
+    public static void onNewInstanceFragment(final Class<?> fragmentClass, final MainActivity context) {
 
         Fragment fragment = null;
         try {
