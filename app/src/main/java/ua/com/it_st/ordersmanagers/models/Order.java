@@ -108,7 +108,7 @@ public class Order {
         mStoreId = storeId;
     }
 
-    public String getClientId() {
+    public String getClientId(final String item) {
         return mClientId;
     }
 
@@ -116,7 +116,7 @@ public class Order {
         mClientId = clientId;
     }
 
-    public String getPriceCategoryId() {
+    public String getPriceCategoryId(final String item) {
         return mPriceCategoryId;
     }
 

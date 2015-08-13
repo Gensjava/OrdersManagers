@@ -20,15 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
-/**
- * Created by Gens on 01.08.2015.
- */
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
 
     public static final String NAME_TABLE = "NAME_TABLE";
-    private TextView textView;
-    private SimpleAdapter adapter;
+    private SimpleAdapter mAdapter;
     private View rootView;
     private String[] mItem;
 
@@ -42,13 +39,13 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                     false);
 
             //создаем адаптер
-            adapter = new MySimpleAdapter(getActivity(), createList(),
+            mAdapter = new MySimpleAdapter(getActivity(), createList(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
 
             ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
-            lv.setAdapter(adapter);
+            lv.setAdapter(mAdapter);
 
             ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
             imViewAdd.setOnClickListener(this);
@@ -97,7 +94,27 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     public void SetSelectUpdate(final String[] item) {
 
         mItem = item;
-        adapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void onfillOrder(int position, String item) {
+        switch (position) {
+            case 0:
+                ConstantsUtil.mCurrentOrder.setFirmId(item);
+                break;
+            case 1:
+                ConstantsUtil.mCurrentOrder.setStoreId(item);
+                break;
+            case 2:
+                ConstantsUtil.mCurrentOrder.setClientId(item);
+                break;
+            case 3:
+                ConstantsUtil.mCurrentOrder.setPriceCategoryId(item);
+                break;
+            case 4:
+                ConstantsUtil.mCurrentOrder.setNote(item);
+                break;
+        }
     }
 
     public interface onEventListener {
@@ -111,14 +128,12 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         String[] headerOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
         private LayoutInflater mInflater;
         private ArrayList mHeaderOrders;
-        private Context mContext;
         private int mPosition;
 
         public MySimpleAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to) {
             super(context, data, resource, from, to);
             mInflater = LayoutInflater.from(context);
             mHeaderOrders = (ArrayList) data;
-            mContext = context;
         }
 
         @Override
@@ -132,12 +147,12 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             Map<String, ?> items = (Map<String, ?>) mHeaderOrders.get(position);
             convertView = mInflater.inflate(R.layout.order_new_header_list_item, parent, false);
 
-            textView = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
-
+            TextView textView = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
             textView.setHint(items.get(getString(R.string.title)).toString());
 
             if (mItem != null & mPosition == position) {
                 textView.setText(mItem[0]);
+                onfillOrder(position, mItem[1]);
             }
 
             textView.setOnClickListener(new View.OnClickListener() {
