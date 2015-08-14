@@ -3,6 +3,7 @@ package ua.com.it_st.ordersmanagers.utils;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.models.Order;
 
@@ -10,6 +11,8 @@ public class ConstantsUtil {
 
     //текущий новый заказ
     public static Order mCurrentOrder = new Order();
+
+
     //ТЧ заказа
     public static Set<Order.OrderLines> mCart = new LinkedHashSet<Order.OrderLines>();
 
@@ -34,9 +37,27 @@ public class ConstantsUtil {
         }
     }
 
+    //Получем последний номер документа
+    public static int getNumberOrder() {
+        short iNumber = 0;
+        return iNumber;
+    }
+
+    //Получаем сумму всего
+    public static String getTotalOrder() {
+        String iNumber = null;
+        return iNumber;
+    }
+
+    //Получаем ИД Агента
+    public static String getIdAgent() {
+        String iNumber = null;
+        return iNumber;
+    }
+
     // Получаем текущее дату системы
     // Возвращаем дату "текущюю дату"
-    private static Date getDate() {
+    public static Date getDate() {
         //текущая дата
         long curTime = System.currentTimeMillis();
         Date date = new Date(curTime);

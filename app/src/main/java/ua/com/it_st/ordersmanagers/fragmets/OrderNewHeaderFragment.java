@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -29,7 +30,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     private View rootView;
     private String[] mItem;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +37,9 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
+
+            UUID uniqueKey = UUID.randomUUID();
+            ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
 
             //создаем адаптер
             mAdapter = new MySimpleAdapter(getActivity(), createList(),
@@ -91,13 +94,17 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         }
     }
 
-    public void SetSelectUpdate(final String[] item) {
+    //записываем и обновляем выбранные данные
+    //item -  0  = наименование, 1 = ИД
+    public void setSelectUpdate(final String[] item) {
 
         mItem = item;
         mAdapter.notifyDataSetChanged();
     }
 
+    //заполняем шапку нового заказа
     private void onfillOrder(int position, String item) {
+
         switch (position) {
             case 0:
                 ConstantsUtil.mCurrentOrder.setFirmId(item);
@@ -114,6 +121,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             case 4:
                 ConstantsUtil.mCurrentOrder.setNote(item);
                 break;
+            default:
+                break;
         }
     }
 
@@ -125,7 +134,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
     private class MySimpleAdapter extends SimpleAdapter {
 
-        String[] headerOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
+        private String[] headerOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
         private LayoutInflater mInflater;
         private ArrayList mHeaderOrders;
         private int mPosition;

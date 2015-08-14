@@ -1,8 +1,11 @@
 package ua.com.it_st.ordersmanagers.sqlTables;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import ua.com.it_st.ordersmanagers.models.Order;
 
 public class TableOrdersLines {
     public static final String TABLE_NAME = "OrdersLines";
@@ -31,6 +34,19 @@ public class TableOrdersLines {
                                     final int oldVersion, final int newVersion) {
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
 
+    }
+
+    public static ContentValues getContentValues(Order.OrderLines sData, String idDoc) {
+
+        final ContentValues data = new ContentValues();
+
+        data.put(COLUMN_DOC_ID, idDoc);
+        data.put(COLUMN_GOODS_ID, sData.getGoodsId());
+        data.put(COLUMN_RATE, sData.getRate());
+        data.put(COLUMN_AMOUNT, sData.getAmount());
+        data.put(COLUMN_PRICE, sData.getPrice());
+
+        return data;
     }
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {

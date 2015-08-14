@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,17 +13,19 @@ import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.Order;
 import ua.com.it_st.ordersmanagers.models.Order.OrderLines;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.DBHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-/**
- * Created by Gens on 01.08.2015.
- */
 public class OrderNewCartFragment extends Fragment implements View.OnClickListener {
 
     @Override
@@ -74,7 +77,10 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     public void onClick(final View view) {
         switch (view.getId()) {
 
-            case R.id.order_new_header_list_image_arrow_right:
+            case R.id.order_new_cart_list_image_arrow_right:
+                //создаем новый заказ
+                onNewOrder();
+                //открываем журнал заказов
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
                 break;
@@ -83,7 +89,24 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    public void onNewOrder() {
+        // открываем подключение к БД
+        SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        //шапка
+        DBHelperUtil dbOrder = new DBHelperUtil(DB, TableOrders.TABLE_NAME);
+        dbOrder.insert(TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
+        //табличная часть
+        // DBHelperUtil dbOrderLine = new DBHelperUtil(DB, TableOrdersLines.TABLE_NAME);
+        //
+        // Iterator <Order.OrderLines> itr = ConstantsUtil.mCart.iterator();
+        //  while (itr.hasNext()) {
+        //      dbOrderLine.insert(TableOrdersLines.getContentValues(itr.next(), ConstantsUtil.mCurrentOrder.getId()));
+        // }
+
+        DB.close();
+    }
+
     public interface onEventListener {
-        void onOpenFragmentClass(Class fClass);
+        void onOpenFragmentClass(Class<?> fClass);
     }
 }

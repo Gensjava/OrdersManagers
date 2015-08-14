@@ -1,5 +1,7 @@
 package ua.com.it_st.ordersmanagers.models;
 
+import java.util.UUID;
+
 import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 
 /**
@@ -108,7 +110,7 @@ public class Order {
         mStoreId = storeId;
     }
 
-    public String getClientId(final String item) {
+    public String getClientId() {
         return mClientId;
     }
 
@@ -116,7 +118,7 @@ public class Order {
         mClientId = clientId;
     }
 
-    public String getPriceCategoryId(final String item) {
+    public String getPriceCategoryId() {
         return mPriceCategoryId;
     }
 

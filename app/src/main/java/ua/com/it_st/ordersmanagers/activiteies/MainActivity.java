@@ -18,6 +18,7 @@ import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
@@ -29,10 +30,10 @@ public class MainActivity extends AppCompatActivity
         OrderListFragment.onEventListener,
         OrderNewHeaderFragment.onEventListener,
         OrderNewGoodsFragment.onEventListener,
-        OrderNewSelectHeaderFragment.OnFragmentSelectListener
+        OrderNewSelectHeaderFragment.OnFragmentSelectListener,
+        OrderNewCartFragment.onEventListener
 
 {
-
 
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
@@ -162,17 +163,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void OnFragmentSelectListener(final String[] link) {
-//        DetailFragment fragment = (DetailFragment) getFragmentManager()
-//                .findFragmentById(R.id.detailFragment);
-//        if (fragment != null && fragment.isInLayout()) {
-//            fragment.setText(link);
-//        }
+
         OrderNewHeaderFragment fragment = (OrderNewHeaderFragment) getSupportFragmentManager().findFragmentByTag(OrderNewHeaderFragment.class.toString());
         if (fragment != null) {
             //Открываем фрагмент
-            fragment.SetSelectUpdate(link);
-
-//            ((TextView)  fragment.getView().findViewById(R.id.order_new_heander_period)).setText("zxdczsdcx");
+            fragment.setSelectUpdate(link);
         }
     }
 }
