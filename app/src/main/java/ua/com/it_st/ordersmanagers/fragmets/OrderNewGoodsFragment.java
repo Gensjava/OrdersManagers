@@ -52,7 +52,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     //параметр для запроса
                     mSelectionArgs = item.getId();
                     //обновляем курсор
-                    getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+                    getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                 }
             } else {
                 Dialogs.showCustomAlertDialogEnterNumber("Добавить в корзину", getActivity(), item, mNode);
@@ -116,7 +116,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         // открываем подключение к БД
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
         // создаем лоадер для чтения данных
-        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
 
         return rootView;
     }
@@ -200,17 +200,15 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         }
         //data.close();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getSupportLoaderManager().destroyLoader(0);
+    }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         new MyCursorLoader(getActivity());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // закрываем подключение при выходе
-        DB.close();
     }
 
     public interface onEventListener {

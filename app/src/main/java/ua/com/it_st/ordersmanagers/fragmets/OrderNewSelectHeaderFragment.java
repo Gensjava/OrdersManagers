@@ -91,41 +91,22 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (DB == null) {
-            // открываем подключение к БД
-            DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        }
-    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new MyCursorLoader(getActivity());
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        scAdapter.swapCursor(data);
+        if (data.isClosed()) {
+            // error
+        } else {
+            scAdapter.swapCursor(data);
+        }
 
-//        if(data != null && !data.isClosed()){
-//            data.close();
-//        }
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (DB != null) {
-            // закрываем подключение при выходе
-            DB.close();
-        }
 
     }
 
@@ -145,10 +126,6 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             throw new ClassCastException(activity.toString()
                     + " должен реализовывать интерфейс OnFragmentInteractionListener");
         }
-    }
-
-    public interface onEventListener {
-        void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 
     public interface OnFragmentSelectListener {

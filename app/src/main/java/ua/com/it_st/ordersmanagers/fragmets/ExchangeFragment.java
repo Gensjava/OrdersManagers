@@ -16,6 +16,8 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
@@ -51,15 +53,15 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.exchege_image_button:
 
-                //удаляем все записи из таблиц
+                /* удаляем все записи из таблиц */
                 onDeleteValueTables();
-                //список файлов для загрузки
+                /* список файлов для загрузки */
                 String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
                 //Log
                 ErrorInfo.setmLogLine("Начало загрузки");
 
-                //подключаемся через HTTP к базе и загужаем данные
+                /* подключаемся через HTTP к базе и загужаем данные */
                 AsyncHttpClientUtil utilAsyncHttpClient = null;
                 boolean lConnect;
                 try {
@@ -73,7 +75,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                     ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
                 }
 
-                //начинаем загрузку
+                /* начинаем загрузку */
                 if (lConnect) {
                     //начинаем транзакцию
                     db.beginTransaction();
@@ -87,7 +89,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
 
                         try {
-                            //загружаем файл
+                            /* загружаем файл */
                             utilAsyncHttpClient.getDownloadFiles(params, db);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -96,7 +98,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                     if (db != null) {
-                        //заканчиваем транзакцию
+                        /* заканчиваем транзакцию */
                         db.setTransactionSuccessful();
                         db.endTransaction();
                     }
@@ -117,7 +119,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
             db.close();
     }
 
-    //чистим таблицы 
+    /* чистим таблицы */
     private void onDeleteValueTables() {
 
         TableCompanies.onDeleteValueTable(db);
@@ -127,6 +129,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         TableTypePrices.onDeleteValueTable(db);
         TableTypeStores.onDeleteValueTable(db);
         TableGoodsByStores.onDeleteValueTable(db);
+        TableOrders.onDeleteValueTable(db);
+        TableOrdersLines.onDeleteValueTable(db);
 
     }
 }

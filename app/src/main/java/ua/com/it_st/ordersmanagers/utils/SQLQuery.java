@@ -5,8 +5,10 @@ package ua.com.it_st.ordersmanagers.utils;
  */
 public class SQLQuery {
 
-    //запрос товаров
-    //sp параметры условий запроса
+    /*
+    запрос товаров
+    sp - параметры условий запроса
+    */
     public static String queryGoods(final String sp) {
 
         String sq;
@@ -17,6 +19,21 @@ public class SQLQuery {
                 "LEFT OUTER JOIN Prices ON Products.kod = Prices.kod\n" +
                 "WHERE " + sp + "\n" +
                 "GROUP by Products.kod";
+        return sq;
+    }
+
+    /*
+    запрос журнал заказов
+    sp параметры условий запроса
+    */
+    public static String queryOrders(final String sp) {
+
+        String sq;
+        sq = "Select Orders._id,Orders.date, Orders.number, Orders.total, Counteragents.name, Counteragents.address\n" +
+                "FROM Orders\n" +
+                "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod\n" +
+                "WHERE " + sp + "\n" +
+                "ORDER BY  Orders.number";
         return sq;
     }
 }

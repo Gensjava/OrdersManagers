@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -169,5 +171,14 @@ public class MainActivity extends AppCompatActivity
             //Открываем фрагмент
             fragment.setSelectUpdate(link);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        DB.close();
+
     }
 }

@@ -8,6 +8,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTasks;
@@ -62,6 +63,7 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
         TableCounteragents.createTable(db);
         TableOrders.createTable(db);
+        TableOrdersLines.createTable(db);
         TablePrices.createTable(db);
         TableProducts.createTable(db);
         TableTasks.createTable(db);

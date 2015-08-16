@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -9,27 +10,27 @@ import ua.com.it_st.ordersmanagers.models.Order;
 
 public class ConstantsUtil {
 
-    //текущий новый заказ
+    /* текущий новый заказ */
     public static Order mCurrentOrder = new Order();
-
-
-    //ТЧ заказа
+    /* ТЧ заказа */
     public static Set<Order.OrderLines> mCart = new LinkedHashSet<Order.OrderLines>();
 
-    //записываем новый товар в ТЧ заказа
-    //если есть такой товар тогда делаем замену
+    /*
+    записываем новый товар в ТЧ заказа
+    если есть такой товар тогда делаем замену
+    */
     public static void setListOrderLines(Order.OrderLines item) {
 
-        //удаляем товар
+        /* удаляем товар */
         onListOrderLinesDelete(item);
 
-        //добавляем только если больше чем 0
+        /* добавляем только если больше чем 0 */
         if (item.getAmount() > 0) {
             mCart.add(item);
         }
     }
 
-    //если есть в ТЧ товар такой удаляем его
+    /* если есть в ТЧ товар такой удаляем его */
     public static void onListOrderLinesDelete(Order.OrderLines item) {
 
         if (mCart.contains(item)) {
@@ -37,30 +38,34 @@ public class ConstantsUtil {
         }
     }
 
-    //Получем последний номер документа
+    /* Получем последний номер документа */
     public static int getNumberOrder() {
         short iNumber = 0;
         return iNumber;
     }
 
-    //Получаем сумму всего
+    /* Получаем сумму всего */
     public static String getTotalOrder() {
         String iNumber = null;
         return iNumber;
     }
 
-    //Получаем ИД Агента
+    /* Получаем ИД Агента */
     public static String getIdAgent() {
         String iNumber = null;
         return iNumber;
     }
 
-    // Получаем текущее дату системы
-    // Возвращаем дату "текущюю дату"
-    public static Date getDate() {
-        //текущая дата
+    /*
+    Получаем текущее дату системы
+    Возвращаем дату "текущюю дату"
+    */
+    public static String getDate() {
+        /* текущая дата */
         long curTime = System.currentTimeMillis();
         Date date = new Date(curTime);
-        return date;
+        /* делаем формат даты */
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
+        return dateFormat.format(date);
     }
 }

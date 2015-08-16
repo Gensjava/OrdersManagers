@@ -11,18 +11,18 @@
 
     <TextView
         android:id="@+id/main_list_item_text_date"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/main_list_item_image_status"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/main_list_item_image_status"
-        android:layout_toRightOf="@+id/main_list_item_image_status"
+        android:layout_alignRight="@+id/main_list_item_image_status"
         android:paddingTop="10dp"
         android:text="@string/header_date"
-        android:textSize="16sp"/>
+        android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/main_list_item_text_client"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -35,24 +35,25 @@
         android:id="@+id/main_list_item_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/main_list_item_image_menu"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/main_list_item_image_menu"
-        android:layout_toStartOf="@+id/main_list_item_image_menu"
+        android:layout_alignStart="@+id/main_list_item_image_menu"
         android:paddingTop="10dp"
         android:text="@string/header_sum"
         android:textSize="16sp"/>
 
     <ImageView
         android:id="@+id/main_list_item_image_menu"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="false"
+        />
 
     <TextView
         android:id="@+id/main_list_item_text_sub_client"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/main_list_item_text_client"
         android:layout_alignStart="@+id/main_list_item_text_client"

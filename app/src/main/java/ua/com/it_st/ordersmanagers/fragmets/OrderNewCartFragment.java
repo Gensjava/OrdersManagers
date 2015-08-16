@@ -20,6 +20,7 @@ import java.util.Map;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.Order;
 import ua.com.it_st.ordersmanagers.models.Order.OrderLines;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -90,20 +91,19 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     }
 
     public void onNewOrder() {
-        // открываем подключение к БД
+        /* открываем подключение к БД*/
         SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        //шапка
+        /* Делаем запись заказа
+        * */
+        /* шапка*/
         DBHelperUtil dbOrder = new DBHelperUtil(DB, TableOrders.TABLE_NAME);
         dbOrder.insert(TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
-        //табличная часть
-        // DBHelperUtil dbOrderLine = new DBHelperUtil(DB, TableOrdersLines.TABLE_NAME);
+        /* табличная часть*/
+        DBHelperUtil dbOrderLine = new DBHelperUtil(DB, TableOrdersLines.TABLE_NAME);
         //
-        // Iterator <Order.OrderLines> itr = ConstantsUtil.mCart.iterator();
-        //  while (itr.hasNext()) {
-        //      dbOrderLine.insert(TableOrdersLines.getContentValues(itr.next(), ConstantsUtil.mCurrentOrder.getId()));
-        // }
-
-        DB.close();
+        for (final OrderLines aMCart : ConstantsUtil.mCart) {
+            dbOrderLine.insert(TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+        }
     }
 
     public interface onEventListener {

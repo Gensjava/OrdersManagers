@@ -28,7 +28,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     public static final String NAME_TABLE = "NAME_TABLE";
     private SimpleAdapter mAdapter;
     private View rootView;
-    private String[] mItem;
+    private String[][] itemsHeader;
+    private int mPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +41,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             UUID uniqueKey = UUID.randomUUID();
             ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
+
+            itemsHeader = new String[5][2];
 
             //создаем адаптер
             mAdapter = new MySimpleAdapter(getActivity(), createList(),
@@ -95,10 +98,10 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     }
 
     //записываем и обновляем выбранные данные
-    //item -  0  = наименование, 1 = ИД
+    //заполняем шапку
     public void setSelectUpdate(final String[] item) {
 
-        mItem = item;
+        itemsHeader[mPosition] = item;
         mAdapter.notifyDataSetChanged();
     }
 
@@ -137,7 +140,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         private String[] headerOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
         private LayoutInflater mInflater;
         private ArrayList mHeaderOrders;
-        private int mPosition;
 
         public MySimpleAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to) {
             super(context, data, resource, from, to);
@@ -157,11 +159,16 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             convertView = mInflater.inflate(R.layout.order_new_header_list_item, parent, false);
 
             TextView textView = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
-            textView.setHint(items.get(getString(R.string.title)).toString());
 
-            if (mItem != null & mPosition == position) {
-                textView.setText(mItem[0]);
-                onfillOrder(position, mItem[1]);
+            //позиция шапки
+            String itemP[] = itemsHeader[position];
+
+            if (itemP[0] == null) {
+                textView.setHint(items.get(getString(R.string.title)).toString());
+            } else {
+
+                textView.setText(itemP[0]);
+                onfillOrder(position, itemP[1]);
             }
 
             textView.setOnClickListener(new View.OnClickListener() {

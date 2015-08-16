@@ -19,6 +19,7 @@ import android.widget.ListView;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
@@ -41,8 +42,13 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
         // формируем столбцы сопоставления
-        String[] from = new String[]{TableOrders.COLUMN_CLIENT_ID};
-        int[] to = new int[]{R.id.main_list_item_text_client};
+        String[] from = new String[]{TableCounteragents.COLUMN_NAME,
+                TableCounteragents.COLUMN_ADDRESS,
+                TableOrders.COLUMN_DATE};
+
+        int[] to = new int[]{R.id.main_list_item_text_client,
+                R.id.main_list_item_text_sub_client,
+                R.id.main_list_item_text_date};
 
         // создааем адаптер и настраиваем список
         scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
@@ -67,7 +73,12 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        scAdapter.swapCursor(data);
+
+        if (data.isClosed()) {
+            // error
+        } else {
+            scAdapter.swapCursor(data);
+        }
     }
 
     @Override
@@ -86,14 +97,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             default:
                 break;
         }
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // закрываем подключение при выходе
-        DB.close();
     }
 
     @Override
@@ -112,16 +115,18 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             super(context);
         }
 
+//        @Override
+//        public void onCanceled(final Cursor cursor) {
+//            super.onCanceled(cursor);
+//            if (cursor != null && !cursor.isClosed()) {
+//               // cursor.close();
+//            }
+//        }
+
         @Override
         public Cursor loadInBackground() {
             return DB
-                    .query(TableOrders.TABLE_NAME, // table name
-                            null, // columns
-                            null, // selection
-                            null, // selectionArgs
-                            null, // groupBy
-                            null, // having
-                            null);// orderBy
+                    .rawQuery(SQLQuery.queryOrders("Orders.number = ?"), new String[]{"0"});
         }
 
     }
