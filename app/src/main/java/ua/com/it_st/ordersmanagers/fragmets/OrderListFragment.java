@@ -9,12 +9,18 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -27,6 +33,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class OrderListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    public static final int IDM_A = 101;
+    public static final int IDM_B = 102;
     private static SQLiteDatabase DB;
     private SimpleCursorAdapter scAdapter;
 
@@ -56,18 +64,46 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
         // создааем адаптер и настраиваем список
         scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
-        final ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
+        /**/
+        ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
         lvData.setAdapter(scAdapter);
 
         // добавляем контекстное меню к списку
-        registerForContextMenu(lvData);
+        // final ImageView lvImageView = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
+
 
         // создаем лоадер для чтения данных
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         //
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
+        //registerForContextMenu(imViewAdd);
         imViewAdd.setOnClickListener(this);
         return rootView;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(Menu.NONE, IDM_A, Menu.NONE, "Menu A");
+        menu.add(Menu.NONE, IDM_B, Menu.NONE, "Menu B");
+
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case IDM_A:
+                Toast.makeText(getActivity(), "Выбран пункт А", Toast.LENGTH_LONG)
+                        .show();
+                return true;
+            case IDM_B:
+                Toast.makeText(getActivity(), "Выбран пункт B", Toast.LENGTH_LONG)
+                        .show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -97,6 +133,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             case R.id.main_heander_image_plus:
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
+                // view.showContextMenu();
                 break;
             default:
                 break;

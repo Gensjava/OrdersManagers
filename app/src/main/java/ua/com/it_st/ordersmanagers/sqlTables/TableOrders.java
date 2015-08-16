@@ -24,6 +24,7 @@ public class TableOrders {
     public static final String COLUMN_PRICE_CATEGORY_ID = "price_id";
     public static final String COLUMN_TOTAL = "total";
     public static final String COLUMN_NOTE = "note";
+    public static final String COLUMN_TIME = "time";
 
     private static final String TAG = TableOrders.class.getSimpleName();
 
@@ -43,6 +44,7 @@ public class TableOrders {
                 + " ," + COLUMN_PRICE_CATEGORY_ID + " integer"
                 + " ," + COLUMN_TOTAL + " real"
                 + " ," + COLUMN_NOTE + " text"
+                + " ," + COLUMN_TIME + " text"
                 + ");");
     }
 
@@ -58,7 +60,7 @@ public class TableOrders {
 
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocTypeEnum.HELD.toString());
-        data.put(COLUMN_DATE, ConstantsUtil.getDate().toString());
+        data.put(COLUMN_DATE, ConstantsUtil.getDate());
         data.put(COLUMN_NUMBER, ConstantsUtil.getNumberOrder());
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, ConstantsUtil.getIdAgent());
@@ -68,6 +70,7 @@ public class TableOrders {
         data.put(COLUMN_PRICE_CATEGORY_ID, sData.getPriceCategoryId());
         data.put(COLUMN_TOTAL, ConstantsUtil.getTotalOrder());
         data.put(COLUMN_NOTE, sData.getNote());
+        data.put(COLUMN_TIME, ConstantsUtil.getTime());
 
         return data;
     }

@@ -63,14 +63,27 @@ public class ConstantsUtil {
 
     /*
     Получаем текущее дату системы
-    Возвращаем дату "текущюю дату"
+    Возвращаем строку дату "текущюю дату"
     */
     public static String getDate() {
         /* текущая дата */
         long curTime = System.currentTimeMillis();
         Date date = new Date(curTime);
         /* делаем формат даты */
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return dateFormat.format(date);
+    }
+
+    /*
+    Получаем текущее дату системы
+    Возвращаем строку время "текущее время"
+    */
+    public static String getTime() {
+        /* текущая дата */
+        long curTime = System.currentTimeMillis();
+        Date date = new Date(curTime);
+        /* делаем формат времени */
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         return dateFormat.format(date);
     }
 }
