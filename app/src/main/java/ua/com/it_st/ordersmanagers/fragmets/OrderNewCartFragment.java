@@ -35,7 +35,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
         View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
-
+        /*создаем адаптер корзины*/
         SimpleAdapter adapter;
         adapter = new SimpleAdapter(getActivity(), createList(),
                 R.layout.order_new_header_list_item,
@@ -59,7 +59,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     }
 
     public List<Map<String, ?>> createList() {
-        //корзина
+        /* корзина */
         Order.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderLines[ConstantsUtil.mCart.size()]);
 
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
@@ -79,9 +79,9 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
 
             case R.id.order_new_cart_list_image_arrow_right:
-                //создаем новый заказ
+                /* создаем новый заказ */
                 onNewOrder();
-                //открываем журнал заказов
+                /* открываем журнал заказов */
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
                 break;
@@ -100,10 +100,12 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         dbOrder.insert(TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
         /* табличная часть*/
         DBHelperUtil dbOrderLine = new DBHelperUtil(DB, TableOrdersLines.TABLE_NAME);
-        //
+        /*создаем новые позиции заказа*/
         for (final OrderLines aMCart : ConstantsUtil.mCart) {
             dbOrderLine.insert(TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
         }
+         /*чистим корзину*/
+        ConstantsUtil.mCart.clear();
     }
 
     public interface onEventListener {

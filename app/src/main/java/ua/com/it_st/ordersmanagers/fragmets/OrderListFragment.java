@@ -42,13 +42,17 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
         // формируем столбцы сопоставления
-        String[] from = new String[]{TableCounteragents.COLUMN_NAME,
+        String[] from = new String[]{
+                TableCounteragents.COLUMN_NAME,
                 TableCounteragents.COLUMN_ADDRESS,
-                TableOrders.COLUMN_DATE};
+                TableOrders.COLUMN_DATE,
+                TableOrders.COLUMN_TOTAL};
 
-        int[] to = new int[]{R.id.main_list_item_text_client,
+        int[] to = new int[]{
+                R.id.main_list_item_text_client,
                 R.id.main_list_item_text_sub_client,
-                R.id.main_list_item_text_date};
+                R.id.main_list_item_text_date,
+                R.id.main_list_item_sum};
 
         // создааем адаптер и настраиваем список
         scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);

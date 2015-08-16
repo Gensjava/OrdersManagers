@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.models.Order;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 
 public class ConstantsUtil {
 
@@ -46,8 +47,12 @@ public class ConstantsUtil {
 
     /* Получаем сумму всего */
     public static String getTotalOrder() {
-        String iNumber = null;
-        return iNumber;
+        double iNumber = 0;
+
+        for (final Order.OrderLines aMCart : ConstantsUtil.mCart) {
+            iNumber = iNumber + aMCart.getSum();
+        }
+        return String.valueOf(iNumber);
     }
 
     /* Получаем ИД Агента */
