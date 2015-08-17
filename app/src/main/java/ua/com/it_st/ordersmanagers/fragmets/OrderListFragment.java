@@ -18,8 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ua.com.it_st.ordersmanagers.R;
@@ -63,11 +66,11 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 R.id.main_list_item_sum};
 
         // создааем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
+        scAdapter = new MySimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
         /**/
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
-        lvData.setAdapter(scAdapter);
 
+        lvData.setAdapter(scAdapter);
         // добавляем контекстное меню к списку
         // final ImageView lvImageView = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
 
@@ -156,20 +159,155 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             super(context);
         }
 
-//        @Override
-//        public void onCanceled(final Cursor cursor) {
-//            super.onCanceled(cursor);
-//            if (cursor != null && !cursor.isClosed()) {
-//               // cursor.close();
-//            }
-//        }
-
         @Override
         public Cursor loadInBackground() {
             return DB
                     .rawQuery(SQLQuery.queryOrders("Orders.number = ?"), new String[]{"0"});
         }
 
+    }
+
+    public static class MenuCustomAdapter extends ArrayAdapter {
+        public static boolean flag = false;
+        private Context context;
+        private int textViewResourceId;
+        private String[] objects;
+        private LayoutInflater mLInflater;
+
+        public MenuCustomAdapter(Context context, int textViewResourceId,
+                                 String[] objects) {
+            super(context, textViewResourceId, objects);
+            this.context = context;
+            this.textViewResourceId = textViewResourceId;
+            this.objects = objects;
+            mLInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView,
+                                    ViewGroup parent) {
+            // TODO Auto-generated method stub
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            return getCustomView(position, convertView, parent);
+        }
+
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+
+            // if (convertView == null)
+
+            //convertView = View.inflate(context, textViewResourceId, null);
+
+            convertView = mLInflater.inflate(R.layout.spinner_row, parent, false);
+
+            TextView label = (TextView) convertView.findViewById(R.id.spinner_row_item_text);
+            label.setText(objects[position]);
+
+            ImageView icon = (ImageView) convertView.findViewById(R.id.spinner_row_icon);
+
+            switch (position) {
+                case 0:
+                    icon.setImageResource(R.mipmap.ic_edit);
+                    break;
+                case 1:
+                    icon.setImageResource(R.mipmap.ic_held);
+                    break;
+                case 2:
+                    icon.setImageResource(R.mipmap.ic_no_held);
+                    break;
+                default:
+                    break;
+            }
+
+//            if (flag != false) {
+//                TextView tv = (TextView) convertView;
+//                tv.setText("");
+//                ImageView icon2 = (ImageView)convertView;
+//                icon2.setImageResource(R.mipmap.ic_clik_menu);
+//            }
+
+
+            return convertView;
+        }
+    }
+
+    class MySimpleCursorAdapter extends SimpleCursorAdapter {
+
+        private LayoutInflater mLInflater;
+
+        public MySimpleCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags) {
+            super(context, layout, c, from, to, flags);
+            mLInflater = (LayoutInflater) mContext
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+
+            convertView = mLInflater.inflate(R.layout.main_list_item, parent, false);
+
+            Cursor itemCursor = (Cursor) getItem(position);
+
+            String cDate = null;
+            String cClient = null;
+            String cAdress = null;
+            String cTotal = null;
+
+            if (itemCursor != null) {
+                cDate = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_DATE));
+                cClient = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_NAME));
+                cAdress = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
+                cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TOTAL));
+            }
+            /*дата */
+            final TextView date = (TextView) convertView.findViewById(R.id.main_list_item_text_date);
+            date.setText(cDate);
+            /*клиент*/
+            final TextView client = (TextView) convertView.findViewById(R.id.main_list_item_text_client);
+            client.setText(cClient);
+            /*адресс*/
+            final TextView adress = (TextView) convertView.findViewById(R.id.main_list_item_text_sub_client);
+            adress.setText(cAdress);
+            /*сумма*/
+            final TextView total = (TextView) convertView.findViewById(R.id.main_list_item_sum);
+            total.setText(cTotal);
+            /*menu*/
+            final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
+            // Настраиваем адаптер
+            String[] cats = getResources().getStringArray(R.array.spinner_orders_menu);
+            final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, cats);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // Вызываем адаптер
+            spinner.setAdapter(adapter);
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent,
+                                           View itemSelected, int selectedItemPosition, long selectedId) {
+
+
+                    String[] choose = getResources().getStringArray(R.array.spinner_orders_menu);
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Ваш выбор: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                    toast.show();
+                    MenuCustomAdapter.flag = true;
+                }
+
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+
+            return convertView;
+        }
     }
 
 }

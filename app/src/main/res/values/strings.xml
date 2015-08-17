@@ -59,10 +59,9 @@
     </string-array>
 
     <string-array name="spinner_orders_menu">
-        <item>редактировать</item>
-        <item>снять с проведения</item>
-        <item>провести</item>
-        <item>копировать</item>
+        <item>Pедактировать</item>
+        <item>Провести</item>
+        <item>Снять с проведения</item>
     </string-array>
 
 

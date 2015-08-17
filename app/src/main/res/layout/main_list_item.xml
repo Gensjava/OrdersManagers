@@ -6,18 +6,18 @@
 
     <ImageView
         android:id="@+id/main_list_item_image_status"
-        android:layout_width="70dp"
-        android:layout_height="50dp"/>
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@mipmap/ic_held"
+        />
 
     <TextView
         android:id="@+id/main_list_item_text_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/main_list_item_image_status"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/main_list_item_image_status"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignBottom="@+id/main_list_item_sum"
+        android:layout_toEndOf="@+id/main_list_item_image_status"
+        android:layout_toRightOf="@+id/main_list_item_image_status"
         android:paddingTop="10dp"
         android:text="@string/header_date"
         android:textIsSelectable="true"
@@ -30,11 +30,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="@string/header_client"
         android:textSize="12sp"
         android:textStyle="bold"/>
 
-    <ImageView
+    <Spinner
         android:id="@+id/main_list_item_image_menu"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -44,7 +46,11 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:src="@mipmap/ic_clik_menu"/>
+        android:background="@mipmap/ic_clik_menu"
+
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/main_list_item_sum"
@@ -53,6 +59,8 @@
         android:layout_alignTop="@+id/main_list_item_text_client"
         android:layout_toLeftOf="@+id/main_list_item_image_menu"
         android:layout_toStartOf="@+id/main_list_item_image_menu"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:paddingTop="12dp"
         android:text="@string/header_sum"
         android:textSize="10sp"/>
@@ -65,6 +73,8 @@
         android:layout_alignStart="@+id/main_list_item_text_client"
         android:layout_below="@+id/main_list_item_text_client"
         android:layout_marginTop="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="@string/header_address"
         android:textSize="10dp"/>
 </RelativeLayout>
