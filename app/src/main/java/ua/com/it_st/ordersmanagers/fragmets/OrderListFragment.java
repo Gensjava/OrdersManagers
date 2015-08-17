@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,8 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -36,8 +39,6 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class OrderListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    public static final int IDM_A = 101;
-    public static final int IDM_B = 102;
     private static SQLiteDatabase DB;
     private SimpleCursorAdapter scAdapter;
 
@@ -49,64 +50,26 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         View rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
 
-        // открываем подключение к БД
+        /* открываем подключение к БД */
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
-        // формируем столбцы сопоставления
-        String[] from = new String[]{
-                TableCounteragents.COLUMN_NAME,
-                TableCounteragents.COLUMN_ADDRESS,
-                TableOrders.COLUMN_DATE,
-                TableOrders.COLUMN_TOTAL};
+        /* формируем столбцы сопоставления */
+        String[] from = new String[]{};
+        int[] to = new int[]{};
 
-        int[] to = new int[]{
-                R.id.main_list_item_text_client,
-                R.id.main_list_item_text_sub_client,
-                R.id.main_list_item_text_date,
-                R.id.main_list_item_sum};
-
-        // создааем адаптер и настраиваем список
+        /* создааем адаптер и настраиваем список */
         scAdapter = new MySimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
         /**/
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
-
         lvData.setAdapter(scAdapter);
-        // добавляем контекстное меню к списку
-        // final ImageView lvImageView = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
 
-
-        // создаем лоадер для чтения данных
+        /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         //
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
-        //registerForContextMenu(imViewAdd);
+
         imViewAdd.setOnClickListener(this);
         return rootView;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, IDM_A, Menu.NONE, "Menu A");
-        menu.add(Menu.NONE, IDM_B, Menu.NONE, "Menu B");
-
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case IDM_A:
-                Toast.makeText(getActivity(), "Выбран пункт А", Toast.LENGTH_LONG)
-                        .show();
-                return true;
-            case IDM_B:
-                Toast.makeText(getActivity(), "Выбран пункт B", Toast.LENGTH_LONG)
-                        .show();
-                return true;
-        }
-        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -121,6 +84,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             // error
         } else {
             scAdapter.swapCursor(data);
+            /*следующий номер заказа*/
+            ConstantsUtil.setsCurrentNumber((short) data.getCount());
         }
     }
 
@@ -136,7 +101,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             case R.id.main_heander_image_plus:
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
-                // view.showContextMenu();
                 break;
             default:
                 break;
@@ -162,23 +126,19 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         @Override
         public Cursor loadInBackground() {
             return DB
-                    .rawQuery(SQLQuery.queryOrders("Orders.number = ?"), new String[]{"0"});
+                    .rawQuery(SQLQuery.queryOrders("Orders._id  <> ?"), new String[]{"null"});
         }
 
     }
 
-    public static class MenuCustomAdapter extends ArrayAdapter {
-        public static boolean flag = false;
-        private Context context;
-        private int textViewResourceId;
+    public class MenuCustomAdapter extends ArrayAdapter {
+
         private String[] objects;
         private LayoutInflater mLInflater;
 
         public MenuCustomAdapter(Context context, int textViewResourceId,
                                  String[] objects) {
             super(context, textViewResourceId, objects);
-            this.context = context;
-            this.textViewResourceId = textViewResourceId;
             this.objects = objects;
             mLInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -197,13 +157,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             return getCustomView(position, convertView, parent);
         }
 
-
         public View getCustomView(int position, View convertView, ViewGroup parent) {
 
-
-            // if (convertView == null)
-
-            //convertView = View.inflate(context, textViewResourceId, null);
 
             convertView = mLInflater.inflate(R.layout.spinner_row, parent, false);
 
@@ -226,14 +181,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                     break;
             }
 
-//            if (flag != false) {
-//                TextView tv = (TextView) convertView;
-//                tv.setText("");
-//                ImageView icon2 = (ImageView)convertView;
-//                icon2.setImageResource(R.mipmap.ic_clik_menu);
-//            }
-
-
             return convertView;
         }
     }
@@ -252,20 +199,18 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         public View getView(final int position, View convertView, final ViewGroup parent) {
 
             convertView = mLInflater.inflate(R.layout.main_list_item, parent, false);
-
+            /*позиция*/
             Cursor itemCursor = (Cursor) getItem(position);
+            /*получаем колонки*/
+            final String cId = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_VIEW_ID));
+            final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_DATE));
+            final String cClient = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_NAME));
+            final String cAdress = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
+            final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TOTAL));
+            final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_NUMBER));
+            final String cStatus = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TYPE));
 
-            String cDate = null;
-            String cClient = null;
-            String cAdress = null;
-            String cTotal = null;
 
-            if (itemCursor != null) {
-                cDate = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_DATE));
-                cClient = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_NAME));
-                cAdress = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
-                cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TOTAL));
-            }
             /*дата */
             final TextView date = (TextView) convertView.findViewById(R.id.main_list_item_text_date);
             date.setText(cDate);
@@ -278,8 +223,21 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             /*сумма*/
             final TextView total = (TextView) convertView.findViewById(R.id.main_list_item_sum);
             total.setText(cTotal);
+             /*номер*/
+            final TextView number = (TextView) convertView.findViewById(R.id.main_list_item_text_number);
+            number.setText(cNumber);
+            /*статус*/
+            final ImageView status = (ImageView) convertView.findViewById(R.id.main_list_item_image_status);
+            /* проведен */
+            if (cStatus.equals(DocTypeEnum.HELD.toString())) {
+                status.setImageResource(R.mipmap.ic_held);
+            } else {
+                status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
+            }
+
             /*menu*/
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
+
             // Настраиваем адаптер
             String[] cats = getResources().getStringArray(R.array.spinner_orders_menu);
             final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, cats);
@@ -289,16 +247,42 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             // Вызываем адаптер
             spinner.setAdapter(adapter);
 
+            final int[] iCurrentSelection = {spinner.getSelectedItemPosition()};
+
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent,
                                            View itemSelected, int selectedItemPosition, long selectedId) {
 
 
-                    String[] choose = getResources().getStringArray(R.array.spinner_orders_menu);
-                    Toast toast = Toast.makeText(getActivity(),
-                            "Ваш выбор: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
-                    toast.show();
-                    MenuCustomAdapter.flag = true;
+                    if (iCurrentSelection[0] != selectedItemPosition) {
+
+                        final ContentValues data = new ContentValues();
+
+                        switch (selectedItemPosition) {
+                            case 1:
+                                data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.HELD.toString());
+                                break;
+                            case 2:
+                                data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.NO_HELD.toString());
+                                break;
+                            default:
+                                break;
+                        }
+                        ///
+                        if (!cId.equals("")) {
+
+                            DB.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
+                            String[] choose = getResources().getStringArray(R.array.spinner_orders_menu);
+
+                            Toast toast = Toast.makeText(getActivity(),
+                                    "Операция выполнена: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                            toast.show();
+
+                            getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                        }
+                    } else {
+                        iCurrentSelection[0] = selectedItemPosition;
+                    }
                 }
 
                 public void onNothingSelected(AdapterView<?> parent) {
@@ -308,6 +292,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
             return convertView;
         }
+
+
     }
 
 }

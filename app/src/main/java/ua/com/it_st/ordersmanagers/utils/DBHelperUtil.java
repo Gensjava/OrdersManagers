@@ -68,8 +68,6 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
         return lContentValues;
     }
 
-
-
     @Override
     public void bind(final int index, final boolean value) {
         super.bind(index, value);
@@ -79,33 +77,9 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
     public long insert(final ContentValues values) {
         return super.insert(values);
     }
-    //  db.addRec("sometext " + (scAdapter.getCount() + 1), R.drawable.ic_launcher);
 
-    //    public static Map getListContentValuesTableName(String [] sData) {
-//
-//        Map<String, ContentValues> lContentValues = new HashMap<String, ContentValues>();
-//
-//        lContentValues.put(TableCompanies.TABLE_NAME, TableCompanies.getContentValues(sData));
-//        lContentValues.put(TableCounteragents.TABLE_NAME, TableCounteragents.getContentValues(sData));
-//        lContentValues.put(TablePrices.TABLE_NAME, TablePrices.getContentValues(sData));
-//        lContentValues.put(TableProducts.TABLE_NAME, TableProducts.getContentValues(sData));
-//        lContentValues.put(TableTypePrices.TABLE_NAME, TableTypePrices.getContentValues(sData));
-//        lContentValues.put(TableTypeStores.TABLE_NAME, TableTypeStores.getContentValues(sData));
-//        lContentValues.put(TableGoodsByStores.TABLE_NAME, TableGoodsByStores.getContentValues(sData));
-//
-//        return lContentValues;
-//    }
-    //                Cursor cursor = db.query(TableCompanies.TABLE_NAME, // table name
-//                         null, // columns
-//                         null, // selection
-//                         null, // selectionArgs
-//                         null, // groupBy
-//                         null, // having
-//                         null);// orderBy
-//
-//                        while (cursor.moveToNext()){
-//                            String catName = cursor.getString(cursor.getColumnIndex(TableCompanies.COLUMN_NAME));
-//                            Log.i("TABLE_NAME",""+catName);
-//        }
-//                cursor.close();
+    @Override
+    public long replace(final ContentValues values) {
+        return super.replace(values);
+    }
 }

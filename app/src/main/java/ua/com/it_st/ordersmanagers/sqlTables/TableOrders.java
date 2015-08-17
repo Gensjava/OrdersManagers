@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
-import ua.com.it_st.ordersmanagers.models.Order;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 public class TableOrders {
@@ -54,14 +54,14 @@ public class TableOrders {
 
     }
 
-    public static ContentValues getContentValues(Order sData) {
+    public static ContentValues getContentValues(OrderDoc sData) {
 
         final ContentValues data = new ContentValues();
 
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocTypeEnum.HELD.toString());
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
-        data.put(COLUMN_NUMBER, ConstantsUtil.getNumberOrder());
+        data.put(COLUMN_NUMBER, ConstantsUtil.getsCurrentNumber());
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, ConstantsUtil.getIdAgent());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());

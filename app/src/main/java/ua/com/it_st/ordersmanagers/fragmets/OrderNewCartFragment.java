@@ -13,14 +13,12 @@ import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.models.Order;
-import ua.com.it_st.ordersmanagers.models.Order.OrderLines;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -60,11 +58,11 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
     public List<Map<String, ?>> createList() {
         /* корзина */
-        Order.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderLines[ConstantsUtil.mCart.size()]);
+        OrderDoc.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderLines[ConstantsUtil.mCart.size()]);
 
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
 
-        for (Order.OrderLines s : cartOrders) {
+        for (OrderDoc.OrderLines s : cartOrders) {
 
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("title", s.getName());
@@ -93,6 +91,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     public void onNewOrder() {
         /* открываем подключение к БД*/
         SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        // TableOrders.onDeleteValueTable(DB);
+        // TableOrdersLines.onDeleteValueTable(DB);
         /* Делаем запись заказа
         * */
         /* шапка*/

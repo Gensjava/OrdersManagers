@@ -7,7 +7,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 /**
  * Created by Gens on 31.07.2015.
  */
-public class Order {
+public class OrderDoc {
     private String mId;
     private DocTypeEnum mDocType;
     private String mDocDate;
@@ -21,12 +21,12 @@ public class Order {
     private String mTotal;
     private String mNote;
 
-    public Order(final String id, final DocTypeEnum docType,
-                 final String docDate, final String docNumber,
-                 final String completed, final String agentId,
-                 final String firmId, final String storeId,
-                 final String clientId, final String priceCategoryId,
-                 final String total, final String note) {
+    public OrderDoc(final String id, final DocTypeEnum docType,
+                    final String docDate, final String docNumber,
+                    final String completed, final String agentId,
+                    final String firmId, final String storeId,
+                    final String clientId, final String priceCategoryId,
+                    final String total, final String note) {
 
         mId = id;
         mDocType = docType;
@@ -42,7 +42,7 @@ public class Order {
         mNote = note;
     }
 
-    public Order() {
+    public OrderDoc() {
 
     }
 

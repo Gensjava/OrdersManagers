@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +16,10 @@ import com.unnamed.b.atv.model.TreeNode;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
-import ua.com.it_st.ordersmanagers.models.Order;
-import ua.com.it_st.ordersmanagers.models.Product;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
 /**
@@ -97,7 +93,7 @@ public class Dialogs {
                         final double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
 
                         //строка ТЧ заказа
-                        Order.OrderLines orderLines = new Order.OrderLines(
+                        OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
                                 ConstantsUtil.mCurrentOrder.getId(),
                                 product.getId(),
                                 1,
