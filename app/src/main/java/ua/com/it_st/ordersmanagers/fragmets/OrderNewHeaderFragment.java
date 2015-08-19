@@ -38,13 +38,13 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-
+            /* сгениророваный номер документа ИД для 1с */
             UUID uniqueKey = UUID.randomUUID();
             ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
 
             itemsHeader = new String[5][2];
 
-            //создаем адаптер
+            /* создаем адаптер */
             mAdapter = new MySimpleAdapter(getActivity(), createList(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
@@ -61,7 +61,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     }
 
     private List<Map<String, ?>> createList() {
-        //иконки к шапке заказа
+        /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
                         R.mipmap.ic_stores,
@@ -70,7 +70,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                         R.mipmap.ic_coment
                 };
         String[] headerOrders = getResources().getStringArray(R.array.header_orders);
-        //список параметров шапки заказа
+        /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         byte x = 0;
         for (String s : headerOrders) {
@@ -97,15 +97,17 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         }
     }
 
-    //записываем и обновляем выбранные данные
-    //заполняем шапку
+    /*
+    записываем и обновляем выбранные данные
+    заполняем шапку
+    */
     public void setSelectUpdate(final String[] item) {
 
         itemsHeader[mPosition] = item;
         mAdapter.notifyDataSetChanged();
     }
 
-    //заполняем шапку нового заказа
+    /* заполняем шапку нового заказа */
     private void onfillOrder(int position, String item) {
 
         switch (position) {
@@ -160,7 +162,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             TextView textView = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
 
-            //позиция шапки
+            /* позиция шапки */
             String itemP[] = itemsHeader[position];
 
             if (itemP[0] == null) {

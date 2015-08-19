@@ -34,7 +34,7 @@ import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
 public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static TextView ui_cart;
-    private static SQLiteDatabase DB;
+    private static SQLiteDatabase sDb;
     private static String mSelectionArgs;
     private AndroidTreeView tView;
     private TreeNode mNode;
@@ -86,23 +86,23 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         final View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
         final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
-        //Это корень
+        /* Это корень */
         TreeNode root = TreeNode.root();
         TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
         TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
-        //создаем ветки
+        /* создаем ветки */
         myRoot.addChildren(myCatalog);
         root.addChildren(myCatalog);
         mNode = myCatalog;
 
-        //создаем древо
+        /* создаем древо */
         tView = new AndroidTreeView(getActivity(), root);
         // tView.setDefaultAnimation(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
         tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
 
-        //загружаем дерево
+        /* загружаем дерево */
         containerView.addView(tView.getView());
 
         if (savedInstanceState != null) {
@@ -111,11 +111,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 tView.restoreState(state);
             }
         }
-        //у корня дерева ИД = ""
+        /* у корня дерева ИД = "" */
         mSelectionArgs = "";
-        // открываем подключение к БД
-        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        // создаем лоадер для чтения данных
+        /* открываем подключение к БД */
+        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
 
         return rootView;
@@ -131,13 +131,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        //inflater.inflate(R.menu.menu_main, menu);
-        //корзина
+        /* корзина */
         final MenuItem customCart = menu.add(0, R.id.menu_cart, 0, "");
         customCart.setActionView(R.layout.main_tool_bar_cart);
         customCart.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         final View menu_cart = menu.findItem(R.id.menu_cart).getActionView();
-        //клик на корзине
+        /* клик на корзине */
         menu_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -198,7 +197,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
             tView.addNode(mNode, newTreeItem);
         }
-        //data.close();
     }
     @Override
     public void onPause() {
@@ -224,7 +222,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         @Override
         public Cursor loadInBackground() {
 
-            return DB
+            return sDb
                     .rawQuery(SQLQuery.queryGoods("Products.id_category = ?"), new String[]{mSelectionArgs});
 
         }

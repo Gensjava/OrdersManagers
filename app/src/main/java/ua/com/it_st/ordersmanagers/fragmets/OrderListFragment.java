@@ -10,12 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.internal.widget.AdapterViewCompat;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,49 +29,48 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-/**
- * Created by Gens on 30.07.2015.
- */
+/* Класс отображает список заказов сделанные курьером
+*  В списке есть контекстное меню построенное на  Spinner */
+
 public class OrderListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    private static SQLiteDatabase DB;
+    private static SQLiteDatabase sDb;
     private SimpleCursorAdapter scAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
+        /* макет фрагмента */
         View rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
-
         /* открываем подключение к БД */
-        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-
+        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /* формируем столбцы сопоставления */
         String[] from = new String[]{};
         int[] to = new int[]{};
-
         /* создааем адаптер и настраиваем список */
         scAdapter = new MySimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
-        /**/
+        /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
         lvData.setAdapter(scAdapter);
-
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        //
+        /* кнопка далее переход на следующий этап*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
-
+        /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
         return rootView;
     }
 
+    /* функция LoaderManager.LoaderCallbacks<Cursor>
+    * отрабатывает при создании */
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         return new MyCursorLoader(getActivity());
     }
 
+    /* функция LoaderManager.LoaderCallbacks<Cursor>
+    * отрабатывает после выполнения*/
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
@@ -89,11 +83,13 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
+    /* функция LoaderManager.LoaderCallbacks<Cursor>
+    * перезапуск */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-
     }
 
+    /* обработка кликов на кнопки */
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
@@ -110,13 +106,17 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onPause() {
         super.onPause();
+        /* выходим из загрузчкика*/
         getActivity().getSupportLoaderManager().destroyLoader(0);
     }
 
+    /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
     }
 
+    /* создаем класс для загрузки данных из БД 
+    * загрузка происходит в фоне */
     private static class MyCursorLoader extends CursorLoader {
 
         public MyCursorLoader(Context context) {
@@ -125,12 +125,14 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
         @Override
         public Cursor loadInBackground() {
-            return DB
+            return sDb
                     .rawQuery(SQLQuery.queryOrders("Orders._id  <> ?"), new String[]{"null"});
         }
-
     }
 
+    /* создаем свой адаптер т.к по умолчанию нет возможности
+     добалять свои изображения в меню
+      */
     public class MenuCustomAdapter extends ArrayAdapter {
 
         private String[] objects;
@@ -159,7 +161,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
         public View getCustomView(int position, View convertView, ViewGroup parent) {
 
-
             convertView = mLInflater.inflate(R.layout.spinner_row, parent, false);
 
             TextView label = (TextView) convertView.findViewById(R.id.spinner_row_item_text);
@@ -180,11 +181,12 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 default:
                     break;
             }
-
             return convertView;
         }
     }
 
+    /* делаем свой адаптер т.к нужно обрабытывать
+     клик на контекстное меню*/
     class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
         private LayoutInflater mLInflater;
@@ -210,7 +212,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_NUMBER));
             final String cStatus = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TYPE));
 
-
             /*дата */
             final TextView date = (TextView) convertView.findViewById(R.id.main_list_item_text_date);
             date.setText(cDate);
@@ -234,28 +235,28 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             } else {
                 status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
             }
-
             /*menu*/
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
 
-            // Настраиваем адаптер
+            /* Настраиваем адаптер */
             String[] cats = getResources().getStringArray(R.array.spinner_orders_menu);
+            /**/
             final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, cats);
-
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            // Вызываем адаптер
+            /* Вызываем адаптер */
             spinner.setAdapter(adapter);
 
+            /*костыль для того чтоб при начале открытия списка незаполнялось первая позиция
+             и при выборе пользователем позицию в меню нормально обрабатывал
+            */
             final int[] iCurrentSelection = {spinner.getSelectedItemPosition()};
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent,
                                            View itemSelected, int selectedItemPosition, long selectedId) {
 
-
                     if (iCurrentSelection[0] != selectedItemPosition) {
-
                         final ContentValues data = new ContentValues();
 
                         switch (selectedItemPosition) {
@@ -268,10 +269,10 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                             default:
                                 break;
                         }
-                        ///
-                        if (!cId.equals("")) {
+                        /*меняем статус у документов (проведен, не проведен)*/
+                        if (!cId.equals("") & selectedItemPosition == 1 || selectedItemPosition == 2) {
 
-                            DB.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
+                            sDb.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
                             String[] choose = getResources().getStringArray(R.array.spinner_orders_menu);
 
                             Toast toast = Toast.makeText(getActivity(),
@@ -288,12 +289,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-
-
             return convertView;
         }
-
-
     }
 
 }

@@ -91,8 +91,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     public void onNewOrder() {
         /* открываем подключение к БД*/
         SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        // TableOrders.onDeleteValueTable(DB);
-        // TableOrdersLines.onDeleteValueTable(DB);
         /* Делаем запись заказа
         * */
         /* шапка*/

@@ -26,11 +26,21 @@ import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
+/* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
+   Файлы:
+   ref_price.csv - цены
+   ref_goodsbystores.csv - остатки по товарам
+   ref_pricecategories.csv - типы цен
+   ref_clients.csv  - клиенты и адресса
+   ref_goods.csv - товары
+   ref_firms.csv - организации
+   ref_stores.csv - склады
+  */
 
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     private final String TEG = ExchangeFragment.class.getSimpleName();
-    private SQLiteDatabase db;
+    private SQLiteDatabase mDb;
 
     @Nullable
     @Override
@@ -42,8 +52,9 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         final TextView exchegeStatus = (TextView) rootView.findViewById(R.id.exchege_text_string_status);
 
         ImageView BHost = (ImageView) rootView.findViewById(R.id.exchege_image_button);
-        db = SQLiteOpenHelperUtil.getInstance().getDatabase();
         BHost.setOnClickListener(this);
+        /* открываем подключение к БД */
+        mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
         return rootView;
     }
@@ -77,8 +88,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                 /* начинаем загрузку */
                 if (lConnect) {
-                    //начинаем транзакцию
-                    db.beginTransaction();
+                    /* начинаем транзакцию */
+                    mDb.beginTransaction();
                     for (String i : nameFile) {
 
                         RequestParams params = new RequestParams();
@@ -90,17 +101,17 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                         try {
                             /* загружаем файл */
-                            utilAsyncHttpClient.getDownloadFiles(params, db);
+                            utilAsyncHttpClient.getDownloadFiles(params, mDb);
                         } catch (Exception e) {
                             e.printStackTrace();
                             //Log
                             ErrorInfo.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
                         }
                     }
-                    if (db != null) {
+                    if (mDb != null) {
                         /* заканчиваем транзакцию */
-                        db.setTransactionSuccessful();
-                        db.endTransaction();
+                        mDb.setTransactionSuccessful();
+                        mDb.endTransaction();
                     }
                 } else {
                     //Log
@@ -116,21 +127,21 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-            db.close();
+        mDb.close();
     }
 
     /* чистим таблицы */
     private void onDeleteValueTables() {
 
-        TableCompanies.onDeleteValueTable(db);
-        TableCounteragents.onDeleteValueTable(db);
-        TablePrices.onDeleteValueTable(db);
-        TableProducts.onDeleteValueTable(db);
-        TableTypePrices.onDeleteValueTable(db);
-        TableTypeStores.onDeleteValueTable(db);
-        TableGoodsByStores.onDeleteValueTable(db);
-        TableOrders.onDeleteValueTable(db);
-        TableOrdersLines.onDeleteValueTable(db);
+        TableCompanies.onDeleteValueTable(mDb);
+        TableCounteragents.onDeleteValueTable(mDb);
+        TablePrices.onDeleteValueTable(mDb);
+        TableProducts.onDeleteValueTable(mDb);
+        TableTypePrices.onDeleteValueTable(mDb);
+        TableTypeStores.onDeleteValueTable(mDb);
+        TableGoodsByStores.onDeleteValueTable(mDb);
+        TableOrders.onDeleteValueTable(mDb);
+        TableOrdersLines.onDeleteValueTable(mDb);
 
     }
 }

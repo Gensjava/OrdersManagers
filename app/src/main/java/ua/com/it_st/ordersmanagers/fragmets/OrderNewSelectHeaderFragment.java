@@ -32,7 +32,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  */
 public class OrderNewSelectHeaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static SQLiteDatabase DB;
+    private static SQLiteDatabase sDb;
     private static String nameTable;
     private SimpleCursorAdapter scAdapter;
     private OnFragmentSelectListener mListener;
@@ -50,12 +50,10 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             nameTable = bundle.getString(OrderNewHeaderFragment.NAME_TABLE);
         }
 
-        if (DB == null) {
-            // открываем подключение к БД
-            DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        }
+        /* открываем подключение к БД */
+        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
-        // формируем столбцы сопоставления
+        /* формируем столбцы сопоставления */
         String[] from = new String[]{getString(R.string.name)};
         int[] to = new int[]{R.id.order_new_select_header_item_text};
 
@@ -76,14 +74,14 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 cData[0] = cName;
                 cData[1] = cKod;
 
-                // Посылаем данные Activity
+                /* Посылаем данные Activity */
                 mListener.OnFragmentSelectListener(cData);
                 getActivity().onBackPressed();
 
             }
         });
 
-        // создаем лоадер для чтения данных
+        /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         //
 
@@ -102,7 +100,6 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         } else {
             scAdapter.swapCursor(data);
         }
-
     }
 
     @Override
@@ -114,7 +111,6 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     public void onPause() {
         super.onPause();
         getActivity().getSupportLoaderManager().destroyLoader(0);
-
     }
 
     @Override
@@ -141,7 +137,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
 
         @Override
         public Cursor loadInBackground() {
-            return DB
+            return sDb
                     .query(nameTable, // table name
                             null, // columns
                             null, // selection
