@@ -1,10 +1,13 @@
 package ua.com.it_st.ordersmanagers.utils;
 
+import android.content.Context;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
 public class ConstantsUtil {
@@ -82,7 +85,6 @@ public class ConstantsUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return dateFormat.format(date);
     }
-
     /*
     Получаем текущее дату системы
     Возвращаем строку время "текущее время"
@@ -94,5 +96,22 @@ public class ConstantsUtil {
         /* делаем формат времени */
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         return dateFormat.format(date);
+    }
+
+    /* проверяем на обязательные поля шапки документа*/
+    public static boolean checkHeaderOrder(Context context) {
+
+        boolean bCheck = false;
+
+        if (
+                mCurrentOrder.getFirmId() == null
+                        || mCurrentOrder.getPriceCategoryId() == null
+                        || mCurrentOrder.getClientId() == null
+                        || mCurrentOrder.getAdress() == null) {
+
+            bCheck = true;
+            ErrorInfo.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
+        }
+        return bCheck;
     }
 }

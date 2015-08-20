@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -100,5 +102,11 @@ public class ErrorInfo {
         Log.i(TEG_ERROR, lLog);
     }
 
-
+    public static void Tost(String title, Context context) {
+        final Toast toast = Toast.makeText(context,
+                title,
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
 }

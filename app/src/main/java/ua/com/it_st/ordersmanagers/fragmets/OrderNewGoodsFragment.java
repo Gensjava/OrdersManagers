@@ -55,7 +55,8 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                 }
             } else {
-                Dialogs.showCustomAlertDialogEnterNumber("Добавить в корзину", getActivity(), item, mNode);
+                Dialogs dialogs = new Dialogs(getActivity());
+                dialogs.showCustomAlertDialogEnterNumber(getString(R.string.addCart), item, mNode);
             }
         }
     };

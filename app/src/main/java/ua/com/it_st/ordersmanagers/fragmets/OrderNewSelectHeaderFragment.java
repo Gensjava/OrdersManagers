@@ -100,7 +100,6 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 }
 
                 /* Посылаем данные Activity */
-
                 mListener.OnFragmentSelectListener(cData);
                 getActivity().onBackPressed();
             }

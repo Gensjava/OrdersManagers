@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
 /*Класс предназначен для отображения и заполнения шапки документа заказа
 * Все поля кроме коммнтария являются обязательными для заполнения*/
@@ -95,8 +96,11 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         switch (view.getId()) {
 
             case R.id.order_new_header_list_image_arrow_right:
-                final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
+                /* проверка шапки*/
+                if (!ConstantsUtil.checkHeaderOrder(getActivity())) {
+                    final onEventListener someEventListener = (onEventListener) getActivity();
+                    someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
+                }
                 break;
             default:
                 break;
@@ -162,11 +166,11 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         public View getView(final int position, View convertView, final ViewGroup parent) {
 
             /*получаем заголовки шапки*/
-            Map<String, ?> items = (Map<String, ?>) mHeaderOrders.get(position);
+            final Map<String, ?> items = (Map<String, ?>) mHeaderOrders.get(position);
             convertView = mInflater.inflate(R.layout.order_new_header_list_item, parent, false);
 
             /* заголовок*/
-            TextView header = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
+            final TextView header = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
             /* позиция шапки */
             String itemP[] = mItemsHeader[position];
             /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
@@ -175,28 +179,41 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             } else {
 
                 header.setText(itemP[0]);
+                /**/
+                String sub_text = null;
                 /*заполняем шапку заказа*/
-                onfillOrder(position, itemP[1], position == 2 ? itemP[2] : null);
-            }
-            /* суб заголовок*/
-            if (position == 2) {
+                if (position == 2) {
+                    sub_text = itemP[2];
 
-                TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
-                sub_header.setVisibility(View.VISIBLE);
-                sub_header.setText(itemP[2]);
-            }
+                    TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
+                    sub_header.setVisibility(View.VISIBLE);
+                    sub_header.setText(sub_text);
+                }
 
+                onfillOrder(position, itemP[1], sub_text);
+                /* суб заголовок*/
+            }
+            
             /*клик на любом месте поля вызываем список занчений*/
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Bundle bundleItem = new Bundle();
-                    bundleItem.putString(NAME_TABLE, mHeaderOrdersNameTable[position]);
 
                     mPosition = position;
+                    /* если это не поле коментарий
+                    * если комент вызываем диалог*/
+                    if (mPosition != 4) {
+                        Bundle bundleItem = new Bundle();
+                        bundleItem.putString(NAME_TABLE, mHeaderOrdersNameTable[position]);
+                        /*открываем окно для выбора значения*/
+                        final onEventListener someEventListener = (onEventListener) getActivity();
+                        someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
+                    } else {
+                        /*вызывваем диалог для ввода комента*/
+                        Dialogs dialogs = new Dialogs(getActivity());
+                        dialogs.showCustomAlertDialogEditComment(getString(R.string.enter_your_coment));
 
-                    final onEventListener someEventListener = (onEventListener) getActivity();
-                    someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
+                    }
                 }
             });
             /*устанвливаем аватар для каждого параметра шапки*/
