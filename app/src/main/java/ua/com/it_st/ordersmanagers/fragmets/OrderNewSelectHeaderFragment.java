@@ -23,42 +23,58 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-/**
- * Created by Gens on 07.08.2015.
- */
+/*Класс предназначен для выбора значений из списка для оформления шапки
+ документа заказа
+  */
 public class OrderNewSelectHeaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static SQLiteDatabase sDb;
     private static String nameTable;
     private SimpleCursorAdapter scAdapter;
     private OnFragmentSelectListener mListener;
+    private boolean mIsSubText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         View rootView = inflater.inflate(R.layout.main_list, container,
                 false);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
+            /*получаем имя таблицы и подставляем в запрос*/
             nameTable = bundle.getString(OrderNewHeaderFragment.NAME_TABLE);
+            /*если это таблица клиентов тогда нам нужен суб текст
+                        *  * чтоб можно было физ.адресс показать*/
+            mIsSubText = nameTable.equals(TableCounteragents.TABLE_NAME);
         }
 
         /* открываем подключение к БД */
         sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
         /* формируем столбцы сопоставления */
-        String[] from = new String[]{getString(R.string.name)};
-        int[] to = new int[]{R.id.order_new_select_header_item_text};
+        final String[] from;
+        final int[] to;
 
-        // создааем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_item, null, from, to, 0);
+        if (!mIsSubText) {
+            from = new String[]{getString(R.string.name)};
+            to = new int[]{R.id.order_new_select_header_item_text};
+            // создааем адаптер и настраиваем список
+            scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_item, null, from, to, 0);
+        } else {
+            from = new String[]{getString(R.string.name), TableCounteragents.COLUMN_ADDRESS};
+            to = new int[]{R.id.order_new_select_header_sub_item_text, R.id.order_new_select_header_sub_sub_item_text};
+            // создааем адаптер и настраиваем список
+            scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_sub_item, null, from, to, 0);
+        }
+
+        /**/
         final ListView lvData = (ListView) rootView.findViewById(R.id.lvMain);
         lvData.setAdapter(scAdapter);
 
@@ -70,14 +86,23 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 String cName = itemCursor.getString(itemCursor.getColumnIndex(getString(R.string.name)));
                 String cKod = itemCursor.getString(itemCursor.getColumnIndex(getString(R.string.kod)));
 
-                String[] cData = new String[2];
-                cData[0] = cName;
-                cData[1] = cKod;
+                String[] cData;
+                if (!mIsSubText) {
+                    cData = new String[2];
+                    cData[0] = cName;
+                    cData[1] = cKod;
+                } else {
+                    String cAdres = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
+                    cData = new String[3];
+                    cData[0] = cName;
+                    cData[1] = cKod;
+                    cData[2] = cAdres;
+                }
 
                 /* Посылаем данные Activity */
+
                 mListener.OnFragmentSelectListener(cData);
                 getActivity().onBackPressed();
-
             }
         });
 
@@ -104,7 +129,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-
+        scAdapter.swapCursor(null);
     }
 
     @Override

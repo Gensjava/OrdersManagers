@@ -20,13 +20,14 @@ public class OrderDoc {
     private String mPriceCategoryId;
     private String mTotal;
     private String mNote;
+    private String mAdress;
 
     public OrderDoc(final String id, final DocTypeEnum docType,
                     final String docDate, final String docNumber,
                     final String completed, final String agentId,
                     final String firmId, final String storeId,
                     final String clientId, final String priceCategoryId,
-                    final String total, final String note) {
+                    final String total, final String note, final String adress) {
 
         mId = id;
         mDocType = docType;
@@ -40,6 +41,7 @@ public class OrderDoc {
         mPriceCategoryId = priceCategoryId;
         mTotal = total;
         mNote = note;
+        mAdress = adress;
     }
 
     public OrderDoc() {
@@ -142,6 +144,13 @@ public class OrderDoc {
         mNote = note;
     }
 
+    public String getAdress() {
+        return mAdress;
+    }
+
+    public void setAdress(final String adress) {
+        mAdress = adress;
+    }
 
     //табличная часть заказа
     public static class OrderLines {

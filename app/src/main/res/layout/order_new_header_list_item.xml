@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -10,19 +10,19 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginLeft="15dp"
-        />
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/order_header_list_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:hint="text"
-
-        android:textColor="@color/space"
-        android:textIsSelectable="true"
-        android:textSize="14dp"/>
+        android:layout_marginTop="10dp"
+        android:hint="заголовок"
+        android:textColorHint="@color/space"
+        android:textIsSelectable="false"
+        android:textSize="14dp"
+        />
 
     <ImageView
         android:id="@+id/order_header_list_item_image_menu"
@@ -32,7 +32,18 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:src="@mipmap/ic_sub_arrow_right"/>
+
+    <TextView
+        android:id="@+id/order_header_list_item_sub_text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order_header_list_item_text"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="адрес"
+        android:textSize="10dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

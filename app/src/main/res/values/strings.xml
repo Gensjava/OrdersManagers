@@ -507,5 +507,8 @@
     <string name="kod">kod</string>
     <string name="title">title</string>
     <string name="imageAvatar">imageAvatar</string>
+    <string name="rNumber">№</string>
+    <string name="rOf">от</string>
+    <string name="client_adress">address</string>
 
 </resources>

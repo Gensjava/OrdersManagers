@@ -25,6 +25,7 @@ public class TableOrders {
     public static final String COLUMN_TOTAL = "total";
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_TIME = "time";
+    public static final String COLUMN_CLIENT_ADRESS = "client_adress";
 
     private static final String TAG = TableOrders.class.getSimpleName();
 
@@ -45,6 +46,7 @@ public class TableOrders {
                 + " ," + COLUMN_TOTAL + " real"
                 + " ," + COLUMN_NOTE + " text"
                 + " ," + COLUMN_TIME + " text"
+                + " ," + COLUMN_CLIENT_ADRESS + " text"
                 + ");");
     }
 
@@ -71,6 +73,7 @@ public class TableOrders {
         data.put(COLUMN_TOTAL, ConstantsUtil.getTotalOrder());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_TIME, ConstantsUtil.getTime());
+        data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
 
         return data;
     }

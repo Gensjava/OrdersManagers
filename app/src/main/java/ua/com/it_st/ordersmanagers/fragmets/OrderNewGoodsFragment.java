@@ -207,6 +207,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         new MyCursorLoader(getActivity());
+
     }
 
     public interface onEventListener {

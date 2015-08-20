@@ -32,8 +32,8 @@ public class SQLQuery {
         sq = "Select Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total, Counteragents.name, Counteragents.address\n" +
                 "FROM Orders\n" +
                 "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod\n" +
-                "WHERE " + sp + "\n" +
-                "ORDER BY  Orders.number";
+                "WHERE " + sp + "\n";
+
         return sq;
     }
 }

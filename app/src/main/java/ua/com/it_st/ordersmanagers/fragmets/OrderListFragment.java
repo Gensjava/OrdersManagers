@@ -87,6 +87,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     * перезапуск */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
+        scAdapter.swapCursor(null);
     }
 
     /* обработка кликов на кнопки */

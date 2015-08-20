@@ -2,33 +2,32 @@ package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+
+/*Класс предназначен для отображения и заполнения шапки документа заказа
+* Все поля кроме коммнтария являются обязательными для заполнения*/
 
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
 
     public static final String NAME_TABLE = "NAME_TABLE";
     private SimpleAdapter mAdapter;
     private View rootView;
-    private String[][] itemsHeader;
+    private String[][] mItemsHeader;
     private int mPosition;
 
     @Override
@@ -38,28 +37,35 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-            /* сгениророваный номер документа ИД для 1с */
+
+            /* сгениророваный номер документа заказа ИД для 1с */
             UUID uniqueKey = UUID.randomUUID();
             ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
-
-            itemsHeader = new String[5][2];
+            /*массив принимает выбранные занчения шапки и передает их в адаптер*/
+            mItemsHeader = new String[5][3];
 
             /* создаем адаптер */
             mAdapter = new MySimpleAdapter(getActivity(), createList(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
-
+            /* список шапка заказа*/
             ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
 
+            /*кнопка далее к следующему этапу*/
             ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
             imViewAdd.setOnClickListener(this);
+            /*устанавливаем дату документа и номер*/
+            TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
+            period.setText(getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
         }
 
         return rootView;
     }
 
+    /* создаем список - шапку  для адаптера
+    * Иконки и заголовки*/
     private List<Map<String, ?>> createList() {
         /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
@@ -69,21 +75,21 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                         R.mipmap.ic_tipe_price,
                         R.mipmap.ic_coment
                 };
+        /*массив заголовков шапки заказа*/
         String[] headerOrders = getResources().getStringArray(R.array.header_orders);
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
-        byte x = 0;
-        for (String s : headerOrders) {
+        /*заполняем шапку заказа*/
+        for (byte x = 0; x < headerOrders.length; x++) {
 
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(getString(R.string.title), s);
+            map.put(getString(R.string.title), headerOrders[x]);
             map.put(getString(R.string.imageAvatar), mPictures[x]);
-            x++;
             items.add(map);
+
         }
         return items;
     }
-
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
@@ -96,19 +102,16 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 break;
         }
     }
-
     /*
     записываем и обновляем выбранные данные
     заполняем шапку
     */
     public void setSelectUpdate(final String[] item) {
-
-        itemsHeader[mPosition] = item;
+        mItemsHeader[mPosition] = item;
         mAdapter.notifyDataSetChanged();
     }
-
     /* заполняем шапку нового заказа */
-    private void onfillOrder(int position, String item) {
+    private void onfillOrder(int position, String item, final String subItem) {
 
         switch (position) {
             case 0:
@@ -119,6 +122,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 break;
             case 2:
                 ConstantsUtil.mCurrentOrder.setClientId(item);
+                ConstantsUtil.mCurrentOrder.setAdress(subItem);
                 break;
             case 3:
                 ConstantsUtil.mCurrentOrder.setPriceCategoryId(item);
@@ -139,7 +143,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
     private class MySimpleAdapter extends SimpleAdapter {
 
-        private String[] headerOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
+        private String[] mHeaderOrdersNameTable = getResources().getStringArray(R.array.header_orders_table);
         private LayoutInflater mInflater;
         private ArrayList mHeaderOrders;
 
@@ -157,27 +161,37 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
 
+            /*получаем заголовки шапки*/
             Map<String, ?> items = (Map<String, ?>) mHeaderOrders.get(position);
             convertView = mInflater.inflate(R.layout.order_new_header_list_item, parent, false);
 
-            TextView textView = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
-
+            /* заголовок*/
+            TextView header = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
             /* позиция шапки */
-            String itemP[] = itemsHeader[position];
-
+            String itemP[] = mItemsHeader[position];
+            /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
             if (itemP[0] == null) {
-                textView.setHint(items.get(getString(R.string.title)).toString());
+                header.setHint(items.get(getString(R.string.title)).toString());
             } else {
 
-                textView.setText(itemP[0]);
-                onfillOrder(position, itemP[1]);
+                header.setText(itemP[0]);
+                /*заполняем шапку заказа*/
+                onfillOrder(position, itemP[1], position == 2 ? itemP[2] : null);
+            }
+            /* суб заголовок*/
+            if (position == 2) {
+
+                TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
+                sub_header.setVisibility(View.VISIBLE);
+                sub_header.setText(itemP[2]);
             }
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            /*клик на любом месте поля вызываем список занчений*/
+            convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View view) {
+                public void onClick(final View v) {
                     Bundle bundleItem = new Bundle();
-                    bundleItem.putString(NAME_TABLE, headerOrdersNameTable[position]);
+                    bundleItem.putString(NAME_TABLE, mHeaderOrdersNameTable[position]);
 
                     mPosition = position;
 
@@ -185,7 +199,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                     someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
                 }
             });
-
+            /*устанвливаем аватар для каждого параметра шапки*/
             ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
             imageView.setImageResource((Integer) items.get(getString(R.string.imageAvatar)));
 
