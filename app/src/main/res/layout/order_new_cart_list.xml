@@ -84,11 +84,46 @@
             >
 
             <TextView
-                android:id="@+id/order_new_cart_list_text_client"
+                android:id="@+id/order_new_cart_list_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="71dp"
+                android:layout_toEndOf="@+id/order_new_cart_list_number"
+                android:layout_toRightOf="@+id/order_new_cart_list_number"
+                android:text="наименование"/>
+
+            <TextView
+                android:id="@+id/order_new_cart_list_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:text="№"/>
+
+            <TextView
+                android:id="@+id/order_new_cart_list_amuont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/order_new_cart_list_sum_heard"
+                android:layout_toStartOf="@+id/order_new_cart_list_sum_heard"
+                android:text="к-во"/>
+
+            <TextView
+                android:id="@+id/order_new_cart_list_sum_heard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="35dp"
+                android:text="сумма"/>
 
         </RelativeLayout>
 

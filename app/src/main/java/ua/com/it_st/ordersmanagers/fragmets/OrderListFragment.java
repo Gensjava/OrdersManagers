@@ -133,7 +133,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
-    /* создаем свой адаптер т.к по умолчанию нет возможности
+    /* создаем свой адаптер к Spinner т.к по умолчанию нет возможности
      добалять свои изображения в меню
       */
     private class MenuCustomAdapter extends ArrayAdapter {
@@ -242,9 +242,9 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
 
             /* Настраиваем адаптер */
-            String[] cats = getResources().getStringArray(R.array.spinner_orders_menu);
+            String[] spinnerMenu = getResources().getStringArray(R.array.spinner_orders_menu);
             /**/
-            final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, cats);
+            final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, spinnerMenu);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             /* Вызываем адаптер */

@@ -106,7 +106,6 @@ public class ErrorInfo {
         final Toast toast = Toast.makeText(context,
                 title,
                 Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 }

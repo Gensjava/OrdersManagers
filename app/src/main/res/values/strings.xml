@@ -64,6 +64,11 @@
         <item>Снять с проведения</item>
     </string-array>
 
+    <string-array name="spinner_cart_menu">
+        <item>Удалить</item>
+        <item>Изменить количество</item>
+    </string-array>
+
 
     <string name="ic_access_alarms">&#xe000;</string>
     <string name="ic_access_time">&#xe001;</string>

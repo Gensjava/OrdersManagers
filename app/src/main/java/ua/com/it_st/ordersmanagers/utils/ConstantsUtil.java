@@ -123,4 +123,14 @@ public class ConstantsUtil {
     public static void clearOrderHeader() {
         mCurrentOrder = new OrderDoc();
     }
+
+    /*проверяем пустая корзина или нет*/
+    public static boolean checkCartEmpty(Context context) {
+        boolean bCheck = false;
+        if (mCart.size() == 0) {
+            bCheck = true;
+            ErrorInfo.Tost("Корзина пустая!", context);
+        }
+        return bCheck;
+    }
 }

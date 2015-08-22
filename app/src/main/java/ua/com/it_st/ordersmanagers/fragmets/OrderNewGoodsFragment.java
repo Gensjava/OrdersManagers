@@ -46,7 +46,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     private static TextView tSumCart;
     private AndroidTreeView tView;
     private TreeNode mNode;
-    private View rootView;
 
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
@@ -101,8 +100,8 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if ((rootView == null)) {
-            rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
+
+        View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
             final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
         /* Это корень */
@@ -141,8 +140,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             imViewAdd.setOnClickListener(this);
         /*Отображаем сумму заказа в подвале*/
             tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
-        }
-        
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         return rootView;
@@ -160,8 +157,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         menu_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                /*проверяем пустая корзина или нет*/
+                if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                    final onEventListener someEventListener = (onEventListener) getActivity();
+                    someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                }
             }
         });
         /*картинка корзины*/
@@ -242,8 +242,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         switch (view.getId()) {
 
             case R.id.order_new_goods_container_image:
-                final onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                /*прповеряем корзину пустая или нет*/
+                if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                    final onEventListener someEventListener = (onEventListener) getActivity();
+                    someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                }
                 break;
             default:
                 break;
