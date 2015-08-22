@@ -2,6 +2,8 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -43,13 +45,14 @@ public class ConstantsUtil {
     }
 
     /* Получаем сумму всего */
-    public static String getTotalOrder() {
+    public static double getTotalOrder() {
         double iNumber = 0;
 
         for (final OrderDoc.OrderLines aMCart : ConstantsUtil.mCart) {
             iNumber = iNumber + aMCart.getSum();
         }
-        return String.valueOf(iNumber);
+        iNumber = new BigDecimal(iNumber).setScale(2, RoundingMode.UP).doubleValue();
+        return iNumber;
     }
 
     /* Получаем ИД Агента */
@@ -103,8 +106,9 @@ public class ConstantsUtil {
 
         boolean bCheck = false;
 
-        if (
-                mCurrentOrder.getFirmId() == null
+        if (mCurrentOrder.getDocNumber() == null
+                || mCurrentOrder.getDocDate() == null
+                || mCurrentOrder.getFirmId() == null
                         || mCurrentOrder.getPriceCategoryId() == null
                         || mCurrentOrder.getClientId() == null
                         || mCurrentOrder.getAdress() == null) {
@@ -113,5 +117,10 @@ public class ConstantsUtil {
             ErrorInfo.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
         }
         return bCheck;
+    }
+
+    /*чистим документ заказа*/
+    public static void clearOrderHeader() {
+        mCurrentOrder = new OrderDoc();
     }
 }

@@ -26,6 +26,7 @@ import ua.com.it_st.ordersmanagers.utils.Dialogs;
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
 
     public static final String NAME_TABLE = "NAME_TABLE";
+    ListView lv;
     private SimpleAdapter mAdapter;
     private View rootView;
     private String[][] mItemsHeader;
@@ -38,10 +39,18 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-
+            /*чистим док заказ*/
+            ConstantsUtil.clearOrderHeader();
             /* сгениророваный номер документа заказа ИД для 1с */
             UUID uniqueKey = UUID.randomUUID();
             ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
+            /*устанавливаем дату документа и номер*/
+            ConstantsUtil.mCurrentOrder.setDocDate(ConstantsUtil.getDate());
+            ConstantsUtil.mCurrentOrder.setDocNumber(String.valueOf(ConstantsUtil.sCurrentNumber));
+            /*выводим данные дату и номер в шапку*/
+            TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
+            period.setText(getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
+
             /*массив принимает выбранные занчения шапки и передает их в адаптер*/
             mItemsHeader = new String[5][3];
 
@@ -51,15 +60,13 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
             /* список шапка заказа*/
-            ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
+            lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
 
             /*кнопка далее к следующему этапу*/
             ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
             imViewAdd.setOnClickListener(this);
-            /*устанавливаем дату документа и номер*/
-            TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
-            period.setText(getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
+
         }
 
         return rootView;

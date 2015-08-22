@@ -20,6 +20,8 @@ public class SQLQuery {
                 "WHERE " + sp + "\n" +
                 "GROUP by Products.kod";
         return sq;
+        //EFT OUTER JOIN GoodsByStores ON Products.kod = GoodsByStores.kod_coods and GoodsByStores.kod_stores = '000000003'
+        //LEFT OUTER JOIN Prices ON Products.kod = Prices.kod  and Prices.price_category_kod = '000000012'
     }
 
     /*

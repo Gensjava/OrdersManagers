@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -134,7 +136,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     /* создаем свой адаптер т.к по умолчанию нет возможности
      добалять свои изображения в меню
       */
-    public class MenuCustomAdapter extends ArrayAdapter {
+    private class MenuCustomAdapter extends ArrayAdapter {
 
         private String[] objects;
         private LayoutInflater mLInflater;
@@ -188,7 +190,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
     /* делаем свой адаптер т.к нужно обрабытывать
      клик на контекстное меню*/
-    class MySimpleCursorAdapter extends SimpleCursorAdapter {
+    private class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
         private LayoutInflater mLInflater;
 

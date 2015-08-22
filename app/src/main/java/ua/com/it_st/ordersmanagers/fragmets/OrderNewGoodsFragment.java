@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,12 +10,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.unnamed.b.atv.model.TreeNode;
@@ -31,27 +34,35 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
 
-public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+/* Класс предназначен для подбора товара к заказу
+* при выборе если нехватает кв-ко товара на складе
+* будет выдавать сообщения, что нехватает на складе товара*/
 
-    public static TextView ui_cart;
+public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+
+    private static TextView ui_cart;
     private static SQLiteDatabase sDb;
     private static String mSelectionArgs;
+    private static TextView tSumCart;
     private AndroidTreeView tView;
     private TreeNode mNode;
+    private View rootView;
+
+    /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
         public void onClick(final TreeNode node, final Object value) {
 
             final TreeItem item = (TreeItem) value;
-            //Текущая позиция дерева
+            /* Текущая позиция дерева */
             mNode = node;
             if (item.isCategory()) {
                 if (!item.isClick()) {
-                    //записываем клик на позиции чтоб два раза не строить ветки
+                    /* записываем клик на позиции чтоб два раза не строить ветки */
                     item.setClick(true);
-                    //параметр для запроса
+                    /* параметр для запроса */
                     mSelectionArgs = item.getId();
-                    //обновляем курсор
+                    /* обновляем курсор */
                     getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                 }
             } else {
@@ -61,11 +72,17 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         }
     };
 
-    //определяем показывать к-во товара в корзине или нет
-    //если больше 0 тогда показываем
+    /*
+    определяем показывать к-во товара в корзине или нет
+    если больше 0 тогда показываем
+    */
     public static void updateCartCount() {
 
         if (ui_cart == null) return;
+
+         /*Показываем сумму заказа в подвале*/
+        String tSum = ConstantsUtil.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(ConstantsUtil.getTotalOrder());
+        tSumCart.setText(tSum + " грн.");
 
         if (ConstantsUtil.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);
@@ -84,49 +101,51 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
-        final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
+        if ((rootView == null)) {
+            rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
+            final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
         /* Это корень */
-        TreeNode root = TreeNode.root();
-        TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-        TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+            TreeNode root = TreeNode.root();
+            TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+            TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
         /* создаем ветки */
-        myRoot.addChildren(myCatalog);
-        root.addChildren(myCatalog);
-        mNode = myCatalog;
+            myRoot.addChildren(myCatalog);
+            root.addChildren(myCatalog);
+            mNode = myCatalog;
 
         /* создаем древо */
-        tView = new AndroidTreeView(getActivity(), root);
-        // tView.setDefaultAnimation(true);
-        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-        tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
-        tView.setDefaultNodeClickListener(nodeClickListener);
+            tView = new AndroidTreeView(getActivity(), root);
+            // tView.setDefaultAnimation(true);
+            tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+            tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
+            tView.setDefaultNodeClickListener(nodeClickListener);
 
         /* загружаем дерево */
-        containerView.addView(tView.getView());
+            containerView.addView(tView.getView());
 
-        if (savedInstanceState != null) {
-            String state = savedInstanceState.getString("tState");
-            if (!TextUtils.isEmpty(state)) {
-                tView.restoreState(state);
+            if (savedInstanceState != null) {
+                String state = savedInstanceState.getString("tState");
+                if (!TextUtils.isEmpty(state)) {
+                    tView.restoreState(state);
+                }
             }
-        }
         /* у корня дерева ИД = "" */
-        mSelectionArgs = "";
+            mSelectionArgs = "";
         /* открываем подключение к БД */
-        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+       
+        /* кнопка далее переход на следующий этап*/
+            ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_goods_container_image);
+        /* слушатель кнопки далее */
+            imViewAdd.setOnClickListener(this);
+        /*Отображаем сумму заказа в подвале*/
+            tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
+        }
+        
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
-
         return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //
-        updateCartCount();
     }
 
     @Override
@@ -145,8 +164,10 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
             }
         });
-
+        /*картинка корзины*/
         ui_cart = (TextView) menu_cart.findViewById(R.id.main_tool_bar_cart_text);
+        /*обновляем корзину*/
+        updateCartCount();
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -155,9 +176,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.expandAll:
+                /*раскрыть дерево*/
                 tView.expandAll();
                 break;
             case R.id.collapseAll:
+                /*свернуть все дерево*/
                 tView.collapseAll();
                 break;
         }
@@ -190,8 +213,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
                     break;
                 default:
-                    double cBalance = Double.parseDouble(data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT)));
-                    double cPrice = Double.parseDouble(data.getString(data.getColumnIndex(TablePrices.COLUMN_PRICE)));
+                    String sBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    String sPrice = data.getString(data.getColumnIndex(TablePrices.COLUMN_PRICE));
+
+                    double cBalance = Double.parseDouble(String.valueOf(sBalance == null ? 0 : sBalance));
+                    double cPrice = Double.parseDouble(String.valueOf(sPrice == null ? 0 : sPrice));
 
                     newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, cBalance, 0, false, cPrice));
             }
@@ -208,7 +234,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         new MyCursorLoader(getActivity());
+    }
 
+    @Override
+    public void onClick(final View view) {
+
+        switch (view.getId()) {
+
+            case R.id.order_new_goods_container_image:
+                final onEventListener someEventListener = (onEventListener) getActivity();
+                someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                break;
+            default:
+                break;
+        }
     }
 
     public interface onEventListener {
@@ -225,8 +264,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         public Cursor loadInBackground() {
 
             return sDb
-                    .rawQuery(SQLQuery.queryGoods("Products.id_category = ?"), new String[]{mSelectionArgs});
+                    .rawQuery(SQLQuery.queryGoods("Products.id_category = ?"
+                    ), new String[]{mSelectionArgs
 
+                    });
         }
     }
+
 }
