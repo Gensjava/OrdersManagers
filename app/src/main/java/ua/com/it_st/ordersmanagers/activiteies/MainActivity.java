@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         // Create a new fragment and specify the planet to show based on
         // position
 
-        Class fragmentClass;
+        Class fragmentClass = null;
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 fragmentClass = OrderListFragment.class;
@@ -117,19 +117,22 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = ExchangeFragment.class;
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = BlankFragment.class;
+                // fragmentClass = BlankFragment.class;
+                finish();
                 break;
             default:
-                fragmentClass = BlankFragment.class;
+                //  fragmentClass = BlankFragment.class;
+        }
+        if (fragmentClass != null) {
+            //Открываем фрагмент
+            WorkFragment.onNewInstanceFragment(fragmentClass, this);
+
+            // Highlight the selected item, update the title, and close the drawer
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
+            mDrawer.closeDrawers();
         }
 
-        //Открываем фрагмент
-        WorkFragment.onNewInstanceFragment(fragmentClass, this);
-
-        // Highlight the selected item, update the title, and close the drawer
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
-        mDrawer.closeDrawers();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -276,5 +276,4 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             return convertView;
         }
     }
-
 }

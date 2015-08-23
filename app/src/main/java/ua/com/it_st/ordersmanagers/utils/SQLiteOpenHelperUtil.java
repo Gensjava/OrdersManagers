@@ -38,6 +38,7 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         mDatabase = getWritableDatabase();
+        // mDatabase.compileStatement()
 
     }
 

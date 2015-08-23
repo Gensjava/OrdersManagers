@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         app:iconColor="#607D8B"
         app:iconFont="fonts/material-icon-font.ttf"
-        app:iconSize="16dp"
+        app:iconSize="18dp"
         app:iconText="@string/ic_keyboard_arrow_right"/>
 
     <com.github.johnkil.print.PrintView
@@ -28,7 +28,7 @@
         android:layout_toRightOf="@id/arrow_icon"
         app:iconColor="#607D8B"
         app:iconFont="fonts/material-icon-font.ttf"
-        app:iconSize="16dp"
+        app:iconSize="18dp"
         app:iconText="@string/ic_email"/>
 
     <TextView
@@ -39,6 +39,6 @@
         android:layout_marginLeft="10dp"
         android:layout_toLeftOf="@+id/buttonsContainer"
         android:layout_toRightOf="@+id/icon"
-        android:textSize="12sp"/>
+        android:textSize="16sp"/>
 
 </RelativeLayout>
