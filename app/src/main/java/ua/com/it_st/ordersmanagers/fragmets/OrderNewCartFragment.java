@@ -66,7 +66,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
         return rootView;
     }
-
     /*заполняем корзину в ArrayList*/
     private ArrayList getItemsGoods() {
         ArrayList<OrderDoc.OrderLines> lCartOrders = new ArrayList<OrderDoc.OrderLines>();
@@ -83,10 +82,11 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
 
             case R.id.order_new_cart_list_image_arrow_right:
-                /* создаем новый заказ */
-                onNewOrder();
+               
                  /*проверяем пустая корзина или нет*/
                 if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                     /* создаем новый заказ */
+                    onNewOrder();
                 /* открываем журнал заказов */
                     final onEventListener someEventListener = (onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderListFragment.class);
@@ -177,6 +177,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
             /* Вызываем адаптер */
             spinner.setAdapter(adapter);
+            spinner.setSelection(2);/*устанавливаем заглушку*/
 
             /*костыль для того чтоб при начале открытия списка незаполнялось первая позиция
              и при выборе пользователем позицию в меню нормально обрабатывал
@@ -246,6 +247,11 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         public View getView(int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
             return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public int getCount() {
+            return super.getCount() - 1; // делаем невидимым последний элемент
         }
 
         public View getCustomView(int position, View convertView, ViewGroup parent) {

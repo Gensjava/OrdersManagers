@@ -12,18 +12,23 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
@@ -162,7 +167,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             return getCustomView(position, convertView, parent);
         }
 
-        public View getCustomView(int position, View convertView, ViewGroup parent) {
+        public View getCustomView(final int position, View convertView, ViewGroup parent) {
 
             convertView = mLInflater.inflate(R.layout.spinner_row, parent, false);
 
@@ -186,6 +191,11 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             }
             return convertView;
         }
+
+        @Override
+        public int getCount() {
+            return super.getCount() - 1; // делаем невидимым последний элемент
+        }
     }
 
     /* делаем свой адаптер т.к нужно обрабытывать
@@ -198,6 +208,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             super(context, layout, c, from, to, flags);
             mLInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         }
 
         @Override
@@ -238,6 +249,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             } else {
                 status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
             }
+
             /*menu*/
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
 
@@ -249,6 +261,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
             /* Вызываем адаптер */
             spinner.setAdapter(adapter);
+            spinner.setSelection(3);/*устанавливаем заглушку*/
 
             /*костыль для того чтоб при начале открытия списка незаполнялось первая позиция
              и при выборе пользователем позицию в меню нормально обрабатывал
@@ -260,6 +273,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                                            View itemSelected, int selectedItemPosition, long selectedId) {
 
                     if (iCurrentSelection[0] != selectedItemPosition) {
+
                         final ContentValues data = new ContentValues();
 
                         switch (selectedItemPosition) {
@@ -290,6 +304,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 }
 
                 public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
             return convertView;

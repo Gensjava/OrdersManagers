@@ -62,11 +62,13 @@
         <item>Pедактировать</item>
         <item>Провести</item>
         <item>Снять с проведения</item>
+        <item>заглушка</item>
     </string-array>
 
     <string-array name="spinner_cart_menu">
         <item>Удалить</item>
         <item>Изменить количество</item>
+        <item>заглушка</item>
     </string-array>
 
 
