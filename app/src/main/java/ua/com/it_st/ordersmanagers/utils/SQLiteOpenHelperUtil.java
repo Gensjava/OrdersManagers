@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
@@ -95,5 +97,4 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
             mDatabase.close();
         }
     }
-
 }

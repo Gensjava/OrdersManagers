@@ -49,6 +49,7 @@ public class Dialogs {
         number = (TextView) numberView.findViewById(R.id.dialog_number_number);
         sum = (TextView) numberView.findViewById(R.id.dialog_number_sum);
 
+
         price.setText(String.valueOf(product.getPrice()));
         sum.setText(String.valueOf(product.getPrice()));
 

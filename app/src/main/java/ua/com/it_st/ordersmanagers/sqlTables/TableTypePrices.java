@@ -12,8 +12,15 @@ public class TableTypePrices {
     public static final String TABLE_NAME = "TypePrices";
     public static final String FILE_NAME = "NameFile=ref_pricecategories.csv";
 
-    public static final String COLUMN_NAME = "name";
     public static final String COLUMN_KOD = "kod";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_NOTE = "note";
+
+    public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
+            + COLUMN_KOD + ", "
+            + COLUMN_NAME + ", "
+            + COLUMN_NOTE
+            + ") VALUES ";
 
     private static final String TAG = TableTypePrices.class.getSimpleName();
 
@@ -23,6 +30,7 @@ public class TableTypePrices {
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
                 + " ," + COLUMN_NAME + " text"
                 + " ," + COLUMN_KOD + " text"
+                + " ," + COLUMN_NOTE + " text"
                 + ");");
     }
 

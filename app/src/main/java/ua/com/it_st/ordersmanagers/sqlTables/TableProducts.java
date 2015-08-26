@@ -15,8 +15,22 @@ public class TableProducts {
     public static final String COLUMN_KOD = "kod";
     public static final String COLUMN_ID_CATEGORY = "id_category";
     public static final String COLUMN_IS_CATEGORY = "is_category";
-    public static final String COLUMN_NAME = "name";
     public static final String COLUMN_LEVEL = "level";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_RATE = "rate";
+    public static final String COLUMN_BARCODE = "barcode";
+    public static final String COLUMN_NOTE = "note";
+
+    public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
+            + COLUMN_KOD + ", "
+            + COLUMN_ID_CATEGORY + ", "
+            + COLUMN_IS_CATEGORY + ", "
+            + COLUMN_LEVEL + ", "
+            + COLUMN_NAME + ", "
+            + COLUMN_RATE + ", "
+            + COLUMN_BARCODE + ", "
+            + COLUMN_NOTE
+            + ") VALUES ";
 
 
     private static final String TAG = TableProducts.class.getSimpleName();
@@ -25,11 +39,14 @@ public class TableProducts {
         Log.i(TAG, "createTable");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
-                + " ," + COLUMN_ID_CATEGORY + " integer"
-                + " ," + COLUMN_NAME + " text"
-                + " ," + COLUMN_LEVEL + " integer"
-                + " ," + COLUMN_IS_CATEGORY + " text"
                 + " ," + COLUMN_KOD + " text"
+                + " ," + COLUMN_ID_CATEGORY + " text"
+                + " ," + COLUMN_IS_CATEGORY + " text"
+                + " ," + COLUMN_LEVEL + " text"
+                + " ," + COLUMN_NAME + " text"
+                + " ," + COLUMN_RATE + " text"
+                + " ," + COLUMN_BARCODE + " text"
+                + " ," + COLUMN_NOTE + " text"
                 + ");");
     }
 

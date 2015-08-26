@@ -37,6 +37,21 @@ public class DBHelperUtil extends DatabaseUtils.InsertHelper {
         return lTableName;
     }
 
+    public static Map getListTableName() {
+
+        Map<String, String> lTableName = new HashMap<String, String>();
+
+        lTableName.put(TableCompanies.FILE_NAME, TableCompanies.INSERT_VALUES);
+        lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.INSERT_VALUES);
+        lTableName.put(TablePrices.FILE_NAME, TablePrices.INSERT_VALUES);
+        lTableName.put(TableProducts.FILE_NAME, TableProducts.INSERT_VALUES);
+        lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.INSERT_VALUES);
+        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
+        lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
+
+        return lTableName;
+    }
+
     public static ContentValues getListContentValuesTableName(String nameTable, String[] sData) {
 
         ContentValues lContentValues = new ContentValues();

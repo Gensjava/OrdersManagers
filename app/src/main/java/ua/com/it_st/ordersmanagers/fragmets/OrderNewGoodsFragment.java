@@ -213,13 +213,10 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
                     break;
                 default:
-                    String sBalance = data.getString(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
-                    String sPrice = data.getString(data.getColumnIndex(TablePrices.COLUMN_PRICE));
+                    double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
 
-                    double cBalance = Double.parseDouble(String.valueOf(sBalance == null ? 0 : sBalance));
-                    double cPrice = Double.parseDouble(String.valueOf(sPrice == null ? 0 : sPrice));
-
-                    newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, cBalance, 0, false, cPrice));
+                    newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
             }
 
             tView.addNode(mNode, newTreeItem);

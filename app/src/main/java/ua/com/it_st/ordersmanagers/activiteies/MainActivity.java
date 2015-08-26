@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity
         //ab.setHomeAsUpIndicator(R.mipmap.ic_drawer);
         // ab.setDisplayHomeAsUpEnabled(true);
 
+        //Открываем фрагмент
+        WorkFragment.onNewInstanceFragment(ExchangeFragment.class, this);
+
 
     }
 

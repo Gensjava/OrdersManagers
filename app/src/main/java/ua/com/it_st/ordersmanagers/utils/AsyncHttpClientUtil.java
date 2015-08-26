@@ -9,13 +9,14 @@ import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
-    //private static final String BASE_URL = "http://192.168.1.5/Pekin/hs/file";
-    private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
+    private static final String BASE_URL = "http://192.168.1.6/Pekin/hs/file";
+    //private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
 
     private final String TEG = AsyncHttpClientUtil.class.getSimpleName();
     private MainActivity mMainActivity;
@@ -24,7 +25,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         mMainActivity = mainActivity;
     }
 
-    public void getDownloadFiles(final RequestParams params, final SQLiteDatabase db) throws Exception {
+    public void getDownloadFiles(final RequestParams params, final SQLiteDatabase db, final Map<String, String> lTableNameInsert, final Map<String, String> lTableName) throws Exception {
 
         get(BASE_URL, params, new FileAsyncHttpResponseHandler(mMainActivity) {
             @Override
@@ -40,7 +41,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
                     try {
-                        WorkFilesUtil.onInsertTable(response, params.toString(), db);
+                        WorkFilesUtil.onInsertTable(response, params.toString(), db, lTableNameInsert, lTableName);
                     } catch (IOException e) {
                         e.printStackTrace();
                         //Log

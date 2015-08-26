@@ -16,6 +16,12 @@ public class TableGoodsByStores {
     public static final String COLUMN_STORES_KOD = "kod_stores";
     public static final String COLUMN_AMOUNT = "amount";
 
+    public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
+            + COLUMN_COODS_KOD + ", "
+            + COLUMN_STORES_KOD + ", "
+            + COLUMN_AMOUNT
+            + ") VALUES ";
+
     private static final String TAG = TableGoodsByStores.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {

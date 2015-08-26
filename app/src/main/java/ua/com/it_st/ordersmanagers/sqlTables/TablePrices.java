@@ -15,7 +15,15 @@ public class TablePrices {
     public static final String COLUMN_KOD = "kod";
     public static final String COLUMN_PRICE_CATEGORY_KOD = "price_category_kod";
     public static final String COLUMN_PRICE = "price";
-
+    public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
+            + COLUMN_KOD + ", "
+            + COLUMN_PRICE_CATEGORY_KOD + ", "
+            + COLUMN_PRICE
+            + ") VALUES ";
+    public static final String insertSql = "insert into Prices ("
+            + TablePrices.COLUMN_KOD + ", " +
+            TablePrices.COLUMN_PRICE_CATEGORY_KOD + ", " +
+            TablePrices.COLUMN_PRICE + ") values (?, ?, ?);";
     private static final String TAG = TablePrices.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {

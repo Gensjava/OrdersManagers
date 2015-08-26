@@ -14,7 +14,12 @@ public class TableTypeStores {
 
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_KOD = "kod";
-
+    public static final String COLUMN_NOTE = "note";
+    public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
+            + COLUMN_KOD + ", "
+            + COLUMN_NAME + ", "
+            + COLUMN_NOTE
+            + ") VALUES ";
     private static final String TAG = TableTypeStores.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
@@ -23,6 +28,7 @@ public class TableTypeStores {
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
                 + " ," + COLUMN_NAME + " text"
                 + " ," + COLUMN_KOD + " text"
+                + " ," + COLUMN_NOTE + " text"
                 + ");");
     }
 
