@@ -32,7 +32,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
 
             view = inflater.inflate(R.layout.order_new_goods_node, null, false);
             tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_value);
-            tvValue.setText(value.text);
+            tvValue.setText(value.getName());
 
             final PrintView iconView = (PrintView) view.findViewById(R.id.icon);
 
@@ -42,11 +42,11 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             view = inflater.inflate(R.layout.order_new_goods_node_item, null, false);
 
             tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_node_value);
-            tvValue.setText(value.text);
+            tvValue.setText(value.getName());
             TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
-            balanceTvValue.setText(String.valueOf(value.balance));
+            balanceTvValue.setText(String.valueOf(value.getBalance()));
             TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
-            orderTvValue.setText(String.valueOf(value.order));
+            orderTvValue.setText(String.valueOf(value.getAmount()));
         }
 
         return view;
@@ -59,13 +59,9 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
         }
     }
 
-    public static class TreeItem {
+    public static class TreeItem extends OrderDoc.OrderLines {
+
         private Integer icon;
-        private String id;
-        private double balance;
-        private double order;
-        private double price;
-        private String text;
         private boolean isCategory;
         private boolean click;
 
@@ -75,10 +71,9 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
                         String id,
                         boolean click,
                         boolean isCategory) {
-
+            super.setName(text);
+            super.setGoodsId(id);
             this.icon = icon;
-            this.text = text;
-            this.id = id;
             this.click = click;
             this.isCategory = isCategory;
         }
@@ -92,15 +87,15 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
                         boolean isCategory,
                         double price) {
 
-            this.text = text;
-            this.id = id;
+            super.setName(text);
+            super.setGoodsId(id);
+            super.setPrice(price);
+            super.setAmount(order);
+            super.setBalance(balance);
             this.click = click;
-            this.balance = balance;
-            this.order = order;
             this.isCategory = isCategory;
-            this.price = price;
-        }
 
+        }
 
         public Integer getIcon() {
             return icon;
@@ -108,22 +103,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
 
         public void setIcon(final Integer icon) {
             this.icon = icon;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(final String text) {
-            this.text = text;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(final String id) {
-            this.id = id;
         }
 
         public boolean isClick() {
@@ -134,21 +113,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.click = click;
         }
 
-        public double getBalance() {
-            return balance;
-        }
-
-        public void setBalance(final double balance) {
-            this.balance = balance;
-        }
-
-        public double getOrder() {
-            return order;
-        }
-
-        public void setOrder(final double order) {
-            this.order = order;
-        }
 
         public boolean isCategory() {
             return isCategory;
@@ -158,13 +122,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.isCategory = isCategory;
         }
 
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(final double price) {
-            this.price = price;
-        }
     }
 }
 

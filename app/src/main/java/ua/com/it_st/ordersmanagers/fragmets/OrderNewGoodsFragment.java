@@ -23,12 +23,14 @@ import android.widget.TextView;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -60,13 +62,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     /* записываем клик на позиции чтоб два раза не строить ветки */
                     item.setClick(true);
                     /* параметр для запроса */
-                    mSelectionArgs = item.getId();
+                    mSelectionArgs = item.getGoodsId();
                     /* обновляем курсор */
                     getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                 }
             } else {
-                Dialogs dialogs = new Dialogs(getActivity());
-                dialogs.showCustomAlertDialogEnterNumber(getString(R.string.addCart), item, mNode);
+                Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
             }
         }
     };
@@ -91,6 +92,45 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
+    /*обновление после выбора к-во товара в списке товаров*/
+    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final TreeProductCategoryHolder.TreeItem product) {
+
+            /* строка ТЧ заказа */
+        OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
+                ConstantsUtil.mCurrentOrder.getId(),
+                product.getGoodsId(),
+                1,
+                numberInDialog,
+                product.getPrice(),
+                sumInDialog,
+                product.getName(),
+                product.getBalance());
+        /* к-во заказа */
+        final TextView orderTvValue = (TextView) mNode.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);
+
+        /* делаем проверку товара на остатке */
+        if (product.getBalance() >= numberInDialog) {
+            if (numberInDialog > 0) {
+                orderTvValue.setVisibility(View.VISIBLE);
+                orderTvValue.setText(String.valueOf(numberInDialog));
+                /* добавляем в табличную часть заказа */
+                ConstantsUtil.setListOrderLines(orderLines);
+            } else {
+                orderTvValue.setVisibility(View.INVISIBLE);
+                /* удаляем из табличной части заказа */
+                ConstantsUtil.onListOrderLinesDelete(orderLines);
+            }
+        } else {
+            //
+            ErrorInfo.Tost(getString(R.string.not_goods_store_number), getActivity());
+        }
+        /*записываем в элемент дерева тоже чтоб потом можно было получить обратно*/
+        product.setAmount(numberInDialog);
+        product.setSum(sumInDialog);
+        /* обновляем корзину */
+        updateCartCount();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,44 +142,44 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
 
         View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
-            final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
+        final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
         /* Это корень */
-            TreeNode root = TreeNode.root();
-            TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-            TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+        TreeNode root = TreeNode.root();
+        TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+        TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
         /* создаем ветки */
-            myRoot.addChildren(myCatalog);
-            root.addChildren(myCatalog);
-            mNode = myCatalog;
+        myRoot.addChildren(myCatalog);
+        root.addChildren(myCatalog);
+        mNode = myCatalog;
 
         /* создаем древо */
-            tView = new AndroidTreeView(getActivity(), root);
-            // tView.setDefaultAnimation(true);
-            tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-            tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
-            tView.setDefaultNodeClickListener(nodeClickListener);
+        tView = new AndroidTreeView(getActivity(), root);
+        // tView.setDefaultAnimation(true);
+        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+        tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
+        tView.setDefaultNodeClickListener(nodeClickListener);
 
         /* загружаем дерево */
-            containerView.addView(tView.getView());
+        containerView.addView(tView.getView());
 
-            if (savedInstanceState != null) {
-                String state = savedInstanceState.getString("tState");
-                if (!TextUtils.isEmpty(state)) {
-                    tView.restoreState(state);
-                }
+        if (savedInstanceState != null) {
+            String state = savedInstanceState.getString("tState");
+            if (!TextUtils.isEmpty(state)) {
+                tView.restoreState(state);
             }
+        }
         /* у корня дерева ИД = "" */
-            mSelectionArgs = "";
+        mSelectionArgs = "";
         /* открываем подключение к БД */
-            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
        
         /* кнопка далее переход на следующий этап*/
-            ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_goods_container_image);
+        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_goods_container_image);
         /* слушатель кнопки далее */
-            imViewAdd.setOnClickListener(this);
+        imViewAdd.setOnClickListener(this);
         /*Отображаем сумму заказа в подвале*/
-            tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
+        tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         return rootView;

@@ -73,7 +73,6 @@ public class WorkFilesUtil {
                     for (byte s = 0; s < country.length; s++) {
                         /*делаем замену символа*/
                         pCountry[s] = country[s].replace('\"', ' ');
-                        pCountry[s] = pCountry[s].replace(',', ' ');
                         pCountry[s] = pCountry[s].replace('\'', ' ');
                         /*убираем пробелы в строке*/
                         pCountry[s] = pCountry[s].trim();
@@ -101,7 +100,6 @@ public class WorkFilesUtil {
                 }
 
                 input.close();
-
 
             } catch (IOException e) {
                 e.printStackTrace();

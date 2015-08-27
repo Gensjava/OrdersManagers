@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
@@ -146,6 +147,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         }
     }
 
+
     public interface onEventListener {
 
         void onOpenFragmentClass(Class<?> fClass);
@@ -217,9 +219,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                         someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
                     } else {
                         /*вызывваем диалог для ввода комента*/
-                        Dialogs dialogs = new Dialogs(getActivity());
-                        dialogs.showCustomAlertDialogEditComment(getString(R.string.enter_your_coment));
-
+                        Dialogs.showCustomAlertDialogEditComment(getActivity(), getString(R.string.enter_your_coment));
                     }
                 }
             });

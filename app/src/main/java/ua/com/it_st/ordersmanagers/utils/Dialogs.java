@@ -3,6 +3,7 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.math.RoundingMode;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
@@ -30,14 +32,22 @@ public class Dialogs {
     private static TextView number, sum;
     private static Context mContext;
     private static LayoutInflater mLayoutInflater;
-
-    public Dialogs(final Context context) {
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
-    }
+    private static OrderDoc.OrderLines product;
+    private static int limitAmuont;
 
     /* Создаем открываем диалог для ввода количества*/
-    public static void showCustomAlertDialogEnterNumber(final String title, final TreeProductCategoryHolder.TreeItem product, final TreeNode node) {
+    public static void showCustomAlertDialogEnterNumber(final Context activity, final String title, Object object, final String fClass) {
+
+        mContext = activity;
+        mLayoutInflater = LayoutInflater.from(activity);
+
+        if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
+            product = (TreeProductCategoryHolder.TreeItem) object;
+            limitAmuont = 0;
+        } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
+            product = (OrderDoc.OrderLines) object;
+            limitAmuont = 1;
+        }
 
         final View numberView;
         /* каст макет */
@@ -49,11 +59,13 @@ public class Dialogs {
         number = (TextView) numberView.findViewById(R.id.dialog_number_number);
         sum = (TextView) numberView.findViewById(R.id.dialog_number_sum);
 
-
         price.setText(String.valueOf(product.getPrice()));
-        sum.setText(String.valueOf(product.getPrice()));
+        sum.setText(String.valueOf(product.getSum() == 0.0 ? product.getPrice() : product.getSum()));
 
-        final double[] numberD = {1.0};
+       /*устанавливаем к-во если уже было, ставим количество товар, если = 0, тогда делаем = 1*/
+        final double[] numberD = {product.getAmount() == 0.0 ? 1.0 : product.getAmount()};
+        number.setText(String.valueOf(numberD[0]));
+
         final Animation animScale = AnimationUtils.loadAnimation(mContext, R.anim.scale_button);
 
         numberPlus.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +82,7 @@ public class Dialogs {
         numberMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberD[0] > 0) {
+                if (numberD[0] > limitAmuont) {
                     numberD[0]--;
                     number.setText(String.valueOf(numberD[0]));
                     double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
@@ -97,37 +109,25 @@ public class Dialogs {
                         //Сумма товара
                         final double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
 
-                        /* строка ТЧ заказа */
-                        OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                                ConstantsUtil.mCurrentOrder.getId(),
-                                product.getId(),
-                                1,
-                                numberInDialog,
-                                product.getPrice(),
-                                sumInDialog,
-                                product.getText());
+                        /*преобразуем тип*/
+                        final MainActivity mAk = (MainActivity) mContext;
 
-                        /* к-во заказа */
-                        final TextView orderTvValue = (TextView) node.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);
-
-                        /* делаем проверку товара на остатке */
-                        if (product.getBalance() >= numberInDialog) {
-                            if (numberInDialog > 0) {
-                                orderTvValue.setVisibility(View.VISIBLE);
-                                orderTvValue.setText(String.valueOf(numberInDialog));
-                                /* добавляем в табличную часть заказа */
-                                ConstantsUtil.setListOrderLines(orderLines);
-                            } else {
-                                orderTvValue.setVisibility(View.INVISIBLE);
-                                /* удаляем из табличной части заказа */
-                                ConstantsUtil.onListOrderLinesDelete(orderLines);
+                        if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
+                         /*делаем поиск списка товаров для передачи параметра*/
+                            final OrderNewGoodsFragment fragment = (OrderNewGoodsFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderNewGoodsFragment.class.toString());
+                            if (fragment != null) {
+                            /*передаем данные сумма, количество*/
+                                fragment.setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
                             }
-                        } else {
-                            //
-                            ErrorInfo.Tost(mContext.getString(R.string.not_goods_store_number), mContext);
+                        } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
+                           /*делаем поиск списка товаров для передачи параметра*/
+                            final OrderNewCartFragment fragment = (OrderNewCartFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderNewCartFragment.class.toString());
+                            if (fragment != null) {
+                            /*передаем данные сумма, количество*/
+                                fragment.setDialogAmount(numberInDialog, sumInDialog, product);
+                            }
                         }
-                        /* обновляем корзину */
-                        OrderNewGoodsFragment.updateCartCount();
+
                         //
                         dialog.cancel();
                     }
@@ -140,7 +140,10 @@ public class Dialogs {
     }
 
     /*диалог для ввода коментария в шапке заказа*/
-    public void showCustomAlertDialogEditComment(final String title) {
+    public static void showCustomAlertDialogEditComment(final Context activity, final String title) {
+
+        mContext = activity;
+        mLayoutInflater = LayoutInflater.from(activity);
 
         final View numberView;
         /* каст макет */
@@ -168,7 +171,7 @@ public class Dialogs {
                         cData[1] = editText;
                          /*преобразуем тип*/
                         MainActivity mAk = (MainActivity) mContext;
-                        /*делаем поиск шапки для передачи параметра*/
+                           /*делаем поиск шапки для передачи параметра*/
                         OrderNewHeaderFragment fragment = (OrderNewHeaderFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderNewHeaderFragment.class.toString());
                         if (fragment != null) {
                             /*передаем данные комента и записывем их в заказ*/
@@ -176,7 +179,10 @@ public class Dialogs {
                         }
                         dialog.cancel();
                     }
-                });
+
+                }
+
+        );
         builder.setNegativeButton(R.string.cancel, null);
 
         final AlertDialog alert = builder.create();

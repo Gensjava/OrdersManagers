@@ -523,5 +523,6 @@
     <string name="not_goods_store_number">Недостаточно остатка товара на складе!</string>
     <string name="not_all_cap_mandatory_filled">Не все обязательные поля шапки заполнены!</string>
     <string name="zero">0.00</string>
+    <string name="Order">"Заказ "</string>
 
 </resources>

@@ -5,6 +5,8 @@ import android.content.Context;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -36,11 +38,35 @@ public class ConstantsUtil {
         }
     }
 
+    /*заполняем корзину в ArrayList*/
+    public static ArrayList<OrderDoc.OrderLines> getItemsGoods() {
+        ArrayList<OrderDoc.OrderLines> lCartOrders = new ArrayList<OrderDoc.OrderLines>();
+
+        OrderDoc.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderDoc.OrderLines[ConstantsUtil.mCart.size()]);
+
+        Collections.addAll(lCartOrders, cartOrders);
+        return lCartOrders;
+    }
     /* если есть в ТЧ товар такой удаляем его */
     public static void onListOrderLinesDelete(OrderDoc.OrderLines item) {
 
         if (mCart.contains(item)) {
             mCart.remove(item);
+        }
+    }
+
+    /*изменяем количество товара*/
+    public static void editCart(OrderDoc.OrderLines item) {
+
+        //если есть такой уже добавляем кол-во и делаем пересчет суммы
+        for (OrderDoc.OrderLines iC : mCart) {
+            if (iC.getGoodsId().equals(item.getGoodsId())) {
+
+                iC.setAmount(item.getAmount());
+                double newSum = new BigDecimal(iC.getAmount() * iC.getPrice()).setScale(2, RoundingMode.UP).doubleValue();
+                iC.setSum(newSum);
+                break;
+            }
         }
     }
 

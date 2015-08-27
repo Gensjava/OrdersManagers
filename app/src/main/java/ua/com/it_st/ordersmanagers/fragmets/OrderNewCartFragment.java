@@ -1,12 +1,10 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.content.ContentValues;
+
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,30 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.DBHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class OrderNewCartFragment extends Fragment implements View.OnClickListener {
 
     private TextView tSumCart;
+    private ArrayAdapter<OrderLines> sAdapter;
+    private ArrayList<OrderDoc.OrderLines> mListItems = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,15 +40,16 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
 
+        mListItems = ConstantsUtil.getItemsGoods();
         /*создаем адаптер корзины*/
-        final ArrayAdapter sAdapter = new MyArrayAdapter(getActivity(), R.layout.order_new_cart_list_item, getItemsGoods());
+        sAdapter = new MyArrayAdapter(getActivity(), R.layout.order_new_cart_list_item, mListItems);
 
         ListView lv = (ListView) rootView.findViewById(R.id.order_new_cart_list_position);
         lv.setAdapter(sAdapter);
 
       /*выводим данные дату и номер в шапку*/
         TextView period = (TextView) rootView.findViewById(R.id.order_new_cart_period);
-        period.setText("Заказ " + getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
+        period.setText(getString(R.string.Order) + getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
          /* кнопка далее переход на следующий этап*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_cart_list_image_arrow_right);
         imViewAdd.setOnClickListener(this);
@@ -66,17 +61,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
         return rootView;
     }
-    /*заполняем корзину в ArrayList*/
-    private ArrayList getItemsGoods() {
-        ArrayList<OrderDoc.OrderLines> lCartOrders = new ArrayList<OrderDoc.OrderLines>();
 
-        OrderDoc.OrderLines[] cartOrders = ConstantsUtil.mCart.toArray(new OrderLines[ConstantsUtil.mCart.size()]);
-
-        for (OrderDoc.OrderLines item : cartOrders) {
-            lCartOrders.add(item);
-        }
-        return lCartOrders;
-    }
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
@@ -103,18 +88,39 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         /* Делаем запись заказа
         * */
         /* шапка*/
-        DBHelperUtil dbOrder = new DBHelperUtil(DB, TableOrders.TABLE_NAME);
-        dbOrder.insert(TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
+        DB.insert(TableOrders.TABLE_NAME, null, TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
         /* табличная часть*/
-        DBHelperUtil dbOrderLine = new DBHelperUtil(DB, TableOrdersLines.TABLE_NAME);
         /*создаем новые позиции заказа*/
         for (final OrderLines aMCart : ConstantsUtil.mCart) {
-            dbOrderLine.insert(TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+            DB.insert(TableOrdersLines.TABLE_NAME, null, TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
         }
          /*чистим корзину*/
         ConstantsUtil.mCart.clear();
     }
 
+    /*обновление после выбора к-во товара в списке товаров*/
+    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final OrderLines product) {
+
+        /* делаем проверку товара на остатке */
+        if (product.getBalance() >= numberInDialog) {
+            if (numberInDialog > 0) {
+                 /* строка ТЧ заказа */
+                /* к-во заказа, сумма */
+                product.setAmount(numberInDialog);
+                product.setSum(sumInDialog);
+                /* редактируем табличную часть заказа */
+                ConstantsUtil.editCart(product);
+            }
+        } else {
+            //
+            ErrorInfo.Tost(getString(R.string.not_goods_store_number), getActivity());
+        }
+        /*перезаписываем список товаров*/
+        mListItems = ConstantsUtil.getItemsGoods();
+        /*обновляем*/
+        sAdapter.notifyDataSetChanged();
+        upDataFooter();
+    }
     private void upDataFooter() {
           /*Показываем сумму заказа в подвале*/
         String tSum = ConstantsUtil.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(ConstantsUtil.getTotalOrder());
@@ -128,8 +134,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     private class MyArrayAdapter extends ArrayAdapter<OrderLines> {
 
         private LayoutInflater mLInflater;
-        private ArrayList<OrderDoc.OrderLines> mListItems;
-
 
         public MyArrayAdapter(final Context context, final int resource, final ArrayList<OrderDoc.OrderLines> objects) {
             super(context, resource, objects);
@@ -142,7 +146,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
             convertView = mLInflater.inflate(R.layout.order_new_cart_list_item, parent, false);
             /*позиция*/
-            final OrderDoc.OrderLines itemOrderLines = getItem(position);
+            final OrderDoc.OrderLines itemOrderLines = mListItems.get(position);
 
              /* номер позиции */
             short iPosition = (short) position;
@@ -195,12 +199,14 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                                 /* удаляем товар*/
                                 mListItems.remove(itemOrderLines);
                                 ConstantsUtil.onListOrderLinesDelete(itemOrderLines);
-                                /* обновляем */
+                                ErrorInfo.Tost("Товар " + itemOrderLines.getName() + " удален из списка.", getActivity());
+                                 /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();
-                                ErrorInfo.Tost("Товар " + itemOrderLines.getName() + " удален из списка.", getActivity());
                                 break;
                             case 1:
+
+                                Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrderLines, OrderNewCartFragment.class.toString());
 
                                 break;
                             default:
@@ -221,8 +227,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     }
 
     /* создаем свой адаптер к Spinner т.к по умолчанию нет возможности
-     добалять свои изображения в меню
-      */
+         добалять свои изображения в меню
+          */
     private class MenuCustomAdapter extends ArrayAdapter {
 
         private String[] objects;

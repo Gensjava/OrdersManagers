@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         // ab.setDisplayHomeAsUpEnabled(true);
 
         //Открываем фрагмент
-        WorkFragment.onNewInstanceFragment(ExchangeFragment.class, this);
+        WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 
 
     }
