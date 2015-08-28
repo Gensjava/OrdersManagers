@@ -30,6 +30,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     private TextView tSumCart;
     private ArrayAdapter<OrderLines> sAdapter;
     private ArrayList<OrderDoc.OrderLines> mListItems = new ArrayList<>();
+    private SQLiteDatabase DB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,9 +46,20 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         ListView lv = (ListView) rootView.findViewById(R.id.order_new_cart_list_position);
         lv.setAdapter(sAdapter);
 
+                /* открываем подключение к БД*/
+        DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        /**/
+        String numberDoc = ConstantsUtil.mCurrentOrder.getDocNumber();
+        String dateDoc = ConstantsUtil.mCurrentOrder.getDocDate();
+
+        if (!ConstantsUtil.modeNewOrder) {
+            TextView header = (TextView) rootView.findViewById(R.id.order_new_cart_list_header_root);
+            header.setText("Редактирование корзины");
+        }
+
       /*выводим данные дату и номер в шапку*/
         TextView period = (TextView) rootView.findViewById(R.id.order_new_cart_period);
-        period.setText(getString(R.string.Order) + getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
+        period.setText(getString(R.string.Order) + getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
          /* кнопка далее переход на следующий этап*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_cart_list_image_arrow_right);
         imViewAdd.setOnClickListener(this);
@@ -68,8 +80,16 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                
                  /*проверяем пустая корзина или нет*/
                 if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                    boolean bCheck;
                      /* создаем новый заказ */
-                    if (onNewOrder()) {
+                    if (ConstantsUtil.modeNewOrder) {
+                        bCheck = onNewOrder();
+                    } else {
+                        /*редактируем заказ*/
+                        bCheck = onUpDataOrder();
+                    }
+
+                    if (bCheck) {
                       /* открываем журнал заказов */
                         final onEventListener someEventListener = (onEventListener) getActivity();
                         someEventListener.onOpenFragmentClass(OrderListFragment.class);
@@ -83,15 +103,17 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    /*создаем новый заказ док*/
     public boolean onNewOrder() {
-        /* открываем подключение к БД*/
-        SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
          /* начинаем транзакцию */
         DB.beginTransaction();
         /* Делаем запись заказа
         * */
         /* шапка*/
-        long inTable = DB.insert(TableOrders.TABLE_NAME, null, TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
+        long inTable = DB.insert(
+                TableOrders.TABLE_NAME,
+                null,
+                TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
 
         if (inTable == -1) {
             ErrorInfo.Tost(getString(R.string.eror_save_cap_doc), getActivity());
@@ -101,7 +123,11 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
          /* табличная часть*/
         /*создаем новые позиции заказа*/
         for (final OrderLines aMCart : ConstantsUtil.mCart) {
-            long inTableLines = DB.insert(TableOrdersLines.TABLE_NAME, null, TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+            long inTableLines = DB.insert(
+                    TableOrdersLines.TABLE_NAME,
+                    null,
+                    TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+
             if (inTableLines == -1) {
                 ErrorInfo.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
                 DB.endTransaction();
@@ -109,6 +135,52 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             }
         }
         
+        /* заканчиваем транзакцию */
+        DB.setTransactionSuccessful();
+        DB.endTransaction();
+        return true;
+    }
+
+    /*обновляем заказ док*/
+    public boolean onUpDataOrder() {
+         /* начинаем транзакцию */
+        DB.beginTransaction();
+        /* Делаем запись заказа
+        * */
+        /* шапка*/
+        long inTable = DB.update(
+                TableOrders.TABLE_NAME,
+                TableOrders.getContentValuesUpdata(ConstantsUtil.mCurrentOrder),
+                "Orders.view_id = ?",
+                new String[]{ConstantsUtil.mCurrentOrder.getId()});
+
+        if (inTable == -1) {
+            ErrorInfo.Tost(getString(R.string.eror_save_cap_doc), getActivity());
+            DB.endTransaction();
+            return false;
+        }
+
+         /* табличная часть*/
+        /*чистим табличную часть*/
+        long inTableLines = DB.delete(
+                TableOrdersLines.TABLE_NAME,
+                "OrdersLines.doc_id = ?",
+                new String[]{ConstantsUtil.mCurrentOrder.getId()});
+
+        /*обновляем позиции заказа (создаем новые)*/
+        for (final OrderLines aMCart : ConstantsUtil.mCart) {
+
+            long inTableLinesNew = DB.insert(TableOrdersLines.TABLE_NAME,
+                    null,
+                    TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+
+            if (inTableLines == -1 || inTableLinesNew == -1) {
+                ErrorInfo.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
+                DB.endTransaction();
+                return false;
+            }
+        }
+
         /* заканчиваем транзакцию */
         DB.setTransactionSuccessful();
         DB.endTransaction();

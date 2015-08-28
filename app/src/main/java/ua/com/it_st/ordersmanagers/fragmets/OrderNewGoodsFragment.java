@@ -253,9 +253,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 return new MyCursorLoaderCart(getActivity());
             default:
                 return null;
-
         }
-
     }
 
     @Override
@@ -263,65 +261,75 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
         switch (loader.getId()) {
             case 0:
-                while (data.moveToNext()) {
-                    String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
-                    String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
-                    String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
-
-                    final TreeNode newTreeItem;
-
-                    switch (isCategory) {
-                        case "true":
-                            newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
-                            break;
-                        default:
-                            double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
-                            double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
-
-                            newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
-                    }
-
-                    tView.addNode(mNode, newTreeItem);
-                }
+                  /*добавляем элемент к дереву*/
+                onAddTree(data);
                 break;
             case 1:/*режим редактирование*/
-                while (data.moveToNext()) {
-
-                    String cID = data.getString(data.getColumnIndex(TableOrdersLines.COLUMN_GOODS_ID));
-                    double isAmount = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT));
-                    double cPrice = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_PRICE));
-                    String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
-                    double cAmountStores = data.getDouble(data.getColumnIndex("amount_stores"));
-
-                    double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
-
-                    OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                            ConstantsUtil.mCurrentOrder.getId(),
-                            cID,
-                            1,
-                            isAmount,
-                            cPrice,
-                            newSum,
-                            cName,
-                            cAmountStores);
-
-                    ConstantsUtil.setListOrderLines(orderLines);
-                }
-                 /*обновляем корзину*/
-                updateCartCount();
+                   /*Заполняем корзину*/
+                onFillCart(data);
                 break;
-
             default:
                 break;
         }
+    }
 
+    /*Заполняем корзину*/
+    private void onFillCart(Cursor data) {
+        while (data.moveToNext()) {
+
+            String cID = data.getString(data.getColumnIndex(TableOrdersLines.COLUMN_GOODS_ID));
+            double isAmount = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT));
+            double cPrice = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_PRICE));
+            String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
+            double cAmountStores = data.getDouble(data.getColumnIndex("amount_stores"));
+
+            double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
+
+            OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
+                    ConstantsUtil.mCurrentOrder.getId(),
+                    cID,
+                    1,
+                    isAmount,
+                    cPrice,
+                    newSum,
+                    cName,
+                    cAmountStores);
+
+            ConstantsUtil.setListOrderLines(orderLines);
+        }
+                 /*обновляем корзину*/
+        updateCartCount();
+    }
+
+    /*добавляем жлемент к дереву*/
+    private void onAddTree(Cursor data) {
+        while (data.moveToNext()) {
+            String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
+            String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
+            String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
+
+            final TreeNode newTreeItem;
+
+            switch (isCategory) {
+                case "true":
+                    newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
+                    break;
+                default:
+                    double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
+
+                    newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
+            }
+
+            tView.addNode(mNode, newTreeItem);
+        }
     }
     @Override
     public void onPause() {
         super.onPause();
         getActivity().getSupportLoaderManager().destroyLoader(0);
 
-        if (ConstantsUtil.modeNewOrder) {
+        if (!ConstantsUtil.modeNewOrder) {
             getActivity().getSupportLoaderManager().destroyLoader(1);
         }
     }
@@ -390,7 +398,4 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     });
         }
     }
-
-
-
 }

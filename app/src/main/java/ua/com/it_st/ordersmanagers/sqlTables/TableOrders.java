@@ -78,6 +78,22 @@ public class TableOrders {
         return data;
     }
 
+    public static ContentValues getContentValuesUpdata(OrderDoc sData) {
+
+        final ContentValues data = new ContentValues();
+
+        data.put(COLUMN_TOTAL, ConstantsUtil.getTotalOrder());
+        data.put(COLUMN_COMPANY_ID, sData.getFirmId());
+        data.put(COLUMN_STORE_ID, sData.getStoreId());
+        data.put(COLUMN_CLIENT_ID, sData.getClientId());
+        data.put(COLUMN_PRICE_CATEGORY_ID, sData.getPriceCategoryId());
+        data.put(COLUMN_NOTE, sData.getNote());
+        data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
+
+        return data;
+    }
+
+
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");
         db.execSQL("DELETE FROM " + TABLE_NAME + ";");

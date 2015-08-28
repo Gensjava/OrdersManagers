@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.loopj.android.http.RequestParams;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
@@ -26,6 +29,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -99,11 +103,20 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
        /* список файлов для загрузки */
         String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
 
-        Map<String, String> lTableNameInsert = new HashMap<String, String>();
+        Map lTableNameInsert = new HashMap<String, String>();
         lTableNameInsert = getListTableName();
         /**/
-        Map<String, String> lTableName = new HashMap<String, String>();
+        Map lTableName = new HashMap<String, String>();
         lTableName = getListHashMapTableName();
+
+        /* текущий новый заказ */
+        ConstantsUtil.mCurrentOrder = new OrderDoc();
+        /* ТЧ заказа */
+        ConstantsUtil.mCart = new LinkedHashSet<OrderDoc.OrderLines>();
+       /*текущий номер заказа*/
+        ConstantsUtil.sCurrentNumber = 0;
+       /*режим заказа новый или не новый*/
+        ConstantsUtil.modeNewOrder = true;
 
         //Log
         ErrorInfo.setmLogLine("Начало загрузки");

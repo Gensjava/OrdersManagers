@@ -65,7 +65,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListFragment.ID_ORDER);
                 ConstantsUtil.mCurrentOrder.setId(id_order);
-             /*номер документа*/
+               /*номер документа*/
                 numberDoc = bundle.getString(OrderListFragment.NUMBER_ORDER);
                 ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
                 /*дата док*/
@@ -89,7 +89,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 //
                 dateDoc = ConstantsUtil.getDate();
                 ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
-
             }
 
             /*выводим данные дату и номер в шапку*/
@@ -231,6 +230,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         String cKodPrices = data.getString(data.getColumnIndex("kod_type_price"));
             /*адресс контрагента*/
         String cCounteragentsAddress = data.getString(data.getColumnIndex("address_contr"));
+        String cComent = data.getString(data.getColumnIndex("note"));
             /*создаем массив шапку*/
             /* создаем массив для передачи в шапку заказа*/
             /*фирма*/
@@ -254,6 +254,11 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         cData[0] = cNamePrices;
         cData[1] = cKodPrices;
         mItemsHeader[3] = cData;
+         /*комент*/
+        cData = new String[2];
+        cData[0] = cComent;
+        cData[1] = cComent;
+        mItemsHeader[4] = cData;
         /*заполняем док заказ*/
         ConstantsUtil.mCurrentOrder.setFirmId(cKodCompanies);
         ConstantsUtil.mCurrentOrder.setStoreId(cKodStores);
