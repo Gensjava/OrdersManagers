@@ -524,5 +524,7 @@
     <string name="not_all_cap_mandatory_filled">Не все обязательные поля шапки заполнены!</string>
     <string name="zero">0.00</string>
     <string name="Order">"Заказ "</string>
+    <string name="error_position">Error: Не записывается позиция документа! (</string>
+    <string name="eror_save_cap_doc">Error: Не записывается шапка документа!</string>
 
 </resources>

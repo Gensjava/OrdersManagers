@@ -22,9 +22,14 @@ import android.widget.TextView;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
@@ -180,6 +185,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         imViewAdd.setOnClickListener(this);
         /*Отображаем сумму заказа в подвале*/
         tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
+
+        if (!ConstantsUtil.modeNewOrder) {
+                /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        }
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         return rootView;
@@ -235,37 +245,85 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
+
+        switch (id) {
+            case 0:
+                return new MyCursorLoader(getActivity());
+            case 1:/*режим редактирование*/
+                return new MyCursorLoaderCart(getActivity());
+            default:
+                return null;
+
+        }
+
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
-        while (data.moveToNext()) {
-            String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
-            String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
-            String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
+        switch (loader.getId()) {
+            case 0:
+                while (data.moveToNext()) {
+                    String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
+                    String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
+                    String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
 
-            final TreeNode newTreeItem;
+                    final TreeNode newTreeItem;
 
-            switch (isCategory) {
-                case "true":
-                    newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
-                    break;
-                default:
-                    double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
-                    double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
+                    switch (isCategory) {
+                        case "true":
+                            newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
+                            break;
+                        default:
+                            double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                            double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
 
-                    newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
-            }
+                            newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
+                    }
 
-            tView.addNode(mNode, newTreeItem);
+                    tView.addNode(mNode, newTreeItem);
+                }
+                break;
+            case 1:/*режим редактирование*/
+                while (data.moveToNext()) {
+
+                    String cID = data.getString(data.getColumnIndex(TableOrdersLines.COLUMN_GOODS_ID));
+                    double isAmount = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT));
+                    double cPrice = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_PRICE));
+                    String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
+                    double cAmountStores = data.getDouble(data.getColumnIndex("amount_stores"));
+
+                    double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
+
+                    OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
+                            ConstantsUtil.mCurrentOrder.getId(),
+                            cID,
+                            1,
+                            isAmount,
+                            cPrice,
+                            newSum,
+                            cName,
+                            cAmountStores);
+
+                    ConstantsUtil.setListOrderLines(orderLines);
+                }
+                 /*обновляем корзину*/
+                updateCartCount();
+                break;
+
+            default:
+                break;
         }
+
     }
     @Override
     public void onPause() {
         super.onPause();
         getActivity().getSupportLoaderManager().destroyLoader(0);
+
+        if (ConstantsUtil.modeNewOrder) {
+            getActivity().getSupportLoaderManager().destroyLoader(1);
+        }
     }
 
     @Override
@@ -290,10 +348,13 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
+    /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
     }
 
+    /* создаем класс для загрузки данных в дерево товаров из БД
+           * загрузка происходит в фоне */
     private static class MyCursorLoader extends CursorLoader {
 
         public MyCursorLoader(Context context) {
@@ -310,5 +371,26 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     });
         }
     }
+
+    /* создаем класс для загрузки данных таблтчной части дока из БД
+           * загрузка происходит в фоне */
+    private static class MyCursorLoaderCart extends CursorLoader {
+
+        public MyCursorLoaderCart(Context context) {
+            super(context);
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+
+            return sDb
+                    .rawQuery(SQLQuery.queryOrdersLinesEdit("OrdersLines.doc_id = ?"
+                    ), new String[]{ConstantsUtil.mCurrentOrder.getId()
+
+                    });
+        }
+    }
+
+
 
 }

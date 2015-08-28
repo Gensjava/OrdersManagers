@@ -1,8 +1,13 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +23,24 @@ import java.util.Map;
 import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /*Класс предназначен для отображения и заполнения шапки документа заказа
 * Все поля кроме коммнтария являются обязательными для заполнения*/
 
-public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener {
+public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
-    ListView lv;
+    private static SQLiteDatabase sDb;
+    private static String id_order;
     private SimpleAdapter mAdapter;
     private View rootView;
     private String[][] mItemsHeader;
@@ -40,17 +53,48 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-            /*чистим док заказ*/
+
+            String numberDoc;
+            String dateDoc;
+           /*чистим док заказ*/
             ConstantsUtil.clearOrderHeader();
-            /* сгениророваный номер документа заказа ИД для 1с */
-            UUID uniqueKey = UUID.randomUUID();
-            ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
-            /*устанавливаем дату документа и номер*/
-            ConstantsUtil.mCurrentOrder.setDocDate(ConstantsUtil.getDate());
-            ConstantsUtil.mCurrentOrder.setDocNumber(String.valueOf(ConstantsUtil.sCurrentNumber));
+
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                /*редактируем документ*/
+               /*получаем ID дока и подставляем в запрос*/
+                id_order = bundle.getString(OrderListFragment.ID_ORDER);
+                ConstantsUtil.mCurrentOrder.setId(id_order);
+             /*номер документа*/
+                numberDoc = bundle.getString(OrderListFragment.NUMBER_ORDER);
+                ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
+                /*дата док*/
+                dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
+                ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
+                /*дата документа*/
+                TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
+                header.setText("Редактирование заказа");
+                  /* открываем подключение к БД */
+                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+                 /* создаем лоадер для чтения данных */
+                getActivity().getSupportLoaderManager().initLoader(0, null, this);
+            } else {
+                /*создаем новый заказ*/
+                /* сгениророваный номер документа заказа ИД для 1с */
+                UUID uniqueKey = UUID.randomUUID();
+                ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
+                /*устанавливаем дату документа и номер*/
+                numberDoc = String.valueOf(ConstantsUtil.sCurrentNumber);
+                ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
+                //
+                dateDoc = ConstantsUtil.getDate();
+                ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
+
+            }
+
             /*выводим данные дату и номер в шапку*/
             TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
-            period.setText(getString(R.string.rNumber) + ConstantsUtil.getsCurrentNumber() + " " + getString(R.string.rOf) + " " + ConstantsUtil.getDate());
+            period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
 
             /*массив принимает выбранные занчения шапки и передает их в адаптер*/
             mItemsHeader = new String[5][3];
@@ -61,7 +105,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar});
             /* список шапка заказа*/
-            lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
+            final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
 
             /*кнопка далее к следующему этапу*/
@@ -71,6 +115,15 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!ConstantsUtil.modeNewOrder) {
+           /* выходим из загрузчкика*/
+            getActivity().getSupportLoaderManager().destroyLoader(0);
+        }
     }
 
     /* создаем список - шапку  для адаптера
@@ -147,11 +200,95 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         }
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+        return new MyCursorLoader(getActivity());
+    }
 
+    @Override
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+
+        if (data.isClosed()) {
+            //err
+
+        } else {
+            /*переходим к первой строке*/
+            data.moveToFirst();
+            fillHeader(data);
+        }
+    }
+
+    private void fillHeader(Cursor data) {
+     /*имя*/
+        String cNameCompanies = data.getString(data.getColumnIndex("name_comp"));
+        String cNameStores = data.getString(data.getColumnIndex("name_type_stores"));
+        String cNameCounteragents = data.getString(data.getColumnIndex("name_contr"));
+        String cNamePrices = data.getString(data.getColumnIndex("name_type_price"));
+            /*код*/
+        String cKodCompanies = data.getString(data.getColumnIndex("kod_comp"));
+        String cKodStores = data.getString(data.getColumnIndex("kod_type_stores"));
+        String KodCounteragents = data.getString(data.getColumnIndex("kod_contr"));
+        String cKodPrices = data.getString(data.getColumnIndex("kod_type_price"));
+            /*адресс контрагента*/
+        String cCounteragentsAddress = data.getString(data.getColumnIndex("address_contr"));
+            /*создаем массив шапку*/
+            /* создаем массив для передачи в шапку заказа*/
+            /*фирма*/
+        String[] cData = new String[2];
+        cData[0] = cNameCompanies;
+        cData[1] = cKodCompanies;
+        mItemsHeader[0] = cData;
+             /*склад*/
+        cData = new String[2];
+        cData[0] = cNameStores;
+        cData[1] = cKodStores;
+        mItemsHeader[1] = cData;
+             /*контрагент*/
+        cData = new String[3];
+        cData[0] = cNameCounteragents;
+        cData[1] = KodCounteragents;
+        cData[2] = cCounteragentsAddress;
+        mItemsHeader[2] = cData;
+             /*прайс*/
+        cData = new String[2];
+        cData[0] = cNamePrices;
+        cData[1] = cKodPrices;
+        mItemsHeader[3] = cData;
+        /*заполняем док заказ*/
+        ConstantsUtil.mCurrentOrder.setFirmId(cKodCompanies);
+        ConstantsUtil.mCurrentOrder.setStoreId(cKodStores);
+        ConstantsUtil.mCurrentOrder.setClientId(KodCounteragents);
+        ConstantsUtil.mCurrentOrder.setPriceCategoryId(cNamePrices);
+
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onLoaderReset(final Loader<Cursor> loader) {
+
+    }
+
+    /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
 
         void onOpenFragmentClass(Class<?> fClass);
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
+    }
+
+    /* создаем класс для загрузки данных из БД
+        * загрузка происходит в фоне */
+    private static class MyCursorLoader extends CursorLoader {
+
+        public MyCursorLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            return sDb
+                    .rawQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"), new String[]{id_order});
+        }
     }
 
     private class MySimpleAdapter extends SimpleAdapter {

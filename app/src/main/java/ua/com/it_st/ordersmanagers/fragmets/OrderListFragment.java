@@ -41,6 +41,9 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class OrderListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    public static final String NUMBER_ORDER = "NUMBER_ORDER";
+    public static final String DATE_ORDER = "DATE_ORDER";
+    public static final String ID_ORDER = "ID_ORDER";
     private static SQLiteDatabase sDb;
     private SimpleCursorAdapter scAdapter;
 
@@ -105,6 +108,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             case R.id.main_heander_image_plus:
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
+                ConstantsUtil.modeNewOrder = true;
                 break;
             default:
                 break;
@@ -121,6 +125,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
+
+        void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 
     /* создаем класс для загрузки данных из БД 
@@ -277,10 +283,22 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                         final ContentValues data = new ContentValues();
 
                         switch (selectedItemPosition) {
+                            case 0:
+                                ConstantsUtil.modeNewOrder = false;
+                                /*рредактируем док*/
+                                Bundle bundleItem = new Bundle();
+                                bundleItem.putString(ID_ORDER, cId);
+                                bundleItem.putString(NUMBER_ORDER, cNumber);
+                                bundleItem.putString(DATE_ORDER, cDate);
+
+                                final onEventListener someEventListener = (onEventListener) getActivity();
+                                someEventListener.onOpenFragmentClassBundle(OrderNewHeaderFragment.class, bundleItem);
                             case 1:
+                                /*проводим док*/
                                 data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.HELD.toString());
                                 break;
                             case 2:
+                                /*помечаем на удаления док*/
                                 data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.NO_HELD.toString());
                                 break;
                             default:

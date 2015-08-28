@@ -22,6 +22,8 @@ public class ConstantsUtil {
     public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
+    /*режим заказа новый или не новый*/
+    public static boolean modeNewOrder;
 
     /*
     записываем новый товар в ТЧ заказа

@@ -15,8 +15,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.ArrayList;
-import java.util.Collections;
-
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
@@ -71,10 +69,13 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                  /*проверяем пустая корзина или нет*/
                 if (!ConstantsUtil.checkCartEmpty(getActivity())) {
                      /* создаем новый заказ */
-                    onNewOrder();
-                /* открываем журнал заказов */
-                    final onEventListener someEventListener = (onEventListener) getActivity();
-                    someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                    if (onNewOrder()) {
+                      /* открываем журнал заказов */
+                        final onEventListener someEventListener = (onEventListener) getActivity();
+                        someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                        /*чистим корзину*/
+                        ConstantsUtil.mCart.clear();
+                    }
                 }
                 break;
             default:
@@ -82,20 +83,36 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void onNewOrder() {
+    public boolean onNewOrder() {
         /* открываем подключение к БД*/
         SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+         /* начинаем транзакцию */
+        DB.beginTransaction();
         /* Делаем запись заказа
         * */
         /* шапка*/
-        DB.insert(TableOrders.TABLE_NAME, null, TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
-        /* табличная часть*/
+        long inTable = DB.insert(TableOrders.TABLE_NAME, null, TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
+
+        if (inTable == -1) {
+            ErrorInfo.Tost(getString(R.string.eror_save_cap_doc), getActivity());
+            DB.endTransaction();
+            return false;
+        }
+         /* табличная часть*/
         /*создаем новые позиции заказа*/
         for (final OrderLines aMCart : ConstantsUtil.mCart) {
-            DB.insert(TableOrdersLines.TABLE_NAME, null, TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+            long inTableLines = DB.insert(TableOrdersLines.TABLE_NAME, null, TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
+            if (inTableLines == -1) {
+                ErrorInfo.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
+                DB.endTransaction();
+                return false;
+            }
         }
-         /*чистим корзину*/
-        ConstantsUtil.mCart.clear();
+        
+        /* заканчиваем транзакцию */
+        DB.setTransactionSuccessful();
+        DB.endTransaction();
+        return true;
     }
 
     /*обновление после выбора к-во товара в списке товаров*/
@@ -121,11 +138,15 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         sAdapter.notifyDataSetChanged();
         upDataFooter();
     }
+
+    /*обновляем подвал*/
     private void upDataFooter() {
           /*Показываем сумму заказа в подвале*/
         String tSum = ConstantsUtil.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(ConstantsUtil.getTotalOrder());
         tSumCart.setText(tSum + " грн.");
     }
+
+    /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
     }

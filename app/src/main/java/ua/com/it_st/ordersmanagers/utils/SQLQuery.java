@@ -1,8 +1,5 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-/**
- * Created by Gens on 07.08.2015.
- */
 public class SQLQuery {
 
     /*
@@ -36,6 +33,45 @@ public class SQLQuery {
                 "FROM Orders\n" +
                 "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod " +
                 "and Orders.client_adress  = Counteragents.address\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+    /*
+    запрос шапки документа
+    sp параметры условий запроса
+    */
+    public static String queryOrdersHeader(final String sp) {
+
+        String sq;
+        sq = "Select Orders._id, " +
+                "Сompanys.name as name_comp, Сompanys.kod as kod_comp,\n" +
+                "TypeStores.name as name_type_stores, TypeStores.kod as kod_type_stores,\n" +
+                "Counteragents.name as name_contr, Counteragents.address as address_contr, Counteragents.kod as kod_contr,\n" +
+                "TypePrices.name as name_type_price, TypePrices.kod as kod_type_price\n" +
+                "FROM Orders\n" +
+                "LEFT OUTER JOIN Сompanys ON Orders.company_id  = Сompanys.kod " +
+                "LEFT OUTER JOIN TypeStores ON Orders.store_id  = TypeStores.kod \n" +
+                "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod \n" +
+                "LEFT OUTER JOIN TypePrices ON Orders.price_id  = TypePrices.kod \n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+    /* запрос табличной части документа
+     sp параметры условий запроса
+     */
+    public static String queryOrdersLinesEdit(final String sp) {
+
+        String sq;
+        sq = "Select OrdersLines.goods_id, OrdersLines.rate, OrdersLines.price, OrdersLines.amount ,\n" +
+                "GoodsByStores.amount as amount_stores,\n" +
+                "Products.name\n" +
+                "FROM OrdersLines\n" +
+                "LEFT OUTER JOIN GoodsByStores ON OrdersLines.goods_id  = GoodsByStores.kod_coods\n" +
+                "LEFT OUTER JOIN Products ON OrdersLines.goods_id  = Products.kod\n" +
                 "WHERE " + sp + "\n";
 
         return sq;
