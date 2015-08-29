@@ -2,7 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
 
-        android:title="Настройки обмена данными">
+        android:layout="@layout/setings_header_up_server"
+        >
 
         <ListPreference
             android:defaultValue="1"
@@ -15,16 +16,16 @@
 
         <EditTextPreference
             android:defaultValue="192.168.0.1"
-            android:dialogTitle="Введите адрес сервера"
-            android:key="id_local"
-            android:summary="Устанавливает новый адрес сервера"
-            android:title="Локальный адрес сервера"/>
+            android:dialogTitle="Введите URL сервера"
+            android:key="@string/id_local"
+            android:summary="Устанавливает новый URL сервера"
+            android:title="Локальный URL сервера"/>
         <EditTextPreference
             android:defaultValue="192.168.0.1"
-            android:dialogTitle="Введите адресс сервера"
+            android:dialogTitle="Введите URL сервера"
             android:key="@string/id_remote"
-            android:summary="Устанавливает новый адрес сервера"
-            android:title="Удаленный адресс сервера"/>
+            android:summary="Устанавливает новый URL сервера"
+            android:title="Удаленный URL сервера"/>
         <EditTextPreference
             android:defaultValue="Мой логин"
             android:dialogTitle="Введите логин"
@@ -49,8 +50,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-
-        android:title="Данные пользователя">
+        android:layout="@layout/setings_header_user"
+        >
         <EditTextPreference
             android:defaultValue="0001"
             android:dialogTitle="Введите ID пользователя"

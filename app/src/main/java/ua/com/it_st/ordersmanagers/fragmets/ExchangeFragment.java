@@ -148,7 +148,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         if (modeServer.equals(getString(R.string.remoteServer))) {
             idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
         } else {
-            idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
+            idServer = mSettings.getString(getActivity().getString(R.string.id_local), null);
         }
 
         try {

@@ -536,5 +536,6 @@
     <string name="mode_server">mode_server</string>
     <string name="remoteServer">Удаленный</string>
     <string name="id_remote">id_remote</string>
+    <string name="id_local">id_local</string>
 
 </resources>
