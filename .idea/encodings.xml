@@ -8,10 +8,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableOrdersLines.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TablePrices.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableProducts.java" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTasks.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypePrices.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypeStores.java" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableUsers.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/AppDeliveriMan.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/ErrorInfo.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/SQLiteOpenHelperUtil.java" charset="windows-1251" />
@@ -21,34 +19,42 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/main_list.xml" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/order_new_goods_node.xml" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/order_new_goods_node_item.xml" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_abuot.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_cart.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_client.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_coment.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_interfice.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_organization.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_stores.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_sub_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_tipe_price.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_abuot.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_cart.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_client.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_coment.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_interfice.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_organization.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_stores.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_sub_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_tipe_price.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_abuot.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_cart.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_client.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_coment.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_interfice.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_organization.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_stores.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_sub_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_tipe_price.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_abuot.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_arrow_right.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_cart.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_client.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_coment.png" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_interfice.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_organization.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_stores.png" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_sub_arrow_right.png" charset="windows-1251" />

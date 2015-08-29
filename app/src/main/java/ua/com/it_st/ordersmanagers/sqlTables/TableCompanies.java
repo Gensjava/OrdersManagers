@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class TableCompanies {
     public static final String TABLE_NAME = "Сompanys";
-    public static final String FILE_NAME = "NameFile=ref_firms.csv";
+    public static final String FILE_NAME = "ref_firms.csv";
 
     public static final String COLUMN_KOD = "kod";
     public static final String COLUMN_NAME = "name";

@@ -20,7 +20,13 @@ import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 
 public class WorkFilesUtil {
 
-    public static void onInsertTable(final File file, final String fileName, final SQLiteDatabase db, final Map<String, String> lTableNameInsert, final Map<String, String> lTableName) throws IOException {
+    public static void onInsertTable(final File file,
+                                     final String fileName,
+                                     final SQLiteDatabase db,
+                                     final Map<String,
+                                             String> lTableNameInsert,
+                                     final Map<String,
+                                             String> lTableName) throws IOException {
 
         DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile(lTableNameInsert.get(fileName), lTableName.get(fileName), db, file);
         downloadAsyncFile.execute();

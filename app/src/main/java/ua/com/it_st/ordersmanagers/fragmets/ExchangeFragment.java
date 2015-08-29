@@ -106,12 +106,12 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     private void dowloadFilesOfServer() {
 
        /* список файлов для загрузки */
-        String[] nameFile = getResources().getStringArray(R.array.name_file_data_test);
+        String[] nameFile = getResources().getStringArray(R.array.name_file_data);
 
-        Map lTableNameInsert = new HashMap<String, String>();
+        Map lTableNameInsert;
         lTableNameInsert = getListTableName();
         /**/
-        Map lTableName = new HashMap<String, String>();
+        Map lTableName;
         lTableName = getListHashMapTableName();
 
         /* текущий новый заказ */
@@ -150,6 +150,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         } else {
             idServer = mSettings.getString(getActivity().getString(R.string.id_local), null);
         }
+        /*каталог на сервере пользователя*/
+        String wayCatalog = mSettings.getString(getActivity().getString(R.string.way_catalog), null);
 
         try {
             utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
@@ -162,14 +164,14 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
             ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         }
 
-                /* начинаем загрузку */
+        /* начинаем загрузку */
         if (lConnect) {
 
             /* начинаем транзакцию */
             mDb.beginTransaction();
             for (String i : nameFile) {
-
                 RequestParams params = new RequestParams();
+                params.put(getString(R.string.NameCatalog), wayCatalog);
                 params.put(getString(R.string.name_file), i);
                 //params.put("login", "admin");
                 //params.put("password", "123");
@@ -178,7 +180,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                 try {
                             /* загружаем файл */
-                    utilAsyncHttpClient.getDownloadFiles(params, mDb, lTableNameInsert, lTableName);
+                    utilAsyncHttpClient.getDownloadFiles(params, mDb, lTableNameInsert, lTableName, i);
                 } catch (Exception e) {
                     e.printStackTrace();
                     //Log

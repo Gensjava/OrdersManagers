@@ -33,16 +33,6 @@
         <item>ref_stores.csv</item>
     </string-array>
 
-    <string-array name="name_file_data_test">
-        <item>ref_price.csv</item>
-        <item>ref_goodsbystores.csv</item>
-        <item>ref_pricecategories.csv</item>
-        <item>ref_clients.csv</item>
-        <item>ref_goods.csv</item>
-        <item>ref_firms.csv</item>
-        <item>ref_stores.csv</item>
-    </string-array>
-
     <string-array name="header_orders">
         <item>Организация</item>
         <item>Склад</item>
@@ -537,5 +527,7 @@
     <string name="remoteServer">Удаленный</string>
     <string name="id_remote">id_remote</string>
     <string name="id_local">id_local</string>
+    <string name="way_catalog">way_catalog</string>
+    <string name="NameCatalog">NameCatalog</string>
 
 </resources>

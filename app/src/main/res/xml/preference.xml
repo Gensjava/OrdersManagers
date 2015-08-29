@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:key="update_server"
-            android:summary="Обмен будет выполняться каждые 3 часа "
+            android:summary="Обмен будет выполняться каждые 2 часа "
             android:title="Oбмен с сервером автоматически"
             >
         </com.cgollner.unclouded.preferences.SwitchPreferenceCompat>
@@ -62,7 +62,7 @@
         <EditTextPreference
             android:defaultValue="путь к папке пользователя..."
             android:dialogTitle="Введите путь к папке"
-            android:key="way_user"
+            android:key="way_catalog"
             android:summary="Устанавливает новый путь к папке на сервере"
             android:title="Путь к папке на сервере пользователя"/>
 
@@ -70,7 +70,7 @@
 
     <PreferenceCategory
 
-        android:title="Оформление интерфейса">
+        android:layout="@layout/setings_header_interfice">
 
         <EditTextPreference
             android:defaultValue="14"
@@ -79,9 +79,10 @@
             android:summary="Устанавливает новый размер шрифта"
             android:title="Размер шрифта"/>
     </PreferenceCategory>
+
     <PreferenceCategory
 
-        android:title="О программе">
+        android:layout="@layout/setings_header_abuot">
         <EditTextPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

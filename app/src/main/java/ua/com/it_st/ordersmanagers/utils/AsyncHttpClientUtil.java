@@ -26,7 +26,13 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         mBaseUrl = url;
     }
 
-    public void getDownloadFiles(final RequestParams params, final SQLiteDatabase db, final Map<String, String> lTableNameInsert, final Map<String, String> lTableName) throws Exception {
+    public void getDownloadFiles(final RequestParams params,
+                                 final SQLiteDatabase db,
+                                 final Map<String,
+                                         String> lTableNameInsert,
+                                 final Map<String,
+                                         String> lTableName,
+                                 final String nameFile) throws Exception {
 
         get(mBaseUrl, params, new FileAsyncHttpResponseHandler(mMainActivity) {
             @Override
@@ -42,15 +48,15 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
                     try {
-                        WorkFilesUtil.onInsertTable(response, params.toString(), db, lTableNameInsert, lTableName);
+                        WorkFilesUtil.onInsertTable(response, nameFile, db, lTableNameInsert, lTableName);
                     } catch (IOException e) {
                         e.printStackTrace();
                         //Log
-                        ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " " + e.toString());
+                        ErrorInfo.setmLogLine("Загрузка файла ", nameFile, true, TEG + " " + e.toString());
                     }
                 } else {
                     //Log
-                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + "Success: Код ошибки " + statusCode);
+                    ErrorInfo.setmLogLine("Загрузка файла ", nameFile, true, TEG + "Success: Код ошибки " + statusCode);
                 }
             }
         });
