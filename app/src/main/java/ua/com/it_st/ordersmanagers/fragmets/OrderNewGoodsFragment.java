@@ -186,10 +186,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         /*Отображаем сумму заказа в подвале*/
         tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-        if (!ConstantsUtil.modeNewOrder) {
+        if (!ConstantsUtil.modeNewOrder & !ConstantsUtil.clickModifitsirovannoiCart) {
                 /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(1, null, this);
         }
+
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         return rootView;
@@ -329,9 +330,10 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         super.onPause();
         getActivity().getSupportLoaderManager().destroyLoader(0);
 
-        if (!ConstantsUtil.modeNewOrder) {
+        if (!ConstantsUtil.modeNewOrder & !ConstantsUtil.clickModifitsirovannoiCart) {
             getActivity().getSupportLoaderManager().destroyLoader(1);
         }
+
     }
 
     @Override

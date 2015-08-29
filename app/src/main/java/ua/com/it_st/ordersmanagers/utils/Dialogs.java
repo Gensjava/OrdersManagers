@@ -118,6 +118,7 @@ public class Dialogs {
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
                                 fragment.setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
+                                ConstantsUtil.clickModifitsirovannoiCart = true;
                             }
                         } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
                            /*делаем поиск списка товаров для передачи параметра*/
@@ -125,6 +126,7 @@ public class Dialogs {
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
                                 fragment.setDialogAmount(numberInDialog, sumInDialog, product);
+                                ConstantsUtil.clickModifitsirovannoiCart = true;
                             }
                         }
 

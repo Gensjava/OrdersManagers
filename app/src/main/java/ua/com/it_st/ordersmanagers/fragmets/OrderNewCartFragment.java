@@ -57,6 +57,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             header.setText("Редактирование корзины");
         }
 
+
       /*выводим данные дату и номер в шапку*/
         TextView period = (TextView) rootView.findViewById(R.id.order_new_cart_period);
         period.setText(getString(R.string.Order) + getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
@@ -95,6 +96,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                         someEventListener.onOpenFragmentClass(OrderListFragment.class);
                         /*чистим корзину*/
                         ConstantsUtil.mCart.clear();
+
                     }
                 }
                 break;
@@ -235,9 +237,15 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         }
 
         @Override
+        public int getCount() {
+            return mListItems.size();
+        }
+
+        @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
 
             convertView = mLInflater.inflate(R.layout.order_new_cart_list_item, parent, false);
+
             /*позиция*/
             final OrderDoc.OrderLines itemOrderLines = mListItems.get(position);
 
@@ -296,16 +304,15 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                                  /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();
+                                /**/
+                                ConstantsUtil.clickModifitsirovannoiCart = true;
                                 break;
                             case 1:
-
                                 Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrderLines, OrderNewCartFragment.class.toString());
-
                                 break;
                             default:
                                 break;
                         }
-
                     } else {
                         iCurrentSelection[0] = selectedItemPosition;
                     }

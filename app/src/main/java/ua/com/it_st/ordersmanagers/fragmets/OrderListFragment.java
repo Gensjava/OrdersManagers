@@ -27,9 +27,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.LinkedHashSet;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -69,6 +72,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
         /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
+        /*устанавливаем мод. корзины*/
+        ConstantsUtil.clickModifitsirovannoiCart = false;
         return rootView;
     }
 
@@ -285,6 +290,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                         switch (selectedItemPosition) {
                             case 0:
                                 ConstantsUtil.modeNewOrder = false;
+                                        /* ТЧ заказа */
+                                ConstantsUtil.mCart = new LinkedHashSet<OrderDoc.OrderLines>();
                                 /*рредактируем док*/
                                 Bundle bundleItem = new Bundle();
                                 bundleItem.putString(ID_ORDER, cId);

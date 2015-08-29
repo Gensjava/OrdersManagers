@@ -24,6 +24,10 @@ public class ConstantsUtil {
     public static short sCurrentNumber;
     /*режим заказа новый или не новый*/
     public static boolean modeNewOrder;
+    /*этот флаг предназначен для режима редактирования заказа его таб.части
+    * true - осзначает что в корзине что-то изменили
+    * false - пока ни кто ничего не менял*/
+    public static boolean clickModifitsirovannoiCart;
 
     /*
     записываем новый товар в ТЧ заказа
