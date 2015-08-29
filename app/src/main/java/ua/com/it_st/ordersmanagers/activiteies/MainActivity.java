@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
+import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,9 +16,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import ua.com.it_st.ordersmanagers.BlankFragment;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
+import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Set a Toolbar to replace the ActionBar.
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -120,12 +122,14 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_second_fragment:
                 fragmentClass = ExchangeFragment.class;
                 break;
-            case R.id.nav_third_fragment:
-                // fragmentClass = BlankFragment.class;
+            case R.id.nav_third_setings:
+                fragmentClass = MainPreferenceFragment.class;
+                break;
+            case R.id.nav_third_exit:
                 finish();
                 break;
             default:
-                //  fragmentClass = BlankFragment.class;
+
         }
         if (fragmentClass != null) {
             //Открываем фрагмент

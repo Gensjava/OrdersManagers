@@ -1,7 +1,9 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -48,6 +50,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     private final String TEG = ExchangeFragment.class.getSimpleName();
     private SQLiteDatabase mDb;
+    private SharedPreferences mSettings;
 
     /*имена таблиц из имен файлов*/
     public static Map getListHashMapTableName() {
@@ -78,6 +81,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         BHost.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        /*вызываем менеджера настроек*/
+        mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         return rootView;
     }
@@ -124,9 +129,31 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         /* подключаемся через HTTP к базе и загужаем данные */
         AsyncHttpClientUtil utilAsyncHttpClient = null;
         boolean lConnect;
+        /*данные настроек*/
+        String loginServer = mSettings.getString(getActivity().getString(R.string.login_server), null);
+        String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
+        /*проверка*/
+        if (loginServer == null) {
+            ErrorInfo.Tost("Введите логин!", getActivity());
+            return;
+        }
+        if (passwordServer == null) {
+            ErrorInfo.Tost("Введите пароль!", getActivity());
+            return;
+        }
+        /*режим сервера*/
+        String modeServer = mSettings.getString(getActivity().getString(R.string.mode_server), null);
+        /* ид сервер удаленны или локальный*/
+        final String idServer;
+        if (modeServer.equals(getString(R.string.remoteServer))) {
+            idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
+        } else {
+            idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
+        }
+
         try {
-            utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity());
-            utilAsyncHttpClient.setBasicAuth("admin", "123");
+            utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
+            utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
             lConnect = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +164,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
                 /* начинаем загрузку */
         if (lConnect) {
-                    /* начинаем транзакцию */
+
+            /* начинаем транзакцию */
             mDb.beginTransaction();
             for (String i : nameFile) {
 

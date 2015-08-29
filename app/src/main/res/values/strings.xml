@@ -71,6 +71,11 @@
         <item>заглушка</item>
     </string-array>
 
+    <string-array name="mode_server">
+        <item>Удаленный</item>
+        <item>Локальный</item>
+    </string-array>
+
 
     <string name="ic_access_alarms">&#xe000;</string>
     <string name="ic_access_time">&#xe001;</string>
@@ -526,5 +531,10 @@
     <string name="Order">"Заказ "</string>
     <string name="error_position">Error: Не записывается позиция документа! (</string>
     <string name="eror_save_cap_doc">Error: Не записывается шапка документа!</string>
+    <string name="login_server">login_server</string>
+    <string name="password_server">password_server</string>
+    <string name="mode_server">mode_server</string>
+    <string name="remoteServer">Удаленный</string>
+    <string name="id_remote">id_remote</string>
 
 </resources>

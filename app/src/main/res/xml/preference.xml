@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+
+        android:title="Настройки обмена данными">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Выберите режим сервера"
+            android:entries="@array/mode_server"
+            android:entryValues="@array/mode_server"
+            android:key="@string/mode_server"
+            android:summary="Устанавливает новый режим сервера обмена"
+            android:title="Режим сервера"/>
+
+        <EditTextPreference
+            android:defaultValue="192.168.0.1"
+            android:dialogTitle="Введите адрес сервера"
+            android:key="id_local"
+            android:summary="Устанавливает новый адрес сервера"
+            android:title="Локальный адрес сервера"/>
+        <EditTextPreference
+            android:defaultValue="192.168.0.1"
+            android:dialogTitle="Введите адресс сервера"
+            android:key="@string/id_remote"
+            android:summary="Устанавливает новый адрес сервера"
+            android:title="Удаленный адресс сервера"/>
+        <EditTextPreference
+            android:defaultValue="Мой логин"
+            android:dialogTitle="Введите логин"
+            android:key="@string/login_server"
+            android:summary="Устанавливает новый логин"
+            android:title="Логин для входа на сервер"/>
+        <EditTextPreference
+            android:defaultValue="Мой пароль"
+            android:dialogTitle="Введите пароль"
+            android:key="@string/password_server"
+            android:summary="Устанавливает новый пароль"
+            android:title="Пароль для входа на сервер"/>
+
+        <com.cgollner.unclouded.preferences.SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:key="update_server"
+            android:summary="Обмен будет выполняться каждые 3 часа "
+            android:title="Oбмен с сервером автоматически"
+            >
+        </com.cgollner.unclouded.preferences.SwitchPreferenceCompat>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+
+        android:title="Данные пользователя">
+        <EditTextPreference
+            android:defaultValue="0001"
+            android:dialogTitle="Введите ID пользователя"
+            android:key="id_user"
+            android:summary="Устанавливает новый ID пользователя"
+            android:title="ID пользователя"/>
+
+        <EditTextPreference
+            android:defaultValue="путь к папке пользователя..."
+            android:dialogTitle="Введите путь к папке"
+            android:key="way_user"
+            android:summary="Устанавливает новый путь к папке на сервере"
+            android:title="Путь к папке на сервере пользователя"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+
+        android:title="Оформление интерфейса">
+
+        <EditTextPreference
+            android:defaultValue="14"
+            android:dialogTitle="Введите размер шрифта (от 10 до 32)"
+            android:key="front_pref_size"
+            android:summary="Устанавливает новый размер шрифта"
+            android:title="Размер шрифта"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+
+        android:title="О программе">
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:key="version"
+            android:summary="1.0"
+            android:title="Версия программы">
+        </EditTextPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

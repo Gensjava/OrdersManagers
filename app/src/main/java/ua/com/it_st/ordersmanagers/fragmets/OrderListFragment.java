@@ -74,6 +74,9 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         imViewAdd.setOnClickListener(this);
         /*устанавливаем мод. корзины*/
         ConstantsUtil.clickModifitsirovannoiCart = false;
+        /*устанавливаем период журнала*/
+        TextView period = (TextView) rootView.findViewById(R.id.main_heander_period);
+        period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
         return rootView;
     }
 

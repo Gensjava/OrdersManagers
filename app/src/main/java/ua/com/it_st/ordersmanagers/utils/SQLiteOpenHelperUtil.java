@@ -13,9 +13,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTasks;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TableUsers;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 
 
@@ -70,8 +68,6 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableOrdersLines.createTable(db);
         TablePrices.createTable(db);
         TableProducts.createTable(db);
-        TableTasks.createTable(db);
-        TableUsers.createTable(db);
         TableTypePrices.createTable(db);
         TableCompanies.createTable(db);
         TableGoodsByStores.createTable(db);
@@ -82,8 +78,6 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
 
-        TableUsers.upgradeTable(db, oldVersion, newVersion);
-        TableCounteragents.upgradeTable(db, oldVersion, newVersion);
 
     }
 
