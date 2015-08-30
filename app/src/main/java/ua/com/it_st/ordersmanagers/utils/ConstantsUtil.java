@@ -28,6 +28,9 @@ public class ConstantsUtil {
     * true - осзначает что в корзине что-то изменили
     * false - пока ни кто ничего не менял*/
     public static boolean clickModifitsirovannoiCart;
+    /**/
+    public static int nPieViewProgress;
+    public static double nPieViewdProgress;
 
     /*
     записываем новый товар в ТЧ заказа

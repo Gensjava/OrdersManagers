@@ -8,11 +8,16 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.filippudak.ProgressPieView.ProgressPieView;
+
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 
 
@@ -25,9 +30,16 @@ public class WorkFilesUtil {
                                              String> lTableNameInsert,
                                      final Map<String,
                                              String> lTableName,
-                                     final ProgressPieView progressPieView) throws IOException {
+                                     final ProgressPieView progressPieView,
+                                     final DiscreteSeekBar discreteSeekBar) throws IOException {
 
-        DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile(lTableNameInsert.get(fileName), lTableName.get(fileName), db, file, progressPieView);
+        DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile(
+                lTableNameInsert.get(fileName),
+                lTableName.get(fileName),
+                db,
+                file,
+                progressPieView,
+                discreteSeekBar);
         downloadAsyncFile.execute();
     }
 
@@ -42,30 +54,47 @@ public class WorkFilesUtil {
         private File mFile;
         private int limitInsert = 100;
         private ProgressPieView mProgressPieView;
-        Handler handler = new Handler() {
+        private DiscreteSeekBar mDiscreteSeekBar;
+        Handler handlerDiscreteSeek = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 Bundle bundle = msg.getData();
-                int date = bundle.getInt("Key");
-                mProgressPieView.setProgress(date);
+                int date = bundle.getInt("DiscreteSeek");
+                mDiscreteSeekBar.setProgress(date);
             }
         };
+        Handler handlerTotalLinesFile = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                /*выставляем макс и минимум прогресса*/
+                int totalLinesFileSeekBar = bundle.getInt("totalLinesFile");
+                mDiscreteSeekBar.setMax(totalLinesFileSeekBar);
+                mDiscreteSeekBar.setMin(0);
+            }
+        };
+        private int totalLinesFile;
 
         public DownloadAsyncFile(final String lineInsert,
                                  final String nameTable,
                                  final SQLiteDatabase database,
                                  final File file,
-                                 final ProgressPieView progressPieView) {
+                                 final ProgressPieView progressPieView,
+                                 final DiscreteSeekBar discreteSeekBar) {
             mLineInsert = lineInsert;
             mNameTable = nameTable;
             mDatabase = database;
             mFile = file;
             mProgressPieView = progressPieView;
+            mDiscreteSeekBar = discreteSeekBar;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+                        /* начинаем транзакцию */
+            // mDatabase.beginTransaction();
+
         }
 
         @Override
@@ -75,12 +104,21 @@ public class WorkFilesUtil {
                 /* Считываем по одной строке */
                 BufferedReader input = new BufferedReader(new FileReader(mFile));
                 /*вычисляем к-во строк в файле*/
-                int totalLinesFile = getCountFileLines(mFile);
+                totalLinesFile = getCountFileLines(mFile);
+
+                /*отсылаем сообщения прогрессу*/
+                Message msgTotalLinesFile = handlerTotalLinesFile.obtainMessage();
+                Bundle bundleTotalLinesFile = new Bundle();
+                bundleTotalLinesFile.putInt("totalLinesFile", totalLinesFile);
+                msgTotalLinesFile.setData(bundleTotalLinesFile);
+                handlerTotalLinesFile.sendMessage(msgTotalLinesFile);
+
                 /*создаем строку команды для базы данных в базу*/
                 StringBuilder sql = new StringBuilder();
 
                 int n = 0;/*счетчик*/
-                //int n1 = 0;/*счетчик*/
+                int nDSeek = 0;/*счетчик*/
+                /**/
                 String line;
                 input.readLine();
                 while ((line = input.readLine()) != null) {
@@ -107,12 +145,12 @@ public class WorkFilesUtil {
                     sql.append(")");
                    /*счетчик*/
                     n++;
-//
-//                    Message msg = handler.obtainMessage();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("Key", ++n1);
-//                    msg.setData(bundle);
-//                    handler.sendMessage(msg);
+                      /*отсылаем сообщения прогрессу*/
+                    Message msgDiscreteSeek = handlerDiscreteSeek.obtainMessage();
+                    Bundle bundleDiscreteSeek = new Bundle();
+                    bundleDiscreteSeek.putInt("DiscreteSeek", ++nDSeek);
+                    msgDiscreteSeek.setData(bundleDiscreteSeek);
+                    handlerDiscreteSeek.sendMessage(msgDiscreteSeek);
 
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
@@ -140,8 +178,14 @@ public class WorkFilesUtil {
         @Override
         protected void onPostExecute(final String s) {
             super.onPostExecute(s);
+            mProgressPieView.setProgress(++ConstantsUtil.nPieViewProgress);
+            double sProgress = ConstantsUtil.nPieViewdProgress += 14.30;
+            mProgressPieView.setText(String.valueOf((int) sProgress) + "%");
             //Log
             ErrorInfo.setmLogLine("Загрузка в таблицу завершена", mNameTable);
+                                    /* заканчиваем транзакцию */
+            // mDatabase.setTransactionSuccessful();
+            //   mDatabase.endTransaction();
         }
 
         /*получаем кол-во строк в файле*/
@@ -154,6 +198,7 @@ public class WorkFilesUtil {
                 e.printStackTrace();
             }
             try {
+                input.readLine();
                 while ((input.readLine()) != null) {
                     n++;
                 }

@@ -3,28 +3,22 @@ package ua.com.it_st.ordersmanagers.activiteies;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.fragmets.ExchangeFragment;
+import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
-import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -35,7 +29,8 @@ public class MainActivity extends AppCompatActivity
         OrderNewHeaderFragment.onEventListener,
         OrderNewGoodsFragment.onEventListener,
         OrderNewSelectHeaderFragment.OnFragmentSelectListener,
-        OrderNewCartFragment.onEventListener
+        OrderNewCartFragment.onEventListener,
+        LoadFilesFragment.onEventListener
 
 {
 
@@ -120,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = OrderListFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = ExchangeFragment.class;
+                fragmentClass = LoadFilesFragment.class;
                 break;
             case R.id.nav_third_setings:
                 fragmentClass = MainPreferenceFragment.class;

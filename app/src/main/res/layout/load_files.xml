@@ -18,7 +18,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/load_files_button"
             android:layout_gravity="center"
-            android:layout_marginTop="52dp"/>
+            android:layout_marginTop="32dp"/>
 
         <Button
             android:id="@+id/load_files_button"
@@ -40,17 +40,29 @@
             android:layout_below="@+id/load_files_button"
             android:layout_marginTop="30dp"
             app:dsb_indicatorColor="?attr/colorAccent"
-            app:dsb_max="15000"
+            app:dsb_max="0"
             app:dsb_min="0"
             app:dsb_progressColor="@color/colorAccent"
             app:dsb_rippleColor="@color/colorAccent"
             app:dsb_trackColor="@color/main_grey"/>
 
         <RelativeLayout
+            android:id="@+id/relativeLayout3"
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_below="@+id/load_files_seekBar"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/load_files_text_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/load_files_image_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="88dp"
+                android:text="0"
+                android:textColor="?attr/colorAccent"/>
 
             <TextView
                 android:id="@+id/load_files_text"
@@ -61,7 +73,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:text="загрузка клиентов..."
-                android:textColor="@color/main_sub_grey"
+                android:textColor="@color/main_grey"
                 android:textIsSelectable="true"
                 android:textSize="10dp"
                 android:textStyle="italic"/>
@@ -72,9 +84,32 @@
                 android:layout_height="35dp"
                 android:layout_below="@+id/load_files_seekBar"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_toLeftOf="@+id/load_files_text"
                 android:layout_toStartOf="@+id/load_files_text"
                 android:src="@mipmap/ic_info"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
+                android:id="@+id/load_files_image_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:alpha="0.5"
+                android:src="@mipmap/ic_arrow_right"
+                android:visibility="invisible"/>
+
+
         </RelativeLayout>
 
     </RelativeLayout>
