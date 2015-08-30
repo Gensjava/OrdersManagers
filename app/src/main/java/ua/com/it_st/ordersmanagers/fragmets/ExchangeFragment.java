@@ -9,8 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.RequestParams;
@@ -18,7 +17,6 @@ import com.loopj.android.http.RequestParams;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
@@ -75,20 +73,19 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.exchange_layout, container,
+        View rootView = inflater.inflate(R.layout.load_files, container,
                 false);
-        final TextView exchegeData = (TextView) rootView.findViewById(R.id.exchege_text_data);
-        final TextView exchegeStatus = (TextView) rootView.findViewById(R.id.exchege_text_string_status);
 
-        ImageView BHost = (ImageView) rootView.findViewById(R.id.exchege_image_button);
+        final Button BHost = (Button) rootView.findViewById(R.id.load_files_button);
+        BHost.setBackgroundResource(R.drawable.roundbutton);
         BHost.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /*вызываем менеджера настроек*/
         mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         /**/
-        mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.progressPieView);
-        mProgressPieView.setMax(25000);
+        mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.load_files_progressPieView);
+        mProgressPieView.setMax(7);
         mProgressPieView.setText("0%");
         mProgressPieView.setTextColor(getResources().getColor(R.color.main_sub_grey));
         mProgressPieView.setProgressColor(getResources().getColor(R.color.main_grey));
@@ -102,7 +99,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
-            case R.id.exchege_image_button:
+            case R.id.load_files_button:
 
                 /* удаляем все записи из таблиц */
                 onDeleteValueTables();

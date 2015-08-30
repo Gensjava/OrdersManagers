@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:ppv="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/load_files_progressPieView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignLeft="@+id/load_files_button"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/load_files_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="52dp"/>
+
+        <Button
+            android:id="@+id/load_files_button"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/load_files_progressPieView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="46dp"
+            android:text="ЗАГРУЗИТЬ"
+            android:textColor="@color/abc_primary_text_material_dark"/>
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/load_files_seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/load_files_button"
+            android:layout_marginTop="30dp"
+            app:dsb_indicatorColor="?attr/colorAccent"
+            app:dsb_max="15000"
+            app:dsb_min="0"
+            app:dsb_progressColor="@color/colorAccent"
+            app:dsb_rippleColor="@color/colorAccent"
+            app:dsb_trackColor="@color/main_grey"/>
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/load_files_seekBar"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/load_files_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="загрузка клиентов..."
+                android:textColor="@color/main_sub_grey"
+                android:textIsSelectable="true"
+                android:textSize="10dp"
+                android:textStyle="italic"/>
+
+            <ImageView
+                android:id="@+id/load_files_imageView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/load_files_seekBar"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/load_files_text"
+                android:layout_toStartOf="@+id/load_files_text"
+                android:src="@mipmap/ic_info"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

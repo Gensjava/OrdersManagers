@@ -80,7 +80,7 @@ public class WorkFilesUtil {
                 StringBuilder sql = new StringBuilder();
 
                 int n = 0;/*счетчик*/
-                int n1 = 0;/*счетчик*/
+                //int n1 = 0;/*счетчик*/
                 String line;
                 input.readLine();
                 while ((line = input.readLine()) != null) {
@@ -107,12 +107,12 @@ public class WorkFilesUtil {
                     sql.append(")");
                    /*счетчик*/
                     n++;
-
-                    Message msg = handler.obtainMessage();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("Key", ++n1);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
+//
+//                    Message msg = handler.obtainMessage();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("Key", ++n1);
+//                    msg.setData(bundle);
+//                    handler.sendMessage(msg);
 
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
@@ -147,7 +147,6 @@ public class WorkFilesUtil {
         /*получаем кол-во строк в файле*/
         private int getCountFileLines(File mFile) {
             int n = 0;
-            String line;
             BufferedReader input = null;
             try {
                 input = new BufferedReader(new FileReader(mFile));
@@ -155,8 +154,7 @@ public class WorkFilesUtil {
                 e.printStackTrace();
             }
             try {
-                input.readLine();
-                while ((line = input.readLine()) != null) {
+                while ((input.readLine()) != null) {
                     n++;
                 }
             } catch (IOException e) {
