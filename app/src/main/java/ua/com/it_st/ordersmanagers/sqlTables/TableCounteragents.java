@@ -11,6 +11,7 @@ import android.util.Log;
 public class TableCounteragents {
     public static final String TABLE_NAME = "Counteragents";
     public static final String FILE_NAME = "ref_clients.csv";
+    public static final String HEADER_NAME = "клиентов";
 
     public static final String COLUMN_KOD = "kod";
     public static final String COLUMN_CATEGORY_KOD = "category_kod";

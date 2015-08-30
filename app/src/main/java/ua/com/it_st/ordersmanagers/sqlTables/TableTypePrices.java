@@ -11,6 +11,7 @@ import android.util.Log;
 public class TableTypePrices {
     public static final String TABLE_NAME = "TypePrices";
     public static final String FILE_NAME = "ref_pricecategories.csv";
+    public static final String HEADER_NAME = "типы прайсов";
 
     public static final String COLUMN_KOD = "kod";
     public static final String COLUMN_NAME = "name";
