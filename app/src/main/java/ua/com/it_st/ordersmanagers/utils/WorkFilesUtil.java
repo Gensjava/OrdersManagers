@@ -1,14 +1,13 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-import android.database.DatabaseUtils;
+
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
-import android.provider.BaseColumns;
-import android.util.Log;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
-import com.opencsv.CSVReader;
-
+import com.filippudak.ProgressPieView.ProgressPieView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
-import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 
 public class WorkFilesUtil {
 
@@ -26,9 +24,10 @@ public class WorkFilesUtil {
                                      final Map<String,
                                              String> lTableNameInsert,
                                      final Map<String,
-                                             String> lTableName) throws IOException {
+                                             String> lTableName,
+                                     final ProgressPieView progressPieView) throws IOException {
 
-        DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile(lTableNameInsert.get(fileName), lTableName.get(fileName), db, file);
+        DownloadAsyncFile downloadAsyncFile = new DownloadAsyncFile(lTableNameInsert.get(fileName), lTableName.get(fileName), db, file, progressPieView);
         downloadAsyncFile.execute();
     }
 
@@ -42,12 +41,26 @@ public class WorkFilesUtil {
         private SQLiteDatabase mDatabase;
         private File mFile;
         private int limitInsert = 100;
+        private ProgressPieView mProgressPieView;
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                int date = bundle.getInt("Key");
+                mProgressPieView.setProgress(date);
+            }
+        };
 
-        public DownloadAsyncFile(final String lineInsert, final String nameTable, final SQLiteDatabase database, final File file) {
+        public DownloadAsyncFile(final String lineInsert,
+                                 final String nameTable,
+                                 final SQLiteDatabase database,
+                                 final File file,
+                                 final ProgressPieView progressPieView) {
             mLineInsert = lineInsert;
             mNameTable = nameTable;
             mDatabase = database;
             mFile = file;
+            mProgressPieView = progressPieView;
         }
 
         @Override
@@ -67,6 +80,7 @@ public class WorkFilesUtil {
                 StringBuilder sql = new StringBuilder();
 
                 int n = 0;/*счетчик*/
+                int n1 = 0;/*счетчик*/
                 String line;
                 input.readLine();
                 while ((line = input.readLine()) != null) {
@@ -93,6 +107,13 @@ public class WorkFilesUtil {
                     sql.append(")");
                    /*счетчик*/
                     n++;
+
+                    Message msg = handler.obtainMessage();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("Key", ++n1);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
                         sql.append("");

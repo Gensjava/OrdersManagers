@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.RequestParams;
 
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     private final String TEG = ExchangeFragment.class.getSimpleName();
     private SQLiteDatabase mDb;
     private SharedPreferences mSettings;
+    private ProgressPieView mProgressPieView;
 
     /*имена таблиц из имен файлов*/
     public static Map getListHashMapTableName() {
@@ -83,6 +86,15 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /*вызываем менеджера настроек*/
         mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        /**/
+        mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.progressPieView);
+        mProgressPieView.setMax(25000);
+        mProgressPieView.setText("0%");
+        mProgressPieView.setTextColor(getResources().getColor(R.color.main_sub_grey));
+        mProgressPieView.setProgressColor(getResources().getColor(R.color.main_grey));
+        mProgressPieView.setStrokeColor(getResources().getColor(R.color.main_grey));
+        // mProgressPieView.setProgress(ConstantsUtil.n);
+
 
         return rootView;
     }
@@ -103,6 +115,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /* загружаем файлы с сервера*/
     private void dowloadFilesOfServer() {
 
        /* список файлов для загрузки */
@@ -166,7 +179,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
         /* начинаем загрузку */
         if (lConnect) {
-
+            int pr = 0;
             /* начинаем транзакцию */
             mDb.beginTransaction();
             for (String i : nameFile) {
@@ -176,11 +189,12 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
                 //params.put("login", "admin");
                 //params.put("password", "123");
                 //Log
+
                 ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
 
                 try {
                             /* загружаем файл */
-                    utilAsyncHttpClient.getDownloadFiles(params, mDb, lTableNameInsert, lTableName, i);
+                    utilAsyncHttpClient.getDownloadFiles(params, mDb, lTableNameInsert, lTableName, i, mProgressPieView);
                 } catch (Exception e) {
                     e.printStackTrace();
                     //Log

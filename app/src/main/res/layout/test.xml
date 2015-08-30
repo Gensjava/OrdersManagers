@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ppv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:max="100"/>
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:layout_weight="1"/>
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieViewInverted"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="CCW"
+            ppv:ppvCounterclockwise="true"
+            ppv:ppvInverted="true"/>
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieViewXml"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="Xml"
+            android:textColor="@color/abc_primary_text_disable_only_material_dark"
+            android:textSize="18sp"
+
+            ppv:ppvBackgroundColor="@color/holo_purple"
+            ppv:ppvProgressColor="@color/holo_red_light"
+            ppv:ppvProgressFillType="center"
+            ppv:ppvStrokeColor="@color/holo_green_light"
+            ppv:ppvStrokeWidth="6dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

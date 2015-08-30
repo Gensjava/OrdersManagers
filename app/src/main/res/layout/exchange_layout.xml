@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="41dp"/>
+
         <TextView
             android:id="@+id/exchege_text_string_status"
             android:layout_width="wrap_content"
@@ -22,33 +31,21 @@
             android:id="@+id/exchege_text_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/progressPieView"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="91dp"
+            android:layout_marginTop="130dp"
             android:text="Загрузка..."/>
 
         <ImageView
             android:id="@+id/exchege_image_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_above="@+id/exchege_text_string_status"
             android:layout_alignLeft="@+id/exchege_text_data"
             android:layout_alignStart="@+id/exchege_text_data"
-            android:layout_below="@+id/exchege_text_data"
-            android:layout_marginTop="119dp"
+            android:layout_marginBottom="40dp"
             android:background="#ffa4ee"
             android:src="@drawable/abc_ic_go_search_api_mtrl_alpha"/>
-
-        <com.filippudak.ProgressPieView.ProgressPieView
-            android:id="@+id/progressPieViewXml"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="Xml"
-            android:textSize="18sp"
-            ppv:ppvProgressFillType="center"
-            />
 
     </RelativeLayout>
 </LinearLayout>

@@ -2,6 +2,7 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,7 +33,8 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                                          String> lTableNameInsert,
                                  final Map<String,
                                          String> lTableName,
-                                 final String nameFile) throws Exception {
+                                 final String nameFile,
+                                 final ProgressPieView progressPieView) throws Exception {
 
         get(mBaseUrl, params, new FileAsyncHttpResponseHandler(mMainActivity) {
             @Override
@@ -48,7 +50,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
                     try {
-                        WorkFilesUtil.onInsertTable(response, nameFile, db, lTableNameInsert, lTableName);
+                        WorkFilesUtil.onInsertTable(response, nameFile, db, lTableNameInsert, lTableName, progressPieView);
                     } catch (IOException e) {
                         e.printStackTrace();
                         //Log
