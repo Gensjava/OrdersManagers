@@ -21,6 +21,7 @@ import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.RequestParams;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import org.apache.http.auth.AuthScope;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,37 +71,6 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
     private TextView mTextProgress;
     private TextView mLoadFiles;
 
-    /*имена таблиц из имен файлов*/
-    public static Map getListHashMapTableName() {
-
-        Map<String, String> lTableName = new HashMap<String, String>();
-
-        lTableName.put(TableCompanies.FILE_NAME, TableCompanies.TABLE_NAME);
-        lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.TABLE_NAME);
-        lTableName.put(TablePrices.FILE_NAME, TablePrices.TABLE_NAME);
-        lTableName.put(TableProducts.FILE_NAME, TableProducts.TABLE_NAME);
-        lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.TABLE_NAME);
-        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.TABLE_NAME);
-        lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.TABLE_NAME);
-
-        return lTableName;
-    }
-
-    /* получаем список имени файла и команду для создания строки в таблицах базе данных*/
-    public static Map getListTableName() {
-
-        Map<String, String> lTableName = new HashMap<String, String>();
-
-        lTableName.put(TableCompanies.FILE_NAME, TableCompanies.INSERT_VALUES);
-        lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.INSERT_VALUES);
-        lTableName.put(TablePrices.FILE_NAME, TablePrices.INSERT_VALUES);
-        lTableName.put(TableProducts.FILE_NAME, TableProducts.INSERT_VALUES);
-        lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.INSERT_VALUES);
-        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
-        lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
-
-        return lTableName;
-    }
 
     @Nullable
     @Override
@@ -125,7 +95,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         /*прогресс каждого файла*/
         mDiscreteSeekBar = (DiscreteSeekBar) rootView.findViewById(R.id.load_files_seekBar);
         /**/
-        mButtonOrderList = (ImageView) rootView.findViewById(R.id.load_files_image_button);
+        mButtonOrderList = (ImageView) rootView.findViewById(R.id.load_files_image_button_n);
         mButtonOrderList.setOnClickListener(this);
         /**/
         mTextProgress = (TextView) rootView.findViewById(R.id.load_files_text_progress);
@@ -146,7 +116,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                 dowloadFilesOfServer();
 
                 break;
-            case R.id.load_files_image_button:
+            case R.id.load_files_image_button_n:
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
                 break;
@@ -167,16 +137,10 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         mProgressPieView.setText("0%");
         mButtonOrderList.setVisibility(View.INVISIBLE);
 
-        Map lTableNameInsert;
-        lTableNameInsert = getListTableName();
-        /**/
-        Map lTableName;
-        lTableName = getListHashMapTableName();
-
         /* текущий новый заказ */
         ConstantsUtil.mCurrentOrder = new OrderDoc();
         /* ТЧ заказа */
-        ConstantsUtil.mCart = new LinkedHashSet<OrderDoc.OrderLines>();
+        ConstantsUtil.mCart = new LinkedHashSet<>();
        /*текущий номер заказа*/
         ConstantsUtil.sCurrentNumber = 0;
        /*режим заказа новый или не новый*/
@@ -214,7 +178,8 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
 
         try {
             utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
-            utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
+            utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
+            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 3);
             lConnect = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,7 +190,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
 
         /* начинаем загрузку */
         if (lConnect) {
-            int pr = 0;
+
             /* начинаем транзакцию */
             mDb.beginTransaction();
             for (String i : nameFile) {
@@ -262,7 +227,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
     public void onInsertTable(final File file,
                               final String fileName
     ) throws IOException {
-        Map<String, String> lTableNameInsert = new HashMap<String, String>();
+        Map<String, String> lTableNameInsert = new HashMap<>();
 
         lTableNameInsert.put(TableCompanies.FILE_NAME, TableCompanies.INSERT_VALUES);
         lTableNameInsert.put(TableCounteragents.FILE_NAME, TableCounteragents.INSERT_VALUES);
@@ -272,7 +237,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         lTableNameInsert.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
         lTableNameInsert.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
 
-        Map<String, String> lTableName = new HashMap<String, String>();
+        Map<String, String> lTableName = new HashMap<>();
 
         lTableName.put(TableCompanies.FILE_NAME, TableCompanies.HEADER_NAME);
         lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.HEADER_NAME);
@@ -311,10 +276,10 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
 
     }
 
-    public class DownloadAsyncFile extends AsyncTask<String, String, String> {
+    public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 
         private final String TEG = LoadFilesFragment.class.getSimpleName();
-        double totalsize;
+
         Handler handlerTotalLinesFile = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -327,16 +292,6 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         };
         private String mCvsSplitBy = ",\"";
         private String mNameTable;
-        Handler handlerDiscreteSeek = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                Bundle bundle = msg.getData();
-                int date = bundle.getInt("DiscreteSeek");
-                mDiscreteSeekBar.setProgress(date);
-                mTextProgress.setText(String.valueOf(mDiscreteSeekBar.getProgress()));
-                mLoadFiles.setText("Загрузка " + mNameTable + "...");
-            }
-        };
         private String mLineInsert;
         private File mFile;
         private int limitInsert = 100;
@@ -403,14 +358,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                     sql.append(")");
                    /*счетчик*/
                     n++;
-                      /*отсылаем сообщения прогрессу*/
-                    Message msgDiscreteSeek = handlerDiscreteSeek.obtainMessage();
-                    Bundle bundleDiscreteSeek = new Bundle();
-                    bundleDiscreteSeek.putInt("DiscreteSeek", ++nDSeek);
-
-
-                    msgDiscreteSeek.setData(bundleDiscreteSeek);
-                    handlerDiscreteSeek.sendMessage(msgDiscreteSeek);
+                    publishProgress(++nDSeek);
 
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
@@ -433,6 +381,16 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             }
 
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(final Integer... values) {
+            super.onProgressUpdate(values);
+
+            mDiscreteSeekBar.setProgress(values[0]);
+            mTextProgress.setText(String.valueOf(mDiscreteSeekBar.getProgress()));
+            mLoadFiles.setText("Загрузка " + mNameTable + "...");
+
         }
 
         @Override

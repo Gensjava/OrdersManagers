@@ -58,7 +58,7 @@
                 android:id="@+id/load_files_text_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/load_files_image_button"
+
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="88dp"
                 android:text="0"
@@ -94,7 +94,7 @@
                     android:text="Информация о загрузке..."
 
                     android:textColor="@color/main_grey"
-                    android:textIsSelectable="true"
+                    android:textIsSelectable="false"
                     android:textSize="10dp"
                     android:textStyle="italic"/>
 
@@ -104,7 +104,7 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/load_files_image_button"
+            android:id="@+id/load_files_image_button_n"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignEnd="@+id/relativeLayout3"

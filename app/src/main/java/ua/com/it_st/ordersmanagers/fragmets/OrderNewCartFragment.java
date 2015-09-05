@@ -272,7 +272,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             sum.setText(lSum);
 
             /*menu*/
-            final Spinner spinner = (Spinner) convertView.findViewById(R.id.order_new_cart_list_item_menu);
+            final Spinner spinner = (Spinner) convertView.findViewById(R.id.order_new_cart_list_item_menu_n);
 
             /* Настраиваем адаптер */
             String[] spinnerMenu = getResources().getStringArray(R.array.spinner_cart_menu);

@@ -22,6 +22,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
     private final String TEG = AsyncHttpClientUtil.class.getSimpleName();
+    RequestParams params;
     //private String mBaseUrl = "http://192.168.1.7/Pekin/hs/file";
     //private static final String BASE_URL = "http://10.0.3.2/Pekin/hs/file";
     private String mBaseUrl;
@@ -31,6 +32,43 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         mMainActivity = mainActivity;
         mBaseUrl = url;
     }
+
+    File getSizeFile() {
+        final File file = null;
+
+        get("", params, new FileAsyncHttpResponseHandler(mMainActivity) {
+            @Override
+            public void onFailure(final int statusCode, final Header[] headers, final Throwable throwable, final File file) {
+                //return file;
+            }
+
+            @Override
+            public void onSuccess(final int statusCode, final Header[] headers, final File file) {
+
+            }
+        });
+        return file;
+    }
+
+    private long dirSize(File dir) {
+
+        if (dir.exists()) {
+            long result = 0;
+            File[] fileList = dir.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                // Recursive call if it's a directory
+                if (fileList[i].isDirectory()) {
+                    result += dirSize(fileList[i]);
+                } else {
+                    // Sum the file size in bytes
+                    result += fileList[i].length();
+                }
+            }
+            return result; // return the file size
+        }
+        return 0;
+    }
+
 
     public void getDownloadFiles(final RequestParams params, final String fileName) throws Exception {
 
