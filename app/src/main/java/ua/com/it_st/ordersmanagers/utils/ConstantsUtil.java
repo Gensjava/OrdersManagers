@@ -32,6 +32,8 @@ public class ConstantsUtil {
     public static int nPieViewProgress;
     public static double nPieViewdProgress;
 
+    public static int sizeFileLine;
+
     /*
     записываем новый товар в ТЧ заказа
     если есть такой товар тогда делаем замену

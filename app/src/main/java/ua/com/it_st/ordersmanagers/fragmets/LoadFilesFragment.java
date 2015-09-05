@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
@@ -47,7 +48,9 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+
 
 /* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
    Файлы:
@@ -62,6 +65,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class LoadFilesFragment extends Fragment implements View.OnClickListener {
 
+
     private final String TEG = LoadFilesFragment.class.getSimpleName();
     private SQLiteDatabase mDb;
     private SharedPreferences mSettings;
@@ -70,6 +74,8 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
     private ImageView mButtonOrderList;
     private TextView mTextProgress;
     private TextView mLoadFiles;
+
+    private int n1;
 
 
     @Nullable
@@ -125,6 +131,9 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    // public static void  setSizeFile(){
+    //  mProgressPieView.setMax(sizeFileLine);
+    //}
     /* загружаем файлы с сервера*/
     private void dowloadFilesOfServer() {
 
@@ -132,7 +141,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         String[] nameFile = getResources().getStringArray(R.array.name_file_data);
         ConstantsUtil.nPieViewProgress = 0;
         ConstantsUtil.nPieViewdProgress = 0;
-        mProgressPieView.setMax(7);
+
         mProgressPieView.setProgress(0);
         mProgressPieView.setText("0%");
         mButtonOrderList.setVisibility(View.INVISIBLE);
@@ -145,6 +154,8 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         ConstantsUtil.sCurrentNumber = 0;
        /*режим заказа новый или не новый*/
         ConstantsUtil.modeNewOrder = true;
+        //
+        n1 = 0;
 
         //Log
         ErrorInfo.setmLogLine("Начало загрузки");
@@ -188,17 +199,31 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         }
 
-        /* начинаем загрузку */
+        //получаем количество всех строк в файлах до загрузки всех файлов
+        RequestParams params = new RequestParams();
+        params.put(getString(R.string.SizeFileCatalog), wayCatalog);
+
+        FileSizeLine fileSizeLine = new FileSizeLine(idServer, params);
+        fileSizeLine.execute();
+        try {
+            fileSizeLine.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        mProgressPieView.setMax(ConstantsUtil.sizeFileLine);
+
         if (lConnect) {
 
             /* начинаем транзакцию */
             mDb.beginTransaction();
             for (String i : nameFile) {
-                RequestParams params = new RequestParams();
+                params = new RequestParams();
                 params.put(getString(R.string.NameCatalog), wayCatalog);
                 params.put(getString(R.string.name_file), i);
-                //params.put("login", "admin");
-                //params.put("password", "123");
+                params.put(getString(R.string.SizeFileCatalog), "");
+
                 //Log
 
                 ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
@@ -308,6 +333,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
@@ -358,7 +384,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                     sql.append(")");
                    /*счетчик*/
                     n++;
-                    publishProgress(++nDSeek);
+                    publishProgress(++nDSeek, ++n1);
 
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
@@ -390,16 +416,21 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             mDiscreteSeekBar.setProgress(values[0]);
             mTextProgress.setText(String.valueOf(mDiscreteSeekBar.getProgress()));
             mLoadFiles.setText("Загрузка " + mNameTable + "...");
+            //Круг прогресс
+
+            mProgressPieView.setProgress(values[1]);
+
+
 
         }
 
         @Override
         protected void onPostExecute(final String s) {
             super.onPostExecute(s);
-            mProgressPieView.setProgress(++ConstantsUtil.nPieViewProgress);
+            // mProgressPieView.setProgress(++ConstantsUtil.nPieViewProgress);
 
-            double sProgress = ConstantsUtil.nPieViewdProgress += 14.29;
-            mProgressPieView.setText(String.valueOf((int) sProgress) + "%");
+            // double sProgress = ConstantsUtil.nPieViewdProgress += 14.29;
+            // mProgressPieView.setText(String.valueOf((int) sProgress) + "%");
 
             if (ConstantsUtil.nPieViewProgress == 7) {
                 mButtonOrderList.setVisibility(View.VISIBLE);
