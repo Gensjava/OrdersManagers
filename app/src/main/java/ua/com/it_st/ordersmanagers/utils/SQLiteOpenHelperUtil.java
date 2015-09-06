@@ -60,6 +60,21 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         }
     }
 
+    /* чистим таблицы */
+    public static void onDeleteValueTables(final SQLiteDatabase mDb) {
+
+        TableCompanies.onDeleteValueTable(mDb);
+        TableCounteragents.onDeleteValueTable(mDb);
+        TablePrices.onDeleteValueTable(mDb);
+        TableProducts.onDeleteValueTable(mDb);
+        TableTypePrices.onDeleteValueTable(mDb);
+        TableTypeStores.onDeleteValueTable(mDb);
+        TableGoodsByStores.onDeleteValueTable(mDb);
+        TableOrders.onDeleteValueTable(mDb);
+        TableOrdersLines.onDeleteValueTable(mDb);
+
+    }
+
     @Override
     public void onCreate(final SQLiteDatabase db) {
 

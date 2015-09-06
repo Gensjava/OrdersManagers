@@ -1,39 +1,32 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
-
 import org.apache.http.Header;
 import org.apache.http.auth.AuthScope;
 
-import java.io.File;
 
-import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
-
-/**
- * Created by Gens on 06.09.2015.
- */
 public class FileSizeLine extends AsyncTask<String, Integer, String> {
 
     private String mBaseUrl;
     private RequestParams mParams;
+    private String mloginServer;
+    private String mPasswordServer;
 
-    public FileSizeLine(final String baseUrl, final RequestParams params) {
+    public FileSizeLine(final String baseUrl, final RequestParams params, final String loginServer, final String passwordServer) {
         mBaseUrl = baseUrl;
         mParams = params;
+        mloginServer = loginServer;
+        mPasswordServer = passwordServer;
     }
 
     @Override
     protected String doInBackground(final String... params) {
         try {
             AsyncHttpClientAsyncTask asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
-            asyncHttpClientAsyncTask.setBasicAuth("admin", "123", AuthScope.ANY);
+            asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
             asyncHttpClientAsyncTask.getSizeFile(mParams);
 
         } catch (Exception e) {
