@@ -148,11 +148,11 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
     }
 
     /*подключаемся к серверу*/
+    /* подключаемся через HTTP к базе и загужаем данные */
     private Object[] connectServer() {
 
         Object[] data = new Object[6];
-        
-        /* подключаемся через HTTP к базе и загужаем данные */
+
         AsyncHttpClientUtil utilAsyncHttpClient = null;
         boolean lConnect;
         /*данные настроек*/
@@ -233,7 +233,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         /*Проверка*/
         if (connectData == null) {
             //Log
-            ErrorInfo.setmLogLine("Нет данных для загрузки!");
+            ErrorInfo.setmLogLine("Не все установлены параметры для загрузки!");
             return;
         }
         /*подключились к базе или нет*/
