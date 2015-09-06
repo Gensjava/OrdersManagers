@@ -16,13 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.RequestParams;
-
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.apache.http.auth.AuthScope;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,15 +29,12 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
@@ -50,7 +44,6 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
-
 
 /* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
    Файлы:
@@ -64,7 +57,6 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
   */
 
 public class LoadFilesFragment extends Fragment implements View.OnClickListener {
-
 
     private final String TEG = LoadFilesFragment.class.getSimpleName();
     private SQLiteDatabase mDb;
@@ -116,14 +108,13 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
     public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.load_files_button:
-
                 /* удаляем все записи из таблиц */
                 SQLiteOpenHelperUtil.onDeleteValueTables(mDb);
                 /*загружаем файлы с сервера*/
                 dowloadFilesOfServer();
-
                 break;
             case R.id.load_files_image_button_n:
+                /*переходим в журанл заказаов*/
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
                 break;
@@ -155,19 +146,12 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         nOSeek = 0;
         mProgress = 0;
     }
-    /* загружаем файлы с сервера*/
-    private void dowloadFilesOfServer() {
 
-       /* список файлов для загрузки */
-        String[] nameFile = getResources().getStringArray(R.array.name_file_data);
-        /*определяем кол-во файлов*/
-        AcountNameFile = nameFile.length;
-        /*обнуляем все значения перед загрузкой*/
-        nullableValues();
+    /*подключаемся к серверу*/
+    private Object[] connectServer() {
 
-        //Log
-        ErrorInfo.setmLogLine("Начало загрузки");
-
+        Object[] data = new Object[6];
+        
         /* подключаемся через HTTP к базе и загужаем данные */
         AsyncHttpClientUtil utilAsyncHttpClient = null;
         boolean lConnect;
@@ -177,11 +161,11 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         /*проверка*/
         if (loginServer == null) {
             ErrorInfo.Tost("Введите логин!", getActivity());
-            return;
+            return null;
         }
         if (passwordServer == null) {
             ErrorInfo.Tost("Введите пароль!", getActivity());
-            return;
+            return null;
         }
         /*режим сервера*/
         String modeServer = mSettings.getString(getActivity().getString(R.string.mode_server), null);
@@ -206,9 +190,19 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             //Log
             ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         }
+        data[0] = lConnect;
+        data[1] = utilAsyncHttpClient;
+        data[2] = loginServer;
+        data[3] = passwordServer;
+        data[4] = wayCatalog;
+        data[5] = idServer;
 
-        //получаем количество всех строк в файлах до загрузки всех файлов
-        RequestParams params = new RequestParams();
+        return data;
+    }
+
+    /* получаем количество всех строк в файлах до загрузки всех файлов */
+    private void getSizeLine(RequestParams params, String wayCatalog, String idServer, String loginServer, String passwordServer) {
+
         params.put(getString(R.string.SizeFileCatalog), wayCatalog);
 
         FileSizeLine fileSizeLine = new FileSizeLine(idServer, params, loginServer, passwordServer);
@@ -221,37 +215,71 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             e.printStackTrace();
         }
         mProgressPieView.setMax(ConstantsUtil.sizeFileLine);
+    }
 
-        if (lConnect) {
+    /* загружаем файлы с сервера*/
+    private void dowloadFilesOfServer() {
 
-            /* начинаем транзакцию */
-            mDb.beginTransaction();
-            for (String i : nameFile) {
-                params = new RequestParams();
-                params.put(getString(R.string.NameCatalog), wayCatalog);
-                params.put(getString(R.string.name_file), i);
-                params.put(getString(R.string.SizeFileCatalog), "");
-
-                //Log
-                ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
-
-                try {
-                    /* загружаем файл */
-                    utilAsyncHttpClient.getDownloadFiles(params, i);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    //Log
-                    ErrorInfo.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
-                }
-            }
-            /* заканчиваем транзакцию */
-            mDb.setTransactionSuccessful();
-            mDb.endTransaction();
-
-        } else {
+       /* список файлов для загрузки */
+        String[] nameFile = getResources().getStringArray(R.array.name_file_data);
+        /*определяем кол-во файлов*/
+        AcountNameFile = nameFile.length;
+        /*обнуляем все значения перед загрузкой*/
+        nullableValues();
+        //Log
+        ErrorInfo.setmLogLine("Начало загрузки");
+         /*подключаемся к серверу*/
+        Object[] connectData = connectServer();
+        /*Проверка*/
+        if (connectData == null) {
+            //Log
+            ErrorInfo.setmLogLine("Нет данных для загрузки!");
+            return;
+        }
+        /*подключились к базе или нет*/
+        boolean lConnect = (boolean) connectData[0];
+        //
+        if (!lConnect) {
             //Log
             ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+            return;
         }
+      /*получаем параметры подключения*/
+        AsyncHttpClientUtil utilAsyncHttpClient = (AsyncHttpClientUtil) connectData[1];
+        String loginServer = (String) connectData[2];
+        String passwordServer = (String) connectData[3];
+        String wayCatalog = (String) connectData[4];
+        String idServer = (String) connectData[5];
+        //
+        RequestParams params = new RequestParams();
+
+        /* получаем количество всех строк в файлах до загрузки всех файлов */
+        getSizeLine(params, wayCatalog, idServer, loginServer, passwordServer);
+
+            /* начинаем транзакцию */
+        mDb.beginTransaction();
+        for (String i : nameFile) {
+            params = new RequestParams();
+            params.put(getString(R.string.NameCatalog), wayCatalog);
+            params.put(getString(R.string.name_file), i);
+            params.put(getString(R.string.SizeFileCatalog), "");
+
+            //Log
+            ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
+
+            try {
+                /* загружаем файл */
+                utilAsyncHttpClient.getDownloadFiles(params, i);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //Log
+                ErrorInfo.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
+            }
+        }
+            /* заканчиваем транзакцию */
+        mDb.setTransactionSuccessful();
+        mDb.endTransaction();
+
     }
 
     public void onInsertTable(final File file,
@@ -282,15 +310,11 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                 lTableName.get(fileName)
         );
         downloadAsyncFile.execute();
-
     }
-
-
 
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
-
     }
 
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
@@ -321,13 +345,11 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             mLineInsert = lineInsert;
             mNameTable = nameTable;
             mFile = file;
-
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -346,7 +368,6 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                 bundleTotalLinesFile.putInt("totalLinesFile", totalLinesFile);
                 msgTotalLinesFile.setData(bundleTotalLinesFile);
                 handlerTotalLinesFile.sendMessage(msgTotalLinesFile);
-
 
                 /*создаем строку команды для базы данных в базу*/
                 StringBuilder sql = new StringBuilder();
@@ -382,7 +403,6 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                     n++;
                     publishProgress(++nDSeek, ++nOSeek);
 
-
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
                         sql.append("");
@@ -409,11 +429,11 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
         @Override
         protected void onProgressUpdate(final Integer... values) {
             super.onProgressUpdate(values);
-            //Линия прогресс
+            /* Линия прогресс */
             mDiscreteSeekBar.setProgress(values[0]);
             mProgressDiscrete += (100 / (double) stotalLinesFile);
             mTextProgress.setText(String.valueOf((int) mProgressDiscrete) + "%");
-            //Круг прогресс
+            /* Круг прогресс */
             mProgressPieView.setProgress(values[1]);
             mProgress += (100 / (double) ConstantsUtil.sizeFileLine);
             mProgressPieView.setText(String.valueOf((int) mProgress) + "%");
@@ -430,7 +450,7 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
                 mButtonOrderList.setVisibility(View.VISIBLE);
                /*считаем разницу между то что пришли данные из 1с и то что реально загрузилось*/
                 int d = ConstantsUtil.sizeFileLine - nOSeek;
-                //Круг прогресс
+                /* Круг прогресс */
                 mProgressPieView.setProgress(nOSeek + d);
                 mProgress += (100 / (double) ConstantsUtil.sizeFileLine) * d;
                 mProgressPieView.setText(String.valueOf((int) mProgress) + "%");
@@ -459,7 +479,6 @@ public class LoadFilesFragment extends Fragment implements View.OnClickListener 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return n;
         }
     }
