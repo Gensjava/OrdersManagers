@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-/**
- * Created by Gens on 27.04.2015.
- */
 public class TableCounteragents {
     public static final String TABLE_NAME = "Counteragents";
     public static final String FILE_NAME = "ref_clients.csv";

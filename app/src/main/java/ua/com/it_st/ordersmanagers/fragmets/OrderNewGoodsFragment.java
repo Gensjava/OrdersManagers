@@ -302,7 +302,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         updateCartCount();
     }
 
-    /*добавляем жлемент к дереву*/
+    /*добавляем элемент к дереву*/
     private void onAddTree(Cursor data) {
         while (data.moveToNext()) {
             String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));

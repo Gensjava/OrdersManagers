@@ -1,24 +1,15 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.filippudak.ProgressPieView.ProgressPieView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 

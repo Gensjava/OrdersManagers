@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-/**
- * Created by Gens on 19.07.2015.
- */
 public class TableCompanies {
     public static final String TABLE_NAME = "Сompanys";
     public static final String FILE_NAME = "ref_firms.csv";

@@ -7,7 +7,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.apache.http.Header;
 import org.apache.http.auth.AuthScope;
 
-
 public class FileSizeLine extends AsyncTask<String, Integer, String> {
 
     private String mBaseUrl;
