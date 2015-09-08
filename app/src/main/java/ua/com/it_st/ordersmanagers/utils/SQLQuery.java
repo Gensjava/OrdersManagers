@@ -39,6 +39,21 @@ public class SQLQuery {
     }
 
     /*
+    запрос журнал заказов для выгрузки в файл csv
+    sp параметры условий запроса
+    */
+    public static String queryOrdersFilesCsv(final String sp) {
+
+        String sq;
+        sq = "Select Orders.view_id, Orders.type,  Orders.date, Orders.number, Orders.completed, Orders.agent_id," +
+                "Orders.company_id, Orders.store_id,  Orders.client_id, Orders.price_id, Orders.total, Orders.note\n" +
+                "FROM Orders\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+    /*
     запрос шапки документа
     sp параметры условий запроса
     */

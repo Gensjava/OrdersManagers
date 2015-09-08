@@ -1,12 +1,26 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 
+import android.net.http.AndroidHttpClient;
+import android.os.Environment;
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
@@ -59,4 +73,28 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         });
     }
 
+    public void postUnloadFiles() throws Exception {
+
+        File myFile = new File("data/data/ua.com.it_st.ordersmanagers", "doc_orders.csv");
+        RequestParams params = new RequestParams();
+        try {
+            params.put("doc_orders", myFile);
+        } catch (FileNotFoundException e) {
+        }
+
+        post(mBaseUrl, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                // handle success response
+                Log.i("headersSuccess", "" + statusCode);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                // handle failure response
+                Log.i("headersFailure", "" + statusCode);
+            }
+        });
+
+    }
 }

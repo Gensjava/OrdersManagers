@@ -276,13 +276,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
     /*Заполняем корзину*/
     private void onFillCart(Cursor data) {
+
+        final int cIDIndex = data.getColumnIndex(TableOrdersLines.COLUMN_GOODS_ID);
+        final int isAmountIndex = data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT);
+        final int cPriceIndex = data.getColumnIndex(TableOrdersLines.COLUMN_PRICE);
+        final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
+        final int cAmountStoresIndex = data.getColumnIndex("amount_stores");
+
         while (data.moveToNext()) {
 
-            String cID = data.getString(data.getColumnIndex(TableOrdersLines.COLUMN_GOODS_ID));
-            double isAmount = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT));
-            double cPrice = data.getDouble(data.getColumnIndex(TableOrdersLines.COLUMN_PRICE));
-            String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
-            double cAmountStores = data.getDouble(data.getColumnIndex("amount_stores"));
+            String cID = data.getString(cIDIndex);
+            double isAmount = data.getDouble(isAmountIndex);
+            double cPrice = data.getDouble(cPriceIndex);
+            String cName = data.getString(cNameIndex);
+            double cAmountStores = data.getDouble(cAmountStoresIndex);
 
             double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
@@ -304,10 +311,15 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
     /*добавляем элемент к дереву*/
     private void onAddTree(Cursor data) {
+
+        final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
+        final int isCategoryIndex = data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY);
+        final int cKodIndex = data.getColumnIndex(TableProducts.COLUMN_KOD);
         while (data.moveToNext()) {
-            String cName = data.getString(data.getColumnIndex(TableProducts.COLUMN_NAME));
-            String isCategory = data.getString(data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY));
-            String cKod = data.getString(data.getColumnIndex(TableProducts.COLUMN_KOD));
+
+            String cName = data.getString(cNameIndex);
+            String isCategory = data.getString(isCategoryIndex);
+            String cKod = data.getString(cKodIndex);
 
             final TreeNode newTreeItem;
 

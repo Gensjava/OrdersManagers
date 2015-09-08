@@ -78,7 +78,10 @@ public class LoadFilesFragment extends FilesFragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
+        if (ConstantsUtil.sizeFileLine > 0) {
+            getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
+        }
+
     }
 
     /* загружаем файлы с сервера*/
@@ -204,7 +207,7 @@ public class LoadFilesFragment extends FilesFragment {
         protected String doInBackground(final String... files) {
 
             try {
-                /* Считываем по одной строке */
+
                 BufferedReader input = new BufferedReader(new FileReader(mFile));
                 /*вычисляем к-во строк в файле*/
                 totalLinesFile = getCountFileLines(mFile);
@@ -225,6 +228,7 @@ public class LoadFilesFragment extends FilesFragment {
                 /**/
                 String line;
                 input.readLine();
+                 /* Считываем по одной строке */
                 while ((line = input.readLine()) != null) {
                     /*получаем массив из строчке*/
                     String[] country = line.split(mCvsSplitBy);

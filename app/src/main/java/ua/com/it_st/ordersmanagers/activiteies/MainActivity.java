@@ -19,6 +19,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.UnloadFilesFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -116,6 +117,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = LoadFilesFragment.class;
+                break;
+            case R.id.unload_files_fragment:
+                fragmentClass = UnloadFilesFragment.class;
                 break;
             case R.id.nav_third_setings:
                 fragmentClass = MainPreferenceFragment.class;

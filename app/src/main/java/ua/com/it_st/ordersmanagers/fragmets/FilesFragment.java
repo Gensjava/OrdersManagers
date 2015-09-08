@@ -45,8 +45,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class FilesFragment extends Fragment implements View.OnClickListener {
 
+    private static SQLiteDatabase mDb;
     private final String TEG = LoadFilesFragment.class.getSimpleName();
-    private SQLiteDatabase mDb;
     private SharedPreferences mSettings;
     private ProgressPieView mProgressPieView;
     private DiscreteSeekBar mDiscreteSeekBar;
@@ -58,6 +58,13 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private int nOSeek;
     private int AcountNameFile;
 
+    protected static SQLiteDatabase getDb() {
+        return mDb;
+    }
+
+    public void setDb(final SQLiteDatabase db) {
+        mDb = db;
+    }
 
     @Nullable
     @Override
@@ -224,17 +231,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         return lTableName;
     }
 
-
     public String getTEG() {
         return TEG;
-    }
-
-    public SQLiteDatabase getDb() {
-        return mDb;
-    }
-
-    public void setDb(final SQLiteDatabase db) {
-        mDb = db;
     }
 
     public SharedPreferences getSettings() {
