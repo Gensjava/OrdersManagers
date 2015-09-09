@@ -8,7 +8,7 @@
         <item
             android:id="@+id/nav_second_fragment"
 
-            android:title="Обмен данными"/>
+            android:title="Загрузка"/>
         <item
             android:id="@+id/unload_files_fragment"
 

@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -64,6 +65,12 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     public void setDb(final SQLiteDatabase db) {
         mDb = db;
+    }
+
+    public static String getDataDir(Context context) throws Exception {
+        return context.getPackageManager()
+                .getPackageInfo(context.getPackageName(), 0)
+                .applicationInfo.dataDir;
     }
 
     @Nullable
@@ -313,5 +320,10 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     public void setAcountNameFile(final int acountNameFile) {
         AcountNameFile = acountNameFile;
+    }
+
+    /* создаем класс - интефейс для открытия фрагментов */
+    public interface onEventListener {
+        void onOpenFragmentClass(Class<?> fClass);
     }
 }

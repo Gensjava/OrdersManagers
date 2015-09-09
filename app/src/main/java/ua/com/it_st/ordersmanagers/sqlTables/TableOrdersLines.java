@@ -9,6 +9,7 @@ import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
 public class TableOrdersLines {
     public static final String TABLE_NAME = "OrdersLines";
+    public static final String sHeader = "DocId,GoodsId,Rate,Amount,Price,";
 
     public static final String COLUMN_DOC_ID = "doc_id";
     public static final String COLUMN_GOODS_ID = "goods_id";

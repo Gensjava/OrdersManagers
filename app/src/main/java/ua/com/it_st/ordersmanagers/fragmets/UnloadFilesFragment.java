@@ -5,67 +5,50 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.loopj.android.http.RequestParams;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
-import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+
 
 public class UnloadFilesFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    @Nullable
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-         /* создаем лоадер для чтения данных */
-        return super.onCreateView(inflater, container, savedInstanceState);
-        // getActivity().getSupportLoaderManager().initLoader(0, null, this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
+    private AsyncHttpClientUtil utilAsyncHttpClient;
 
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.load_files_button:
+                 /*получаем подключение к серверу*/
+                final Object[] ctServer = connectServer();
+                utilAsyncHttpClient = (AsyncHttpClientUtil) ctServer[1];
 
                 getActivity().getSupportLoaderManager().destroyLoader(0);
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                //
+                getActivity().getSupportLoaderManager().destroyLoader(1);
+                getActivity().getSupportLoaderManager().initLoader(1, null, this);
 
                 break;
-//            case R.id.load_files_image_button_n:
-//                /*переходим в журанл заказаов*/
-//                final onEventListener someEventListener = (onEventListener) getActivity();
-//                someEventListener.onOpenFragmentClass(OrderListFragment.class);
-//                break;
+            case R.id.load_files_image_button_n:
+                /*переходим в журанл заказаов*/
+                final onEventListener someEventListener = (onEventListener) getActivity();
+                someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                break;
             default:
                 break;
         }
@@ -80,24 +63,42 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
+        switch (id) {
+            case 0:
+                return new MyCursorLoaderHeader(getActivity());
+            case 1:
+                return new MyCursorLoaderLines(getActivity());
+            default:
+                return null;
+        }
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
+        final String nameFile;
+        final String[] headerLines;
+
         switch (loader.getId()) {
             case 0:
                   /*формируем документ заказ шапку*/
+                nameFile = "doc_orders.csv";
+                headerLines = TableOrders.sHeader.split(",");
                 try {
-                    getAllOrdersHeader(data);
+                    getAllOrdersHeaderLines(data, nameFile, headerLines);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
-            case 1:/*режим редактирование*/
-                   /*Заполняем корзину*/
-                //  onFillCart(data);
+            case 1:
+                 /*формируем документ табличную часть*/
+                nameFile = "doc_lines.csv";
+                headerLines = TableOrdersLines.sHeader.split(",");
+                try {
+                    getAllOrdersHeaderLines(data, nameFile, headerLines);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 break;
@@ -110,13 +111,16 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
     }
 
     /*получаем все заказы (шапку заказов)*/
-    private void getAllOrdersHeader(Cursor itemCursor) throws IOException {
+    private void getAllOrdersHeaderLines(final Cursor itemCursor, String nameFile, final String[] headerLines) throws IOException {
 
-        //BufferedWriter input = new BufferedWriter(new FileReader(mFile));
-
-        String path = "data/data/ua.com.it_st.ordersmanagers/";
-        CSVWriter writer = new CSVWriter(new FileWriter(path + "doc_orders.csv"), ',');
-        writer.writeNext(TableOrders.sHeader.split(","));
+        String path = null;
+        try {
+            path = getDataDir(getActivity()) + "/" + nameFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final CSVWriter myFile = new CSVWriter(new FileWriter(path), ',');
+        myFile.writeNext(headerLines);
 
         final String[] arrayColumnNames = itemCursor.getColumnNames();
 
@@ -125,32 +129,31 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
             final String[] entries = new String[arrayColumnNames.length];
 
             for (byte i = 0; i < arrayColumnNames.length; i++) {
-                int cIndex = itemCursor.getColumnIndex(arrayColumnNames[i]);
+                final int cIndex = itemCursor.getColumnIndex(arrayColumnNames[i]);
                 entries[i] = itemCursor.getString(cIndex);
             }
-
-            writer.writeNext(entries);
+            myFile.writeNext(entries);
         }
-        writer.flush();
-        writer.close();
-        /**/
-        // UnloadAsyncFile unloadAsyncFile = new UnloadAsyncFile();
-        ////unloadAsyncFile.execute();
-        Object[] data = connectServer();
+        myFile.flush();
+        myFile.close();
 
-        AsyncHttpClientUtil utilAsyncHttpClient = (AsyncHttpClientUtil) data[1];
+        RequestParams params = new RequestParams();
+
         try {
-            utilAsyncHttpClient.postUnloadFiles();
+            params.put(nameFile, new File(path));
+            utilAsyncHttpClient.postUnloadFiles(params, nameFile);
         } catch (Exception e) {
             e.printStackTrace();
+            //Log
+            ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
         }
     }
 
-    /* создаем класс для загрузки данных в дерево товаров из БД
+    /* создаем класс для выгрузки данных заказов шапки из БД
                * загрузка происходит в фоне */
-    private static class MyCursorLoader extends CursorLoader {
+    private static class MyCursorLoaderHeader extends CursorLoader {
 
-        public MyCursorLoader(Context context) {
+        public MyCursorLoaderHeader(Context context) {
             super(context);
         }
 
@@ -158,17 +161,23 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
         public Cursor loadInBackground() {
 
             return getDb()
-                    .rawQuery(SQLQuery.queryOrdersFilesCsv("Orders._id  <> ?"), new String[]{"null"});
+                    .rawQuery(SQLQuery.queryOrdersHeaderFilesCsv("Orders._id  <> ?"), new String[]{"null"});
         }
     }
 
-    public class UnloadAsyncFile extends AsyncTask<String, Integer, String> {
+    /* создаем класс для выгрузки данных заказов табличной части из БД
+              * загрузка происходит в фоне */
+    private static class MyCursorLoaderLines extends CursorLoader {
+
+        public MyCursorLoaderLines(Context context) {
+            super(context);
+        }
 
         @Override
-        protected String doInBackground(final String... params) {
+        public Cursor loadInBackground() {
 
-            return null;
+            return getDb()
+                    .rawQuery(SQLQuery.queryOrdersLinesFilesCsv("OrdersLines.goods_id  <> ?"), new String[]{"null"});
         }
     }
-
 }

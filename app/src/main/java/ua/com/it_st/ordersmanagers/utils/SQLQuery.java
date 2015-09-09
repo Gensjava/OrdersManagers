@@ -42,7 +42,7 @@ public class SQLQuery {
     запрос журнал заказов для выгрузки в файл csv
     sp параметры условий запроса
     */
-    public static String queryOrdersFilesCsv(final String sp) {
+    public static String queryOrdersHeaderFilesCsv(final String sp) {
 
         String sq;
         sq = "Select Orders.view_id, Orders.type,  Orders.date, Orders.number, Orders.completed, Orders.agent_id," +
@@ -89,6 +89,18 @@ public class SQLQuery {
                 "LEFT OUTER JOIN Products ON OrdersLines.goods_id  = Products.kod\n" +
                 "WHERE " + sp + "\n";
 
+        return sq;
+    }
+
+    /* запрос табличной части документа  для выгрузки в файл csv
+     sp параметры условий запроса
+     */
+    public static String queryOrdersLinesFilesCsv(final String sp) {
+
+        String sq;
+        sq = "Select OrdersLines.goods_id, OrdersLines.rate,  OrdersLines.amount ,OrdersLines.price\n" +
+                "FROM OrdersLines\n" +
+                "WHERE " + sp + "\n";
         return sq;
     }
 }

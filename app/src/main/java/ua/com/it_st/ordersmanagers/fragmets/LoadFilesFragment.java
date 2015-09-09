@@ -168,10 +168,7 @@ public class LoadFilesFragment extends FilesFragment {
         downloadAsyncFile.execute();
     }
 
-    /* создаем класс - интефейс для открытия фрагментов */
-    public interface onEventListener {
-        void onOpenFragmentClass(Class<?> fClass);
-    }
+
 
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 
@@ -208,14 +205,14 @@ public class LoadFilesFragment extends FilesFragment {
 
             try {
 
-                BufferedReader input = new BufferedReader(new FileReader(mFile));
+                final BufferedReader input = new BufferedReader(new FileReader(mFile));
                 /*вычисляем к-во строк в файле*/
                 totalLinesFile = getCountFileLines(mFile);
                 stotalLinesFile = totalLinesFile;
                 mProgressDiscrete = 0;
                 /*отсылаем сообщения прогрессу*/
-                Message msgTotalLinesFile = handlerTotalLinesFile.obtainMessage();
-                Bundle bundleTotalLinesFile = new Bundle();
+                final Message msgTotalLinesFile = handlerTotalLinesFile.obtainMessage();
+                final Bundle bundleTotalLinesFile = new Bundle();
                 bundleTotalLinesFile.putInt("totalLinesFile", totalLinesFile);
                 msgTotalLinesFile.setData(bundleTotalLinesFile);
                 handlerTotalLinesFile.sendMessage(msgTotalLinesFile);
