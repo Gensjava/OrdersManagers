@@ -27,7 +27,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class UnloadFilesFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private AsyncHttpClientUtil utilAsyncHttpClient;
+    private AsyncHttpClientUtil mUtilAsyncHttpClient;
+    private String mWayCatalog;
 
     @Override
     public void onClick(final View v) {
@@ -35,7 +36,9 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
             case R.id.load_files_button:
                  /*получаем подключение к серверу*/
                 final Object[] ctServer = connectServer();
-                utilAsyncHttpClient = (AsyncHttpClientUtil) ctServer[1];
+                mUtilAsyncHttpClient = (AsyncHttpClientUtil) ctServer[1];
+                //
+                mWayCatalog = (String) ctServer[4];
 
                 getActivity().getSupportLoaderManager().destroyLoader(0);
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
@@ -140,12 +143,13 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
         RequestParams params = new RequestParams();
 
         try {
-            params.put(nameFile, new File(path));
-            utilAsyncHttpClient.postUnloadFiles(params, nameFile);
+            params.put(mWayCatalog + nameFile, new File(path));
+
+            mUtilAsyncHttpClient.postUnloadFiles(params, nameFile);
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
+            ErrorInfo.setmLogLine("Выгрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
         }
     }
 
