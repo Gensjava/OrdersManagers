@@ -39,7 +39,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/load_files_button"
             android:layout_marginTop="20dp"
-            app:dsb_indicatorColor="?attr/colorAccent"
+            app:dsb_indicatorColor="@color/colorAccent"
             app:dsb_max="0"
             app:dsb_min="0"
             app:dsb_progressColor="@color/colorAccent"

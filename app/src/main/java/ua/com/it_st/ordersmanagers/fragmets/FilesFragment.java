@@ -58,6 +58,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private double mProgressDiscrete;
     private int nOSeek;
     private int AcountNameFile;
+    private Button BHost;
 
     protected static SQLiteDatabase getDb() {
         return mDb;
@@ -80,7 +81,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.load_files, container,
                 false);
 
-        final Button BHost = (Button) rootView.findViewById(R.id.load_files_button);
+        BHost = (Button) rootView.findViewById(R.id.load_files_button);
         BHost.setBackgroundResource(R.drawable.roundbutton);
         BHost.setOnClickListener(this);
         /* открываем подключение к БД */
@@ -320,6 +321,14 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     public void setAcountNameFile(final int acountNameFile) {
         AcountNameFile = acountNameFile;
+    }
+
+    public Button getBHost() {
+        return BHost;
+    }
+
+    public void setBHost(final Button BHost) {
+        this.BHost = BHost;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

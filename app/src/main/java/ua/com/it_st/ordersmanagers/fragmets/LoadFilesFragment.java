@@ -168,8 +168,6 @@ public class LoadFilesFragment extends FilesFragment {
         downloadAsyncFile.execute();
     }
 
-
-
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 
         private final String TEG = LoadFilesFragment.class.getSimpleName();

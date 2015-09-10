@@ -103,4 +103,18 @@ public class SQLQuery {
                 "WHERE " + sp + "\n";
         return sq;
     }
+
+    /* запрос считам сколько строк в табличной части документа
+     и в шапке для выгрузки в файл csv
+    sp параметры условий запроса
+    */
+    public static String queryOrdersLinesAcuont() {
+
+        String sq;
+        sq = "SELECT (a.count + b.count) as sum\n" +
+                "FROM \n" +
+                "(SELECT COUNT(*) count FROM Orders) a, \n" +
+                "(SELECT COUNT(*) count FROM OrdersLines) b \n";
+        return sq;
+    }
 }
