@@ -70,14 +70,10 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
                 mUtilAsyncHttpClient = (AsyncHttpClientUtil) ctServer[1];
                 mWayCatalog = (String) ctServer[4];
 
-                getActivity().getSupportLoaderManager().destroyLoader(0);
-                getActivity().getSupportLoaderManager().initLoader(0, null, this);
-
-                getActivity().getSupportLoaderManager().destroyLoader(1);
-                getActivity().getSupportLoaderManager().initLoader(1, null, this);
-
-                getActivity().getSupportLoaderManager().destroyLoader(2);
-                getActivity().getSupportLoaderManager().initLoader(2, null, this);
+                for (byte i = 0; i < 3; i++) {
+                    getActivity().getSupportLoaderManager().destroyLoader(i);
+                    getActivity().getSupportLoaderManager().initLoader(i, null, this);
+                }
 
                 break;
             case R.id.load_files_image_button_n:
@@ -189,7 +185,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
             n++;
             mProgress++;
            /*двигаем бар */
-            onProgressBar(n, mProgress, sizeBar);
+            onProgressBar(n, sizeBar);
 
         }
         myFile.flush();
@@ -208,7 +204,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
     }
 
     /*двигаем бар и вычисляем процент выполнения */
-    private void onProgressBar(int DprogressSeekBar, int PierPogressPieBar, final int sizeBar) {
+    private void onProgressBar(int DprogressSeekBar, final int sizeBar) {
 
         getDiscreteSeekBar().setProgress(DprogressSeekBar);
         pProgressDiscrete += (int) (100 / (double) sizeBar);
@@ -216,7 +212,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
          /*надпись бара*/
         getTextProgress().setText(String.valueOf((int) getProgressDiscrete()) + "%");
         /* Круг прогресс */
-        getProgressPieView().setProgress(PierPogressPieBar);
+        getProgressPieView().setProgress(mProgress);
         pProgressPie += (100 / (double) mAcuont);
         setProgress(pProgressPie);
         getProgressPieView().setText(String.valueOf((int) getProgress()) + "%");

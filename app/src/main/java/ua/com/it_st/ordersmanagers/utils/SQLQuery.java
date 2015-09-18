@@ -98,7 +98,7 @@ public class SQLQuery {
     public static String queryOrdersLinesFilesCsv(final String sp) {
 
         String sq;
-        sq = "Select OrdersLines.goods_id, OrdersLines.rate,  OrdersLines.amount ,OrdersLines.price\n" +
+        sq = "Select OrdersLines.doc_id, OrdersLines.goods_id, OrdersLines.rate,  OrdersLines.amount ,OrdersLines.price\n" +
                 "FROM OrdersLines\n" +
                 "WHERE " + sp + "\n";
         return sq;
