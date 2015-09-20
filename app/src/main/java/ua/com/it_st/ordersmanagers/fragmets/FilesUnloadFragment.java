@@ -47,8 +47,11 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.load_files_button:
+
                 /*чистим все параметры */
                 nullableValues();
+                //Log
+                InfoUtil.setmLogLine("Начало выгрузки!");
                 mProgress = 0;
                 pProgressPie = 0;
                  /*получаем подключение к серверу*/
@@ -110,27 +113,43 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 data.moveToNext();
                 /*получаем количество строк двух таблиц*/
                 mAcuont = data.getInt(data.getColumnIndex("sum"));
-                /*устанавливаем максимальное количество бара*/
-                getProgressPieView().setMax(mAcuont);
+                if (mAcuont > 0) {
+                    /*устанавливаем максимальное количество бара*/
+                    getProgressPieView().setMax(mAcuont);
+                } else {
+                    InfoUtil.setmLogLine("Выгрузка файла", "Заказов для выгрузки нет.", true, getTEG());
+                }
                 break;
             case 1:
                   /*формируем документ заказ шапку*/
-                nameFile = TableOrders.FILE_NAME;
-                headerLines = TableOrders.sHeader.split(",");
-                try {
-                    getAllOrdersHeaderLines(data, nameFile, headerLines);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (mAcuont > 0) {
+                    nameFile = TableOrders.FILE_NAME;
+                    headerLines = TableOrders.sHeader.split(",");
+                    try {
+                        getAllOrdersHeaderLines(data, nameFile, headerLines);
+                        //Log
+                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        //Log
+                        InfoUtil.setmLogLine("Выгрузка файла", nameFile, true, getTEG() + " " + e.toString());
+                    }
                 }
                 break;
             case 2:
+                if (mAcuont > 0) {
                  /*формируем документ табличную часть*/
-                nameFile = TableOrdersLines.FILE_NAME;
-                headerLines = TableOrdersLines.sHeader.split(",");
-                try {
-                    getAllOrdersHeaderLines(data, nameFile, headerLines);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    nameFile = TableOrdersLines.FILE_NAME;
+                    headerLines = TableOrdersLines.sHeader.split(",");
+                    try {
+                        getAllOrdersHeaderLines(data, nameFile, headerLines);
+                        //Log
+                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        //Log
+                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
+                    }
                 }
                 break;
             default:
@@ -159,6 +178,8 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
             path = getDataDir(getActivity()) + "/" + nameFile;
         } catch (Exception e) {
             e.printStackTrace();
+            //Log
+            InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
         }
         final CSVWriter myFile = new CSVWriter(new FileWriter(path), ',');
         myFile.writeNext(headerLines);
@@ -191,7 +212,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            InfoUtil.setmLogLine("Выгрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
+            InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
         }
     }
 

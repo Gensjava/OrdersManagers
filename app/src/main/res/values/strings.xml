@@ -15,7 +15,7 @@
     <string name="period">с 01–08-15 по 31-08-15</string>
     <string name="error_login_password_inet">: Логин или пароль не верный или нет подключенгия к интернету!</string>
     <string name="action_conect_base">Подключение к базе</string>
-    <string name="action_download_file">Загрузка файла</string>
+    <string name="action_download_file">Получаем файл</string>
     <string name="name_file">NameFile</string>
     <string name="header_date">Дата</string>
     <string name="header_client">Клиент</string>

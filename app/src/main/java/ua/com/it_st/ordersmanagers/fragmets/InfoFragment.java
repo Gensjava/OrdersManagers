@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
@@ -25,8 +24,7 @@ public class InfoFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_list, container,
                 false);
-                  /**/
-
+        /*Создаем адаптер для инфы*/
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), createsList(),
                 R.layout.info_item,
                 new String[]{"image", "info", "date"},
@@ -54,10 +52,10 @@ public class InfoFragment extends Fragment {
             map.put("info", s.getTitle());
             map.put("date", s.getSubTitle());
 
-            if (sizeList == n || n == 1) {
-                map.put("image", imgInfoOk);
-            } else if (s.isError()) {
+            if (s.isError()) {
                 map.put("image", imgInfoError);
+            } else if (sizeList == n || n == 1) {
+                map.put("image", imgInfoOk);
             } else {
                 map.put("image", imgInfo);
             }

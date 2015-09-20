@@ -137,6 +137,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         //
         nOSeek = 0;
         mProgress = 0;
+        /*чистим список для лога*/
+        InfoUtil.mLogLineList.clear();
     }
 
     /*подключаемся к серверу*/

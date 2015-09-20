@@ -175,7 +175,13 @@ public class FilesLoadFragment extends FilesFragment {
                 lTableNameInsert.get(fileName),
                 lTableName.get(fileName)
         );
-        downloadAsyncFile.execute();
+        try {
+            downloadAsyncFile.execute();
+        } catch (Exception e) {
+            //Log
+            InfoUtil.setmLogLine("Загружаем информацию в базу ", true, TEG + ": " + fileName + "  " + e.toString());
+        }
+
     }
 
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {

@@ -58,7 +58,7 @@ public class InfoUtil {
 
         String lCurDateTime = ConstantsUtil.getDate() + " " + ConstantsUtil.getTime();
 
-        String lLog = lCurDateTime + ": " + lAction + "\n ";
+        String lLog = lCurDateTime + ": " + lAction + "\n";
         //Log
         mLogLine = mLogLine + " " + lLog;
         mLogLineList.add(new InfoItem(false, lAction, lCurDateTime));
@@ -70,7 +70,7 @@ public class InfoUtil {
 
         String lCurDateTime = ConstantsUtil.getDate() + " " + ConstantsUtil.getTime();
 
-        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n ";
+        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n";
         //Log
         mLogLine = mLogLine + " " + lLog;
         mLogLineList.add(new InfoItem(false, lAction + " - " + lLogLine, lCurDateTime));
@@ -82,11 +82,11 @@ public class InfoUtil {
 
         String lCurDateTime = ConstantsUtil.getDate() + " " + ConstantsUtil.getTime();
 
-        String lerr = lbErr ? "Error: " + lsError + "\n " : "";
-        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n " + lerr;
+        String lerr = lbErr ? "Error: " + lsError : "";
+        String lLog = lCurDateTime + ": " + lAction + " - " + lLogLine + "\n" + lerr;
         //Log
         mLogLine = mLogLine + " " + lLog;
-        mLogLineList.add(new InfoItem(lbErr, lAction + " - " + lLogLine + "\n " + lerr, lCurDateTime));
+        mLogLineList.add(new InfoItem(lbErr, lAction + " - " + lLogLine + "\n" + lerr, lCurDateTime));
 
         Log.i(TEG_ERROR, lLog);
     }
@@ -95,11 +95,11 @@ public class InfoUtil {
 
         String lCurDateTime = ConstantsUtil.getDate() + " " + ConstantsUtil.getTime();
 
-        String lerr = lbErr ? "Error: " + lsError + "\n " : "";
-        String lLog = lCurDateTime + ": " + lAction + "\n " + lerr;
+        String lerr = lbErr ? "Error: " + lsError : "";
+        String lLog = lCurDateTime + ": " + lAction + "\n" + lerr;
         //Log
         mLogLine = mLogLine + " " + lLog;
-        mLogLineList.add(new InfoItem(lbErr, lAction + "\n " + lerr + lerr, lCurDateTime));
+        mLogLineList.add(new InfoItem(lbErr, lAction + "\n" + lerr + lerr, lCurDateTime));
 
         Log.i(TEG_ERROR, lLog);
     }

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
@@ -68,7 +69,12 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 // handle success response
                 if (statusCode == HttpStatus.SC_OK) {
                     //Log
-                    InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + " " + bytes.toString());
+                    InfoUtil.setmLogLine("Файл доставлен ", fileName);
+
+                    if (fileName.equals(TableOrdersLines.FILE_NAME)) {
+                        //Log
+                        InfoUtil.setmLogLine("Выгрузка завершена!");
+                    }
                 } else {
                     //Log
                     InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
@@ -79,7 +85,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
                 if (statusCode != HttpStatus.SC_OK) {
                     //Log
-                    InfoUtil.setmLogLine("Выгрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
+                    InfoUtil.setmLogLine("Выгрузка файла", fileName, true, TEG + " Failure: Код ошибки " + statusCode);
                 }
             }
         });
