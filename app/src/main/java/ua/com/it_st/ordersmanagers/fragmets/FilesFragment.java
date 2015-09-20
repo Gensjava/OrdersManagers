@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +29,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
@@ -59,6 +63,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private int nOSeek;
     private int AcountNameFile;
     private Button BHost;
+    private ImageView ImageViewInfo;
+    private Timer mTimer;
 
     protected static SQLiteDatabase getDb() {
         return mDb;
@@ -85,7 +91,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         BHost.setBackgroundResource(R.drawable.roundbutton);
         BHost.setOnClickListener(this);
         /*кнопка информации*/
-        ImageView ImageViewInfo = (ImageView) rootView.findViewById(R.id.load_files_imageView);
+        ImageViewInfo = (ImageView) rootView.findViewById(R.id.load_files_imageView);
         ImageViewInfo.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
@@ -115,6 +121,35 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /*делаем чтоб картинка мигала*/
+    public void getFleshImage(final int icon, final int anim, final ImageView iv) {
+
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+
+        final Animation animScale = AnimationUtils.loadAnimation(getActivity(), anim);
+        iv.setImageResource(icon);
+
+        //Вкл.таймер
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //мигаем
+                        iv.startAnimation(animScale);
+                    }
+                });
+
+            }
+        }, 2000, 1000); //
+    }
+
     /*обнуляем значения перед загрузкой*/
     public void nullableValues() {
 
@@ -139,6 +174,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mProgress = 0;
         /*чистим список для лога*/
         InfoUtil.mLogLineList.clear();
+        /*чистим ошибок нет*/
+        InfoUtil.isErrors = false;
     }
 
     /*подключаемся к серверу*/
@@ -338,6 +375,14 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     public void setBHost(final Button BHost) {
         this.BHost = BHost;
+    }
+
+    public ImageView getImageViewInfo() {
+        return ImageViewInfo;
+    }
+
+    public void setImageViewInfo(final ImageView imageViewInfo) {
+        ImageViewInfo = imageViewInfo;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

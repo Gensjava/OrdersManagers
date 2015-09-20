@@ -323,6 +323,12 @@ public class FilesLoadFragment extends FilesFragment {
                 //Log
                 InfoUtil.setmLogLine("Загрузка завершена!");
                 getTextProgress().setText((int) mProgress + "%");
+                /*мигаем иконкой для вывода лога*/
+                if (InfoUtil.isErrors) {
+                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                } else {
+                    getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                }
             }
 
         }

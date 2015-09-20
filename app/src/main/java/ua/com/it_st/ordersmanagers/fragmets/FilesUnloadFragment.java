@@ -8,6 +8,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.loopj.android.http.RequestParams;
 import com.opencsv.CSVWriter;
@@ -15,6 +18,8 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
@@ -64,7 +69,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                     getActivity().getSupportLoaderManager().destroyLoader(i);
                     getActivity().getSupportLoaderManager().initLoader(i, null, this);
                 }
-
                 break;
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
@@ -150,6 +154,12 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                         //Log
                         InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
                     }
+                }
+                /*мигаем иконкой для вывода лога*/
+                if (InfoUtil.isErrors) {
+                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                } else {
+                    getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
                 }
                 break;
             default:

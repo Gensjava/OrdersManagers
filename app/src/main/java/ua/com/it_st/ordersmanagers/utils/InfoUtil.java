@@ -19,6 +19,7 @@ public class InfoUtil {
     private static final String TEG_INFO = "Info";
     public static String mLogLine;
     public static List<InfoItem> mLogLineList = new ArrayList<InfoItem>();
+    public static boolean isErrors;
 
 
     public static void showErrorAlertDialog(String errMessage, Context context) {
@@ -89,6 +90,10 @@ public class InfoUtil {
         mLogLineList.add(new InfoItem(lbErr, lAction + " - " + lLogLine + "\n" + lerr, lCurDateTime));
 
         Log.i(TEG_ERROR, lLog);
+
+        if (!isErrors) {
+            isErrors = lbErr;
+        }
     }
 
     public static void setmLogLine(final String lAction, final boolean lbErr, final String lsError) {
@@ -102,6 +107,10 @@ public class InfoUtil {
         mLogLineList.add(new InfoItem(lbErr, lAction + "\n" + lerr + lerr, lCurDateTime));
 
         Log.i(TEG_ERROR, lLog);
+
+        if (!isErrors) {
+            isErrors = lbErr;
+        }
     }
 
     public static void Tost(String title, Context context) {
