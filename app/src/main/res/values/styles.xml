@@ -2,15 +2,13 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/main_sub_grey</item>
+        <item name="colorPrimary">@color/main_grey</item>
         <item name="colorPrimaryDark">@color/main_grey</item>
         <item name="colorAccent">#FF4081</item>
     </style>
 
     <style name="TreeNodeStyleCustom">
         <item name="android:paddingLeft">20dp</item>
-        <!--<item name="android:showDividers">middle</item>-->
-        <!--<item name="android:divider">@android:drawable/divider_horizontal_bright</item>-->
     </style>
 
     <style name="TreeNodeStyleDivided">

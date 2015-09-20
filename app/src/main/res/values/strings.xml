@@ -528,6 +528,7 @@
     <string name="id_remote">id_remote</string>
     <string name="id_local">id_local</string>
     <string name="way_catalog">way_catalog</string>
+    <string name="id_user">id_user</string>
     <string name="NameCatalog">NameCatalog</string>
     <string name="SizeFileCatalog">SizeFileCatalog</string>
 

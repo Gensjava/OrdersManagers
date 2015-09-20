@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +33,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -127,7 +125,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             }
         } else {
             //
-            ErrorInfo.Tost(getString(R.string.not_goods_store_number), getActivity());
+            InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
         /*записываем в элемент дерева тоже чтоб потом можно было получить обратно*/
         product.setAmount(numberInDialog);
@@ -387,9 +385,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         public Cursor loadInBackground() {
 
             return sDb
-                    .rawQuery(SQLQuery.queryGoods("Products.id_category = ?"
-                    ), new String[]{mSelectionArgs
-
+                    .rawQuery(SQLQuery.queryGoods("Products.id_category = ? " +
+                                    "and GoodsByStores.kod_stores = ?" +
+                                    "and Prices.price_category_kod = ? " +
+                                    "or Products.is_category = ? " +
+                                    "and Products.id_category = ?"
+                    ), new String[]{mSelectionArgs, ConstantsUtil.mCurrentOrder.getStoreId(), ConstantsUtil.mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
                     });
         }
     }

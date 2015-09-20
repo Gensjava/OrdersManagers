@@ -7,6 +7,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.apache.http.Header;
 import org.apache.http.auth.AuthScope;
 
+import ua.com.it_st.ordersmanagers.R;
+
 public class FileSizeLine extends AsyncTask<String, Integer, String> {
 
     private String mBaseUrl;
@@ -27,9 +29,11 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             AsyncHttpClientAsyncTask asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
             asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
             asyncHttpClientAsyncTask.getSizeFile(mParams);
-
+            asyncHttpClientAsyncTask.setMaxRetriesAndTimeout(3, 15);
         } catch (Exception e) {
             e.printStackTrace();
+            //Log
+            InfoUtil.setmLogLine("Подключение к базе", true, e.toString());
         }
         return null;
     }
@@ -45,7 +49,8 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             get(mBaseUrl, params, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(final int statusCode, final Header[] headers, final String responseString, final Throwable throwable) {
-
+                    //Log
+                    InfoUtil.setmLogLine("Расчет  файлов строк ", params.toString(), true, " Failure: Код ошибки " + statusCode);
                 }
 
                 @Override

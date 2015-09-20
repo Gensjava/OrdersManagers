@@ -11,6 +11,7 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 public class TableOrders {
     public static final String TABLE_NAME = "Orders";
+    public static final String FILE_NAME = "ref_firms.csv";
     public static final String sHeader = "Id, DocType, DocDate, DocNumber, Completed, AgentId, FirmId, StoreId, ClientId, PriceCategoryId, Total, Note,";
 
     public static final String COLUMN_VIEW_ID = "view_id";
@@ -66,7 +67,7 @@ public class TableOrders {
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
         data.put(COLUMN_NUMBER, ConstantsUtil.getsCurrentNumber());
         data.put(COLUMN_COMPLETED, "");
-        data.put(COLUMN_AGENT_ID, ConstantsUtil.getIdAgent());
+        data.put(COLUMN_AGENT_ID, sData.getAgentId());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());
         data.put(COLUMN_STORE_ID, sData.getStoreId());
         data.put(COLUMN_CLIENT_ID, sData.getClientId());

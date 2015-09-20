@@ -1,9 +1,11 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -86,9 +88,15 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 /*устанавливаем дату документа и номер*/
                 numberDoc = String.valueOf(ConstantsUtil.sCurrentNumber);
                 ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
-                //
+                /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
+                /**/
+                        /*вызываем менеджера настроек*/
+                SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                      /*код на сервере пользователя*/
+                String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
+                ConstantsUtil.mCurrentOrder.setAgentId(kodAgent);
             }
 
             /*выводим данные дату и номер в шапку*/
@@ -143,7 +151,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         /*заполняем шапку заказа*/
         for (byte x = 0; x < headerOrders.length; x++) {
 
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<>();
             map.put(getString(R.string.title), headerOrders[x]);
             map.put(getString(R.string.imageAvatar), mPictures[x]);
             items.add(map);

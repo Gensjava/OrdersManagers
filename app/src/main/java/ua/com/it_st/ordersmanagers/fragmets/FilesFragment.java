@@ -40,14 +40,14 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 
 public class FilesFragment extends Fragment implements View.OnClickListener {
 
     private static SQLiteDatabase mDb;
-    private final String TEG = LoadFilesFragment.class.getSimpleName();
+    private final String TEG = FilesLoadFragment.class.getSimpleName();
     private SharedPreferences mSettings;
     private ProgressPieView mProgressPieView;
     private DiscreteSeekBar mDiscreteSeekBar;
@@ -78,12 +78,15 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.load_files, container,
+        View rootView = inflater.inflate(R.layout.files_load, container,
                 false);
 
         BHost = (Button) rootView.findViewById(R.id.load_files_button);
         BHost.setBackgroundResource(R.drawable.roundbutton);
         BHost.setOnClickListener(this);
+        /*кнопка информации*/
+        ImageView ImageViewInfo = (ImageView) rootView.findViewById(R.id.load_files_imageView);
+        ImageViewInfo.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /*вызываем менеджера настроек*/
@@ -149,11 +152,15 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
         /*проверка*/
         if (loginServer == null) {
-            ErrorInfo.Tost("Введите логин!", getActivity());
+            InfoUtil.Tost("Введите логин!", getActivity());
+            //Log
+            InfoUtil.setmLogLine("Введите логин!", true, TEG);
             return null;
         }
         if (passwordServer == null) {
-            ErrorInfo.Tost("Введите пароль!", getActivity());
+            InfoUtil.Tost("Введите пароль!", getActivity());
+            //Log
+            InfoUtil.setmLogLine("Введите пароль!", true, TEG);
             return null;
         }
         /*режим сервера*/
@@ -171,13 +178,13 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         try {
             utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
             utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
-            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 5);
+            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 15);
             lConnect = true;
         } catch (Exception e) {
             e.printStackTrace();
             lConnect = false;
             //Log
-            ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         }
         data[0] = lConnect;
         data[1] = utilAsyncHttpClient;

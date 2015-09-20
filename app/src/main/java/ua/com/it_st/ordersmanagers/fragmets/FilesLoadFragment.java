@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -31,9 +31,9 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
    ref_stores.csv - склады
   */
 
-public class LoadFilesFragment extends FilesFragment {
+public class FilesLoadFragment extends FilesFragment {
 
-    private final String TEG = LoadFilesFragment.class.getSimpleName();
+    private final String TEG = FilesLoadFragment.class.getSimpleName();
     private double mProgress;
     private double mProgressDiscrete;
     private int nOSeek;
@@ -41,7 +41,7 @@ public class LoadFilesFragment extends FilesFragment {
     private Map<String, String> lTableNameInsert;
     private Map<String, String> lTableName;
 
-    public LoadFilesFragment() {
+    public FilesLoadFragment() {
         super();
     }
 
@@ -56,8 +56,13 @@ public class LoadFilesFragment extends FilesFragment {
                 break;
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
-                final onEventListener someEventListener = (onEventListener) getActivity();
+                onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                break;
+            case R.id.load_files_imageView:
+                /*переходим в список ощибок*/
+                someEventListener = (onEventListener) getActivity();
+                someEventListener.onOpenFragmentClass(InfoFragment.class);
                 break;
             default:
                 break;
@@ -75,8 +80,12 @@ public class LoadFilesFragment extends FilesFragment {
             fileSizeLine.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         } catch (ExecutionException e) {
             e.printStackTrace();
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
         }
         if (ConstantsUtil.sizeFileLine > 0) {
             getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
@@ -98,17 +107,18 @@ public class LoadFilesFragment extends FilesFragment {
         AcountNameFile = nameFile.length;
         /*обнуляем все значения перед загрузкой*/
         nullableValues();
+
         nOSeek = getnOSeek();
         mProgress = getProgress();
         mProgressDiscrete = getProgressDiscrete();
         //Log
-        ErrorInfo.setmLogLine("Начало загрузки");
+        InfoUtil.setmLogLine("Начало загрузки");
          /*подключаемся к серверу*/
         Object[] connectData = connectServer();
         /*Проверка*/
         if (connectData == null) {
             //Log
-            ErrorInfo.setmLogLine("Не все установлены параметры для загрузки!");
+            InfoUtil.setmLogLine("Не все установлены параметры для загрузки!");
             return;
         }
         /*подключились к базе или нет*/
@@ -116,7 +126,7 @@ public class LoadFilesFragment extends FilesFragment {
         //
         if (!lConnect) {
             //Log
-            ErrorInfo.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
             return;
         }
       /*получаем параметры подключения*/
@@ -140,7 +150,7 @@ public class LoadFilesFragment extends FilesFragment {
             params.put(getString(R.string.SizeFileCatalog), "");
 
             //Log
-            ErrorInfo.setmLogLine(getString(R.string.action_download_file), i);
+            InfoUtil.setmLogLine(getString(R.string.action_download_file), i);
 
             try {
                 /* загружаем файл */
@@ -148,7 +158,7 @@ public class LoadFilesFragment extends FilesFragment {
             } catch (Exception e) {
                 e.printStackTrace();
                 //Log
-                ErrorInfo.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
+                InfoUtil.setmLogLine(getString(R.string.action_download_file), i, true, TEG + ": " + e.toString());
             }
         }
             /* заканчиваем транзакцию */
@@ -170,7 +180,7 @@ public class LoadFilesFragment extends FilesFragment {
 
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 
-        private final String TEG = LoadFilesFragment.class.getSimpleName();
+        private final String TEG = FilesLoadFragment.class.getSimpleName();
         private String mCvsSplitBy = ",\"";
         private String mNameTable;
         Handler handlerTotalLinesFile = new Handler() {
@@ -267,7 +277,7 @@ public class LoadFilesFragment extends FilesFragment {
             } catch (IOException e) {
                 e.printStackTrace();
                 //Log
-                ErrorInfo.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
+                InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
             }
             return null;
         }
@@ -289,7 +299,8 @@ public class LoadFilesFragment extends FilesFragment {
         @Override
         protected void onPostExecute(final String s) {
             super.onPostExecute(s);
-
+            //Log
+            InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable + ", завершена!");
              /*счетчик файлов*/
             ConstantsUtil.nPieViewProgress++;
              /*если загрузился последний файл*/
@@ -303,10 +314,11 @@ public class LoadFilesFragment extends FilesFragment {
                 getProgressPieView().setText(String.valueOf((int) mProgress) + "%");
                 /**/
                 getLoadFiles().setText("Загрузка завершена!");
+                //Log
+                InfoUtil.setmLogLine("Загрузка завершена!");
                 getTextProgress().setText((int) mProgress + "%");
             }
-            //Log
-            ErrorInfo.setmLogLine("Загрузка в таблицу завершена", mNameTable);
+
         }
     }
 }

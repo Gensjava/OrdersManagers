@@ -27,13 +27,13 @@
             android:summary="Устанавливает новый URL сервера"
             android:title="Удаленный URL сервера"/>
         <EditTextPreference
-            android:defaultValue="Мой логин"
+            android:defaultValue=""
             android:dialogTitle="Введите логин"
             android:key="@string/login_server"
             android:summary="Устанавливает новый логин"
             android:title="Логин для входа на сервер"/>
         <EditTextPreference
-            android:defaultValue="Мой пароль"
+            android:defaultValue=""
             android:dialogTitle="Введите пароль"
             android:key="@string/password_server"
             android:summary="Устанавливает новый пароль"
@@ -53,14 +53,14 @@
         android:layout="@layout/setings_header_user"
         >
         <EditTextPreference
-            android:defaultValue="0001"
+            android:defaultValue=""
             android:dialogTitle="Введите ID пользователя"
             android:key="id_user"
             android:summary="Устанавливает новый ID пользователя"
             android:title="ID пользователя"/>
 
         <EditTextPreference
-            android:defaultValue="путь к папке пользователя..."
+            android:defaultValue=""
             android:dialogTitle="Введите путь к папке"
             android:key="way_catalog"
             android:summary="Устанавливает новый путь к папке на сервере"

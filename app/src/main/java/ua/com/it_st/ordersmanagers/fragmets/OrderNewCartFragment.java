@@ -22,7 +22,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class OrderNewCartFragment extends Fragment implements View.OnClickListener {
@@ -118,7 +118,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
 
         if (inTable == -1) {
-            ErrorInfo.Tost(getString(R.string.eror_save_cap_doc), getActivity());
+            InfoUtil.Tost(getString(R.string.eror_save_cap_doc), getActivity());
             DB.endTransaction();
             return false;
         }
@@ -131,7 +131,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                     TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
 
             if (inTableLines == -1) {
-                ErrorInfo.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
+                InfoUtil.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
                 DB.endTransaction();
                 return false;
             }
@@ -157,7 +157,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 new String[]{ConstantsUtil.mCurrentOrder.getId()});
 
         if (inTable == -1) {
-            ErrorInfo.Tost(getString(R.string.eror_save_cap_doc), getActivity());
+            InfoUtil.Tost(getString(R.string.eror_save_cap_doc), getActivity());
             DB.endTransaction();
             return false;
         }
@@ -177,7 +177,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                     TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
 
             if (inTableLines == -1 || inTableLinesNew == -1) {
-                ErrorInfo.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
+                InfoUtil.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
                 DB.endTransaction();
                 return false;
             }
@@ -204,7 +204,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             }
         } else {
             //
-            ErrorInfo.Tost(getString(R.string.not_goods_store_number), getActivity());
+            InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
         /*перезаписываем список товаров*/
         mListItems = ConstantsUtil.getItemsGoods();
@@ -300,7 +300,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                                 /* удаляем товар*/
                                 mListItems.remove(itemOrderLines);
                                 ConstantsUtil.onListOrderLinesDelete(itemOrderLines);
-                                ErrorInfo.Tost("Товар " + itemOrderLines.getName() + " удален из списка.", getActivity());
+                                InfoUtil.Tost("Товар " + itemOrderLines.getName() + " удален из списка.", getActivity());
                                  /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();

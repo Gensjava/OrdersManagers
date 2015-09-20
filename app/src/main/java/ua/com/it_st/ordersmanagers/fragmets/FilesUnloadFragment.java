@@ -3,41 +3,28 @@ package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.loopj.android.http.RequestParams;
 import com.opencsv.CSVWriter;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
-import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.ErrorInfo;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 
-public class UnloadFilesFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class FilesUnloadFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private AsyncHttpClientUtil mUtilAsyncHttpClient;
     private String mWayCatalog;
@@ -78,8 +65,13 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
                 break;
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
-                final onEventListener someEventListener = (onEventListener) getActivity();
+                onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                break;
+            case R.id.load_files_imageView:
+                /*переходим в список ощибок*/
+                someEventListener = (onEventListener) getActivity();
+                someEventListener.onOpenFragmentClass(InfoFragment.class);
                 break;
             default:
                 break;
@@ -123,7 +115,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
                 break;
             case 1:
                   /*формируем документ заказ шапку*/
-                nameFile = "doc_orders.csv";
+                nameFile = TableOrders.FILE_NAME;
                 headerLines = TableOrders.sHeader.split(",");
                 try {
                     getAllOrdersHeaderLines(data, nameFile, headerLines);
@@ -133,7 +125,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
                 break;
             case 2:
                  /*формируем документ табличную часть*/
-                nameFile = "doc_lines.csv";
+                nameFile = TableOrdersLines.FILE_NAME;
                 headerLines = TableOrdersLines.sHeader.split(",");
                 try {
                     getAllOrdersHeaderLines(data, nameFile, headerLines);
@@ -199,7 +191,7 @@ public class UnloadFilesFragment extends FilesFragment implements LoaderManager.
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            ErrorInfo.setmLogLine("Выгрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
+            InfoUtil.setmLogLine("Выгрузка файла ", params.toString(), true, getTEG() + " " + e.toString());
         }
     }
 

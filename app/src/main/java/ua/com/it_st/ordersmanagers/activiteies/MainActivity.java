@@ -12,14 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
+import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
-import ua.com.it_st.ordersmanagers.fragmets.UnloadFilesFragment;
+import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         OrderNewGoodsFragment.onEventListener,
         OrderNewSelectHeaderFragment.OnFragmentSelectListener,
         OrderNewCartFragment.onEventListener,
-        LoadFilesFragment.onEventListener
+        FilesLoadFragment.onEventListener
 
 {
 
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
 
         // Set the menu icon instead of the launcher icon.
 
@@ -116,10 +115,10 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = OrderListFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = LoadFilesFragment.class;
+                fragmentClass = FilesLoadFragment.class;
                 break;
             case R.id.unload_files_fragment:
-                fragmentClass = UnloadFilesFragment.class;
+                fragmentClass = FilesUnloadFragment.class;
                 break;
             case R.id.nav_third_setings:
                 fragmentClass = MainPreferenceFragment.class;

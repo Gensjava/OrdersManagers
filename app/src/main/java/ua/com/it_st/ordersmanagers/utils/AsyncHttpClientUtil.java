@@ -10,7 +10,7 @@ import org.apache.http.HttpStatus;
 import java.io.File;
 import java.io.IOException;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.fragmets.LoadFilesFragment;
+import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 
 public class AsyncHttpClientUtil extends AsyncHttpClient {
 
@@ -32,7 +32,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             public void onFailure(final int statusCode, final Header[] headers, final Throwable throwable, final File file) {
                 if (statusCode != HttpStatus.SC_OK) {
                     //Log
-                    ErrorInfo.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
+                    InfoUtil.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
                 }
             }
 
@@ -42,7 +42,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 if (statusCode == HttpStatus.SC_OK) {
                     try {
 
-                        final LoadFilesFragment fragment = (LoadFilesFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(LoadFilesFragment.class.toString());
+                        final FilesLoadFragment fragment = (FilesLoadFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(FilesLoadFragment.class.toString());
                         if (fragment != null) {
                             /**/
                             fragment.onInsertTable(response, fileName);
@@ -50,11 +50,11 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     } catch (IOException e) {
                         e.printStackTrace();
                         //Log
-                        ErrorInfo.setmLogLine("Загрузка файла ", fileName, true, TEG + " " + e.toString());
+                        InfoUtil.setmLogLine("Загрузка файла ", fileName, true, TEG + " " + e.toString());
                     }
                 } else {
                     //Log
-                    ErrorInfo.setmLogLine("Загрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
+                    InfoUtil.setmLogLine("Загрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
                 }
             }
         });
@@ -68,10 +68,10 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 // handle success response
                 if (statusCode == HttpStatus.SC_OK) {
                     //Log
-                    ErrorInfo.setmLogLine("Выгрузка файла ", fileName, true, TEG + " " + bytes.toString());
+                    InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + " " + bytes.toString());
                 } else {
                     //Log
-                    ErrorInfo.setmLogLine("Выгрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
+                    InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
                 }
             }
 
@@ -79,7 +79,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
                 if (statusCode != HttpStatus.SC_OK) {
                     //Log
-                    ErrorInfo.setmLogLine("Выгрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
+                    InfoUtil.setmLogLine("Выгрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
                 }
             }
         });

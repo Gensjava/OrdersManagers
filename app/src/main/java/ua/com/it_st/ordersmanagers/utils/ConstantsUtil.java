@@ -28,10 +28,10 @@ public class ConstantsUtil {
     * true - осзначает что в корзине что-то изменили
     * false - пока ни кто ничего не менял*/
     public static boolean clickModifitsirovannoiCart;
-    /**/
+    /*для расчета прогресс-бара при обмене инфой*/
     public static int nPieViewProgress;
     public static double nPieViewdProgress;
-
+    /*общае кол-во строк при обмене всех файлов */
     public static int sizeFileLine;
 
     /*
@@ -92,12 +92,6 @@ public class ConstantsUtil {
         return iNumber;
     }
 
-    /* Получаем ИД Агента */
-    public static String getIdAgent() {
-        String iNumber = null;
-        return iNumber;
-    }
-
     /* получаем новый номер заказа */
     public static short getsCurrentNumber() {
         return sCurrentNumber;
@@ -145,13 +139,14 @@ public class ConstantsUtil {
 
         if (mCurrentOrder.getDocNumber() == null
                 || mCurrentOrder.getDocDate() == null
+                || mCurrentOrder.getAgentId() == null
                 || mCurrentOrder.getFirmId() == null
                         || mCurrentOrder.getPriceCategoryId() == null
                         || mCurrentOrder.getClientId() == null
                         || mCurrentOrder.getAdress() == null) {
 
             bCheck = true;
-            ErrorInfo.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
+            InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
         }
         return bCheck;
     }
@@ -166,7 +161,7 @@ public class ConstantsUtil {
         boolean bCheck = false;
         if (mCart.size() == 0) {
             bCheck = true;
-            ErrorInfo.Tost("Корзина пустая!", context);
+            InfoUtil.Tost("Корзина пустая!", context);
         }
         return bCheck;
     }
