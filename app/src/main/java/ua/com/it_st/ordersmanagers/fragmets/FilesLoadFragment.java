@@ -291,14 +291,20 @@ public class FilesLoadFragment extends FilesFragment {
         @Override
         protected void onProgressUpdate(final Integer... values) {
             super.onProgressUpdate(values);
+            try {
             /* Линия прогресс */
-            getDiscreteSeekBar().setProgress(values[0]);
-            mProgressDiscrete += (100 / (double) stotalLinesFile);
-            getTextProgress().setText(String.valueOf((int) mProgressDiscrete) + "%");
+                getDiscreteSeekBar().setProgress(values[0]);
+                mProgressDiscrete += (100 / (double) stotalLinesFile);
+                getTextProgress().setText(String.valueOf((int) mProgressDiscrete) + "%");
             /* Круг прогресс */
-            getProgressPieView().setProgress(values[1]);
-            mProgress += (100 / (double) ConstantsUtil.sizeFileLine);
-            getProgressPieView().setText(String.valueOf((int) mProgress) + "%");
+
+                getProgressPieView().setProgress(values[1]);
+                mProgress += (100 / (double) ConstantsUtil.sizeFileLine);
+                getProgressPieView().setText(String.valueOf((int) mProgress) + "%");
+            } catch (Exception e) {
+                InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
+            }
+
             //
         }
 

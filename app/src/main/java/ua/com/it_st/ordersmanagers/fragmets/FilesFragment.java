@@ -124,12 +124,17 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     /*делаем чтоб картинка мигала*/
     public void getFleshImage(final int icon, final int anim, final ImageView iv) {
 
+        final Animation animScale = AnimationUtils.loadAnimation(getActivity(), anim);
+        /*проверяем если уже работает то не запускаем*/
+        if (animScale.hasStarted() & !animScale.hasEnded()) {
+            return;
+        }
+       /*обнуляем таймер*/
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
-
-        final Animation animScale = AnimationUtils.loadAnimation(getActivity(), anim);
+         /*устанавливаем иконку*/
         iv.setImageResource(icon);
 
         //Вкл.таймер
@@ -137,14 +142,22 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        //мигаем
-                        iv.startAnimation(animScale);
+                        @Override
+                        public void run() {
+                            //мигаем
+                            iv.startAnimation(animScale);
+                        }
+                    });
+                } else {
+                  /*обнуляем таймер*/
+                    if (mTimer != null) {
+                        mTimer.cancel();
+                        mTimer = null;
                     }
-                });
+                }
 
             }
         }, 2000, 1000); //
@@ -191,15 +204,15 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
         /*проверка*/
         if (loginServer == null) {
-            InfoUtil.Tost("Введите логин!", getActivity());
+            InfoUtil.Tost("Введите в настройках логин!", getActivity());
             //Log
-            InfoUtil.setmLogLine("Введите логин!", true, TEG);
+            InfoUtil.setmLogLine("Введите в настройках логин!", true, TEG);
             return null;
         }
         if (passwordServer == null) {
-            InfoUtil.Tost("Введите пароль!", getActivity());
+            InfoUtil.Tost("Введите в настройках пароль!", getActivity());
             //Log
-            InfoUtil.setmLogLine("Введите пароль!", true, TEG);
+            InfoUtil.setmLogLine("Введите в настройках пароль!", true, TEG);
             return null;
         }
         /*режим сервера*/

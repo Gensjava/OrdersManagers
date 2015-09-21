@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
 
-        SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        DB.close();
+        //SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        //DB.close();
 
     }
 
