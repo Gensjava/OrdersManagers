@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
-        android:text="Значение шапки"/>
+        android:text="Значение шапки"
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/order_new_select_header_sub_sub_item_text"
@@ -19,5 +20,5 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="суб значение шапки"
-        android:textSize="10dp"/>
+        android:textSize="12dp"/>
 </LinearLayout>

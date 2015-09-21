@@ -130,6 +130,15 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         getActivity().getSupportLoaderManager().destroyLoader(0);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+                /* создаем лоадер для чтения данных */
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                            /* обновляем курсор */
+        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+    }
+
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);

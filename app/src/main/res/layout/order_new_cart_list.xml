@@ -4,52 +4,172 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/order_new_cart_list_header_root"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:background="@color/main_grey"
-        android:gravity="center"
-        android:paddingBottom="60dp"
-        android:text="@string/cart"
-        android:textColor="@android:color/background_light"
-        android:textSize="25sp"/>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/main_grey"
-            android:gravity="center|end"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/order_new_cart_list_sum_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginRight="5dp"
-                android:text="Сумма:"
-                android:textColor="#ffffff"
-                android:textSize="22dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/order_new_cart_list_sum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="0.00"
-                android:textColor="#ffffff"
-                android:textSize="22dp"/>
+                <TextView
+                    android:id="@+id/order_new_cart_list_header_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/main_grey"
+                    android:gravity="center"
+                    android:paddingBottom="60dp"
+                    android:text="@string/cart"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="25sp"/>
+
+                <TextView
+                    android:id="@+id/order_new_cart_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="80dp"
+                    android:text="Заказ №001 от 01-08-15"
+                    android:textColor="@color/main_sub_grey"/>
+
+            </RelativeLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/order_new_cart_list_image_arrow_right"
+                android:layout_marginTop="5dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/order_new_cart_list_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="71dp"
+                    android:layout_toEndOf="@+id/order_new_cart_list_number"
+                    android:layout_toRightOf="@+id/order_new_cart_list_number"
+                    android:text="Наименование"/>
+
+                <TextView
+                    android:id="@+id/order_new_cart_list_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="№"/>
+
+                <TextView
+                    android:id="@+id/order_new_cart_list_amuont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/order_new_cart_list_sum_heard"
+                    android:layout_toStartOf="@+id/order_new_cart_list_sum_heard"
+                    android:text="к-во"/>
+
+                <TextView
+                    android:id="@+id/order_new_cart_list_sum_heard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="70dp"
+                    android:text="сумма"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/order_new_cart_list_position"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/linearLayout2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/order_new_cart_list_space"/>
+
+                <TextView
+                    android:id="@+id/order_new_cart_list_space"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/relativeLayout2"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/main_sub_grey"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/main_grey"
+        android:gravity="center|end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/order_new_cart_list_sum_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginRight="5dp"
+            android:text="Сумма:"
+            android:textColor="#ffffff"
+            android:textSize="22dp"/>
+
+        <TextView
+            android:id="@+id/order_new_cart_list_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="0.00"
+            android:textColor="#ffffff"
+            android:textSize="22dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/order_new_cart_list_image_arrow_right"
@@ -60,89 +180,8 @@
             android:layout_below="@+id/order_new_cart_period"
             android:layout_gravity="right"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="300dp"
             android:src="@mipmap/ic_arrow_right"/>
-
-        <TextView
-            android:id="@+id/order_new_cart_period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="47dp"
-            android:text="Заказ №001 от 01-08-15"
-            android:textColor="@color/main_sub_grey"/>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_new_cart_list_image_arrow_right"
-            android:layout_marginTop="5dp"
-            >
-
-            <TextView
-                android:id="@+id/order_new_cart_list_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="71dp"
-                android:layout_toEndOf="@+id/order_new_cart_list_number"
-                android:layout_toRightOf="@+id/order_new_cart_list_number"
-                android:text="наименование"/>
-
-            <TextView
-                android:id="@+id/order_new_cart_list_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="5dp"
-                android:text="№"/>
-
-            <TextView
-                android:id="@+id/order_new_cart_list_amuont"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/order_new_cart_list_sum_heard"
-                android:layout_toStartOf="@+id/order_new_cart_list_sum_heard"
-                android:text="к-во"/>
-
-            <TextView
-                android:id="@+id/order_new_cart_list_sum_heard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="48dp"
-                android:layout_marginRight="35dp"
-                android:text="сумма"/>
-
-        </RelativeLayout>
-
-        <ListView
-            android:id="@+id/order_new_cart_list_position"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/linearLayout2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_new_cart_list_space"/>
-
-        <TextView
-            android:id="@+id/order_new_cart_list_space"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/relativeLayout2"
-            android:layout_centerHorizontal="true"
-            android:background="@color/main_sub_grey"/>
 
     </RelativeLayout>
 

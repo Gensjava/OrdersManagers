@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/order_new_goods_node_item_node_value"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="40dp"
         android:layout_toLeftOf="@+id/buttonsContainer"
-        android:textSize="14sp"/>
+        android:textSize="18sp"/>
 
     <LinearLayout
         android:id="@+id/buttonsContainer"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textColor="@color/new_green"
-            android:textSize="14sp"/>
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/order_new_goods_node_item_order_value"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textColor="@color/red_indicator"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:visibility="invisible"/>
     </LinearLayout>
 

@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -61,6 +63,18 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
            /*чистим док заказ*/
             ConstantsUtil.clearOrderHeader();
 
+            /*расчет  позиции кнопки далее к следующему этапу*/
+            TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
+             /*кнопка далее к следующему этапу*/
+            ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
+            imViewAdd.setOnClickListener(this);
+
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//
+//            params.setMargins(100, header.getMeasuredHeight(), 20, 0);
+//            imViewAdd.setLayoutParams(params);
+
             Bundle bundle = getArguments();
             if (bundle != null) {
                 /*редактируем документ*/
@@ -73,8 +87,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 /*дата док*/
                 dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
                 ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
-                /*дата документа*/
-                TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
+                /*стктус докуента*/
                 header.setText("Редактирование заказа");
                   /* открываем подключение к БД */
                 sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
@@ -114,10 +127,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             /* список шапка заказа*/
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
-
-            /*кнопка далее к следующему этапу*/
-            ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
-            imViewAdd.setOnClickListener(this);
 
         }
 

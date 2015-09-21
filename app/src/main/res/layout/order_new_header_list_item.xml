@@ -21,7 +21,7 @@
         android:hint="заголовок"
         android:textColorHint="@color/space"
         android:textIsSelectable="false"
-        android:textSize="14dp"
+        android:textSize="16dp"
         />
 
     <ImageView
@@ -43,7 +43,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="адрес"
-        android:textSize="10dp"
+        android:textSize="12dp"
         android:visibility="invisible"/>
 
 </RelativeLayout>
