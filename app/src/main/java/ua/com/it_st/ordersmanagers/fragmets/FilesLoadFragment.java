@@ -5,12 +5,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import android.view.View;
 import com.loopj.android.http.RequestParams;
+
+import org.apache.http.util.EncodingUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import ua.com.it_st.ordersmanagers.R;
@@ -237,10 +243,18 @@ public class FilesLoadFragment extends FilesFragment {
                 int n = 0;/*счетчик*/
                 int nDSeek = 0;/*счетчик*/
                 /**/
-                String line;
+                String line = null;
                 input.readLine();
                  /* Считываем по одной строке */
                 while ((line = input.readLine()) != null) {
+
+                    // String lineEn = new String(line.getBytes("UTF-8"),"UTF-8");
+
+//                    Charset cset = Charset.forName("UTF-8");
+//                    ByteBuffer buf = cset.encode(line);
+//                    byte[] b = buf.array();
+//                    String lineEn = new String(b);
+
                     /*получаем массив из строчке*/
                     String[] country = line.split(mCvsSplitBy);
                     String[] pCountry = new String[country.length];
