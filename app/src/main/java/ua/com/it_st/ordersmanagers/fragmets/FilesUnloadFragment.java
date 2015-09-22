@@ -217,7 +217,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         RequestParams params = new RequestParams();
 
         try {
-            params.put(mWayCatalog + nameFile, new File(path));
+            params.put(mWayCatalog + "received\\" + nameFile, new File(path));
             mUtilAsyncHttpClient.postUnloadFiles(params, nameFile);
         } catch (Exception e) {
             e.printStackTrace();
