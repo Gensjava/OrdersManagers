@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
@@ -20,6 +23,8 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
+import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -185,7 +190,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+    /* текущий новый заказ */
+        ConstantsUtil.mCurrentOrder = null;
+    /* ТЧ заказа */
+        ConstantsUtil.mCart.clear();
         //SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
         //DB.close();
 

@@ -273,7 +273,6 @@ public class FilesLoadFragment extends FilesFragment {
                    /*счетчик*/
                     n++;
                     publishProgress(++nDSeek, ++nOSeek);
-                    Log.i("nDSeek" + mNameTable, " " + nDSeek);
 
                     /*делаем добавления пачки строк в базу при выполнеии условий*/
                     if (n == limitInsert || n == totalLinesFile) {
