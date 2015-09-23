@@ -240,6 +240,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         String cNameStores = data.getString(data.getColumnIndex("name_type_stores"));
         String cNameCounteragents = data.getString(data.getColumnIndex("name_contr"));
         String cNamePrices = data.getString(data.getColumnIndex("name_type_price"));
+        String cAgent = data.getString(data.getColumnIndex("agent_id"));
             /*код*/
         String cKodCompanies = data.getString(data.getColumnIndex("kod_comp"));
         String cKodStores = data.getString(data.getColumnIndex("kod_type_stores"));
@@ -281,6 +282,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         ConstantsUtil.mCurrentOrder.setStoreId(cKodStores);
         ConstantsUtil.mCurrentOrder.setClientId(KodCounteragents);
         ConstantsUtil.mCurrentOrder.setPriceCategoryId(cNamePrices);
+        ConstantsUtil.mCurrentOrder.setAgentId(cAgent);
 
         mAdapter.notifyDataSetChanged();
 

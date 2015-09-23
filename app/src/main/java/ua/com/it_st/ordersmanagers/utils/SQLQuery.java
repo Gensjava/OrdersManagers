@@ -58,7 +58,7 @@ public class SQLQuery {
     public static String queryOrdersHeader(final String sp) {
 
         String sq;
-        sq = "Select Orders._id, Orders.note," +
+        sq = "Select Orders._id, Orders.note, Orders.agent_id," +
                 "Сompanys.name as name_comp, Сompanys.kod as kod_comp,\n" +
                 "TypeStores.name as name_type_stores, TypeStores.kod as kod_type_stores,\n" +
                 "Counteragents.name as name_contr, Counteragents.address as address_contr, Counteragents.kod as kod_contr,\n" +
