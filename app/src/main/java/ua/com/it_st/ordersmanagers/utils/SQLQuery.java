@@ -97,7 +97,8 @@ public class SQLQuery {
 
         String sq;
         sq = "Select OrdersLines.doc_id, OrdersLines.goods_id, OrdersLines.rate,  OrdersLines.amount ,OrdersLines.price\n" +
-                "FROM OrdersLines\n" +
+                "FROM Orders\n" +
+                "LEFT OUTER JOIN OrdersLines ON Orders.view_id  = OrdersLines.doc_id\n" +
                 "WHERE " + sp + "\n";
         return sq;
     }

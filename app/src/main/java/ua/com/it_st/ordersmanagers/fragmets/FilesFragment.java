@@ -230,7 +230,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         try {
             utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
             utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
-            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 15);
+            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 60);
             lConnect = true;
         } catch (Exception e) {
             e.printStackTrace();

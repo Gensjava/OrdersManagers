@@ -254,7 +254,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         public Cursor loadInBackground() {
 
             return getDb()
-                    .rawQuery(SQLQuery.queryOrdersHeaderFilesCsv("Orders._id  <> ?"), new String[]{"null"});
+                    .rawQuery(SQLQuery.queryOrdersHeaderFilesCsv("Orders.type  <> ?"), new String[]{"NO_HELD"});
         }
     }
 
@@ -270,7 +270,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         public Cursor loadInBackground() {
 
             return getDb()
-                    .rawQuery(SQLQuery.queryOrdersLinesFilesCsv("OrdersLines.goods_id  <> ?"), new String[]{"null"});
+                    .rawQuery(SQLQuery.queryOrdersLinesFilesCsv("Orders.type  <> ?"), new String[]{"NO_HELD"});
         }
     }
 

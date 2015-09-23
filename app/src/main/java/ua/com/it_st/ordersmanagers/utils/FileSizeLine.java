@@ -29,7 +29,7 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             AsyncHttpClientAsyncTask asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
             asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
             asyncHttpClientAsyncTask.getSizeFile(mParams);
-            asyncHttpClientAsyncTask.setMaxRetriesAndTimeout(3, 15);
+            asyncHttpClientAsyncTask.setMaxRetriesAndTimeout(3, 60);
         } catch (Exception e) {
             e.printStackTrace();
             //Log
