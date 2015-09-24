@@ -31,6 +31,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class FilesUnloadFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private final String TEG = FilesUnloadFragment.class.getSimpleName();
     private AsyncHttpClientUtil mUtilAsyncHttpClient;
     private String mWayCatalog;
     private int mAcuont;
@@ -55,15 +56,24 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
 
                 /*чистим все параметры */
                 nullableValues();
-                //Log
-                InfoUtil.setmLogLine("Начало выгрузки!");
                 mProgress = 0;
                 pProgressPie = 0;
-                 /*получаем подключение к серверу*/
-                final Object[] ctServer = connectServer();
+                //Log
+                InfoUtil.setmLogLine("Начало выгрузки!");
+                /*подключаемся к серверу*/
+                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
 
-                mUtilAsyncHttpClient = (AsyncHttpClientUtil) ctServer[1];
-                mWayCatalog = (String) ctServer[4];
+                /*подключились к базе или нет*/
+                boolean lConnect = connectData.isMlConnect();
+                if (!lConnect) {
+                    //Log
+                    InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                    return;
+                }
+
+                mUtilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
+                mWayCatalog = connectData.getWayCatalog();
 
                 for (byte i = 0; i < 3; i++) {
                     getActivity().getSupportLoaderManager().destroyLoader(i);

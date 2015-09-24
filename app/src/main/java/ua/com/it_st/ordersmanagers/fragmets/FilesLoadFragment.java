@@ -93,6 +93,7 @@ public class FilesLoadFragment extends FilesFragment {
             e.printStackTrace();
             //Log
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
+            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
         }
         if (ConstantsUtil.sizeFileLine > 0) {
             getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
@@ -121,27 +122,23 @@ public class FilesLoadFragment extends FilesFragment {
         //Log
         InfoUtil.setmLogLine("Начало загрузки");
          /*подключаемся к серверу*/
-        Object[] connectData = connectServer();
-        /*Проверка*/
-        if (connectData == null) {
-            //Log
-            InfoUtil.setmLogLine("Не все установлены параметры для загрузки!");
-            return;
-        }
+        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
+
         /*подключились к базе или нет*/
-        boolean lConnect = (boolean) connectData[0];
+        boolean lConnect = connectData.isMlConnect();
         //
         if (!lConnect) {
             //Log
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
             return;
         }
       /*получаем параметры подключения*/
-        AsyncHttpClientUtil utilAsyncHttpClient = (AsyncHttpClientUtil) connectData[1];
-        String loginServer = (String) connectData[2];
-        String passwordServer = (String) connectData[3];
-        String wayCatalog = (String) connectData[4];
-        String idServer = (String) connectData[5];
+        AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
+        String loginServer = connectData.getMloginServer();
+        String passwordServer = connectData.getPasswordServer();
+        String wayCatalog = connectData.getWayCatalog();
+        String idServer = connectData.getIdServer();
         //
         RequestParams params = new RequestParams();
 

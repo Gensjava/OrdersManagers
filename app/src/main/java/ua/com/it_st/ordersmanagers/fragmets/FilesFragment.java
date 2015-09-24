@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private double mProgress;
     private double mProgressDiscrete;
     private int nOSeek;
-    private int AcountNameFile;
     private Button BHost;
     private ImageView ImageViewInfo;
     private Timer mTimer;
@@ -191,63 +191,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         InfoUtil.isErrors = false;
     }
 
-    /*подключаемся к серверу*/
-    /* подключаемся через HTTP к базе и загужаем данные */
-    public Object[] connectServer() {
-
-        Object[] data = new Object[6];
-
-        AsyncHttpClientUtil utilAsyncHttpClient = null;
-        boolean lConnect;
-        /*данные настроек*/
-        String loginServer = mSettings.getString(getActivity().getString(R.string.login_server), null);
-        String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
-        /*проверка*/
-        if (loginServer == null) {
-            InfoUtil.Tost("Введите в настройках логин!", getActivity());
-            //Log
-            InfoUtil.setmLogLine("Введите в настройках логин!", true, TEG);
-            return null;
-        }
-        if (passwordServer == null) {
-            InfoUtil.Tost("Введите в настройках пароль!", getActivity());
-            //Log
-            InfoUtil.setmLogLine("Введите в настройках пароль!", true, TEG);
-            return null;
-        }
-        /*режим сервера*/
-        String modeServer = mSettings.getString(getActivity().getString(R.string.mode_server), null);
-        /* ид сервер удаленны или локальный*/
-        final String idServer;
-        if (modeServer.equals(getString(R.string.remoteServer))) {
-            idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
-        } else {
-            idServer = mSettings.getString(getActivity().getString(R.string.id_local), null);
-        }
-        /*каталог на сервере пользователя*/
-        String wayCatalog = mSettings.getString(getActivity().getString(R.string.way_catalog), null);
-
-        try {
-            utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), idServer);
-            utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
-            utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 60);
-            lConnect = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            lConnect = false;
-            //Log
-            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-        }
-        data[0] = lConnect;
-        data[1] = utilAsyncHttpClient;
-        data[2] = loginServer;
-        data[3] = passwordServer;
-        data[4] = wayCatalog;
-        data[5] = idServer;
-
-        return data;
-    }
-
     /*получаем кол-во строк в файле*/
     public int getCountFileLines(File mFile) {
         int n = 0;
@@ -302,52 +245,24 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         return TEG;
     }
 
-    public SharedPreferences getSettings() {
-        return mSettings;
-    }
-
-    public void setSettings(final SharedPreferences settings) {
-        mSettings = settings;
-    }
-
     public ProgressPieView getProgressPieView() {
         return mProgressPieView;
-    }
-
-    public void setProgressPieView(final ProgressPieView progressPieView) {
-        mProgressPieView = progressPieView;
     }
 
     public DiscreteSeekBar getDiscreteSeekBar() {
         return mDiscreteSeekBar;
     }
 
-    public void setDiscreteSeekBar(final DiscreteSeekBar discreteSeekBar) {
-        mDiscreteSeekBar = discreteSeekBar;
-    }
-
     public ImageView getButtonOrderList() {
         return mButtonOrderList;
-    }
-
-    public void setButtonOrderList(final ImageView buttonOrderList) {
-        mButtonOrderList = buttonOrderList;
     }
 
     public TextView getTextProgress() {
         return mTextProgress;
     }
 
-    public void setTextProgress(final TextView textProgress) {
-        mTextProgress = textProgress;
-    }
-
     public TextView getLoadFiles() {
         return mLoadFiles;
-    }
-
-    public void setLoadFiles(final TextView loadFiles) {
-        mLoadFiles = loadFiles;
     }
 
     public double getProgress() {
@@ -370,36 +285,147 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         return nOSeek;
     }
 
-    public void setnOSeek(final int nOSeek) {
-        this.nOSeek = nOSeek;
-    }
-
-    public int getAcountNameFile() {
-        return AcountNameFile;
-    }
-
-    public void setAcountNameFile(final int acountNameFile) {
-        AcountNameFile = acountNameFile;
-    }
-
     public Button getBHost() {
         return BHost;
-    }
-
-    public void setBHost(final Button BHost) {
-        this.BHost = BHost;
     }
 
     public ImageView getImageViewInfo() {
         return ImageViewInfo;
     }
 
-    public void setImageViewInfo(final ImageView imageViewInfo) {
-        ImageViewInfo = imageViewInfo;
-    }
-
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
+    }
+
+    /*клас для подключения к серверу 1с*/
+    /* подключаемся через HTTP к базе и загужаем данные */
+    public class ConnectServer {
+
+        private boolean mlConnect;
+        private AsyncHttpClientUtil mAsyncHttpClientUtil;
+
+        public ConnectServer() {
+
+            String loginServer = getMloginServer();
+            String passwordServer = getPasswordServer();
+
+            AsyncHttpClientUtil utilAsyncHttpClient = null;
+            try {
+                utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
+                utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
+                utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 30000);
+                Log.i("loopj", "" + utilAsyncHttpClient.getConnectTimeout());
+
+                setMlConnect(true);
+            } catch (java.net.SocketTimeoutException e) {
+
+                try {
+                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
+                    utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer, AuthScope.ANY);
+                    utilAsyncHttpClient.setMaxRetriesAndTimeout(3, 30000);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    //Log
+                    InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
+                }
+
+                setMlConnect(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                setMlConnect(false);
+                //Log
+                InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
+            }
+
+            setAsyncHttpClientUtil(utilAsyncHttpClient);
+
+        }
+
+        public AsyncHttpClientUtil getAsyncHttpClientUtil() {
+            return mAsyncHttpClientUtil;
+        }
+
+        public void setAsyncHttpClientUtil(final AsyncHttpClientUtil asyncHttpClientUtil) {
+            mAsyncHttpClientUtil = asyncHttpClientUtil;
+        }
+
+        public boolean isMlConnect() {
+            return mlConnect;
+        }
+
+        public void setMlConnect(final boolean mlConnect) {
+            this.mlConnect = mlConnect;
+        }
+
+        public String getMloginServer() {
+
+            String loginServer = mSettings.getString(getActivity().getString(R.string.login_server), null);
+            /*проверка*/
+            if (loginServer == null) {
+                InfoUtil.Tost("Введите в настройках логин!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках логин!", true, TEG);
+                return null;
+            }
+            return loginServer;
+        }
+
+        public String getPasswordServer() {
+
+            String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
+
+            if (passwordServer == null) {
+                InfoUtil.Tost("Введите в настройках пароль!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках пароль!", true, TEG);
+                return null;
+            }
+            return passwordServer;
+        }
+
+        public String getModeServer() {
+         /*режим сервера*/
+            String modeServer = mSettings.getString(getActivity().getString(R.string.mode_server), null);
+
+            if (modeServer == null) {
+                InfoUtil.Tost("Установите в настройках режим сервера!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Установите в настройках режим сервера!", true, TEG);
+                return null;
+            }
+            return modeServer;
+        }
+
+        public String getIdServer() {
+
+        /* ид сервер удаленны или локальный*/
+            final String idServer;
+            if (getModeServer().equals(getString(R.string.remoteServer))) {
+                idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
+            } else {
+                idServer = mSettings.getString(getActivity().getString(R.string.id_local), null);
+            }
+            if (idServer == null || idServer.equals("")) {
+                InfoUtil.Tost("Введите в настройках путь к серверу!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках путь к серверу!", true, TEG);
+            }
+            return idServer;
+        }
+
+        public String getWayCatalog() {
+
+            /*каталог на сервере пользователя*/
+            String wayCatalog = mSettings.getString(getActivity().getString(R.string.way_catalog), null);
+
+            if (wayCatalog == null || wayCatalog.equals("")) {
+                InfoUtil.Tost("Введите в настройках каталог пользователя!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках каталог пользователя!", true, TEG);
+            }
+            return wayCatalog;
+        }
     }
 }
