@@ -29,7 +29,8 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             AsyncHttpClientAsyncTask asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
             asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
             asyncHttpClientAsyncTask.getSizeFile(mParams);
-            asyncHttpClientAsyncTask.setMaxRetriesAndTimeout(3, 20000);
+            asyncHttpClientAsyncTask.setTimeout(30000);
+            asyncHttpClientAsyncTask.setResponseTimeout(30000);
         } catch (java.net.SocketTimeoutException e) {
 
             AsyncHttpClientAsyncTask asyncHttpClientAsyncTask;
@@ -37,7 +38,8 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
                 asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
                 asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
                 asyncHttpClientAsyncTask.getSizeFile(mParams);
-                asyncHttpClientAsyncTask.setMaxRetriesAndTimeout(3, 20000);
+                asyncHttpClientAsyncTask.setTimeout(30000);
+                asyncHttpClientAsyncTask.setResponseTimeout(30000);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
