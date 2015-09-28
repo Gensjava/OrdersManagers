@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.HttpRequest;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
