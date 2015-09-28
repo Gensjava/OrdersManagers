@@ -7,6 +7,8 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -35,7 +37,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
 
         get(mBaseUrl, params, new FileAsyncHttpResponseHandler(mMainActivity) {
             @Override
-            public void onFailure(final int statusCode, final Header[] headers, final Throwable throwable, final File file) {
+            public void onFailure(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final Throwable throwable, final File file) {
                 if (statusCode != HttpStatus.SC_OK) {
                     //Log
                     InfoUtil.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
@@ -53,14 +55,14 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, File response) {
+            public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final File file) {
                 // Do something with the file `response`
                 if (statusCode == HttpStatus.SC_OK) {
                     try {
                         FilesLoadFragment fragment = (FilesLoadFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(FilesLoadFragment.class.toString());
                         if (fragment != null) {
                             /**/
-                            fragment.onInsertTable(response, fileName);
+                            fragment.onInsertTable(file, fileName);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -79,7 +81,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
 
         post(mBaseUrl, params, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+            public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final byte[] responseBody) {
                 // handle success response
                 if (statusCode == HttpStatus.SC_OK) {
                     //Log
@@ -96,7 +98,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+            public void onFailure(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final byte[] responseBody, final Throwable error) {
                 if (statusCode != HttpStatus.SC_OK) {
 
                     if (mgError == 0) {
@@ -115,5 +117,6 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         });
 
     }
+
 
 }

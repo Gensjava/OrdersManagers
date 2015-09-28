@@ -26,20 +26,18 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(final String... params) {
         try {
-            AsyncHttpClientAsyncTask asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
-            asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
-            asyncHttpClientAsyncTask.getSizeFile(mParams);
-            asyncHttpClientAsyncTask.setTimeout(30000);
-            asyncHttpClientAsyncTask.setResponseTimeout(30000);
+            SyncHttpClientAsyncTask syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
+            syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
+            syncHttpClientAsyncTask.getSizeFile(mParams);
+            syncHttpClientAsyncTask.setTimeout(50000);
+
         } catch (java.net.SocketTimeoutException e) {
 
-            AsyncHttpClientAsyncTask asyncHttpClientAsyncTask;
             try {
-                asyncHttpClientAsyncTask = new AsyncHttpClientAsyncTask();
-                asyncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer, AuthScope.ANY);
-                asyncHttpClientAsyncTask.getSizeFile(mParams);
-                asyncHttpClientAsyncTask.setTimeout(30000);
-                asyncHttpClientAsyncTask.setResponseTimeout(30000);
+                SyncHttpClientAsyncTask syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
+                syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
+                syncHttpClientAsyncTask.getSizeFile(mParams);
+                syncHttpClientAsyncTask.setTimeout(50000);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -52,9 +50,9 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
         return null;
     }
 
-    public class AsyncHttpClientAsyncTask extends SyncHttpClient {
+    public class SyncHttpClientAsyncTask extends SyncHttpClient {
 
-        public AsyncHttpClientAsyncTask() throws Exception {
+        public SyncHttpClientAsyncTask() throws Exception {
 
         }
 
@@ -62,18 +60,16 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
 
             get(mBaseUrl, params, new TextHttpResponseHandler() {
                 @Override
-                public void onFailure(final int statusCode, final Header[] headers, final String responseString, final Throwable throwable) {
+                public void onFailure(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final String responseString, final Throwable throwable) {
                     //Log
                     InfoUtil.setmLogLine("Расчет  файлов строк ", params.toString(), true, " Failure: Код ошибки " + statusCode);
                 }
 
                 @Override
-                public void onSuccess(final int statusCode, final Header[] headers, final String responseString) {
+                public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final String responseString) {
                     ConstantsUtil.sizeFileLine = Integer.parseInt(responseString);
                 }
             });
         }
     }
-
-
 }
