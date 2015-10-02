@@ -41,28 +41,46 @@
                 android:text="№001 от 01-08-15"
                 android:textColor="@color/main_sub_grey"/>
 
-        </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:orientation="vertical">
-
             <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right">
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/order_new_heander_period"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="right"
+            android:background="@android:color/background_light">
 
                 <TextView
                     android:id="@+id/order_new_header_list_text_client"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:text="Параметры шапки"/>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                >
+
+                <ImageView
+                    android:id="@+id/order_new_header_list_image_arrow_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/ic_arrow_right"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
 
         </LinearLayout>
 
@@ -97,27 +115,6 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        >
-
-        <ImageView
-            android:id="@+id/order_new_header_list_image_arrow_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="300dp"
-            android:src="@mipmap/ic_arrow_right"/>
-    </RelativeLayout>
 
 
 </RelativeLayout>

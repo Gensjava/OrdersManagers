@@ -28,20 +28,20 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
         try {
             SyncHttpClientAsyncTask syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
             syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
-            syncHttpClientAsyncTask.getSizeFile(mParams);
             syncHttpClientAsyncTask.setTimeout(30000);
             syncHttpClientAsyncTask.setConnectTimeout(30000);
             syncHttpClientAsyncTask.setResponseTimeout(30000);
+            syncHttpClientAsyncTask.getSizeFile(mParams);
 
         } catch (java.net.SocketTimeoutException e) {
 
             try {
                 SyncHttpClientAsyncTask syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
                 syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
-                syncHttpClientAsyncTask.getSizeFile(mParams);
                 syncHttpClientAsyncTask.setTimeout(30000);
                 syncHttpClientAsyncTask.setConnectTimeout(30000);
                 syncHttpClientAsyncTask.setResponseTimeout(30000);
+                syncHttpClientAsyncTask.getSizeFile(mParams);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -65,8 +65,21 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             get(mBaseUrl, params, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final String responseString, final Throwable throwable) {
-                    //Log
-                    InfoUtil.setmLogLine("Расчет  файлов строк ", params.toString(), true, " Failure: Код ошибки " + statusCode);
+
+                    SyncHttpClientAsyncTask syncHttpClientAsyncTask = null;
+                    try {
+                        syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //Log
+                        InfoUtil.setmLogLine("Расчет  файлов строк ", params.toString(), true, " Failure: Код ошибки " + statusCode);
+                    }
+                    syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
+                    syncHttpClientAsyncTask.setTimeout(30000);
+                    syncHttpClientAsyncTask.setConnectTimeout(30000);
+                    syncHttpClientAsyncTask.setResponseTimeout(30000);
+                    syncHttpClientAsyncTask.getSizeFile(mParams);
+
                 }
 
                 @Override

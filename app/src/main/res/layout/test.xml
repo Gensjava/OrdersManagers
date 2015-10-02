@@ -7,57 +7,52 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <SeekBar
-        android:id="@+id/seekbar"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:max="100"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="196dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#7dff8b"
+            android:text="New Text"/>
 
-        <com.filippudak.ProgressPieView.ProgressPieView
-            android:id="@+id/progressPieView"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView2"
+            android:background="#ff4d4b"
+            android:text="New Text"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:layout_weight="1"/>
+            android:layout_alignLeft="@+id/textView2"
+            android:layout_alignParentEnd="true">
 
-        <com.filippudak.ProgressPieView.ProgressPieView
-            android:id="@+id/progressPieViewInverted"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="CCW"
-            ppv:ppvCounterclockwise="true"
-            ppv:ppvInverted="true"/>
-
-        <com.filippudak.ProgressPieView.ProgressPieView
-            android:id="@+id/progressPieViewXml"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="Xml"
-            android:textColor="@color/abc_primary_text_disable_only_material_dark"
-            android:textSize="18sp"
-
-            ppv:ppvBackgroundColor="@color/holo_purple"
-            ppv:ppvProgressColor="@color/holo_red_light"
-            ppv:ppvProgressFillType="center"
-            ppv:ppvStrokeColor="@color/holo_green_light"
-            ppv:ppvStrokeWidth="6dp"/>
-    </LinearLayout>
-
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="44dp"
+                android:layout_marginRight="44dp"
+                android:layout_marginTop="179dp"
+                android:background="#3f9bff"
+                android:text="New Text"/>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

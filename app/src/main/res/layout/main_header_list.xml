@@ -17,7 +17,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
                 <TextView
                     android:id="@+id/main_heander_text_JurnalOrders"
@@ -38,58 +39,73 @@
                     android:layout_centerVertical="true"
                     android:text="@string/period"
                     android:textColor="@color/main_sub_grey"/>
-            </RelativeLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/main_heander_image_plus"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/main_heander_text_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignBottom="@+id/main_heander_text_JurnalOrders"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="30dp"
-                    android:singleLine="true"
-                    android:text="@string/header_date"/>
+                    android:layout_gravity="bottom"
+                    android:background="@android:color/background_light"
+                    android:clickable="true"
+                    android:foregroundGravity="bottom"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/main_heander_text_client"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:paddingRight="10dp"
-                    android:text="@string/header_client"/>
+                    <TextView
+                        android:id="@+id/main_heander_text_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="30dp"
+                        android:singleLine="true"
+                        android:text="@string/header_date"/>
 
-                <TextView
-                    android:id="@+id/main_heander_text_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginRight="25dp"
-                    android:text="@string/header_sum"/>
+                    <TextView
+                        android:id="@+id/main_heander_text_client"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:paddingRight="10dp"
+                        android:text="@string/header_client"/>
 
+                    <TextView
+                        android:id="@+id/main_heander_text_sum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:text="@string/header_sum"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/main_heander_image_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginRight="20dp"
+                        android:src="@mipmap/ic_plus"/>
+
+                </RelativeLayout>
             </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -123,22 +139,5 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/main_heander_image_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/main_heander_period"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="300dp"
-            android:src="@mipmap/ic_plus"/>
-    </RelativeLayout>
 
 </RelativeLayout>
