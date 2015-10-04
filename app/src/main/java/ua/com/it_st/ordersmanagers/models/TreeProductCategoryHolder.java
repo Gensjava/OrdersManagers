@@ -10,7 +10,9 @@ import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
+import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
 public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeProductCategoryHolder.TreeItem> {
@@ -49,16 +51,17 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_node_value);
             tvValue.setText(value.getName());
 
-            tvValue.setOnLongClickListener(new View.OnLongClickListener() {
+            TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
+            balanceTvValue.setText(String.valueOf(value.getBalance()));
+
+            balanceTvValue.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {
                     Dialogs.openDialog = false;
                     Dialogs.showCustomAlertDialogEnterNumber(context, context.getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
-                    return false;
+                    return true;
                 }
             });
-            TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
-            balanceTvValue.setText(String.valueOf(value.getBalance()));
             TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
             orderTvValue.setText(String.valueOf(value.getAmount()));
             TextView priceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_price_value);

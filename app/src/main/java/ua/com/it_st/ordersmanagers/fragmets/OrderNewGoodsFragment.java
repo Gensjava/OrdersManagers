@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,6 +84,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 Dialogs.product = item;
                 double numberInDialog = Dialogs.numberD;
                 double sumInDialog = Dialogs.product.getPrice() * Dialogs.numberD;
+                Log.i("ddddd2", "" + numberInDialog);
 
                 setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
 

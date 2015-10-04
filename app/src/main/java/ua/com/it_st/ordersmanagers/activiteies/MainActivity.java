@@ -204,7 +204,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     /*Метод для ввода количества в заказе*/
     public void OnClickNamber(View view) {
 
@@ -242,5 +241,4 @@ public class MainActivity extends AppCompatActivity
         }
         Dialogs.calculationSum(Double.parseDouble(String.valueOf(Dialogs.editNumber.getText())), Dialogs.product.getPrice(), view, Dialogs.animScale);
     }
-
 }
