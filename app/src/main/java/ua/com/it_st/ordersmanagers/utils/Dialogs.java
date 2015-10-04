@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,12 +65,12 @@ public class Dialogs {
         price.setText(String.valueOf(product.getPrice()));
         textSum.setText(String.valueOf(product.getSum()));
 
-       /*устанавливаем к-во если уже было, ставим количество товар, если = 0, тогда делаем = 0*/
+       /*устанавливаем к-во */
         numberD = product.getAmount();
 
         if ((numberD % 1 == 0)) {
             int numberI = (int) numberD;
-            editNumber.setText(numberI);
+            editNumber.setText(String.valueOf(numberI));
         } else {
             editNumber.setText(String.valueOf(numberD == 0.0 ? "0" : numberD));
         }
@@ -90,7 +92,6 @@ public class Dialogs {
                 }
             }
         });
-
 
         /* открываем диалог */
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

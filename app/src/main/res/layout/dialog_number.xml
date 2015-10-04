@@ -19,14 +19,16 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
             android:layout_weight="0.33"
-            android:gravity="center|fill_vertical"
+            android:gravity="left|center|fill_vertical"
             android:text="Цена"/>
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.33"
             android:gravity="center"
             android:text="Количество"/>
@@ -35,9 +37,10 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="0.33"
             android:autoText="false"
-            android:gravity="center"
+            android:gravity="center|right"
             android:text="Сумма"/>
     </LinearLayout>
 
@@ -51,45 +54,49 @@
 
         <TextView
             android:id="@+id/dialog_number_price"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:gravity="center_vertical|center_horizontal"
             android:text="price"/>
 
         <ImageView
             android:id="@+id/dialog_number_minus"
-            android:layout_width="40dp"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:layout_weight="0.2"
             android:gravity="center"
             android:onClick="onClick"
             android:src="@mipmap/ic_dialog_minus"/>
 
         <EditText
             android:id="@+id/dialog_number_number"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:clickable="false"
-            android:focusable="true"
+            android:cursorVisible="false"
+            android:focusable="false"
             android:gravity="center_vertical|center_horizontal"
             android:inputType=""
             android:longClickable="true"
-            android:text="1.0"/>
+            android:text="1.0"
+            android:textColor="@color/colorAccent"/>
 
         <ImageView
             android:id="@+id/dialog_number_plus"
-            android:layout_width="40dp"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:layout_weight="0.2"
             android:gravity="center"
             android:onClick="onClick"
             android:src="@mipmap/ic_dialog_plus"/>
 
         <TextView
             android:id="@+id/dialog_number_sum"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:autoText="false"
             android:gravity="center_vertical|center_horizontal"
             android:text="Sum"/>

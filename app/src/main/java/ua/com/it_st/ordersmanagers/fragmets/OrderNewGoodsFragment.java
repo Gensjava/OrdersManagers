@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,11 +67,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     item.setClick(true);
                     /* параметр для запроса */
                     mSelectionArgs = item.getGoodsId();
+
                     /* обновляем курсор */
-                    getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                    if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                    } else {
+                         /* создаем лоадер для чтения данных */
+                        getActivity().getSupportLoaderManager().initLoader(0, null, null);
+                        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                    }
+
                 }
             } else {
                 Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
+
             }
         }
     };
