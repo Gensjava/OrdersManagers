@@ -9,7 +9,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -25,6 +29,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -197,6 +202,45 @@ public class MainActivity extends AppCompatActivity
         //SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
         //DB.close();
 
+    }
+
+
+    /*Метод для ввода количества в заказе*/
+    public void OnClickNamber(View view) {
+
+        switch (view.getId()) {
+            case R.id.but_del:
+
+                Dialogs.editNumber.setText(Dialogs.editNumber.getText().delete(
+                        Dialogs.editNumber.getText().length() - 1,
+                        Dialogs.editNumber.getText().length()));
+
+                if (Dialogs.editNumber.getText().toString().trim().length() == 0) {
+                    Dialogs.editNumber.setText("0");
+                }
+
+                break;
+            case R.id.but_dumping:
+                Dialogs.editNumber.setText("0");
+                break;
+            case R.id.but_point:
+
+                if (!Dialogs.editNumber.getText().toString().contains(".")) {
+                    Dialogs.editNumber.setText(Dialogs.editNumber.getText() + ".");
+                }
+                break;
+            default:
+                if (Dialogs.editNumber.getText().toString().equals("0")
+                        || Dialogs.editNumber.getText().toString().equals("0.0")
+                        || Dialogs.editNumber.getText().toString().trim().length() == 6) {
+                    Dialogs.editNumber.setText(view.getContentDescription().toString());
+                } else {
+                    Dialogs.editNumber.setText(Dialogs.editNumber.getText() + view.getContentDescription().toString());
+                }
+
+                break;
+        }
+        Dialogs.calculationSum(Double.parseDouble(String.valueOf(Dialogs.editNumber.getText())), Dialogs.product.getPrice(), view, Dialogs.animScale);
     }
 
 }

@@ -3,8 +3,6 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -12,9 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.unnamed.b.atv.model.TreeNode;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,11 +24,14 @@ import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
 public class Dialogs {
 
-    private static TextView number, sum;
+    public static EditText editNumber;
+    public static OrderDoc.OrderLines product;
+    public static Animation animScale;
+    private static TextView textSum;
     private static Context mContext;
     private static LayoutInflater mLayoutInflater;
-    private static OrderDoc.OrderLines product;
     private static int limitAmuont;
+    private static double numberD;
 
     /* Создаем открываем диалог для ввода количества*/
     public static void showCustomAlertDialogEnterNumber(final Context activity, final String title, Object object, final String fClass) {
@@ -52,42 +50,43 @@ public class Dialogs {
         final View numberView;
         /* каст макет */
         numberView = mLayoutInflater.inflate(R.layout.dialog_number, null);
-        /* поля из макета */
+        animScale = AnimationUtils.loadAnimation(mContext, R.anim.scale_button);
+
         final ImageView numberMinus = (ImageView) numberView.findViewById(R.id.dialog_number_minus);
+
+        /* поля из макета */
         final ImageView numberPlus = (ImageView) numberView.findViewById(R.id.dialog_number_plus);
         final TextView price = (TextView) numberView.findViewById(R.id.dialog_number_price);
-        number = (TextView) numberView.findViewById(R.id.dialog_number_number);
-        sum = (TextView) numberView.findViewById(R.id.dialog_number_sum);
+        editNumber = (EditText) numberView.findViewById(R.id.dialog_number_number);
+        textSum = (TextView) numberView.findViewById(R.id.dialog_number_sum);
 
         price.setText(String.valueOf(product.getPrice()));
-        sum.setText(String.valueOf(product.getSum() == 0.0 ? product.getPrice() : product.getSum()));
+        textSum.setText(String.valueOf(product.getSum()));
 
-       /*устанавливаем к-во если уже было, ставим количество товар, если = 0, тогда делаем = 1*/
-        final double[] numberD = {product.getAmount() == 0.0 ? 1.0 : product.getAmount()};
-        number.setText(String.valueOf(numberD[0]));
+       /*устанавливаем к-во если уже было, ставим количество товар, если = 0, тогда делаем = 0*/
+        numberD = product.getAmount();
 
-        final Animation animScale = AnimationUtils.loadAnimation(mContext, R.anim.scale_button);
+        if ((numberD % 1 == 0)) {
+            int numberI = (int) numberD;
+            editNumber.setText(numberI);
+        } else {
+            editNumber.setText(String.valueOf(numberD == 0.0 ? "0" : numberD));
+        }
 
         numberPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberD[0]++;
-                number.setText(String.valueOf(numberD[0]));
-                double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
-                sum.setText(String.valueOf(newSum));
-                v.startAnimation(animScale);
+                numberD++;
+                calculationSum(numberD, product.getPrice(), v, animScale);
             }
         });
 
         numberMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberD[0] > limitAmuont) {
-                    numberD[0]--;
-                    number.setText(String.valueOf(numberD[0]));
-                    double newSum = new BigDecimal(product.getPrice() * numberD[0]).setScale(2, RoundingMode.UP).doubleValue();
-                    sum.setText(String.valueOf(newSum));
-                    v.startAnimation(animScale);
+                if (numberD > limitAmuont) {
+                    numberD--;
+                    calculationSum(numberD, product.getPrice(), v, animScale);
                 }
             }
         });
@@ -105,9 +104,9 @@ public class Dialogs {
                                         int id) {
 
                         /* Количество товара */
-                        final double numberInDialog = Double.parseDouble(String.valueOf(number.getText()));
+                        final double numberInDialog = Double.parseDouble(String.valueOf(editNumber.getText()));
                         //Сумма товара
-                        final double sumInDialog = Double.parseDouble(String.valueOf(sum.getText()));
+                        final double sumInDialog = Double.parseDouble(String.valueOf(textSum.getText()));
 
                         /*преобразуем тип*/
                         final MainActivity mAk = (MainActivity) mContext;
@@ -139,6 +138,27 @@ public class Dialogs {
         final AlertDialog alert = builder.create();
         alert.show();
 
+    }
+
+    public static void calculationSum(double acount, double price, View v, Animation animScale) {
+
+        double newSum = new BigDecimal(price * acount).setScale(2, RoundingMode.UP).doubleValue();
+
+        textSum.setText(String.valueOf(newSum));
+        numberD = acount;
+
+        if ((acount % 1 == 0)) {
+            editNumber.setText(String.valueOf((int) acount));
+        } else {
+
+            editNumber.setText(String.valueOf(acount));
+
+            if (editNumber.getText().toString().equals("0.0")) {
+                editNumber.setText("0");
+            }
+        }
+
+        v.startAnimation(animScale);
     }
 
     /*диалог для ввода коментария в шапке заказа*/
@@ -190,5 +210,4 @@ public class Dialogs {
         final AlertDialog alert = builder.create();
         alert.show();
     }
-
 }

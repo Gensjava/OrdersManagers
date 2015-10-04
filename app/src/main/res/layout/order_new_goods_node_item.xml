@@ -6,40 +6,55 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:minHeight="32dp">
 
-    <TextView
-        android:id="@+id/order_new_goods_node_item_node_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="40dp"
-        android:layout_toLeftOf="@+id/buttonsContainer"
-        android:textSize="18sp"/>
-
     <LinearLayout
-        android:id="@+id/buttonsContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/order_new_goods_node_item_balance_value"
-            android:layout_width="wrap_content"
+            android:id="@+id/order_new_goods_node_item_node_value"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/new_green"
-            android:textSize="18sp"/>
-
-        <TextView
-            android:id="@+id/order_new_goods_node_item_order_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/red_indicator"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/buttonsContainer"
             android:textSize="18sp"
-            android:visibility="invisible"/>
+            />
+
+        <LinearLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/order_new_goods_node_item_balance_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/new_green"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/order_new_goods_node_item_price_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/main_grey"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/order_new_goods_node_item_order_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/red_indicator"
+                android:textSize="18sp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import android.util.Log;
 import android.view.View;
 import com.loopj.android.http.RequestParams;
-
-import org.apache.http.util.EncodingUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import ua.com.it_st.ordersmanagers.R;

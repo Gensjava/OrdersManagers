@@ -283,13 +283,13 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
         while (data.moveToNext()) {
 
-            String cID = data.getString(cIDIndex);
-            double isAmount = data.getDouble(isAmountIndex);
-            double cPrice = data.getDouble(cPriceIndex);
-            String cName = data.getString(cNameIndex);
-            double cAmountStores = data.getDouble(cAmountStoresIndex);
+            final String cID = data.getString(cIDIndex);
+            final double isAmount = data.getDouble(isAmountIndex);
+            final double cPrice = data.getDouble(cPriceIndex);
+            final String cName = data.getString(cNameIndex);
+            final double cAmountStores = data.getDouble(cAmountStoresIndex);
 
-            double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
+            final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
             OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
                     ConstantsUtil.mCurrentOrder.getId(),
@@ -313,11 +313,12 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
         final int isCategoryIndex = data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY);
         final int cKodIndex = data.getColumnIndex(TableProducts.COLUMN_KOD);
+
         while (data.moveToNext()) {
 
-            String cName = data.getString(cNameIndex);
-            String isCategory = data.getString(isCategoryIndex);
-            String cKod = data.getString(cKodIndex);
+            final String cName = data.getString(cNameIndex);
+            final String isCategory = data.getString(isCategoryIndex);
+            final String cKod = data.getString(cKodIndex);
 
             final TreeNode newTreeItem;
 

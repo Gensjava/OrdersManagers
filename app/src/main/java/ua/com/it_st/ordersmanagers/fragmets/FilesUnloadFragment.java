@@ -8,9 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 import com.loopj.android.http.RequestParams;
 import com.opencsv.CSVWriter;
@@ -18,8 +15,6 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;

@@ -47,6 +47,8 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             balanceTvValue.setText(String.valueOf(value.getBalance()));
             TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
             orderTvValue.setText(String.valueOf(value.getAmount()));
+            TextView priceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_price_value);
+            priceTvValue.setText(String.valueOf(value.getPrice()));
         }
 
         return view;
