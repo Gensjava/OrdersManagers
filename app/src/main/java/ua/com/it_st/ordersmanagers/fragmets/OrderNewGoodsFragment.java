@@ -76,11 +76,18 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                         getActivity().getSupportLoaderManager().initLoader(0, null, null);
                         getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                     }
-
                 }
+
+            } else if (Dialogs.openDialog & !item.isCategory()) {
+
+                Dialogs.product = item;
+                double numberInDialog = Dialogs.numberD;
+                double sumInDialog = Dialogs.product.getPrice() * Dialogs.numberD;
+
+                setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
+
             } else {
                 Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
-
             }
         }
     };

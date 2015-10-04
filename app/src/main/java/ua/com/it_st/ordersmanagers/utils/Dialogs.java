@@ -29,17 +29,20 @@ public class Dialogs {
     public static EditText editNumber;
     public static OrderDoc.OrderLines product;
     public static Animation animScale;
+    public static double numberD;
+    public static boolean openDialog;
     private static TextView textSum;
     private static Context mContext;
     private static LayoutInflater mLayoutInflater;
     private static int limitAmuont;
-    private static double numberD;
 
     /* Создаем открываем диалог для ввода количества*/
     public static void showCustomAlertDialogEnterNumber(final Context activity, final String title, Object object, final String fClass) {
 
+        openDialog = true;
         mContext = activity;
         mLayoutInflater = LayoutInflater.from(activity);
+
 
         if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
             product = (TreeProductCategoryHolder.TreeItem) object;
