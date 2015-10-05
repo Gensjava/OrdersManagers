@@ -199,9 +199,6 @@ public class MainActivity extends AppCompatActivity
         ConstantsUtil.mCurrentOrder = null;
     /* ТЧ заказа */
         ConstantsUtil.mCart.clear();
-        //SQLiteDatabase DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        //DB.close();
-
     }
 
     /*Метод для ввода количества в заказе*/

@@ -39,10 +39,8 @@ public class Dialogs {
     /* Создаем открываем диалог для ввода количества*/
     public static void showCustomAlertDialogEnterNumber(final Context activity, final String title, Object object, final String fClass) {
 
-        openDialog = true;
         mContext = activity;
         mLayoutInflater = LayoutInflater.from(activity);
-
 
         if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
             product = (TreeProductCategoryHolder.TreeItem) object;

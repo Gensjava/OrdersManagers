@@ -54,18 +54,11 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
             balanceTvValue.setText(String.valueOf(value.getBalance()));
 
-            balanceTvValue.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(final View view) {
-                    Dialogs.openDialog = false;
-                    Dialogs.showCustomAlertDialogEnterNumber(context, context.getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
-                    return true;
-                }
-            });
-            TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
-            orderTvValue.setText(String.valueOf(value.getAmount()));
             TextView priceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_price_value);
             priceTvValue.setText(String.valueOf(value.getPrice()));
+
+            TextView orderTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_order_value);
+            orderTvValue.setText(String.valueOf(value.getAmount()));
         }
 
         return view;

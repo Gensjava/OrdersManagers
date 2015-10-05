@@ -79,12 +79,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     }
                 }
 
-            } else if (Dialogs.openDialog & !item.isCategory()) {
+            } else if (!item.isCategory() & Dialogs.openDialog) {
 
                 Dialogs.product = item;
                 double numberInDialog = Dialogs.numberD;
                 double sumInDialog = Dialogs.product.getPrice() * Dialogs.numberD;
-                Log.i("ddddd2", "" + numberInDialog);
 
                 setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
 
@@ -216,6 +215,39 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        /* домой */
+        final MenuItem customНоме = menu.add(0, R.id.collapseAll, 0, "");
+        customНоме.setActionView(R.layout.main_tool_bar_home);
+        customНоме.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final View menu_home = menu.findItem(R.id.collapseAll).getActionView();
+        /* клик на корзине */
+        menu_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                /*свернуть все дерево*/
+                tView.collapseAll();
+            }
+        });
+
+        /* фиксация диалога заказов выбора по количеству */
+        final MenuItem customDialogAmuont = menu.add(0, R.id.menu_dialog_amuont, 0, "");
+        customDialogAmuont.setActionView(R.layout.main_tool_bar_chick_dialog);
+        customDialogAmuont.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final View menu_dialog_amuont = menu.findItem(R.id.menu_dialog_amuont).getActionView();
+
+        /* клик на корзине */
+        menu_dialog_amuont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                // меняем он на кнопке
+                if (Dialogs.openDialog)
+                    menu_dialog_amuont.setBackgroundResource(R.color.main_grey);
+                else
+                    menu_dialog_amuont.setBackgroundResource(R.color.main_grey_select);
+
+                Dialogs.openDialog = !Dialogs.openDialog;
+            }
+        });
         /* корзина */
         final MenuItem customCart = menu.add(0, R.id.menu_cart, 0, "");
         customCart.setActionView(R.layout.main_tool_bar_cart);
@@ -226,10 +258,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             @Override
             public void onClick(final View view) {
                 /*проверяем пустая корзина или нет*/
-                if (!ConstantsUtil.checkCartEmpty(getActivity())) {
-                    final onEventListener someEventListener = (onEventListener) getActivity();
-                    someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
-                }
+                openCart();
             }
         });
         /*картинка корзины*/
@@ -237,7 +266,18 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         /*обновляем корзину*/
         updateCartCount();
 
+        //inflater.inflate(R.menu.menu_main, menu);
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /*открываем корзину*/
+    protected void openCart() {
+         /*проверяем пустая корзина или нет*/
+        if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+            final onEventListener someEventListener = (onEventListener) getActivity();
+            someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+        }
     }
 
     @Override
@@ -250,6 +290,10 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             case R.id.collapseAll:
                 /*свернуть все дерево*/
                 tView.collapseAll();
+                break;
+            case R.id.menu_cart:
+                /*проверяем пустая корзина или нет*/
+                openCart();
                 break;
         }
         return true;

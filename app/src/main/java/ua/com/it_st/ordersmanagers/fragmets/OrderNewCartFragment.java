@@ -136,7 +136,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 return false;
             }
         }
-        
+          /*Возвращаем положение выбор диалога к-во по умолчанию*/
+        Dialogs.openDialog = false;
         /* заканчиваем транзакцию */
         DB.setTransactionSuccessful();
         DB.endTransaction();
@@ -182,7 +183,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 return false;
             }
         }
-
+          /*Возвращаем положение выбор диалога к-во по умолчанию*/
+        Dialogs.openDialog = false;
         /* заканчиваем транзакцию */
         DB.setTransactionSuccessful();
         DB.endTransaction();

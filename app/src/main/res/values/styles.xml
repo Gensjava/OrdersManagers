@@ -15,5 +15,9 @@
         <item name="android:showDividers">middle</item>
         <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
     </style>
-
+    <!-- Popup Menu Background Color styles -->
+    <style name="MyPopupMenu"
+           parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/colorAccent</item>
+    </style>
 </resources>

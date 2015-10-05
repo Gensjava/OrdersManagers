@@ -531,5 +531,6 @@
     <string name="id_user">id_user</string>
     <string name="NameCatalog">NameCatalog</string>
     <string name="SizeFileCatalog">SizeFileCatalog</string>
+    <string name="fix_amount">Зафиксировать к-во</string>
 
 </resources>

@@ -14,5 +14,9 @@
     <item
         android:id="@+id/collapseAll"
         android:title="@string/collapseAll"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_dialog_amuont"
+        android:title="@string/fix_amount"
+        app:showAsAction="always"/>
 </menu>

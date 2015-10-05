@@ -5,6 +5,7 @@
     <item name="white" type="color">#fff</item>
     <item name="main_sub_grey" type="color">#CFD8DC</item>
     <item name="main_grey" type="color">#607D8B</item>
+    <item name="main_grey_select" type="color">#446574</item>
     <item name="main_orange_new" type="color">#FF5722</item>
     <item name="main_orange_text" type="color">#FFFFECB3</item>
     <color name="textview_shadow">#ff674125</color>
