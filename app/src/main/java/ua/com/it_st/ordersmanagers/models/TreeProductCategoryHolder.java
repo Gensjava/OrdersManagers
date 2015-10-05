@@ -1,19 +1,12 @@
 package ua.com.it_st.ordersmanagers.models;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
-
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
-import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
 public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeProductCategoryHolder.TreeItem> {
 
@@ -32,8 +25,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
 
         final TextView tvValue;
         isCategory = value.isCategory;
-
-        final TreeItem item = value;
 
         if (isCategory) {
 

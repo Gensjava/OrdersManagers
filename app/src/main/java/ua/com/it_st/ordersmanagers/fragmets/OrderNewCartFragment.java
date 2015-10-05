@@ -276,6 +276,13 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             /*menu*/
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.order_new_cart_list_item_menu_n);
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    spinner.performClick();
+                }
+            });
+
             /* Настраиваем адаптер */
             String[] spinnerMenu = getResources().getStringArray(R.array.spinner_cart_menu);
             /**/

@@ -35,6 +35,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -49,6 +50,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     public static final String ID_ORDER = "ID_ORDER";
     private static SQLiteDatabase sDb;
     private SimpleCursorAdapter scAdapter;
+    private TextView ordersSum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +70,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         lvData.setAdapter(scAdapter);
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        getActivity().getSupportLoaderManager().initLoader(1, null, this);
         /* кнопка далее переход на следующий этап*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
         /* слушатель кнопки далее */
@@ -77,37 +80,57 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         /*устанавливаем период журнала*/
         TextView period = (TextView) rootView.findViewById(R.id.main_heander_period);
         period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
+        /*подвал журнал заказов */
+        ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
         return rootView;
     }
 
-    /* функция LoaderManager.LoaderCallbacks<Cursor>
+    /* функция
     * отрабатывает при создании */
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
-    }
-
-    /* функция LoaderManager.LoaderCallbacks<Cursor>
-    * отрабатывает после выполнения*/
-    @Override
-    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-
-        if (data.isClosed()) {
-            // error
-        } else {
-            scAdapter.swapCursor(data);
-            /*следующий номер заказа*/
-            ConstantsUtil.setsCurrentNumber((short) data.getCount());
+        switch (id) {
+            case 0:/*получаем все заазы*/
+                return new MyCursorLoader(getActivity());
+            case 1:/*получаем сумму всех заазов*/
+                return new MyCursorLoaderOrdersSum(getActivity());
+            default:
+                return null;
         }
     }
 
-    /* функция LoaderManager.LoaderCallbacks<Cursor>
-    * перезапуск */
+    /*функция отрабатывает после выполнения*/
     @Override
-    public void onLoaderReset(final Loader<Cursor> loader) {
-        scAdapter.swapCursor(null);
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+
+        switch (loader.getId()) {
+            case 0:
+                scAdapter.swapCursor(data);
+                /*следующий номер заказа*/
+                ConstantsUtil.setsCurrentNumber((short) data.getCount());
+                break;
+            case 1:
+                final int cSumIndex = data.getColumnIndex("sum_orders");
+                data.moveToFirst();
+                final String cSum = data.getString(cSumIndex);
+                updataSumOrders(cSum);
+                break;
+            default:
+                break;
+        }
     }
 
+
+    /* функция перезапуск */
+    @Override
+    public void onLoaderReset(final Loader<Cursor> loader) {
+        //   scAdapter.swapCursor(null);
+    }
+
+    /*Обновляем подвал сумму заказов*/
+    private void updataSumOrders(String sumOrders) {
+        ordersSum.setText(sumOrders);
+    }
     /* обработка кликов на кнопки */
     @Override
     public void onClick(final View view) {
@@ -128,15 +151,18 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         super.onPause();
         /* выходим из загрузчкика*/
         getActivity().getSupportLoaderManager().destroyLoader(0);
+        getActivity().getSupportLoaderManager().destroyLoader(1);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-                /* создаем лоадер для чтения данных */
+        /* создаем загрузчик */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
-                            /* обновляем курсор */
+        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+         /* обновляем курсор */
         getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+        getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
     }
 
     /* создаем класс - интефейс для открытия фрагментов */
@@ -146,7 +172,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 
-    /* создаем класс для загрузки данных из БД 
+    /* создаем класс для загрузки данных из БД Журнала заказов
     * загрузка происходит в фоне */
     private static class MyCursorLoader extends CursorLoader {
 
@@ -158,6 +184,21 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         public Cursor loadInBackground() {
             return sDb
                     .rawQuery(SQLQuery.queryOrders("Orders._id  <> ?"), new String[]{"null"});
+        }
+    }
+
+    /* создаем класс для загрузки данных из БД суммы заказов
+    * загрузка происходит в фоне */
+    private static class MyCursorLoaderOrdersSum extends CursorLoader {
+
+        public MyCursorLoaderOrdersSum(Context context) {
+            super(context);
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            return sDb
+                    .rawQuery(SQLQuery.queryOrdersSum("Orders.type  <> ?"), new String[]{"NO_HELD"});
         }
     }
 
@@ -249,12 +290,22 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_NUMBER));
             final String cStatus = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TYPE));
 
+            /*menu*/
+            final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
+
             /*дата */
             final TextView date = (TextView) convertView.findViewById(R.id.main_list_item_text_date);
             date.setText(cDate);
             /*клиент*/
             final TextView client = (TextView) convertView.findViewById(R.id.main_list_item_text_client);
             client.setText(cClient);
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    spinner.performClick();
+                }
+            });
             /*адресс*/
             final TextView adress = (TextView) convertView.findViewById(R.id.main_list_item_text_sub_client);
             adress.setText(cAdress);
@@ -272,9 +323,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             } else {
                 status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
             }
-
-            /*menu*/
-            final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
 
             /* Настраиваем адаптер */
             String[] spinnerMenu = getResources().getStringArray(R.array.spinner_orders_menu);
@@ -303,7 +351,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                             case 0:
                                 ConstantsUtil.modeNewOrder = false;
                                         /* ТЧ заказа */
-                                ConstantsUtil.mCart = new LinkedHashSet<OrderDoc.OrderLines>();
+                                ConstantsUtil.mCart = new LinkedHashSet<>();
                                 /*рредактируем док*/
                                 Bundle bundleItem = new Bundle();
                                 bundleItem.putString(ID_ORDER, cId);

@@ -26,11 +26,25 @@ public class SQLQuery {
     public static String queryOrders(final String sp) {
 
         String sq;
-        sq = "Select Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total," +
+        sq = "Select   Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total," +
                 "Counteragents.name, Counteragents.address\n" +
                 "FROM Orders\n" +
                 "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod " +
                 "and Orders.client_adress  = Counteragents.address\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+    /*
+    запрос журнал заказов сумма всех заказов
+    sp параметры условий запроса
+    */
+    public static String queryOrdersSum(final String sp) {
+
+        String sq;
+        sq = "Select Sum(Orders.total) as sum_orders " +
+                "FROM Orders\n" +
                 "WHERE " + sp + "\n";
 
         return sq;

@@ -9,23 +9,18 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
@@ -53,6 +48,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     private static TextView tSumCart;
     private AndroidTreeView tView;
     private TreeNode mNode;
+    private ImageView ui_dialog;
 
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
@@ -161,7 +157,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
         final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
 
@@ -235,17 +230,18 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         customDialogAmuont.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         final View menu_dialog_amuont = menu.findItem(R.id.menu_dialog_amuont).getActionView();
 
+        /*количество для выбора в заказ*/
+        ui_dialog = (ImageView) menu_dialog_amuont.findViewById(R.id.main_tool_bar_chick_dialog_image);
+        /*обновляем выбор*/
+        updateSelectDialog();
         /* клик на корзине */
         menu_dialog_amuont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                // меняем он на кнопке
-                if (Dialogs.openDialog)
-                    menu_dialog_amuont.setBackgroundResource(R.color.main_grey);
-                else
-                    menu_dialog_amuont.setBackgroundResource(R.color.main_grey_select);
-
                 Dialogs.openDialog = !Dialogs.openDialog;
+                // меняем фон
+                updateSelectDialog();
+
             }
         });
         /* корзина */
@@ -269,6 +265,18 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         //inflater.inflate(R.menu.menu_main, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // меняем фон для выбранного количества в диалоге
+    private void updateSelectDialog() {
+        if (ui_dialog == null) return;
+
+        // меняем фон на кнопке
+        if (!Dialogs.openDialog) {
+            ui_dialog.setBackgroundResource(R.color.main_grey);
+        } else {
+            ui_dialog.setBackgroundResource(R.color.main_grey_select);
+        }
     }
 
     /*открываем корзину*/
