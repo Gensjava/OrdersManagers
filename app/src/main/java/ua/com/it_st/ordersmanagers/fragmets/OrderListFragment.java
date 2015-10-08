@@ -6,23 +6,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +25,10 @@ import android.widget.Toast;
 import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.enums.DocType;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -48,6 +41,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     public static final String NUMBER_ORDER = "NUMBER_ORDER";
     public static final String DATE_ORDER = "DATE_ORDER";
     public static final String ID_ORDER = "ID_ORDER";
+    public static final String DOC_TYPE_OPERATION = "DOC_TYPE_OPERATION";
     private static SQLiteDatabase sDb;
     private SimpleCursorAdapter scAdapter;
     private TextView ordersSum;
@@ -70,7 +64,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         lvData.setAdapter(scAdapter);
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        getActivity().getSupportLoaderManager().initLoader(2, null, this);
         /* кнопка далее переход на следующий этап*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
         /* слушатель кнопки далее */
@@ -92,7 +86,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         switch (id) {
             case 0:/*получаем все заазы*/
                 return new MyCursorLoader(getActivity());
-            case 1:/*получаем сумму всех заазов*/
+            case 2:/*получаем сумму всех заазов*/
                 return new MyCursorLoaderOrdersSum(getActivity());
             default:
                 return null;
@@ -109,11 +103,12 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 /*следующий номер заказа*/
                 ConstantsUtil.setsCurrentNumber((short) data.getCount());
                 break;
-            case 1:
+            case 2:
                 final int cSumIndex = data.getColumnIndex("sum_orders");
                 data.moveToFirst();
                 final String cSum = data.getString(cSumIndex);
                 updataSumOrders(cSum);
+
                 break;
             default:
                 break;
@@ -124,7 +119,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     /* функция перезапуск */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-        //   scAdapter.swapCursor(null);
+        scAdapter.swapCursor(null);
     }
 
     /*Обновляем подвал сумму заказов*/
@@ -139,7 +134,8 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             case R.id.main_heander_image_plus:
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
-                ConstantsUtil.modeNewOrder = true;
+                /*чистим док заказ и содаем новый заказ*/
+                ConstantsUtil.clearOrderHeader(DocTypeOperation.NEW);
                 break;
             default:
                 break;
@@ -151,7 +147,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         super.onPause();
         /* выходим из загрузчкика*/
         getActivity().getSupportLoaderManager().destroyLoader(0);
-        getActivity().getSupportLoaderManager().destroyLoader(1);
+        getActivity().getSupportLoaderManager().destroyLoader(2);
     }
 
     @Override
@@ -159,10 +155,10 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         super.onResume();
         /* создаем загрузчик */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        getActivity().getSupportLoaderManager().initLoader(2, null, this);
          /* обновляем курсор */
         getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
-        getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+        getActivity().getSupportLoaderManager().getLoader(2).forceLoad();
     }
 
     /* создаем класс - интефейс для открытия фрагментов */
@@ -250,6 +246,9 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 case 2:
                     icon.setImageResource(R.mipmap.ic_no_held);
                     break;
+                case 3:
+                    icon.setImageResource(R.mipmap.ic_copy);
+                    break;
                 default:
                     break;
             }
@@ -318,7 +317,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             /*статус*/
             final ImageView status = (ImageView) convertView.findViewById(R.id.main_list_item_image_status);
             /* проведен */
-            if (cStatus.equals(DocTypeEnum.HELD.toString())) {
+            if (cStatus.equals(DocType.HELD.toString())) {
                 status.setImageResource(R.mipmap.ic_held);
             } else {
                 status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
@@ -332,7 +331,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
             /* Вызываем адаптер */
             spinner.setAdapter(adapter);
-            spinner.setSelection(3);/*устанавливаем заглушку*/
+            spinner.setSelection(4);/*устанавливаем заглушку*/
 
             /*костыль для того чтоб при начале открытия списка незаполнялось первая позиция
              и при выборе пользователем позицию в меню нормально обрабатывал
@@ -349,11 +348,25 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
                         switch (selectedItemPosition) {
                             case 0:
-                                ConstantsUtil.modeNewOrder = false;
+                            case 3:
+
+                                Bundle bundleItem = new Bundle();
+                                switch (selectedItemPosition) {
+                                    case 0:
+                                  /*чистим док заказ и редактируем заказ*/
+                                        ConstantsUtil.clearOrderHeader(DocTypeOperation.EDIT);
+                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_order));
+                                        break;
+                                    case 3:
+                                  /*чистим док заказ и копируем заказ*/
+                                        ConstantsUtil.clearOrderHeader(DocTypeOperation.COPY);
+                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_order));
+                                        break;
+                                }
                                         /* ТЧ заказа */
                                 ConstantsUtil.mCart = new LinkedHashSet<>();
-                                /*рредактируем док*/
-                                Bundle bundleItem = new Bundle();
+                                /*редактируем док*/
+
                                 bundleItem.putString(ID_ORDER, cId);
                                 bundleItem.putString(NUMBER_ORDER, cNumber);
                                 bundleItem.putString(DATE_ORDER, cDate);
@@ -362,11 +375,11 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                                 someEventListener.onOpenFragmentClassBundle(OrderNewHeaderFragment.class, bundleItem);
                             case 1:
                                 /*проводим док*/
-                                data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.HELD.toString());
+                                data.put(TableOrders.COLUMN_TYPE, DocType.HELD.toString());
                                 break;
                             case 2:
                                 /*помечаем на удаления док*/
-                                data.put(TableOrders.COLUMN_TYPE, DocTypeEnum.NO_HELD.toString());
+                                data.put(TableOrders.COLUMN_TYPE, DocType.NO_HELD.toString());
                                 break;
                             default:
                                 break;

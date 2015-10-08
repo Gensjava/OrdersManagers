@@ -22,6 +22,7 @@ import com.unnamed.b.atv.view.AndroidTreeView;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -49,6 +50,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     private AndroidTreeView tView;
     private TreeNode mNode;
     private ImageView ui_dialog;
+    private TextView ui_dialog_auont;
 
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
@@ -197,9 +199,13 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         /*Отображаем сумму заказа в подвале*/
         tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-        if (!ConstantsUtil.modeNewOrder & !ConstantsUtil.clickModifitsirovannoiCart) {
+        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+
+            if (!ConstantsUtil.clickModifitsirovannoiCart) {
                 /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(1, null, this);
+            }
         }
 
         /* создаем лоадер для чтения данных */
@@ -232,6 +238,8 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
         /*количество для выбора в заказ*/
         ui_dialog = (ImageView) menu_dialog_amuont.findViewById(R.id.main_tool_bar_chick_dialog_image);
+         /*количество для выбора в заказ*/
+        ui_dialog_auont = (TextView) menu_dialog_amuont.findViewById(R.id.main_tool_bar_chick_dialog_text);
         /*обновляем выбор*/
         updateSelectDialog();
         /* клик на корзине */
@@ -241,7 +249,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 Dialogs.openDialog = !Dialogs.openDialog;
                 // меняем фон
                 updateSelectDialog();
-
             }
         });
         /* корзина */
@@ -274,8 +281,11 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         // меняем фон на кнопке
         if (!Dialogs.openDialog) {
             ui_dialog.setBackgroundResource(R.color.main_grey);
+            ui_dialog_auont.setVisibility(View.INVISIBLE);
         } else {
             ui_dialog.setBackgroundResource(R.color.main_grey_select);
+            ui_dialog_auont.setVisibility(View.VISIBLE);
+            ui_dialog_auont.setText(String.valueOf((int) Dialogs.numberD));
         }
     }
 
@@ -412,8 +422,13 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         super.onPause();
         getActivity().getSupportLoaderManager().destroyLoader(0);
 
-        if (!ConstantsUtil.modeNewOrder & !ConstantsUtil.clickModifitsirovannoiCart) {
-            getActivity().getSupportLoaderManager().destroyLoader(1);
+        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+
+            if (!ConstantsUtil.clickModifitsirovannoiCart) {
+                /* удаляем лоадер для чтения данных */
+                getActivity().getSupportLoaderManager().destroyLoader(1);
+            }
         }
 
     }
@@ -480,7 +495,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
             return sDb
                     .rawQuery(SQLQuery.queryOrdersLinesEdit("OrdersLines.doc_id = ?"
-                    ), new String[]{ConstantsUtil.mCurrentOrder.getId()
+                    ), new String[]{OrderNewHeaderFragment.id_order
 
                     });
         }

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
+import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
@@ -63,7 +63,7 @@ public class TableOrders {
         final ContentValues data = new ContentValues();
 
         data.put(COLUMN_VIEW_ID, sData.getId());
-        data.put(COLUMN_TYPE, DocTypeEnum.HELD.toString());
+        data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
         data.put(COLUMN_NUMBER, ConstantsUtil.getsCurrentNumber());
         data.put(COLUMN_COMPLETED, "");

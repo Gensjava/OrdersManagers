@@ -1,6 +1,6 @@
 package ua.com.it_st.ordersmanagers.enums;
 
 
-public enum DocTypeEnum {
+public enum DocType {
     HELD, NO_HELD
 }

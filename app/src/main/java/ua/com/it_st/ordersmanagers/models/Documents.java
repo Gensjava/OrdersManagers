@@ -1,6 +1,6 @@
 package ua.com.it_st.ordersmanagers.models;
 
-import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
+import ua.com.it_st.ordersmanagers.enums.DocType;
 
 /**
  * Created by Gens on 17.08.2015.
@@ -8,7 +8,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
 public class Documents {
 
     private String mId;
-    private DocTypeEnum mDocType;
+    private DocType mDocType;
     private String mDocDate;
     private String mDocNumber;
     private String mCompleted;
@@ -34,11 +34,11 @@ public class Documents {
         mId = id;
     }
 
-    public DocTypeEnum getDocType() {
+    public DocType getDocType() {
         return mDocType;
     }
 
-    public void setDocType(final DocTypeEnum docType) {
+    public void setDocType(final DocType docType) {
         mDocType = docType;
     }
 

@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
 public class ConstantsUtil {
@@ -22,8 +23,6 @@ public class ConstantsUtil {
     public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
-    /*режим заказа новый или не новый*/
-    public static boolean modeNewOrder;
     /*этот флаг предназначен для режима редактирования заказа его таб.части
     * true - осзначает что в корзине что-то изменили
     * false - пока ни кто ничего не менял*/
@@ -151,9 +150,10 @@ public class ConstantsUtil {
         return bCheck;
     }
 
-    /*чистим документ заказа*/
-    public static void clearOrderHeader() {
+    /*чистим документ заказа и устанавливаем вид операции дока*/
+    public static void clearOrderHeader(final DocTypeOperation docTypeOperation) {
         mCurrentOrder = new OrderDoc();
+        mCurrentOrder.setTypeOperation(docTypeOperation);
     }
 
     /*проверяем пустая корзина или нет*/

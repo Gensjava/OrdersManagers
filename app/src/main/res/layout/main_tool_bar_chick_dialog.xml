@@ -20,6 +20,26 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@mipmap/ic_number_chick_white"/>
+
+        <TextView
+            android:id="@+id/main_tool_bar_chick_dialog_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/main_tool_bar_chick_dialog_image"
+            android:layout_alignTop="@+id/main_tool_bar_chick_dialog_image"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/round_green"
+            android:gravity="center"
+            android:minWidth="19sp"
+            android:paddingBottom="1dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="@null"
+            android:textColor="#ffffffff"
+            android:textSize="12sp"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 

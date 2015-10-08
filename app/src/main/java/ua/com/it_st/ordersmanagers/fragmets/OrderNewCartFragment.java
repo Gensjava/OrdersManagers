@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.ArrayList;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
@@ -52,11 +53,13 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         String numberDoc = ConstantsUtil.mCurrentOrder.getDocNumber();
         String dateDoc = ConstantsUtil.mCurrentOrder.getDocDate();
 
-        if (!ConstantsUtil.modeNewOrder) {
-            TextView header = (TextView) rootView.findViewById(R.id.order_new_cart_list_header_root);
-            header.setText("Редактирование корзины");
-        }
+        TextView header = (TextView) rootView.findViewById(R.id.order_new_cart_list_header_root);
 
+        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+            header.setText(getString(R.string.edit_cart));
+        } else if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+            header.setText(getString(R.string.copy_cart));
+        }
 
       /*выводим данные дату и номер в шапку*/
         TextView period = (TextView) rootView.findViewById(R.id.order_new_cart_period);
@@ -78,12 +81,13 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
 
             case R.id.order_new_cart_list_image_arrow_right:
-               
+
                  /*проверяем пустая корзина или нет*/
                 if (!ConstantsUtil.checkCartEmpty(getActivity())) {
                     boolean bCheck;
                      /* создаем новый заказ */
-                    if (ConstantsUtil.modeNewOrder) {
+                    if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.NEW) ||
+                            ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
                         bCheck = onNewOrder();
                     } else {
                         /*редактируем заказ*/
@@ -96,7 +100,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                         someEventListener.onOpenFragmentClass(OrderListFragment.class);
                         /*чистим корзину*/
                         ConstantsUtil.mCart.clear();
-
                     }
                 }
                 break;

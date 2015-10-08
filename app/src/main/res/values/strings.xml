@@ -52,6 +52,7 @@
         <item>Pедактировать</item>
         <item>Провести</item>
         <item>Снять с проведения</item>
+        <item>Копировать</item>
         <item>заглушка</item>
     </string-array>
 
@@ -532,5 +533,9 @@
     <string name="NameCatalog">NameCatalog</string>
     <string name="SizeFileCatalog">SizeFileCatalog</string>
     <string name="fix_amount">Зафиксировать к-во</string>
+    <string name="edit_order">Редактирование заказа</string>
+    <string name="edit_cart">Редактирование корзины</string>
+    <string name="copy_order">Копирование заказа</string>
+    <string name="copy_cart">Копирование корзины</string>
 
 </resources>

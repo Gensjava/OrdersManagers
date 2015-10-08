@@ -33,6 +33,7 @@ import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -172,14 +173,12 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mProgressPieView.setText("0%");
         mButtonOrderList.setVisibility(View.INVISIBLE);
 
-        /* текущий новый заказ */
-        ConstantsUtil.mCurrentOrder = new OrderDoc();
+        /*чистим док заказ и редактируем заказ*/
+        ConstantsUtil.clearOrderHeader(DocTypeOperation.NEW);
         /* ТЧ заказа */
         ConstantsUtil.mCart = new LinkedHashSet<>();
        /*текущий номер заказа*/
         ConstantsUtil.sCurrentNumber = 0;
-       /*режим заказа новый или не новый*/
-        ConstantsUtil.modeNewOrder = true;
         //
         nOSeek = 0;
         mProgress = 0;

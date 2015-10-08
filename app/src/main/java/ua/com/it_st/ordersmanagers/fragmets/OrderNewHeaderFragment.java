@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -34,6 +35,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -43,8 +45,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 public class OrderNewHeaderFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
+    public static String id_order;
     private static SQLiteDatabase sDb;
-    private static String id_order;
     private SimpleAdapter mAdapter;
     private View rootView;
     private String[][] mItemsHeader;
@@ -60,8 +62,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             String numberDoc;
             String dateDoc;
-           /*чистим док заказ*/
-            ConstantsUtil.clearOrderHeader();
 
             /*расчет  позиции кнопки далее к следующему этапу*/
             TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
@@ -69,15 +69,12 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
             imViewAdd.setOnClickListener(this);
 
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//            params.setMargins(100, header.getMeasuredHeight(), 20, 0);
-//            imViewAdd.setLayoutParams(params);
-
             Bundle bundle = getArguments();
-            if (bundle != null) {
-                /*редактируем документ*/
+            /*редактируем документ*/
+            if (bundle != null &
+                    ConstantsUtil.mCurrentOrder != null &
+                    ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+
                /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListFragment.ID_ORDER);
                 ConstantsUtil.mCurrentOrder.setId(id_order);
@@ -88,11 +85,12 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
                 ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
                 /*стктус докуента*/
-                header.setText("Редактирование заказа");
+                header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
                   /* открываем подключение к БД */
                 sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
                  /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
+
             } else {
                 /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
@@ -110,6 +108,17 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                       /*код на сервере пользователя*/
                 String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
                 ConstantsUtil.mCurrentOrder.setAgentId(kodAgent);
+               /* так заполняем при операции дока копирвоать */
+                if (bundle != null & ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+                       /*получаем ID дока и подставляем в запрос*/
+                    id_order = bundle.getString(OrderListFragment.ID_ORDER);
+                     /*стктус докуента*/
+                    header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
+                     /* открываем подключение к БД */
+                    sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+                 /* создаем лоадер для чтения данных */
+                    getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                }
             }
 
             /*выводим данные дату и номер в шапку*/
@@ -136,7 +145,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
-        if (!ConstantsUtil.modeNewOrder) {
+        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
            /* выходим из загрузчкика*/
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -229,8 +239,12 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
         } else {
             /*переходим к первой строке*/
-            data.moveToFirst();
-            fillHeader(data);
+            if (data.moveToFirst()) {
+                fillHeader(data);
+            } else {
+                InfoUtil.Tost("Нет данных по номеру заказа " + id_order, getActivity());
+            }
+
         }
     }
 

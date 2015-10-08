@@ -1,15 +1,14 @@
 package ua.com.it_st.ordersmanagers.models;
 
-import java.util.UUID;
-
-import ua.com.it_st.ordersmanagers.enums.DocTypeEnum;
+import ua.com.it_st.ordersmanagers.enums.DocType;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 
 /**
  * Created by Gens on 31.07.2015.
  */
 public class OrderDoc {
     private String mId;
-    private DocTypeEnum mDocType;
+    private DocType mDocType;
     private String mDocDate;
     private String mDocNumber;
     private String mCompleted;
@@ -21,13 +20,15 @@ public class OrderDoc {
     private String mTotal;
     private String mNote;
     private String mAdress;
+    private DocTypeOperation mTypeOperation;
 
-    public OrderDoc(final String id, final DocTypeEnum docType,
+    public OrderDoc(final String id, final DocType docType,
                     final String docDate, final String docNumber,
                     final String completed, final String agentId,
                     final String firmId, final String storeId,
                     final String clientId, final String priceCategoryId,
-                    final String total, final String note, final String adress) {
+                    final String total, final String note, final String adress,
+                    final DocTypeOperation typeOperation) {
 
         mId = id;
         mDocType = docType;
@@ -42,6 +43,7 @@ public class OrderDoc {
         mTotal = total;
         mNote = note;
         mAdress = adress;
+        mTypeOperation = typeOperation;
     }
 
     public OrderDoc() {
@@ -56,11 +58,11 @@ public class OrderDoc {
         mId = id;
     }
 
-    public DocTypeEnum getDocType() {
+    public DocType getDocType() {
         return mDocType;
     }
 
-    public void setDocType(final DocTypeEnum docType) {
+    public void setDocType(final DocType docType) {
         mDocType = docType;
     }
 
@@ -150,6 +152,14 @@ public class OrderDoc {
 
     public void setAdress(final String adress) {
         mAdress = adress;
+    }
+
+    public DocTypeOperation getTypeOperation() {
+        return mTypeOperation;
+    }
+
+    public void setTypeOperation(final DocTypeOperation typeOperation) {
+        mTypeOperation = typeOperation;
     }
 
     //табличная часть заказа
