@@ -24,8 +24,10 @@ import java.util.HashMap;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /*Класс предназначен для выбора значений из списка для оформления шапки
@@ -52,7 +54,9 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             nameTable = bundle.getString(OrderNewHeaderFragment.NAME_TABLE);
             /*если это таблица клиентов тогда нам нужен суб текст
                         *  * чтоб можно было физ.адресс показать*/
-            mIsSubText = nameTable.equals(TableCounteragents.TABLE_NAME);
+            if (nameTable != null) {
+                mIsSubText = nameTable.equals(TableCounteragents.TABLE_NAME);
+            }
         }
 
         /* открываем подключение к БД */
@@ -68,11 +72,19 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             // создааем адаптер и настраиваем список
             scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_item, null, from, to, 0);
         } else {
-            from = new String[]{getString(R.string.name), TableCounteragents.COLUMN_ADDRESS};
-            to = new int[]{R.id.order_new_select_header_sub_item_text, R.id.order_new_select_header_sub_sub_item_text};
+            from = new String[]{getString(R.string.name), TableCounteragents.COLUMN_ADDRESS, TableCounteragentsDebt.COLUMN_DEBT};
+            to = new int[]{R.id.order_new_select_header_sub_item_text, R.id.order_new_select_header_sub_sub_item_text, R.id.order_new_select_header_sub_item_text_debt};
             // создааем адаптер и настраиваем список
             scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_sub_item, null, from, to, 0);
         }
+        if (!mIsSubText) {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        } else {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        }
+
 
         /**/
         final ListView lvData = (ListView) rootView.findViewById(R.id.lvMain);
@@ -104,19 +116,19 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 getActivity().onBackPressed();
             }
         });
-
-        /* создаем лоадер для чтения данных */
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        //
-
         return rootView;
     }
-
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
+        switch (id) {
+            case 0:/*получаем все заазы*/
+                return new MyCursorLoader(getActivity());
+            case 1:/*получаем сумму всех заазов*/
+                return new MyCursorLoaderDebt(getActivity());
+            default:
+                return null;
+        }
     }
-
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         if (data.isClosed()) {
@@ -125,16 +137,37 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             scAdapter.swapCursor(data);
         }
     }
-
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         scAdapter.swapCursor(null);
     }
-
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().getSupportLoaderManager().destroyLoader(0);
+
+        if (!mIsSubText) {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().destroyLoader(0);
+        } else {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().destroyLoader(1);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mIsSubText) {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                 /* обновляем курсор */
+            getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+        } else {
+             /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(1, null, this);
+                 /* обновляем курсор */
+            getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+        }
     }
 
     @Override
@@ -153,6 +186,8 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         void OnFragmentSelectListener(String[] link);
     }
 
+    /* создаем класс для загрузки данных из БД общие данные
+    * загрузка происходит в фоне */
     private static class MyCursorLoader extends CursorLoader {
 
         public MyCursorLoader(Context context) {
@@ -169,6 +204,22 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                             null, // groupBy
                             null, // having
                             null);// orderBy
+        }
+
+    }
+
+    /* создаем класс для загрузки данных из БД долг клиентов
+* загрузка происходит в фоне */
+    private static class MyCursorLoaderDebt extends CursorLoader {
+
+        public MyCursorLoaderDebt(Context context) {
+            super(context);
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            return sDb
+                    .rawQuery(SQLQuery.queryCounteragentsDebt("Counteragents.name  <> ?"), new String[]{"null"});
         }
 
     }

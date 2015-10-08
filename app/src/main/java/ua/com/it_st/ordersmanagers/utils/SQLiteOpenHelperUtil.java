@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteStatement;
 
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -20,7 +21,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
@@ -72,6 +73,7 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableGoodsByStores.onDeleteValueTable(mDb);
         TableOrders.onDeleteValueTable(mDb);
         TableOrdersLines.onDeleteValueTable(mDb);
+        TableCounteragentsDebt.onDeleteValueTable(mDb);
 
     }
 
@@ -87,12 +89,15 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableCompanies.createTable(db);
         TableGoodsByStores.createTable(db);
         TableTypeStores.createTable(db);
+        TableCounteragentsDebt.createTable(db);
 
     }
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-
+        if (oldVersion == 1 & newVersion == 2) {
+            TableCounteragentsDebt.createTable(db);
+        }
 
     }
 

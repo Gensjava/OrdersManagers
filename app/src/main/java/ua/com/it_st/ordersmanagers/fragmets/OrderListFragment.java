@@ -78,7 +78,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
         return rootView;
     }
-
     /* функция
     * отрабатывает при создании */
     @Override
@@ -92,7 +91,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 return null;
         }
     }
-
     /*функция отрабатывает после выполнения*/
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
@@ -114,14 +112,11 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 break;
         }
     }
-
-
     /* функция перезапуск */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         scAdapter.swapCursor(null);
     }
-
     /*Обновляем подвал сумму заказов*/
     private void updataSumOrders(String sumOrders) {
         ordersSum.setText(sumOrders);
@@ -141,7 +136,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 break;
         }
     }
-
     @Override
     public void onPause() {
         super.onPause();

@@ -37,6 +37,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
@@ -219,6 +220,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         lTableNameInsert.put(TableTypePrices.FILE_NAME, TableTypePrices.INSERT_VALUES);
         lTableNameInsert.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
         lTableNameInsert.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
+        lTableNameInsert.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.INSERT_VALUES);
 
         return lTableNameInsert;
     }
@@ -234,6 +236,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.HEADER_NAME);
         lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.HEADER_NAME);
         lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.HEADER_NAME);
+        lTableName.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.HEADER_NAME);
 
         return lTableName;
     }

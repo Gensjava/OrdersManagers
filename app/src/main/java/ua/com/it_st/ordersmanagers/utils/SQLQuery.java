@@ -130,4 +130,18 @@ public class SQLQuery {
                 "(SELECT COUNT(*) count FROM OrdersLines) b \n";
         return sq;
     }
+
+    /* запрос получаем долг клиентов
+    sp параметры условий запроса
+    */
+    public static String queryCounteragentsDebt(final String sp) {
+
+        String sq;
+        sq = "Select Counteragents._id, Counteragents.kod,Counteragents.name, Counteragents.address, CounteragentsDebt.debt\n" +
+                "From Counteragents\n" +
+                "LEFT OUTER JOIN CounteragentsDebt ON Counteragents.kod  = CounteragentsDebt.kod\n" +
+                "WHERE " + sp + "\n" +
+                "GROUP by Counteragents.name,Counteragents.kod, Counteragents.address, CounteragentsDebt.debt;";
+        return sq;
+    }
 }
