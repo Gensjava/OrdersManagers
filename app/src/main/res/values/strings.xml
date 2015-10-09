@@ -538,5 +538,6 @@
     <string name="edit_cart">Редактирование корзины</string>
     <string name="copy_order">Копирование заказа</string>
     <string name="copy_cart">Копирование корзины</string>
+    <string name="start_load">Начало загрузки</string>
 
 </resources>

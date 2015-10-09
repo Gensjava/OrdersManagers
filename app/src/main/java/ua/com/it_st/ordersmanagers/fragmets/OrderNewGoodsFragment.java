@@ -395,6 +395,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         final int isCategoryIndex = data.getColumnIndex(TableProducts.COLUMN_IS_CATEGORY);
         final int cKodIndex = data.getColumnIndex(TableProducts.COLUMN_KOD);
 
+        StringBuilder sqlWhere = new StringBuilder();
         while (data.moveToNext()) {
 
             final String cName = data.getString(cNameIndex);
@@ -406,6 +407,8 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             switch (isCategory) {
                 case "true":
                     newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
+                    sqlWhere.append("'" + cKod + "'");
+                    sqlWhere.append(",");
                     break;
                 default:
                     double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));

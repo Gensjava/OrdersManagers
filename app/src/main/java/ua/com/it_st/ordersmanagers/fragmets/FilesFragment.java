@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -65,6 +68,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private Button BHost;
     private ImageView ImageViewInfo;
     private Timer mTimer;
+    private View ui_bar;
+
 
     protected static SQLiteDatabase getDb() {
         return mDb;
@@ -78,6 +83,25 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         return context.getPackageManager()
                 .getPackageInfo(context.getPackageName(), 0)
                 .applicationInfo.dataDir;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+
+        final MenuItem customBar = menu.add(0, R.id.menu_bar, 0, "");
+        customBar.setActionView(R.layout.progress_bar);
+        customBar.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        View menu_hotlistBar = menu.findItem(R.id.menu_bar).getActionView();
+
+        ui_bar = menu_hotlistBar.findViewById(R.id.main_progress_bar);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Nullable
@@ -163,6 +187,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         }, 2000, 1000); //
     }
 
+
     /*обнуляем значения перед загрузкой*/
     public void nullableValues() {
 
@@ -173,6 +198,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mProgressPieView.setProgress(0);
         mProgressPieView.setText("0%");
         mButtonOrderList.setVisibility(View.INVISIBLE);
+        ui_bar.setVisibility(View.VISIBLE);
 
         /*чистим док заказ и редактируем заказ*/
         ConstantsUtil.clearOrderHeader(DocTypeOperation.NEW);
@@ -293,6 +319,14 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         return ImageViewInfo;
     }
 
+    public View getUi_bar() {
+        return ui_bar;
+    }
+
+    public void setUi_bar(final View ui_bar) {
+        this.ui_bar = ui_bar;
+    }
+
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
@@ -375,6 +409,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
             }
             return loginServer;
         }
+
 
         public String getPasswordServer() {
 

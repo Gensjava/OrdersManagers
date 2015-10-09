@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import com.loopj.android.http.RequestParams;
 
@@ -49,6 +52,7 @@ public class FilesLoadFragment extends FilesFragment {
 
     @Override
     public void onClick(final View view) {
+
         switch (view.getId()) {
             case R.id.load_files_button:
                 /* удаляем все записи из таблиц */
@@ -93,12 +97,13 @@ public class FilesLoadFragment extends FilesFragment {
         if (ConstantsUtil.sizeFileLine > 0) {
             getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
         }
-
     }
 
     /* загружаем файлы с сервера*/
     private void dowloadFilesOfServer() {
 
+        /*обнуляем все значения перед загрузкой*/
+        nullableValues();
          /*получаем команды для записи новой строки в таблице*/
         lTableNameInsert = getFileNameInsert();
         /*получаем заголовки таблиц*/
@@ -108,14 +113,12 @@ public class FilesLoadFragment extends FilesFragment {
         String[] nameFile = getResources().getStringArray(R.array.name_file_data);
         /*определяем кол-во файлов*/
         AcountNameFile = nameFile.length;
-        /*обнуляем все значения перед загрузкой*/
-        nullableValues();
 
         nOSeek = getnOSeek();
         mProgress = getProgress();
         mProgressDiscrete = getProgressDiscrete();
         //Log
-        InfoUtil.setmLogLine("Начало загрузки");
+        InfoUtil.setmLogLine(getString(R.string.start_load));
          /*подключаемся к серверу*/
         FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
 
@@ -126,6 +129,7 @@ public class FilesLoadFragment extends FilesFragment {
             //Log
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
             getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+            getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
       /*получаем параметры подключения*/
@@ -163,7 +167,6 @@ public class FilesLoadFragment extends FilesFragment {
             /* заканчиваем транзакцию */
         getDb().setTransactionSuccessful();
         getDb().endTransaction();
-
     }
 
     public void onInsertTable(final File file,
@@ -212,12 +215,10 @@ public class FilesLoadFragment extends FilesFragment {
             mNameTable = nameTable;
             mFile = file;
         }
-
         @Override
         protected String doInBackground(final String... files) {
 
             try {
-
                 final BufferedReader input = new BufferedReader(new FileReader(mFile));
                 /*вычисляем к-во строк в файле*/
                 totalLinesFile = getCountFileLines(mFile);
@@ -292,6 +293,7 @@ public class FilesLoadFragment extends FilesFragment {
         protected void onProgressUpdate(final Integer... values) {
             super.onProgressUpdate(values);
             try {
+
             /* Линия прогресс */
                 getDiscreteSeekBar().setProgress(values[0]);
                 mProgressDiscrete += (100 / (double) stotalLinesFile);
@@ -304,10 +306,7 @@ public class FilesLoadFragment extends FilesFragment {
             } catch (Exception e) {
                 InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
             }
-
-            //
         }
-
         @Override
         protected void onPostExecute(final String s) {
             super.onPostExecute(s);
@@ -335,8 +334,8 @@ public class FilesLoadFragment extends FilesFragment {
                 } else {
                     getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
                 }
+                getUi_bar().setVisibility(View.INVISIBLE);
             }
-
         }
     }
 }

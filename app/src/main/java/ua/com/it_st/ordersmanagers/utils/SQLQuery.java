@@ -9,13 +9,18 @@ public class SQLQuery {
     public static String queryGoods(final String sp) {
 
         String sq;
-        sq = "Select Products.name, Products.kod, Products.id_category, Products.is_category," +
-                "GoodsByStores.Amount, GoodsByStores.kod_stores, Prices.price\n" +
+        sq = "Select Products.name, Products.kod, Products.id_category, Products.is_category,\n" +
+                "Prices.price,(GoodsByStores.Amount - IFNULL(OrdersLinesD.amount,0)) as amount\n" +
                 "FROM Products\n" +
                 "LEFT OUTER JOIN GoodsByStores ON Products.kod = GoodsByStores.kod_coods\n" +
                 "LEFT OUTER JOIN Prices ON Products.kod = Prices.kod\n" +
-                "WHERE " + sp + "\n" +
-                "GROUP by Products.name";
+                "LEFT OUTER JOIN (\n" +
+                "Select OrdersLines.goods_id,Sum(OrdersLines.amount) as amount\n" +
+                "FROM OrdersLines\n" +
+                "LEFT OUTER JOIN Orders ON OrdersLines.doc_id  = Orders.view_id\n" +
+                "Where Orders.type <> 'NO_HELD'\n" +
+                "GROUP by OrdersLines.goods_id) as  OrdersLinesD ON Products.kod =  OrdersLinesD.goods_id\n" +
+                "WHERE " + sp + "\n";
         return sq;
     }
 
