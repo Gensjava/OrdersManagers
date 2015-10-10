@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.RequestParams;
@@ -54,7 +55,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 mProgress = 0;
                 pProgressPie = 0;
                 //Log
-                InfoUtil.setmLogLine("Начало выгрузки!");
+                InfoUtil.setmLogLine(getString(R.string.start_on_load));
                 /*подключаемся к серверу*/
                 FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
 
@@ -64,6 +65,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                     //Log
                     InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
                     getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                    getUi_bar().setVisibility(View.INVISIBLE);
                     return;
                 }
 
@@ -94,14 +96,16 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     public void onPause() {
         super.onPause();
         /* выходим из загрузчкика*/
-        getActivity().getSupportLoaderManager().destroyLoader(0);
+        for (byte i = 0; i < 3; i++) {
+            getActivity().getSupportLoaderManager().destroyLoader(i);
+        }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         switch (id) {
             case 0:
-                return new MyCursorLoaderLinesAcuont(getActivity());
+                return new MyCursorLoaderLinesAmount(getActivity());
             case 1:
                 return new MyCursorLoaderHeader(getActivity());
             case 2:
@@ -127,6 +131,15 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                     getProgressPieView().setMax(mAcuont);
                 } else {
                     InfoUtil.setmLogLine("Выгрузка файла", "Заказов для выгрузки нет.", true, getTEG());
+                    /*информаци о выгрузке*/
+                    getLoadFiles().setText("Заказов для выгрузки нет.");
+                    getUi_bar().setVisibility(View.INVISIBLE);
+                    /*мигаем иконкой для вывода лога*/
+                    if (InfoUtil.isErrors) {
+                        getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                    } else {
+                        getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                    }
                 }
                 break;
             case 1:
@@ -134,6 +147,8 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 if (mAcuont > 0) {
                     nameFile = TableOrders.FILE_NAME;
                     headerLines = TableOrders.sHeader.split(",");
+                    /*информаци о выгрузке*/
+                    getLoadFiles().setText("Выгрузка " + TableOrders.HEADER_NAME);
                     try {
                         getAllOrdersHeaderLines(data, nameFile, headerLines);
                         //Log
@@ -142,6 +157,15 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                         e.printStackTrace();
                         //Log
                         InfoUtil.setmLogLine("Выгрузка файла", nameFile, true, getTEG() + " " + e.toString());
+                         /*информаци о выгрузке*/
+                        getLoadFiles().setText("Выгрузка завершина c ошибками!");
+                        getUi_bar().setVisibility(View.INVISIBLE);
+                        /*мигаем иконкой для вывода лога*/
+                        if (InfoUtil.isErrors) {
+                            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                        } else {
+                            getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                        }
                     }
                 }
                 break;
@@ -150,22 +174,29 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                  /*формируем документ табличную часть*/
                     nameFile = TableOrdersLines.FILE_NAME;
                     headerLines = TableOrdersLines.sHeader.split(",");
+                                                             /*информаци о выгрузке*/
+                    getLoadFiles().setText("Выгрузка " + TableOrdersLines.HEADER_NAME);
                     try {
                         getAllOrdersHeaderLines(data, nameFile, headerLines);
                         //Log
                         InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         //Log
                         InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
+                         /*информаци о выгрузке*/
+                        getLoadFiles().setText("Выгрузка завершина c ошибками!");
+                        getUi_bar().setVisibility(View.INVISIBLE);
+                        /*мигаем иконкой для вывода лога*/
+                        if (InfoUtil.isErrors) {
+                            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                        } else {
+                            getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                        }
                     }
                 }
-                /*мигаем иконкой для вывода лога*/
-                if (InfoUtil.isErrors) {
-                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
-                } else {
-                    getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
-                }
+
                 break;
             default:
                 break;
@@ -214,7 +245,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
             mProgress++;
            /*двигаем бар */
             onProgressBar(n, sizeBar);
-
         }
         myFile.flush();
         myFile.close();
@@ -224,11 +254,19 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         try {
             params.put(mWayCatalog + "received\\" + nameFile, new File(path));
             mUtilAsyncHttpClient.postUnloadFiles(params, nameFile);
-            getUi_bar().setVisibility(View.INVISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
             //Log
             InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
+                        /*информаци о выгрузке*/
+            getLoadFiles().setText("Выгрузка завершина c ошибками!");
+            getUi_bar().setVisibility(View.INVISIBLE);
+            /*мигаем иконкой для вывода лога*/
+            if (InfoUtil.isErrors) {
+                getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+            } else {
+                getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+            }
         }
     }
 
@@ -236,7 +274,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     private void onProgressBar(int DprogressSeekBar, final int sizeBar) {
 
         getDiscreteSeekBar().setProgress(DprogressSeekBar);
-        pProgressDiscrete += (int) (100 / (double) sizeBar);
+        pProgressDiscrete += (100 / (double) sizeBar);
         setProgressDiscrete(pProgressDiscrete);
          /*надпись бара*/
         getTextProgress().setText(String.valueOf((int) getProgressDiscrete()) + "%");
@@ -245,7 +283,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         pProgressPie += (100 / (double) mAcuont);
         setProgress(pProgressPie);
         getProgressPieView().setText(String.valueOf((int) getProgress()) + "%");
-
     }
 
     /* создаем класс для выгрузки данных заказов шапки из БД
@@ -282,9 +319,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
 
     /* создаем класс для выгрузки данных считаем сколько стирок в двух таблицах
              * загрузка происходит в фоне */
-    private static class MyCursorLoaderLinesAcuont extends CursorLoader {
+    private static class MyCursorLoaderLinesAmount extends CursorLoader {
 
-        public MyCursorLoaderLinesAcuont(Context context) {
+        public MyCursorLoaderLinesAmount(Context context) {
             super(context);
         }
 
@@ -292,7 +329,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         public Cursor loadInBackground() {
 
             return getDb()
-                    .rawQuery(SQLQuery.queryOrdersLinesAcuont(), null);
+                    .rawQuery(SQLQuery.queryOrdersLinesAmount(), null);
         }
     }
 }

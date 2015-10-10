@@ -13,6 +13,7 @@ public class TableOrders {
     public static final String TABLE_NAME = "Orders";
     public static final String FILE_NAME = "doc_orders.csv";
     public static final String sHeader = "Id, DocType, DocDate, DocNumber, Completed, AgentId, FirmId, StoreId, ClientId, PriceCategoryId, Total, Note,";
+    public static final String HEADER_NAME = "шапка заказов";
 
     public static final String COLUMN_VIEW_ID = "view_id";
     public static final String COLUMN_TYPE = "type";

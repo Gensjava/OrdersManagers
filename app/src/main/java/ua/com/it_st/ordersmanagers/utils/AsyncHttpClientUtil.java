@@ -1,6 +1,8 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 
+import android.view.View;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -14,6 +16,7 @@ import java.io.IOException;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.fragmets.FilesFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -88,6 +91,15 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     InfoUtil.setmLogLine("Файл доставлен ", fileName);
 
                     if (fileName.equals(TableOrdersLines.FILE_NAME)) {
+
+                        FilesFragment fragment = (FilesUnloadFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(FilesUnloadFragment.class.toString());
+                        if (fragment != null) {
+                            /**/
+                            fragment.getLoadFiles().setText("Выгрузка завершена!");
+                            /*мигаем иконкой для вывода лога*/
+                            fragment.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, fragment.getImageViewInfo());
+                            fragment.getUi_bar().setVisibility(View.INVISIBLE);
+                        }
                         //Log
                         InfoUtil.setmLogLine("Выгрузка завершена!");
                     }
@@ -108,6 +120,8 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         /*мигаем иконкой для вывода лога*/
                             fragment.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo());
                             mgError++;
+                            fragment.getUi_bar().setVisibility(View.INVISIBLE);
+                            fragment.getLoadFiles().setText("Выгрузка завершена!");
                         }
                     }
                     //Log
@@ -117,6 +131,4 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         });
 
     }
-
-
 }

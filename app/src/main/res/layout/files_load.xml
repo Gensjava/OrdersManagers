@@ -108,7 +108,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="10dp"
-                        android:text="Информация о загрузке..."
+                        android:text="Информация об обмене..."
                         android:textColor="@color/main_grey"
                         android:textIsSelectable="false"
                         android:textSize="12dp"

@@ -132,9 +132,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         /**/
         mButtonOrderList = (ImageView) rootView.findViewById(R.id.load_files_image_button_n);
         mButtonOrderList.setOnClickListener(this);
-        /**/
+        /*процент бара при обмене файлами */
         mTextProgress = (TextView) rootView.findViewById(R.id.load_files_text_progress);
-            /**/
+            /*инфо при обмене*/
         mLoadFiles = (TextView) rootView.findViewById(R.id.load_files_text);
 
         return rootView;
@@ -149,6 +149,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     public void getFleshImage(final int icon, final int anim, final ImageView iv) {
 
         final Animation animScale = AnimationUtils.loadAnimation(getActivity(), anim);
+
         /*проверяем если уже работает то не запускаем*/
         if (animScale.hasStarted() & !animScale.hasEnded()) {
             return;
@@ -290,6 +291,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     public TextView getLoadFiles() {
         return mLoadFiles;
     }
+
 
     public double getProgress() {
         return mProgress;

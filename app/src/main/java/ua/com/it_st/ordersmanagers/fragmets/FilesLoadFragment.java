@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -80,7 +81,7 @@ public class FilesLoadFragment extends FilesFragment {
 
         params.put(getString(R.string.SizeFileCatalog), wayCatalog);
 
-        FileSizeLine fileSizeLine = new FileSizeLine(idServer, params, loginServer, passwordServer);
+        FileSizeLine fileSizeLine = new FileSizeLine(idServer, params, loginServer, passwordServer, (MainActivity) getActivity());
         fileSizeLine.execute();
         try {
             fileSizeLine.get();
@@ -119,6 +120,7 @@ public class FilesLoadFragment extends FilesFragment {
         mProgressDiscrete = getProgressDiscrete();
         //Log
         InfoUtil.setmLogLine(getString(R.string.start_load));
+        getLoadFiles().setText(getString(R.string.start_load));
          /*подключаемся к серверу*/
         FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
 
@@ -316,7 +318,7 @@ public class FilesLoadFragment extends FilesFragment {
             ConstantsUtil.nPieViewProgress++;
              /*если загрузился последний файл*/
             if (ConstantsUtil.nPieViewProgress == AcountNameFile) {
-                getButtonOrderList().setVisibility(View.VISIBLE);
+
                /*считаем разницу между то что пришли данные из 1с и то что реально загрузилось*/
                 int d = ConstantsUtil.sizeFileLine - nOSeek;
                 /* Круг прогресс */
@@ -328,12 +330,14 @@ public class FilesLoadFragment extends FilesFragment {
                 //Log
                 InfoUtil.setmLogLine("Загрузка завершена!");
                 getTextProgress().setText((int) mProgress + "%");
+
                 /*мигаем иконкой для вывода лога*/
                 if (InfoUtil.isErrors) {
                     getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
                 } else {
                     getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
                 }
+                getButtonOrderList().setVisibility(View.VISIBLE);
                 getUi_bar().setVisibility(View.INVISIBLE);
             }
         }

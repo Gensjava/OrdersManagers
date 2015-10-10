@@ -11,6 +11,7 @@ public class TableOrdersLines {
     public static final String TABLE_NAME = "OrdersLines";
     public static final String FILE_NAME = "doc_lines.csv";
     public static final String sHeader = "DocId,GoodsId,Rate,Amount,Price,";
+    public static final String HEADER_NAME = "табличной части заказов";
 
     public static final String COLUMN_DOC_ID = "doc_id";
     public static final String COLUMN_GOODS_ID = "goods_id";

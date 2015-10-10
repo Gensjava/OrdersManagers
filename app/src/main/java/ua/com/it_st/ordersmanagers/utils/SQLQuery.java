@@ -126,13 +126,18 @@ public class SQLQuery {
      и в шапке для выгрузки в файл csv
     sp параметры условий запроса
     */
-    public static String queryOrdersLinesAcuont() {
+    public static String queryOrdersLinesAmount() {
 
         String sq;
         sq = "SELECT (a.count + b.count) as sum\n" +
-                "FROM \n" +
-                "(SELECT COUNT(*) count FROM Orders) a, \n" +
-                "(SELECT COUNT(*) count FROM OrdersLines) b \n";
+                "FROM\n" +
+                "(SELECT COUNT(*) count\n" +
+                "FROM Orders\n" +
+                "WHERE Orders.type <> 'NO_HELD') a,\n" +
+                "(SELECT COUNT(*) count\n" +
+                "FROM Orders\n" +
+                "LEFT OUTER JOIN OrdersLines ON Orders.view_id = OrdersLines.doc_id\n" +
+                "WHERE Orders.type <> 'NO_HELD' ) b ";
         return sq;
     }
 
