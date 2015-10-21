@@ -10,14 +10,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
+
+
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -26,13 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
-import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -136,8 +133,9 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             /* список шапка заказа*/
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
-
         }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrow_left);
+        MainActivity.chickMainFragment = false;
 
         return rootView;
     }

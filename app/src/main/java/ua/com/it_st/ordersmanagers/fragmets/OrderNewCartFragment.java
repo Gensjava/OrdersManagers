@@ -317,7 +317,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                                 notifyDataSetChanged();
                                 upDataFooter();
                                 /**/
-                                ConstantsUtil.clickModifitsirovannoiCart = true;
+                                ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(true);
                                 break;
                             case 1:
                                 Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrderLines, OrderNewCartFragment.class.toString());

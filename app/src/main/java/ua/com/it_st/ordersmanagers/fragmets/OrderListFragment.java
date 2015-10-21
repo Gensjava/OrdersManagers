@@ -11,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -70,12 +72,15 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
         /*устанавливаем мод. корзины*/
-        ConstantsUtil.clickModifitsirovannoiCart = false;
+        ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(false);
         /*устанавливаем период журнала*/
         TextView period = (TextView) rootView.findViewById(R.id.main_heander_period);
         period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
         /*подвал журнал заказов */
         ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
+        /**/
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_drawer);
+        MainActivity.chickMainFragment = true;
         return rootView;
     }
     /* функция

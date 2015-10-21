@@ -23,10 +23,6 @@ public class ConstantsUtil {
     public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
-    /*этот флаг предназначен для режима редактирования заказа его таб.части
-    * true - осзначает что в корзине что-то изменили
-    * false - пока ни кто ничего не менял*/
-    public static boolean clickModifitsirovannoiCart;
     /*для расчета прогресс-бара при обмене инфой*/
     public static int nPieViewProgress;
     public static double nPieViewdProgress;

@@ -22,13 +22,18 @@ public class OrderDoc {
     private String mAdress;
     private DocTypeOperation mTypeOperation;
 
+    /*этот флаг предназначен для режима редактирования заказа его таб.части
+    * true - осзначает что в корзине что-то изменили
+    * false - пока ни кто ничего не менял*/
+    private boolean mClickModifitsirovannoiCart;
+
     public OrderDoc(final String id, final DocType docType,
                     final String docDate, final String docNumber,
                     final String completed, final String agentId,
                     final String firmId, final String storeId,
                     final String clientId, final String priceCategoryId,
                     final String total, final String note, final String adress,
-                    final DocTypeOperation typeOperation) {
+                    final DocTypeOperation typeOperation, final boolean clickModifitsirovannoiCart) {
 
         mId = id;
         mDocType = docType;
@@ -44,6 +49,7 @@ public class OrderDoc {
         mNote = note;
         mAdress = adress;
         mTypeOperation = typeOperation;
+        mClickModifitsirovannoiCart = clickModifitsirovannoiCart;
     }
 
     public OrderDoc() {
@@ -162,6 +168,14 @@ public class OrderDoc {
         mTypeOperation = typeOperation;
     }
 
+    public boolean isClickModifitsirovannoiCart() {
+        return mClickModifitsirovannoiCart;
+    }
+
+    public void setClickModifitsirovannoiCart(final boolean clickModifitsirovannoiCart) {
+        mClickModifitsirovannoiCart = clickModifitsirovannoiCart;
+    }
+
     //табличная часть заказа
     public static class OrderLines extends Product {
 
@@ -192,5 +206,4 @@ public class OrderDoc {
             mBalance = balance;
         }
     }
-
 }

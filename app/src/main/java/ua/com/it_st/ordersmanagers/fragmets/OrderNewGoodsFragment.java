@@ -202,7 +202,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
                 || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!ConstantsUtil.clickModifitsirovannoiCart) {
+            if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(1, null, this);
             }
@@ -221,7 +221,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         customНоме.setActionView(R.layout.main_tool_bar_home);
         customНоме.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         final View menu_home = menu.findItem(R.id.collapseAll).getActionView();
-        /* клик на корзине */
+        /* клик на домой */
         menu_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -242,7 +242,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         ui_dialog_auont = (TextView) menu_dialog_amuont.findViewById(R.id.main_tool_bar_chick_dialog_text);
         /*обновляем выбор*/
         updateSelectDialog();
-        /* клик на корзине */
+        /* клик для выбора в заказ */
         menu_dialog_amuont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -362,6 +362,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
         final int cAmountStoresIndex = data.getColumnIndex("amount_stores");
 
+        // data.moveToFirst();
         while (data.moveToNext()) {
 
             final String cID = data.getString(cIDIndex);
@@ -428,7 +429,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
                 || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!ConstantsUtil.clickModifitsirovannoiCart) {
+            if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* удаляем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().destroyLoader(1);
             }

@@ -3,6 +3,7 @@ package ua.com.it_st.ordersmanagers.activiteies;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -45,9 +46,9 @@ public class MainActivity extends AppCompatActivity
 
 {
 
+    public static boolean chickMainFragment;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,26 +61,10 @@ public class MainActivity extends AppCompatActivity
 
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
         mToolbar.setTitle("");
-        // mToolbar.setSubtitle("Sub");
-        // mToolbar.setLogo(R.drawable.abc_btn_borderless_material);
         setSupportActionBar(mToolbar);
-
-//        if (mToolbar != null) {
-//            setSupportActionBar(mToolbar);
-//            mToolbar.setNavigationIcon(R.drawable.ic_action_back);
-//            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onBackPressed();
-//                }
-//            });
-//        }
-
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Set the menu icon instead of the launcher icon.
 
         // Find our drawer view
         NavigationView nvDrawerN = (NavigationView) findViewById(R.id.nvView);
@@ -88,15 +73,22 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle drawerToggle = setupDrawerToggle();
         mDrawer.setDrawerListener(drawerToggle);
 
-        //drawerToggle.setDrawerIndicatorEnabled(true);
+        chickMainFragment = true;//поумолчанию открывается ящик
+        //Disables onClick toggle listener (onClick)
 
-        //final ActionBar ab = getSupportActionBar();
-        //ab.setHomeAsUpIndicator(R.mipmap.ic_drawer);
-        // ab.setDisplayHomeAsUpEnabled(true);
-
+        drawerToggle.setDrawerIndicatorEnabled(false);
+        drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chickMainFragment) {
+                    mDrawer.openDrawer(GravityCompat.START);
+                } else {
+                    onBackPressed();
+                }
+            }
+        });
         //Открываем фрагмент
         WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
-
 
     }
 
@@ -152,12 +144,6 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -237,5 +223,29 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         Dialogs.calculationSum(Double.parseDouble(String.valueOf(Dialogs.editNumber.getText())), Dialogs.product.getPrice(), view, Dialogs.animScale);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        OrderListFragment mainFragment = (OrderListFragment) getSupportFragmentManager().findFragmentByTag(OrderListFragment.class.toString());
+
+        if (checkFragment(mainFragment)) {
+            chickMainFragment = true;
+            mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        } else {
+            chickMainFragment = false;
+        }
+    }
+
+    /*делаем проверку на текущий фрагмент*/
+    private boolean checkFragment(Fragment fragment) {
+        boolean checkMain = false;
+
+        if (fragment != null) {
+            checkMain = fragment.isVisible();
+        }
+        return checkMain;
     }
 }
