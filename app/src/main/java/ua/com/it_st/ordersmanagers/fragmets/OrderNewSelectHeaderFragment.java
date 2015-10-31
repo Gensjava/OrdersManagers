@@ -157,6 +157,10 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     @Override
     public void onResume() {
         super.onResume();
+         /* открываем подключение к БД */
+        if (sDb == null) {
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        }
         if (!mIsSubText) {
              /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(0, null, this);

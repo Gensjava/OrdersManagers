@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        //Открываем фрагмент
+        //Открываем главный фрагмент
         WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 
     }
@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             chickMainFragment = false;
         }
+
     }
 
     /*делаем проверку на текущий фрагмент*/

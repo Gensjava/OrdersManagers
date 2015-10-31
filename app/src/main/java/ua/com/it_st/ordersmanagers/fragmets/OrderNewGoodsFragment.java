@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -204,12 +205,14 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
             if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
-            getActivity().getSupportLoaderManager().initLoader(1, null, this);
+                getActivity().getSupportLoaderManager().initLoader(1, null, this);
             }
         }
+        if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+           /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        }
 
-        /* создаем лоадер для чтения данных */
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
         return rootView;
     }
 
@@ -282,6 +285,7 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         if (!Dialogs.openDialog) {
             ui_dialog.setBackgroundResource(R.color.main_grey);
             ui_dialog_auont.setVisibility(View.INVISIBLE);
+            Dialogs.numberD = 1;
         } else {
             ui_dialog.setBackgroundResource(R.color.main_grey_select);
             ui_dialog_auont.setVisibility(View.VISIBLE);
@@ -456,6 +460,15 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        /* открываем подключение к БД */
+        if (sDb == null) {
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         }
     }
 

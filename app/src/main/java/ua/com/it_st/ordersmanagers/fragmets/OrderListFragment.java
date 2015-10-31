@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +72,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
         /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
-        /*устанавливаем мод. корзины*/
-        ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(false);
         /*устанавливаем период журнала*/
         TextView period = (TextView) rootView.findViewById(R.id.main_heander_period);
         period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
@@ -152,6 +151,11 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onResume() {
         super.onResume();
+               /* открываем подключение к БД */
+        if (sDb == null) {
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        }
+
         /* создаем загрузчик */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         getActivity().getSupportLoaderManager().initLoader(2, null, this);

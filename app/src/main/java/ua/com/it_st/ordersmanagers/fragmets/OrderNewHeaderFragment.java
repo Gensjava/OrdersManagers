@@ -116,6 +116,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                  /* создаем лоадер для чтения данных */
                     getActivity().getSupportLoaderManager().initLoader(0, null, this);
                 }
+                        /*устанавливаем мод. корзины*/
+                ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(false);
             }
 
             /*выводим данные дату и номер в шапку*/
@@ -305,6 +307,15 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        /* открываем подключение к БД */
+        if (sDb == null) {
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        }
+    }
+
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
 
@@ -375,7 +386,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 onfillOrder(position, itemP[1], sub_text);
                 /* суб заголовок*/
             }
-            
+
             /*клик на любом месте поля вызываем список занчений*/
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
