@@ -350,9 +350,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
             try {
                 utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
                 utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
-                utilAsyncHttpClient.setTimeout(30000);
-                utilAsyncHttpClient.setConnectTimeout(30000);
-                utilAsyncHttpClient.setResponseTimeout(30000);
+                utilAsyncHttpClient.setTimeout(50000);
+                utilAsyncHttpClient.setConnectTimeout(50000);
+                utilAsyncHttpClient.setResponseTimeout(50000);
 
 
                 setMlConnect(true);
@@ -361,9 +361,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
                 try {
                     utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
                     utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
-                    utilAsyncHttpClient.setTimeout(30000);
-                    utilAsyncHttpClient.setConnectTimeout(30000);
-                    utilAsyncHttpClient.setResponseTimeout(30000);
+                    utilAsyncHttpClient.setTimeout(50000);
+                    utilAsyncHttpClient.setConnectTimeout(50000);
+                    utilAsyncHttpClient.setResponseTimeout(50000);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     //Log

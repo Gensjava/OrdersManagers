@@ -149,6 +149,7 @@ public class FilesLoadFragment extends FilesFragment {
             /* начинаем транзакцию */
         getDb().beginTransaction();
         for (String i : nameFile) {
+
             params = new RequestParams();
             params.put(getString(R.string.NameCatalog), wayCatalog);
             params.put(getString(R.string.name_file), i);
