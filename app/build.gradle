@@ -49,7 +49,7 @@ dependencies {
     compile files('libs/opencsv-3.5.jar')
     compile 'com.infstory:switch-preference-compat:1.0.0'
     compile 'com.github.machinarius:preferencefragment:0.1.2'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.3@aar') {
         transitive = true;
     }
 

@@ -428,15 +428,18 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().getSupportLoaderManager().destroyLoader(0);
 
         if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
                 || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
             if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
-                /* удаляем лоадер для чтения данных */
+                /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().destroyLoader(1);
             }
+        }
+        if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+           /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().destroyLoader(0);
         }
 
     }
@@ -469,6 +472,21 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         /* открываем подключение к БД */
         if (sDb == null) {
             sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        }
+
+        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+
+            if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
+                /* создаем лоадер для чтения данных */
+                getActivity().getSupportLoaderManager().initLoader(1, null, this);
+                getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
+            }
+        }
+        if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+           /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+            getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
         }
     }
 
