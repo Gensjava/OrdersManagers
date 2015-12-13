@@ -132,7 +132,6 @@
                     android:id="@+id/main_heander_space"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@+id/relativeLayout2"
                     android:layout_centerHorizontal="true"
                     android:background="@color/main_sub_grey"/>
 
