@@ -123,6 +123,10 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     }
     /*Обновляем подвал сумму заказов*/
     private void updataSumOrders(String sumOrders) {
+
+        if (sumOrders == null) {
+            sumOrders = "0.00";
+        }
         ordersSum.setText(sumOrders);
     }
     /* обработка кликов на кнопки */
