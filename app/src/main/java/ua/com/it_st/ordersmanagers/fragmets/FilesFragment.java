@@ -457,5 +457,18 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
             }
             return wayCatalog;
         }
+
+        public String getIDUser() {
+
+            /*ИД пользователя*/
+            String IDUser = mSettings.getString(mContext.getString(R.string.id_user), null);
+
+            if (IDUser == null || IDUser.equals("")) {
+                InfoUtil.Tost("Введите в настройках ID пользователя!", getActivity());
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках ID пользователя!", true, TEG);
+            }
+            return IDUser;
+        }
     }
 }

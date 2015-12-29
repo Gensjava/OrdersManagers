@@ -41,6 +41,7 @@ public class SendData extends FilesFragment {
         params.put("lat", mLat);
         params.put("lon", vLon);
         params.put("status", mStatus);
+        params.put("kodAgent", connectData.getIDUser());
 
         try {
             mUtilAsyncHttpClient.postUnloadParams(params);

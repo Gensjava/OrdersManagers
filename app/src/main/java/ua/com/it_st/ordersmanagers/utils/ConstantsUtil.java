@@ -104,7 +104,6 @@ public class ConstantsUtil {
             ConstantsUtil.sCurrentNumber = ++sCurrentNumber;
         }
     }
-
     /*
       Получаем текущее дату системы
       Возвращаем строку дату "текущюю дату"

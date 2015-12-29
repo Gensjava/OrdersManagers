@@ -18,7 +18,7 @@ import ua.com.it_st.ordersmanagers.utils.SendData;
 public class GPSMonitor extends Service {
 
     // constant
-    public static final long NOTIFY_INTERVAL = 20 * 1000; // 60 seconds
+    public static final long NOTIFY_INTERVAL = 60 * 1000; // 60 seconds
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
@@ -62,7 +62,7 @@ public class GPSMonitor extends Service {
 
                     if (mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         //отправляем данные на сервер
-                        SendData sendData = new SendData(ConstantsUtil.getDate() + ConstantsUtil.getTime(),
+                        SendData sendData = new SendData(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
                                 String.valueOf(MyLocationListener.latitude),
                                 String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
                         sendData.sendDataOnServer();
