@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +29,8 @@ public class ConstantsUtil {
     public static double nPieViewdProgress;
     /*общае кол-во строк при обмене всех файлов */
     public static int sizeFileLine;
+    /*вызываем менеджера настроек*/
+    public static SharedPreferences mSettings = null;
 
     /*
     записываем новый товар в ТЧ заказа

@@ -1,15 +1,15 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 
+import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import org.apache.http.Header;
+
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +30,13 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
     private MainActivity mMainActivity;
     private int mgError;
 
-    public AsyncHttpClientUtil(final MainActivity mainActivity, String url) throws Exception {
+    public AsyncHttpClientUtil(final MainActivity mainActivity, final String url) throws Exception {
         mMainActivity = mainActivity;
+        mBaseUrl = url;
+        mgError = 0;
+    }
+
+    public AsyncHttpClientUtil(final String url) throws Exception {
         mBaseUrl = url;
         mgError = 0;
     }
@@ -127,6 +132,22 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     //Log
                     InfoUtil.setmLogLine("Выгрузка файла", fileName, true, TEG + " Failure: Код ошибки " + statusCode);
                 }
+            }
+        });
+
+    }
+
+    public void postUnloadParams(final RequestParams params) throws Exception {
+
+        post(mBaseUrl, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                Log.i("sss", "" + statusCode);
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("sss1", "" + statusCode);
             }
         });
 

@@ -5,11 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+
 import com.loopj.android.http.RequestParams;
 
 import java.io.BufferedReader;
@@ -18,12 +15,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
@@ -122,7 +120,7 @@ public class FilesLoadFragment extends FilesFragment {
         InfoUtil.setmLogLine(getString(R.string.start_load));
         getLoadFiles().setText(getString(R.string.start_load));
          /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
+        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity());
 
         /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();

@@ -37,7 +37,6 @@ import java.util.TimerTask;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
@@ -56,7 +55,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     private static SQLiteDatabase mDb;
     private final String TEG = FilesLoadFragment.class.getSimpleName();
-    private SharedPreferences mSettings;
+    public SharedPreferences mSettings;
     private ProgressPieView mProgressPieView;
     private DiscreteSeekBar mDiscreteSeekBar;
     private ImageView mButtonOrderList;
@@ -69,7 +68,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private ImageView ImageViewInfo;
     private Timer mTimer;
     private View ui_bar;
-
 
     protected static SQLiteDatabase getDb() {
         return mDb;
@@ -119,8 +117,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         ImageViewInfo.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        /*вызываем менеджера настроек*/
-        mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         /*Круглый общий прогресс загрузки*/
         mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.load_files_progressPieView);
         mProgressPieView.setText("0%");
@@ -340,35 +337,30 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
         private boolean mlConnect;
         private AsyncHttpClientUtil mAsyncHttpClientUtil;
+        private SharedPreferences mSettings;
+        private Context mContext;
 
-        public ConnectServer() {
+        public ConnectServer(Context context) {
+
+            mContext = context;
+            /*вызываем менеджера настроек*/
+            mSettings = ConstantsUtil.mSettings;
 
             String loginServer = getMloginServer();
             String passwordServer = getPasswordServer();
 
             AsyncHttpClientUtil utilAsyncHttpClient = null;
             try {
-                utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
+                if (mContext.equals(MainActivity.class.toString())) {
+                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, getIdServer());
+                } else {
+                    utilAsyncHttpClient = new AsyncHttpClientUtil(getIdServer());
+                }
+
                 utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
                 utilAsyncHttpClient.setTimeout(50000);
                 utilAsyncHttpClient.setConnectTimeout(50000);
                 utilAsyncHttpClient.setResponseTimeout(50000);
-
-
-                setMlConnect(true);
-            } catch (java.net.SocketTimeoutException e) {
-
-                try {
-                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) getActivity(), getIdServer());
-                    utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
-                    utilAsyncHttpClient.setTimeout(50000);
-                    utilAsyncHttpClient.setConnectTimeout(50000);
-                    utilAsyncHttpClient.setResponseTimeout(50000);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                    //Log
-                    InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-                }
 
                 setMlConnect(true);
 
@@ -376,11 +368,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
                 setMlConnect(false);
                 //Log
-                InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
+                InfoUtil.setmLogLine(mContext.getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
             }
-
             setAsyncHttpClientUtil(utilAsyncHttpClient);
-
         }
 
         public AsyncHttpClientUtil getAsyncHttpClientUtil() {
@@ -401,7 +391,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
         public String getMloginServer() {
 
-            String loginServer = mSettings.getString(getActivity().getString(R.string.login_server), null);
+            String loginServer = mSettings.getString(mContext.getString(R.string.login_server), null);
             /*проверка*/
             if (loginServer == null) {
                 InfoUtil.Tost("Введите в настройках логин!", getActivity());
@@ -412,10 +402,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
             return loginServer;
         }
 
-
         public String getPasswordServer() {
 
-            String passwordServer = mSettings.getString(getActivity().getString(R.string.password_server), null);
+            String passwordServer = mSettings.getString(mContext.getString(R.string.password_server), null);
 
             if (passwordServer == null) {
                 InfoUtil.Tost("Введите в настройках пароль!", getActivity());
@@ -428,7 +417,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
         public String getModeServer() {
          /*режим сервера*/
-            String modeServer = mSettings.getString(getActivity().getString(R.string.mode_server), null);
+            String modeServer = mSettings.getString(mContext.getString(R.string.mode_server), null);
 
             if (modeServer == null) {
                 InfoUtil.Tost("Установите в настройках режим сервера!", getActivity());
@@ -443,10 +432,10 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
         /* ид сервер удаленны или локальный*/
             final String idServer;
-            if (getModeServer().equals(getString(R.string.remoteServer))) {
-                idServer = mSettings.getString(getActivity().getString(R.string.id_remote), null);
+            if (getModeServer().equals(mContext.getString(R.string.remoteServer))) {
+                idServer = mSettings.getString(mContext.getString(R.string.id_remote), null);
             } else {
-                idServer = mSettings.getString(getActivity().getString(R.string.id_local), null);
+                idServer = mSettings.getString(mContext.getString(R.string.id_local), null);
             }
             if (idServer == null || idServer.equals("")) {
                 InfoUtil.Tost("Введите в настройках путь к серверу!", getActivity());
@@ -459,7 +448,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         public String getWayCatalog() {
 
             /*каталог на сервере пользователя*/
-            String wayCatalog = mSettings.getString(getActivity().getString(R.string.way_catalog), null);
+            String wayCatalog = mSettings.getString(mContext.getString(R.string.way_catalog), null);
 
             if (wayCatalog == null || wayCatalog.equals("")) {
                 InfoUtil.Tost("Введите в настройках каталог пользователя!", getActivity());

@@ -1,37 +1,31 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
+import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
-import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -90,6 +84,9 @@ public class MainActivity extends AppCompatActivity
         //Открываем главный фрагмент
         WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 
+        /*вызываем менеджера настроек*/
+        ConstantsUtil.mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -142,6 +139,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -248,5 +246,17 @@ public class MainActivity extends AppCompatActivity
             checkMain = fragment.isVisible();
         }
         return checkMain;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        /*Запускаем монитор GPS*/
+        startService(new Intent(this, GPSMonitor.class));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

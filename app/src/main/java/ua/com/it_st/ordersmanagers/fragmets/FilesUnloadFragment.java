@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.RequestParams;
@@ -57,7 +56,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 //Log
                 InfoUtil.setmLogLine(getString(R.string.start_on_load));
                 /*подключаемся к серверу*/
-                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer();
+                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity());
 
                 /*подключились к базе или нет*/
                 boolean lConnect = connectData.isMlConnect();
