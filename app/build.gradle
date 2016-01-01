@@ -51,6 +51,7 @@ dependencies {
     compile 'com.github.machinarius:preferencefragment:0.1.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.3@aar') {
         transitive = true;
+
     }
 
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'

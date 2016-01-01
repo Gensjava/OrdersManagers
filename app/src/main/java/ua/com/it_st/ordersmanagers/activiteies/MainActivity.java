@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        //Открываем главный фрагмент
-        WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 
         /*вызываем менеджера настроек*/
         ConstantsUtil.mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        //Открываем главный фрагмент
+        WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 
     }
 
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity
             setTitle(menuItem.getTitle());
             mDrawer.closeDrawers();
         }
-
     }
 
     @Override
@@ -235,7 +234,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             chickMainFragment = false;
         }
-
     }
 
     /*делаем проверку на текущий фрагмент*/

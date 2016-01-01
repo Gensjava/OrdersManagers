@@ -7,12 +7,12 @@ import com.loopj.android.http.RequestParams;
 import ua.com.it_st.ordersmanagers.fragmets.FilesFragment;
 
 //отправляем данные на сервер
-public class SendData extends FilesFragment {
+public class SendDataGPS extends FilesFragment {
 
     private String mTime, mLat, vLon, mStatus;
     private Context mContext;
 
-    public SendData(String time, String lat, String lon, String status, Context context) {
+    public SendDataGPS(String time, String lat, String lon, String status, Context context) {
 
         mTime = time;
         mLat = lat;
@@ -25,7 +25,7 @@ public class SendData extends FilesFragment {
     public void sendDataOnServer() {
 
         /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(mContext);
+        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(mContext, (byte) 1);
 
         /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();

@@ -68,6 +68,11 @@
         <item>Локальный</item>
     </string-array>
 
+    <string-array name="template_way">
+        <item>Files</item>
+        <item>GPS</item>
+        <item>Picture</item>
+    </string-array>
 
     <string name="ic_access_alarms">&#xe000;</string>
     <string name="ic_access_time">&#xe001;</string>
@@ -534,6 +539,7 @@
     <string name="NameCatalog">NameCatalog</string>
     <string name="SizeFileCatalog">SizeFileCatalog</string>
     <string name="fix_amount">Зафиксировать к-во</string>
+    <string name="show_picture">Показать изображение</string>
     <string name="edit_order">Редактирование заказа</string>
     <string name="edit_cart">Редактирование корзины</string>
     <string name="copy_order">Копирование заказа</string>

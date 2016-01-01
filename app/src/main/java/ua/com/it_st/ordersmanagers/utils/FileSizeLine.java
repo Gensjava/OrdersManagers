@@ -1,18 +1,12 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
 
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
-import org.apache.http.Header;
-import org.apache.http.auth.AuthScope;
 
-import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 
 public class FileSizeLine extends AsyncTask<String, Integer, String> {
 
@@ -39,19 +33,6 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
             syncHttpClientAsyncTask.setConnectTimeout(30000);
             syncHttpClientAsyncTask.setResponseTimeout(30000);
             syncHttpClientAsyncTask.getSizeFile(mParams);
-
-        } catch (java.net.SocketTimeoutException e) {
-
-            try {
-                SyncHttpClientAsyncTask syncHttpClientAsyncTask = new SyncHttpClientAsyncTask();
-                syncHttpClientAsyncTask.setBasicAuth(mloginServer, mPasswordServer);
-                syncHttpClientAsyncTask.setTimeout(30000);
-                syncHttpClientAsyncTask.setConnectTimeout(30000);
-                syncHttpClientAsyncTask.setResponseTimeout(30000);
-                syncHttpClientAsyncTask.getSizeFile(mParams);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
 
         } catch (Exception e) {
             e.printStackTrace();

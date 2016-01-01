@@ -340,21 +340,23 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         private SharedPreferences mSettings;
         private Context mContext;
 
-        public ConnectServer(Context context) {
+        public ConnectServer(Context context, byte tWay) {
 
             mContext = context;
             /*вызываем менеджера настроек*/
             mSettings = ConstantsUtil.mSettings;
+              /* список шаблонов пути к серверу  */
+            String[] templateWay = mContext.getResources().getStringArray(R.array.template_way);
 
             String loginServer = getMloginServer();
             String passwordServer = getPasswordServer();
 
             AsyncHttpClientUtil utilAsyncHttpClient = null;
             try {
-                if (mContext.equals(MainActivity.class.toString())) {
-                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, getIdServer());
+                if (mContext.getClass().equals(MainActivity.class)) {//выгрузка загрузка файлов
+                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, getIdServer() + templateWay[tWay]);
                 } else {
-                    utilAsyncHttpClient = new AsyncHttpClientUtil(getIdServer());
+                    utilAsyncHttpClient = new AsyncHttpClientUtil(getIdServer() + templateWay[tWay]);//обмен данными GPS
                 }
 
                 utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);

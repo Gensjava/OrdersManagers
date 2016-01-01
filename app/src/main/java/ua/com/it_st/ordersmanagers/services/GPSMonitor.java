@@ -13,7 +13,7 @@ import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.MyLocationListener;
-import ua.com.it_st.ordersmanagers.utils.SendData;
+import ua.com.it_st.ordersmanagers.utils.SendDataGPS;
 
 public class GPSMonitor extends Service {
 
@@ -30,6 +30,13 @@ public class GPSMonitor extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        SimpleWakefulReceiver.completeWakefulIntent(intent);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -62,10 +69,10 @@ public class GPSMonitor extends Service {
 
                     if (mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         //отправляем данные на сервер
-                        SendData sendData = new SendData(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
+                        SendDataGPS sendDataGPS = new SendDataGPS(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
                                 String.valueOf(MyLocationListener.latitude),
                                 String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
-                        sendData.sendDataOnServer();
+                        sendDataGPS.sendDataOnServer();
                     } else {
                         stopSelf();
                         mTimer.cancel();

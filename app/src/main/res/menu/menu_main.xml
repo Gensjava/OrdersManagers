@@ -24,5 +24,9 @@
         android:id="@+id/menu_bar"
         android:showAsAction="always"
         android:title="Загрузка"/>
+    <item
+        android:id="@+id/menu_picture"
+        android:title="@string/show_picture"
+        app:showAsAction="always" />
 
 </menu>

@@ -19,6 +19,7 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.FilesFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
+import ua.com.it_st.ordersmanagers.fragmets.PictureFragment;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 
 public class AsyncHttpClientUtil extends AsyncHttpClient {
@@ -152,4 +153,43 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         });
 
     }
+
+    public void getDownloadFilesPicture(final RequestParams params) throws Exception {
+
+        get(mBaseUrl, params, new FileAsyncHttpResponseHandler(mMainActivity) {
+            @Override
+            public void onFailure(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final Throwable throwable, final File file) {
+                if (statusCode != HttpStatus.SC_OK) {
+                    //Log
+                    InfoUtil.setmLogLine("Загрузка файла ", params.toString(), true, TEG + " Failure: Код ошибки " + statusCode);
+
+                    if (mgError == 0) {
+                        PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
+
+                        if (fragment != null) {
+                        /*мигаем иконкой для вывода лога*/
+                            // fragment.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo());
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final File file) {
+                // Do something with the file `response`
+                if (statusCode == HttpStatus.SC_OK) {
+                    PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
+                    if (fragment != null) {
+                        /**/
+                        fragment.getPicture(file.getPath());
+                    }
+                } else {
+                    //Log
+                    //  InfoUtil.setmLogLine("Загрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
+                }
+            }
+        });
+    }
+
 }

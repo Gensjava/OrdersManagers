@@ -120,7 +120,7 @@ public class FilesLoadFragment extends FilesFragment {
         InfoUtil.setmLogLine(getString(R.string.start_load));
         getLoadFiles().setText(getString(R.string.start_load));
          /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity());
+        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity(), (byte) 0);
 
         /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();
@@ -132,12 +132,16 @@ public class FilesLoadFragment extends FilesFragment {
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
+
+         /* список шаблонов пути к серверу  */
+        String[] templateWay = getResources().getStringArray(R.array.template_way);
+
       /*получаем параметры подключения*/
         AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
         String loginServer = connectData.getMloginServer();
         String passwordServer = connectData.getPasswordServer();
         String wayCatalog = connectData.getWayCatalog();
-        String idServer = connectData.getIdServer();
+        String idServer = connectData.getIdServer() + templateWay[0];
         //
         RequestParams params = new RequestParams();
 

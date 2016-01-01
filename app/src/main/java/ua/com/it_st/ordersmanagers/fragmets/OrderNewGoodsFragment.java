@@ -9,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,25 +17,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
-import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.*;
+import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.TreeItem;
 
 /* Класс предназначен для подбора товара к заказу
 * при выборе если нехватает кв-ко товара на складе
@@ -233,6 +237,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
             }
         });
 
+        /* показать изображение товара */
+        final MenuItem showPicture = menu.add(0, R.id.menu_picture, 0, "");
+        showPicture.setActionView(R.layout.main_tool_bar_home);
+        showPicture.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final View menu_picture = menu.findItem(R.id.menu_picture).getActionView();
+        /* клик на кнопке */
+        menu_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                /*показываем*/
+                WorkFragment.onNewInstanceFragment(PictureFragment.class, (MainActivity) getActivity());
+            }
+        });
+
         /* фиксация диалога заказов выбора по количеству */
         final MenuItem customDialogAmuont = menu.add(0, R.id.menu_dialog_amuont, 0, "");
         customDialogAmuont.setActionView(R.layout.main_tool_bar_chick_dialog);
@@ -271,8 +289,6 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         ui_cart = (TextView) menu_cart.findViewById(R.id.main_tool_bar_cart_text);
         /*обновляем корзину*/
         updateCartCount();
-
-        //inflater.inflate(R.menu.menu_main, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -56,7 +56,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 //Log
                 InfoUtil.setmLogLine(getString(R.string.start_on_load));
                 /*подключаемся к серверу*/
-                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity());
+                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity(), (byte) 0);
 
                 /*подключились к базе или нет*/
                 boolean lConnect = connectData.isMlConnect();
