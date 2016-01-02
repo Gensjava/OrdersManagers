@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -46,7 +45,7 @@ import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.TreeI
 * при выборе если нехватает кв-ко товара на складе
 * будет выдавать сообщения, что нехватает на складе товара*/
 
-public class OrderNewGoodsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class OrderNewGoodsFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private static TextView ui_cart;
     private static SQLiteDatabase sDb;
@@ -55,7 +54,9 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
     private AndroidTreeView tView;
     private TreeNode mNode;
     private ImageView ui_dialog;
+    private ImageView ui_picture;
     private TextView ui_dialog_auont;
+    private boolean bModePicture;
 
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
@@ -82,16 +83,21 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
                     }
                 }
 
-            } else if (!item.isCategory() & Dialogs.openDialog) {
-
-                Dialogs.product = item;
-                double numberInDialog = Dialogs.numberD;
-                double sumInDialog = Dialogs.product.getPrice() * Dialogs.numberD;
-
-                setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
-
             } else {
-                Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
+
+                if (Dialogs.openDialog) {//обычный режим набираем в корзину
+
+                    Dialogs.product = item;
+                    double numberInDialog = Dialogs.numberD;
+                    double sumInDialog = Dialogs.product.getPrice() * Dialogs.numberD;
+                    setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
+
+                } else if (bModePicture) {//показываем картинки
+                    WorkFragment.onNewInstanceFragment(PictureFragment.class, (MainActivity) getActivity());
+
+                } else {//повтор к-во товаров
+                    Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
+                }
             }
         }
     };
@@ -239,15 +245,20 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
 
         /* показать изображение товара */
         final MenuItem showPicture = menu.add(0, R.id.menu_picture, 0, "");
-        showPicture.setActionView(R.layout.main_tool_bar_home);
+        showPicture.setActionView(R.layout.main_tool_bar_picture);
         showPicture.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         final View menu_picture = menu.findItem(R.id.menu_picture).getActionView();
+        /*количество для выбора в заказ*/
+        ui_picture = (ImageView) menu_picture.findViewById(R.id.main_tool_bar_picture_image);
+        /*обновляем*/
+        modePicture();
         /* клик на кнопке */
         menu_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                bModePicture = !bModePicture;
                 /*показываем*/
-                WorkFragment.onNewInstanceFragment(PictureFragment.class, (MainActivity) getActivity());
+                modePicture();
             }
         });
 
@@ -290,12 +301,39 @@ public class OrderNewGoodsFragment extends Fragment implements LoaderManager.Loa
         /*обновляем корзину*/
         updateCartCount();
 
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // меняем фон для режима изображения
+    private void modePicture() {
+        if (ui_picture == null) return;
+        if (Dialogs.openDialog) return;
+
+        // меняем фон на кнопке
+        if (!bModePicture) {
+            ConstantsUtil.sConnectData = null;
+            ui_picture.setBackgroundResource(R.color.main_grey);
+        } else {
+            ui_picture.setBackgroundResource(R.color.main_grey_select);
+
+              /*подключаемся к серверу*/
+            ConstantsUtil.sConnectData = new FilesFragment.ConnectServer(getActivity(), (byte) 2);
+           /*подключились к базе или нет*/
+            boolean lConnect = ConstantsUtil.sConnectData.isMlConnect();
+            //
+            if (!lConnect) {
+                //Log
+                InfoUtil.Tost("Нет возможности поключиться к серверу", getActivity());
+                return;
+            }
+        }
     }
 
     // меняем фон для выбранного количества в диалоге
     private void updateSelectDialog() {
         if (ui_dialog == null) return;
+        if (bModePicture) return;
 
         // меняем фон на кнопке
         if (!Dialogs.openDialog) {

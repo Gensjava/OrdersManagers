@@ -14,6 +14,7 @@ import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.fragmets.FilesFragment;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
 public class ConstantsUtil {
@@ -31,6 +32,8 @@ public class ConstantsUtil {
     public static int sizeFileLine;
     /*вызываем менеджера настроек*/
     public static SharedPreferences mSettings = null;
+    /*держим подключнеие*/
+    public static FilesFragment.ConnectServer sConnectData = null;
 
     /*
     записываем новый товар в ТЧ заказа

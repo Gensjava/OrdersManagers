@@ -17,7 +17,7 @@
             android:id="@+id/main_tool_bar_picture_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_home" />
+            android:src="@mipmap/ic_picture" />
     </RelativeLayout>
 
 
