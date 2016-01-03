@@ -167,9 +167,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
 
                         if (fragment != null) {
-                        /*мигаем иконкой для вывода лога*/
-                            // fragment.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo());
-
+                            fragment.onError();
                         }
                     }
                 }
@@ -178,15 +176,15 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
             @Override
             public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final File file) {
                 // Do something with the file `response`
+                PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
                 if (statusCode == HttpStatus.SC_OK) {
-                    PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
                     if (fragment != null) {
                         /**/
                         fragment.getPicture(file.getPath());
                     }
                 } else {
                     //Log
-                    //  InfoUtil.setmLogLine("Загрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
+                    fragment.onError();
                 }
             }
         });

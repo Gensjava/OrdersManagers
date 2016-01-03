@@ -9,20 +9,11 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <ImageView
-            android:id="@+id/goods_picture"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="false"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:foregroundGravity="center"
-            android:src="@mipmap/ic_picture_main" />
-
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:gravity="center">
 
             <ProgressBar
@@ -37,7 +28,19 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentTop="false"
                 android:layout_alignWithParentIfMissing="false" />
+
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/goods_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:foregroundGravity="center"
+            android:src="@mipmap/ic_picture_main" />
 
     </RelativeLayout>
 

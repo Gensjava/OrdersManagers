@@ -31,10 +31,7 @@ public class PictureFragment extends FilesFragment {
         FilesFragment.ConnectServer connectData = ConstantsUtil.sConnectData;
         //
         if (connectData == null) {
-            //Log
-            InfoUtil.Tost("Нет подключения к серверу", getActivity());
-            //imageView.setImageURI(getResources().);
-            ui_bar.setVisibility(View.INVISIBLE);
+            onError();
             return rootView;
         }
 
@@ -45,6 +42,8 @@ public class PictureFragment extends FilesFragment {
             connectData.getAsyncHttpClientUtil().getDownloadFilesPicture(params);
         } catch (Exception e) {
             e.printStackTrace();
+            onError();
+            return rootView;
         }
         return rootView;
     }
@@ -52,6 +51,12 @@ public class PictureFragment extends FilesFragment {
     /*загружаем изображение*/
     public void getPicture(String url) {
         imageView.setImageURI(Uri.parse(url));
+        ui_bar.setVisibility(View.INVISIBLE);
+    }
+
+    public void onError() {
+        InfoUtil.Tost("Нет подключения к серверу", getActivity());
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error));
         ui_bar.setVisibility(View.INVISIBLE);
     }
 }
