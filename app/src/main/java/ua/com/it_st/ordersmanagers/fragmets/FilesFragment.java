@@ -343,6 +343,13 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         public ConnectServer(Context context, byte tWay) {
 
             mContext = context;
+            /*проверка есть интерент или нет*/
+            boolean isInternet = ConstantsUtil.isInternetAvailable(mContext);
+            if (!isInternet) {
+                InfoUtil.showErrorAlertDialog(context.getString(R.string.error_inet), context.getString(R.string.updata), getActivity());
+                return;
+            }
+
             /*вызываем менеджера настроек*/
             mSettings = ConstantsUtil.mSettings;
               /* список шаблонов пути к серверу  */

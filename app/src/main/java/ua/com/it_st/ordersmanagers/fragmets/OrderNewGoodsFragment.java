@@ -47,6 +47,7 @@ import static ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder.TreeI
 
 public class OrderNewGoodsFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    public static String GOODS_KOD = "GOODS_KOD";
     private static TextView ui_cart;
     private static SQLiteDatabase sDb;
     private static String mSelectionArgs;
@@ -57,7 +58,6 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     private ImageView ui_picture;
     private TextView ui_dialog_auont;
     private boolean bModePicture;
-
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
@@ -93,7 +93,9 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                     setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) Dialogs.product);
 
                 } else if (bModePicture) {//показываем картинки
-                    WorkFragment.onNewInstanceFragment(PictureFragment.class, (MainActivity) getActivity());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(GOODS_KOD, item.getDocId());
+                    WorkFragment.onNewInstanceFragment(PictureFragment.class, bundle, (MainActivity) getActivity());
 
                 } else {//повтор к-во товаров
                     Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), item, OrderNewGoodsFragment.class.toString());
@@ -317,14 +319,17 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         } else {
             ui_picture.setBackgroundResource(R.color.main_grey_select);
 
-              /*подключаемся к серверу*/
-            ConstantsUtil.sConnectData = new FilesFragment.ConnectServer(getActivity(), (byte) 2);
+            boolean lConnect = false;
+            if (ConstantsUtil.sConnectData == null) {
+                 /*подключаемся к серверу*/
+                ConstantsUtil.sConnectData = new FilesFragment.ConnectServer(getActivity(), (byte) 2);
            /*подключились к базе или нет*/
-            boolean lConnect = ConstantsUtil.sConnectData.isMlConnect();
+                lConnect = ConstantsUtil.sConnectData.isMlConnect();
+            }
             //
             if (!lConnect) {
                 //Log
-                InfoUtil.Tost("Нет возможности поключиться к серверу", getActivity());
+                InfoUtil.Tost(getString(R.string.eror_conect), getActivity());
                 return;
             }
         }

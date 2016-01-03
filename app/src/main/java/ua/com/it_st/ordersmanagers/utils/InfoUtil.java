@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ua.com.it_st.ordersmanagers.R;
@@ -22,11 +21,11 @@ public class InfoUtil {
     public static boolean isErrors;
 
 
-    public static void showErrorAlertDialog(String errMessage, Context context) {
+    public static void showErrorAlertDialog(String errMessage, String errTitle, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Error:")
+        builder.setTitle("Error:" + errTitle)
                 .setMessage(errMessage)
-                .setIcon(R.drawable.abc_btn_check_material)
+                .setIcon(R.mipmap.ic_error)
                 .setCancelable(false)
                 .setNegativeButton("OK",
                         new DialogInterface.OnClickListener() {

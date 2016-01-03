@@ -37,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/period"
                     android:textColor="@color/main_sub_grey"/>
 
                 <RelativeLayout

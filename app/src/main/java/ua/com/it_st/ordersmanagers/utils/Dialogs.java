@@ -10,8 +10,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
@@ -197,13 +199,43 @@ public class Dialogs {
                         }
                         dialog.cancel();
                     }
-
                 }
-
         );
         builder.setNegativeButton(R.string.cancel, null);
 
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public static boolean showYesNoDialog(String iMessage, String iTitle, Context context) {
+        final boolean[] isUpData = {false};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(iTitle)
+                .setMessage(iMessage)
+                .setIcon(R.mipmap.ic_info)
+                .setCancelable(false)
+                .setPositiveButton("Да",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                isUpData[0] = true;
+                            }
+                        })
+
+        ;
+
+        builder.setNegativeButton("Нет",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        isUpData[0] = false;
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+        return isUpData[0];
+    }
+
 }

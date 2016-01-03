@@ -20,6 +20,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -93,29 +94,12 @@ public class FilesLoadFragment extends FilesFragment {
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
             getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
         }
-        if (ConstantsUtil.sizeFileLine > 0) {
-            getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
-        }
+
     }
 
     /* загружаем файлы с сервера*/
     private void dowloadFilesOfServer() {
 
-        /*обнуляем все значения перед загрузкой*/
-        nullableValues();
-         /*получаем команды для записи новой строки в таблице*/
-        lTableNameInsert = getFileNameInsert();
-        /*получаем заголовки таблиц*/
-        lTableName = getFileNameHeader();
-
-       /* список файлов для загрузки */
-        String[] nameFile = getResources().getStringArray(R.array.name_file_data);
-        /*определяем кол-во файлов*/
-        AcountNameFile = nameFile.length;
-
-        nOSeek = getnOSeek();
-        mProgress = getProgress();
-        mProgressDiscrete = getProgressDiscrete();
         //Log
         InfoUtil.setmLogLine(getString(R.string.start_load));
         getLoadFiles().setText(getString(R.string.start_load));
@@ -132,9 +116,10 @@ public class FilesLoadFragment extends FilesFragment {
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
-
          /* список шаблонов пути к серверу  */
         String[] templateWay = getResources().getStringArray(R.array.template_way);
+        /**/
+        ConstantsUtil.sizeFileLine = 0;
 
       /*получаем параметры подключения*/
         AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
@@ -148,7 +133,37 @@ public class FilesLoadFragment extends FilesFragment {
         /* получаем количество всех строк в файлах до загрузки всех файлов */
         getSizeLine(params, wayCatalog, idServer, loginServer, passwordServer);
 
-            /* начинаем транзакцию */
+        if (ConstantsUtil.sizeFileLine > 0) {
+            getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
+        } else {
+            InfoUtil.showErrorAlertDialog(getString(R.string.eror_conect), getString(R.string.updata), getActivity());
+            getUi_bar().setVisibility(View.INVISIBLE);
+            return;
+        }
+        /*даем пользователю выбрать загружать новые данные или нет*/
+        boolean isUpData = Dialogs.showYesNoDialog(getString(R.string.question_updata), getString(R.string.updata), getActivity());
+        /* если выбрано нет на загружаем дальше*/
+        if (!isUpData) {
+            getUi_bar().setVisibility(View.INVISIBLE);
+            return;
+        }
+        /*обнуляем все значения перед загрузкой*/
+        nullableValues();
+         /*получаем команды для записи новой строки в таблице*/
+        lTableNameInsert = getFileNameInsert();
+        /*получаем заголовки таблиц*/
+        lTableName = getFileNameHeader();
+
+       /* список файлов для загрузки */
+        String[] nameFile = getResources().getStringArray(R.array.name_file_data);
+        /*определяем кол-во файлов*/
+        AcountNameFile = nameFile.length;
+
+        nOSeek = getnOSeek();
+        mProgress = getProgress();
+        mProgressDiscrete = getProgressDiscrete();
+
+        /* начинаем транзакцию */
         getDb().beginTransaction();
         for (String i : nameFile) {
 
@@ -319,6 +334,7 @@ public class FilesLoadFragment extends FilesFragment {
             InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable + ", завершена!");
              /*счетчик файлов*/
             ConstantsUtil.nPieViewProgress++;
+
              /*если загрузился последний файл*/
             if (ConstantsUtil.nPieViewProgress == AcountNameFile) {
 

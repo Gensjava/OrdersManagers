@@ -31,31 +31,44 @@ public class PictureFragment extends FilesFragment {
         FilesFragment.ConnectServer connectData = ConstantsUtil.sConnectData;
         //
         if (connectData == null) {
-            onError();
+            onError(getString(R.string.eror_conect));
             return rootView;
         }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            /*получаем код товара*/
+            String goodsKod = bundle.getString(OrderNewGoodsFragment.GOODS_KOD);
 
-        RequestParams params = new RequestParams();
+            if (goodsKod != null) {
+                RequestParams params = new RequestParams();
+                params.put(OrderNewGoodsFragment.GOODS_KOD, goodsKod);
 
-        try {
+                try {
                 /* загружаем файл */
-            connectData.getAsyncHttpClientUtil().getDownloadFilesPicture(params);
-        } catch (Exception e) {
-            e.printStackTrace();
-            onError();
-            return rootView;
+                    connectData.getAsyncHttpClientUtil().getDownloadFilesPicture(params);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onError(getString(R.string.eror_conect));
+                    return rootView;
+                }
+            } else {
+                onError(getString(R.string.eror_goods_kod));
+            }
         }
         return rootView;
     }
 
     /*загружаем изображение*/
     public void getPicture(String url) {
+
         imageView.setImageURI(Uri.parse(url));
         ui_bar.setVisibility(View.INVISIBLE);
     }
 
-    public void onError() {
-        InfoUtil.Tost("Нет подключения к серверу", getActivity());
+    /*если ошибка*/
+    public void onError(String erText) {
+
+        InfoUtil.showErrorAlertDialog(erText, getString(R.string.updata), getActivity());
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error));
         ui_bar.setVisibility(View.INVISIBLE);
     }

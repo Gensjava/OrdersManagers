@@ -134,8 +134,8 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     InfoUtil.setmLogLine("Выгрузка файла", fileName, true, TEG + " Failure: Код ошибки " + statusCode);
                 }
             }
-        });
 
+        });
     }
 
     public void postUnloadParams(final RequestParams params) throws Exception {
@@ -167,7 +167,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
 
                         if (fragment != null) {
-                            fragment.onError();
+                            fragment.onError(mMainActivity.getString(R.string.eroor_dowload_picture));
                         }
                     }
                 }
@@ -184,7 +184,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     }
                 } else {
                     //Log
-                    fragment.onError();
+                    fragment.onError(mMainActivity.getString(R.string.eroor_dowload_picture));
                 }
             }
         });

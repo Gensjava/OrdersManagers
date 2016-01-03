@@ -2,6 +2,8 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,7 +36,6 @@ public class ConstantsUtil {
     public static SharedPreferences mSettings = null;
     /*держим подключнеие*/
     public static FilesFragment.ConnectServer sConnectData = null;
-
     /*
     записываем новый товар в ТЧ заказа
     если есть такой товар тогда делаем замену
@@ -165,5 +166,15 @@ public class ConstantsUtil {
             InfoUtil.Tost("Корзина пустая!", context);
         }
         return bCheck;
+    }
+
+    /*Проверка подключение к интернету*/
+    public static boolean isInternetAvailable(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+
+
     }
 }

@@ -12,7 +12,6 @@
     <string name="drawer_item_open_source">Open Source</string>
     <string name="drawer_item_contact">Contact</string>
     <string name="JurnalOrders">Журнал заказов</string>
-    <string name="period">с 01–08-15 по 31-08-15</string>
     <string name="error_login_password_inet">: Логин или пароль не верный или нет подключенгия к интернету!</string>
     <string name="action_conect_base">Подключение к базе</string>
     <string name="action_download_file">Получаем файл</string>
@@ -546,5 +545,12 @@
     <string name="copy_cart">Копирование корзины</string>
     <string name="start_load">Начало загрузки</string>
     <string name="start_on_load">Начало выгрузки!</string>
+    <string name="eror_conect">Нет подключения к серверу!</string>
+    <string name="eror_goods_kod">Не найден код товара!</string>
+    <string name="eroor_dowload_picture">Не удалось загрузить изображение!</string>
+    <string name="conect_is_server">Соединение с сервером идет...</string>
+    <string name="error_inet">Нет подключения к интернету!</string>
+    <string name="updata">Обмен данными</string>
+    <string name="question_updata">При загрзке новых данных, все старые данные будет утеряны, продолжить?</string>
 
 </resources>
