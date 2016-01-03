@@ -76,8 +76,9 @@ public class FilesLoadFragment extends FilesFragment {
     }
 
     /* получаем количество всех строк в файлах до загрузки всех файлов */
-    private void getSizeLine(RequestParams params, String wayCatalog, String idServer, String loginServer, String passwordServer) {
+    private void getSizeLine(String wayCatalog, String idServer, String loginServer, String passwordServer) {
 
+        RequestParams params = new RequestParams();
         params.put(getString(R.string.SizeFileCatalog), wayCatalog);
 
         FileSizeLine fileSizeLine = new FileSizeLine(idServer, params, loginServer, passwordServer, (MainActivity) getActivity());
@@ -120,19 +121,11 @@ public class FilesLoadFragment extends FilesFragment {
         String[] templateWay = getResources().getStringArray(R.array.template_way);
         /**/
         ConstantsUtil.sizeFileLine = 0;
-
-      /*получаем параметры подключения*/
-        AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
-        String loginServer = connectData.getMloginServer();
-        String passwordServer = connectData.getPasswordServer();
-        String wayCatalog = connectData.getWayCatalog();
-        String idServer = connectData.getIdServer() + templateWay[0];
-        //
-        RequestParams params = new RequestParams();
-
+        
         /* получаем количество всех строк в файлах до загрузки всех файлов */
-        getSizeLine(params, wayCatalog, idServer, loginServer, passwordServer);
+        getSizeLine(connectData.getWayCatalog(), connectData.getIdServer() + templateWay[0], connectData.getMloginServer(), connectData.getPasswordServer());
 
+        /*если количество = 0 тогда возврат нет  смысла продолжать*/
         if (ConstantsUtil.sizeFileLine > 0) {
             getProgressPieView().setMax(ConstantsUtil.sizeFileLine);
         } else {
@@ -163,12 +156,16 @@ public class FilesLoadFragment extends FilesFragment {
         mProgress = getProgress();
         mProgressDiscrete = getProgressDiscrete();
 
+        /*получаем параметры подключения*/
+        AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
+        RequestParams params;
+        
         /* начинаем транзакцию */
         getDb().beginTransaction();
         for (String i : nameFile) {
 
             params = new RequestParams();
-            params.put(getString(R.string.NameCatalog), wayCatalog);
+            params.put(getString(R.string.NameCatalog), connectData.getWayCatalog());
             params.put(getString(R.string.name_file), i);
             params.put(getString(R.string.SizeFileCatalog), "");
 
