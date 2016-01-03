@@ -207,6 +207,8 @@ public class Dialogs {
         alert.show();
     }
 
+    /* диалог создан для ввода вопроса да или нет
+    * возвращает boolean*/
     public static boolean showYesNoDialog(String iMessage, String iTitle, Context context) {
         final boolean[] isUpData = {false};
 
