@@ -94,7 +94,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
                 } else if (bModePicture) {//показываем картинки
                     Bundle bundle = new Bundle();
-                    bundle.putString(GOODS_KOD, item.getDocId());
+                    bundle.putString(GOODS_KOD, item.getGoodsId());
                     WorkFragment.onNewInstanceFragment(PictureFragment.class, bundle, (MainActivity) getActivity());
 
                 } else {//повтор к-во товаров
@@ -319,18 +319,9 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         } else {
             ui_picture.setBackgroundResource(R.color.main_grey_select);
 
-            boolean lConnect = false;
             if (ConstantsUtil.sConnectData == null) {
                  /*подключаемся к серверу*/
                 ConstantsUtil.sConnectData = new FilesFragment.ConnectServer(getActivity(), (byte) 2);
-           /*подключились к базе или нет*/
-                lConnect = ConstantsUtil.sConnectData.isMlConnect();
-            }
-            //
-            if (!lConnect) {
-                //Log
-                InfoUtil.Tost(getString(R.string.eror_conect), getActivity());
-                return;
             }
         }
     }

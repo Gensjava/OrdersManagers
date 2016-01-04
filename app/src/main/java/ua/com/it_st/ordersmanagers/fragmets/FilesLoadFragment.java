@@ -55,10 +55,9 @@ public class FilesLoadFragment extends FilesFragment {
 
         switch (view.getId()) {
             case R.id.load_files_button:
-                /* удаляем все записи из таблиц */
-                SQLiteOpenHelperUtil.onDeleteValueTables(getDb());
                 /*загружаем файлы с сервера*/
-                dowloadFilesOfServer();
+                /*даем пользователю выбрать загружать новые данные или нет*/
+                Dialogs.showYesNoDialog(getString(R.string.question_updata), getString(R.string.updata), (MainActivity) getActivity());
                 break;
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
@@ -99,7 +98,7 @@ public class FilesLoadFragment extends FilesFragment {
     }
 
     /* загружаем файлы с сервера*/
-    private void dowloadFilesOfServer() {
+    public void dowloadFilesOfServer() {
 
         //Log
         InfoUtil.setmLogLine(getString(R.string.start_load));
@@ -133,13 +132,9 @@ public class FilesLoadFragment extends FilesFragment {
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
-        /*даем пользователю выбрать загружать новые данные или нет*/
-        boolean isUpData = Dialogs.showYesNoDialog(getString(R.string.question_updata), getString(R.string.updata), getActivity());
-        /* если выбрано нет на загружаем дальше*/
-        if (!isUpData) {
-            getUi_bar().setVisibility(View.INVISIBLE);
-            return;
-        }
+
+        /* удаляем все записи из таблиц */
+        SQLiteOpenHelperUtil.onDeleteValueTables(getDb());
         /*обнуляем все значения перед загрузкой*/
         nullableValues();
          /*получаем команды для записи новой строки в таблице*/

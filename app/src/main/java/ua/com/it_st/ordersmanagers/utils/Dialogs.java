@@ -16,6 +16,7 @@ import java.math.RoundingMode;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
@@ -209,8 +210,7 @@ public class Dialogs {
 
     /* диалог создан для ввода вопроса да или нет
     * возвращает boolean*/
-    public static boolean showYesNoDialog(String iMessage, String iTitle, Context context) {
-        final boolean[] isUpData = {false};
+    public static void showYesNoDialog(String iMessage, String iTitle, final MainActivity context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(iTitle)
@@ -220,8 +220,14 @@ public class Dialogs {
                 .setPositiveButton("Да",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+
                                 dialog.cancel();
-                                isUpData[0] = true;
+                                FilesLoadFragment fragment = (FilesLoadFragment) context.getSupportFragmentManager().findFragmentByTag(FilesLoadFragment.class.toString());
+
+                                if (fragment != null) {
+                                         /*загружаем информацию с сервера*/
+                                    fragment.dowloadFilesOfServer();
+                                }
                             }
                         })
 
@@ -231,13 +237,12 @@ public class Dialogs {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                        isUpData[0] = false;
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
 
-        return isUpData[0];
+
     }
 
 }
