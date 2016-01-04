@@ -60,8 +60,11 @@ public class PictureFragment extends FilesFragment {
 
     /*загружаем изображение*/
     public void getPicture(String url) {
-
-        imageView.setImageURI(Uri.parse(url));
+        try {
+            imageView.setImageURI(Uri.parse(url));
+        } catch (Exception e) {
+            onError(getString(R.string.eror_goods_kod));
+        }
         ui_bar.setVisibility(View.INVISIBLE);
     }
 

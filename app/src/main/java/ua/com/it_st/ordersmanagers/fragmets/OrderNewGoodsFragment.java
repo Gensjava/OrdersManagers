@@ -258,6 +258,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         menu_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                if (Dialogs.openDialog) return;
                 bModePicture = !bModePicture;
                 /*показываем*/
                 modePicture();
@@ -280,6 +281,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         menu_dialog_amuont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                if (bModePicture) return;
                 Dialogs.openDialog = !Dialogs.openDialog;
                 // меняем фон
                 updateSelectDialog();
