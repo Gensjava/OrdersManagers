@@ -58,6 +58,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     private ImageView ui_picture;
     private TextView ui_dialog_auont;
     private boolean bModePicture;
+    private Bundle outState;
     /*обрабытывам клик на позиции дерева*/
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
@@ -174,8 +175,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
         View rootView = inflater.inflate(R.layout.order_new_goods_container, null, false);
         final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
-
-        /* Это корень */
+     /* Это корень */
         TreeNode root = TreeNode.root();
         TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
         TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
@@ -184,14 +184,13 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         root.addChildren(myCatalog);
         mNode = myCatalog;
 
-        /* создаем древо */
+         /* создаем древо */
         tView = new AndroidTreeView(getActivity(), root);
         // tView.setDefaultAnimation(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
         tView.setDefaultViewHolder(TreeProductCategoryHolder.class);
         tView.setDefaultNodeClickListener(nodeClickListener);
-
-        /* загружаем дерево */
+          /* загружаем дерево */
         containerView.addView(tView.getView());
 
         if (savedInstanceState != null) {
@@ -200,6 +199,14 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                 tView.restoreState(state);
             }
         }
+        if (outState != null) {
+            String state = outState.getString("tState");
+            if (!TextUtils.isEmpty(state)) {
+                tView.restoreState(state);
+            }
+
+        }
+
         /* у корня дерева ИД = "" */
         mSelectionArgs = "";
         /* открываем подключение к БД */
@@ -304,7 +311,6 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         ui_cart = (TextView) menu_cart.findViewById(R.id.main_tool_bar_cart_text);
         /*обновляем корзину*/
         updateCartCount();
-
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -493,7 +499,8 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
-
+        outState = new Bundle();
+        outState.putString("tState", tView.getSaveState());
     }
 
     @Override
