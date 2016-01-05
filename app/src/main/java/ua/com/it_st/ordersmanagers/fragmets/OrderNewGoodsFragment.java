@@ -204,7 +204,6 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             if (!TextUtils.isEmpty(state)) {
                 tView.restoreState(state);
             }
-
         }
 
         /* у корня дерева ИД = "" */

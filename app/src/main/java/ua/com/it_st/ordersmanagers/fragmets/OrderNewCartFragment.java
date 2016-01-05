@@ -14,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -85,13 +86,15 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                  /*проверяем пустая корзина или нет*/
                 if (!ConstantsUtil.checkCartEmpty(getActivity())) {
                     boolean bCheck;
+
+                    UpdateOrderDB lUpdateOrderDB = new UpdateOrderDB(DB, getActivity());
                      /* создаем новый заказ */
                     if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.NEW) ||
                             ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
-                        bCheck = onNewOrder();
+                        bCheck = lUpdateOrderDB.add();
                     } else {
                         /*редактируем заказ*/
-                        bCheck = onUpDataOrder();
+                        bCheck = lUpdateOrderDB.update();
                     }
 
                     if (bCheck) {
@@ -106,92 +109,6 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             default:
                 break;
         }
-    }
-
-    /*создаем новый заказ док*/
-    public boolean onNewOrder() {
-         /* начинаем транзакцию */
-        DB.beginTransaction();
-        /* Делаем запись заказа
-        * */
-        /* шапка*/
-        long inTable = DB.insert(
-                TableOrders.TABLE_NAME,
-                null,
-                TableOrders.getContentValues(ConstantsUtil.mCurrentOrder));
-
-        if (inTable == -1) {
-            InfoUtil.Tost(getString(R.string.eror_save_cap_doc), getActivity());
-            DB.endTransaction();
-            return false;
-        }
-         /* табличная часть*/
-        /*создаем новые позиции заказа*/
-        for (final OrderLines aMCart : ConstantsUtil.mCart) {
-            long inTableLines = DB.insert(
-                    TableOrdersLines.TABLE_NAME,
-                    null,
-                    TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
-
-            if (inTableLines == -1) {
-                InfoUtil.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
-                DB.endTransaction();
-                return false;
-            }
-        }
-          /*Возвращаем положение выбор диалога к-во по умолчанию*/
-        Dialogs.openDialog = false;
-        /* заканчиваем транзакцию */
-        DB.setTransactionSuccessful();
-        DB.endTransaction();
-        return true;
-    }
-
-    /*обновляем заказ док*/
-    public boolean onUpDataOrder() {
-         /* начинаем транзакцию */
-        DB.beginTransaction();
-        /* Делаем запись заказа
-        * */
-        /* шапка*/
-        long inTable = DB.update(
-                TableOrders.TABLE_NAME,
-                TableOrders.getContentValuesUpdata(ConstantsUtil.mCurrentOrder),
-                "Orders.view_id = ?",
-                new String[]{ConstantsUtil.mCurrentOrder.getId()});
-
-        if (inTable == -1) {
-            InfoUtil.Tost(getString(R.string.eror_save_cap_doc), getActivity());
-            DB.endTransaction();
-            return false;
-        }
-
-         /* табличная часть*/
-        /*чистим табличную часть*/
-        long inTableLines = DB.delete(
-                TableOrdersLines.TABLE_NAME,
-                "OrdersLines.doc_id = ?",
-                new String[]{ConstantsUtil.mCurrentOrder.getId()});
-
-        /*обновляем позиции заказа (создаем новые)*/
-        for (final OrderLines aMCart : ConstantsUtil.mCart) {
-
-            long inTableLinesNew = DB.insert(TableOrdersLines.TABLE_NAME,
-                    null,
-                    TableOrdersLines.getContentValues(aMCart, ConstantsUtil.mCurrentOrder.getId()));
-
-            if (inTableLines == -1 || inTableLinesNew == -1) {
-                InfoUtil.Tost(getString(R.string.error_position) + ConstantsUtil.mCurrentOrder.getId() + ")", getActivity());
-                DB.endTransaction();
-                return false;
-            }
-        }
-          /*Возвращаем положение выбор диалога к-во по умолчанию*/
-        Dialogs.openDialog = false;
-        /* заканчиваем транзакцию */
-        DB.setTransactionSuccessful();
-        DB.endTransaction();
-        return true;
     }
 
     /*обновление после выбора к-во товара в списке товаров*/

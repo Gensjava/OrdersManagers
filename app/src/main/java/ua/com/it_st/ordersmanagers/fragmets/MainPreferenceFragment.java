@@ -10,9 +10,7 @@ import com.github.machinarius.preferencefragment.PreferenceFragment;
 
 import ua.com.it_st.ordersmanagers.R;
 
-/**
- * Created by Gens on 29.08.2015.
- */
+
 public class MainPreferenceFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
     private SharedPreferences mSettings;
 
