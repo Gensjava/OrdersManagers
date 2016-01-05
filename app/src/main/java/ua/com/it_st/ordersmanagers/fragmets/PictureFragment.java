@@ -21,6 +21,7 @@ public class PictureFragment extends FilesFragment {
     private ImageView imageView;
     private ProgressBar ui_bar;
     private File mFile;
+    private boolean mLuck;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class PictureFragment extends FilesFragment {
         FilesFragment.ConnectServer connectData = ConstantsUtil.sConnectData;
         //
         if (connectData == null) {
-            onError(getString(R.string.eror_conect));
+            isError(getString(R.string.eror_conect));
             return rootView;
         }
         Bundle bundle = getArguments();
@@ -51,11 +52,11 @@ public class PictureFragment extends FilesFragment {
                     connectData.getAsyncHttpClientUtil().getDownloadFilesPicture(params);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    onError(getString(R.string.eror_conect));
+                    isError(getString(R.string.eroor_dowload_picture));
                     return rootView;
                 }
             } else {
-                onError(getString(R.string.eror_goods_kod));
+                isError(getString(R.string.eror_goods_kod));
             }
         }
         return rootView;
@@ -71,17 +72,18 @@ public class PictureFragment extends FilesFragment {
                     @Override
                     public void onSuccess() {
                         ui_bar.setVisibility(View.INVISIBLE);
+                        mLuck = true;
                     }
 
                     @Override
                     public void onError() {
-                        ui_bar.setVisibility(View.INVISIBLE);
+                        isError(getString(R.string.eror_goods_kod));
                     }
                 });
     }
 
     /*если ошибка*/
-    public void onError(String erText) {
+    public void isError(String erText) {
 
         InfoUtil.showErrorAlertDialog(erText, getString(R.string.updata), getActivity());
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error));
@@ -91,7 +93,9 @@ public class PictureFragment extends FilesFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mFile.delete();
+        if (mLuck) {
+            mFile.delete();
+        }
     }
 }
 

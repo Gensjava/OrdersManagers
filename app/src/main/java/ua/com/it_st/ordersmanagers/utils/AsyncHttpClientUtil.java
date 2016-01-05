@@ -1,7 +1,6 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 
-import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -168,7 +167,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                         PictureFragment fragment = (PictureFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(PictureFragment.class.toString());
 
                         if (fragment != null) {
-                            fragment.onError(mMainActivity.getString(R.string.eroor_dowload_picture));
+                            fragment.isError(mMainActivity.getString(R.string.eroor_dowload_picture));
                         }
                     }
                 }
@@ -185,14 +184,14 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                     }
                 } else {
                     //Log
-                    fragment.onError(mMainActivity.getString(R.string.eroor_dowload_picture));
+                    fragment.isError(mMainActivity.getString(R.string.eroor_dowload_picture));
                 }
             }
 
             @Override
             public void onProgress(long bytesWritten, long totalSize) {
-                Log.i("прогрксс", "" + totalSize);
-                AsyncHttpClient.log.v(LOG_TAG, String.format("Progress %d from %d (%2.0f%%)", bytesWritten, totalSize, (totalSize > 0) ? (bytesWritten * 1.0 / totalSize) * 100 : -1));
+                // Log.i("прогрксс", "" + totalSize);
+                // AsyncHttpClient.log.v(LOG_TAG, String.format("Progress %d from %d (%2.0f%%)", bytesWritten, totalSize, (totalSize > 0) ? (bytesWritten * 1.0 / totalSize) * 100 : -1));
                 //super.onProgress(bytesWritten, totalSize);
 
             }
