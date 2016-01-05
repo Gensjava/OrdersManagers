@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,7 +22,6 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
-import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         /*Запускаем монитор GPS*/
-        startService(new Intent(this, GPSMonitor.class));
+        // startService(new Intent(this, GPSMonitor.class));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -18,6 +20,7 @@ public class PictureFragment extends FilesFragment {
 
     private ImageView imageView;
     private ProgressBar ui_bar;
+    private File mFile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,13 +62,22 @@ public class PictureFragment extends FilesFragment {
     }
 
     /*загружаем изображение*/
-    public void getPicture(String url) {
-        try {
-            imageView.setImageURI(Uri.parse(url));
-        } catch (Exception e) {
-            onError(getString(R.string.eror_goods_kod));
-        }
-        ui_bar.setVisibility(View.INVISIBLE);
+    public void getPicture(final File file) {
+        mFile = file;
+        Picasso.with(getActivity())
+                .load(file)
+                .error(R.mipmap.ic_error)
+                .into(imageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        ui_bar.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        ui_bar.setVisibility(View.INVISIBLE);
+                    }
+                });
     }
 
     /*если ошибка*/
@@ -74,6 +86,12 @@ public class PictureFragment extends FilesFragment {
         InfoUtil.showErrorAlertDialog(erText, getString(R.string.updata), getActivity());
         imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error));
         ui_bar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mFile.delete();
     }
 }
 

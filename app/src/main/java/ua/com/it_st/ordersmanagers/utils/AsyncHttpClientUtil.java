@@ -143,13 +143,14 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
         post(mBaseUrl, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                Log.i("sss", "" + statusCode);
+
             }
 
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                Log.i("sss1", "" + statusCode);
+
             }
+
         });
 
     }
@@ -180,12 +181,20 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                 if (statusCode == HttpStatus.SC_OK) {
                     if (fragment != null) {
                         /**/
-                        fragment.getPicture(file.getPath());
+                        fragment.getPicture(file);
                     }
                 } else {
                     //Log
                     fragment.onError(mMainActivity.getString(R.string.eroor_dowload_picture));
                 }
+            }
+
+            @Override
+            public void onProgress(long bytesWritten, long totalSize) {
+                Log.i("прогрксс", "" + totalSize);
+                AsyncHttpClient.log.v(LOG_TAG, String.format("Progress %d from %d (%2.0f%%)", bytesWritten, totalSize, (totalSize > 0) ? (bytesWritten * 1.0 / totalSize) * 100 : -1));
+                //super.onProgress(bytesWritten, totalSize);
+
             }
         });
     }
