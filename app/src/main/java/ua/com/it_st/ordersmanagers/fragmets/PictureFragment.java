@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.ConnectServer;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
@@ -32,7 +33,7 @@ public class PictureFragment extends FilesFragment {
         ui_bar = (ProgressBar) rootView.findViewById(R.id.progress_bar_picture);
 
         /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = ConstantsUtil.sConnectData;
+        ConnectServer connectData = ConstantsUtil.sConnectData;
         //
         if (connectData == null) {
             isError(getString(R.string.eror_conect));
@@ -67,7 +68,7 @@ public class PictureFragment extends FilesFragment {
         mFile = file;
         Picasso.with(getActivity())
                 .load(file)
-                .error(R.mipmap.ic_error)
+                .error(R.mipmap.ic_error_big)
                 .into(imageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
@@ -86,7 +87,7 @@ public class PictureFragment extends FilesFragment {
     public void isError(String erText) {
 
         InfoUtil.showErrorAlertDialog(erText, getString(R.string.updata), getActivity());
-        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error));
+        imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_error_big));
         ui_bar.setVisibility(View.INVISIBLE);
     }
 

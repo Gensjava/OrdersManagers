@@ -21,6 +21,7 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.ConnectServer;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
@@ -58,7 +59,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 //Log
                 InfoUtil.setmLogLine(getString(R.string.start_on_load));
                 /*подключаемся к серверу*/
-                FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity(), (byte) 0);
+                ConnectServer connectData = new ConnectServer(getActivity(), (byte) 0);
                 //класс работает с настройками программы
                 WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
 

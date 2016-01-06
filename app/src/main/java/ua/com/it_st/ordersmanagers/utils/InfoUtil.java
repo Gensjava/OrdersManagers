@@ -20,15 +20,16 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 public class InfoUtil {
 
-    private static final String TEG_ERROR = "ErrorInfo";
-    private static final String TEG_INFO = "Info";
+    private static final String TEG_ERROR_INFO = "ErrorInfo:";
+    private static final String TEG_INFO = "Info:";
+    private static final String TEG_ERROR = "Error:";
     public static String mLogLine;
     public static List<InfoItem> mLogLineList = new ArrayList<InfoItem>();
     public static boolean isErrors;
 
     public static void showErrorAlertDialog(String errMessage, String errTitle, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Error:" + errTitle)
+        builder.setTitle(TEG_ERROR + errTitle)
                 .setMessage(errMessage)
                 .setIcon(R.mipmap.ic_error)
                 .setCancelable(false)
@@ -134,7 +135,7 @@ public class InfoUtil {
         mLogLine = mLogLine + " " + lLog;
         mLogLineList.add(new InfoItem(lbErr, lAction + " - " + lLogLine + "\n" + lerr, lCurDateTime));
 
-        Log.i(TEG_ERROR, lLog);
+        Log.i(TEG_ERROR_INFO, lLog);
 
         if (!isErrors) {
             isErrors = lbErr;
@@ -151,7 +152,7 @@ public class InfoUtil {
         mLogLine = mLogLine + " " + lLog;
         mLogLineList.add(new InfoItem(lbErr, lAction + "\n" + lerr + lerr, lCurDateTime));
 
-        Log.i(TEG_ERROR, lLog);
+        Log.i(TEG_ERROR_INFO, lLog);
 
         if (!isErrors) {
             isErrors = lbErr;

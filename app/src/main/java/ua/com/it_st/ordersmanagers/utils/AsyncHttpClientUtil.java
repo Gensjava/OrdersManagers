@@ -3,7 +3,6 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.view.View;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -21,7 +20,7 @@ import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PictureFragment;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 
-public class AsyncHttpClientUtil extends AsyncHttpClient {
+public class AsyncHttpClientUtil extends com.loopj.android.http.AsyncHttpClient {
 
     private final String TEG = AsyncHttpClientUtil.class.getSimpleName();
     //private String mBaseUrl = "http://192.168.1.7/Pekin/hs/file";

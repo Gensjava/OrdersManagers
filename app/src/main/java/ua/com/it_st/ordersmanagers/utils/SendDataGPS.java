@@ -20,12 +20,11 @@ public class SendDataGPS extends FilesFragment {
         mContext = context;
         mStatus = status;
     }
-
     //отправляем данные на сервер
     public void sendDataOnServer() {
 
         /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(mContext, (byte) 1);
+        ConnectServer connectData = new ConnectServer(mContext, (byte) 1);
 
         /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();

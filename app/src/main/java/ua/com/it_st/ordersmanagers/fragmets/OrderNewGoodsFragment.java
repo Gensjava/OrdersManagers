@@ -32,6 +32,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.utils.ConnectServer;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -355,7 +356,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             if (ConstantsUtil.sConnectData == null) {
                  /*подключаемся к серверу*/
-                ConstantsUtil.sConnectData = new FilesFragment.ConnectServer(getActivity(), (byte) 2);
+                ConstantsUtil.sConnectData = new ConnectServer(getActivity(), (byte) 2);
             }
         }
     }

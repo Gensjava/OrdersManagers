@@ -21,31 +21,13 @@ import com.filippudak.ProgressPieView.ProgressPieView;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
-import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
-import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
-import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
-import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
-import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 
 public class FilesFragment extends Fragment implements View.OnClickListener {
@@ -165,58 +147,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         InfoUtil.isErrors = false;
     }
 
-    /*получаем кол-во строк в файле*/
-    public int getCountFileLines(File mFile) {
-        int n = 0;
-        BufferedReader input = null;
-        try {
-            input = new BufferedReader(new FileReader(mFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            input.readLine();
-            while ((input.readLine()) != null) {
-                n++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return n;
-    }
-
-    public Map<String, String> getFileNameInsert() {
-
-        Map<String, String> lTableNameInsert = new HashMap<>();
-
-        lTableNameInsert.put(TableCompanies.FILE_NAME, TableCompanies.INSERT_VALUES);
-        lTableNameInsert.put(TableCounteragents.FILE_NAME, TableCounteragents.INSERT_VALUES);
-        lTableNameInsert.put(TablePrices.FILE_NAME, TablePrices.INSERT_VALUES);
-        lTableNameInsert.put(TableProducts.FILE_NAME, TableProducts.INSERT_VALUES);
-        lTableNameInsert.put(TableTypePrices.FILE_NAME, TableTypePrices.INSERT_VALUES);
-        lTableNameInsert.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
-        lTableNameInsert.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
-        lTableNameInsert.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.INSERT_VALUES);
-
-        return lTableNameInsert;
-    }
-
-    public Map<String, String> getFileNameHeader() {
-
-        Map<String, String> lTableName = new HashMap<>();
-
-        lTableName.put(TableCompanies.FILE_NAME, TableCompanies.HEADER_NAME);
-        lTableName.put(TableCounteragents.FILE_NAME, TableCounteragents.HEADER_NAME);
-        lTableName.put(TablePrices.FILE_NAME, TablePrices.HEADER_NAME);
-        lTableName.put(TableProducts.FILE_NAME, TableProducts.HEADER_NAME);
-        lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.HEADER_NAME);
-        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.HEADER_NAME);
-        lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.HEADER_NAME);
-        lTableName.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.HEADER_NAME);
-
-        return lTableName;
-    }
-
     public String getTEG() {
         return TEG;
     }
@@ -240,7 +170,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     public TextView getLoadFiles() {
         return mLoadFiles;
     }
-
 
     public double getProgress() {
         return mProgress;
@@ -283,77 +212,4 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         void onOpenFragmentClass(Class<?> fClass);
     }
 
-    /*клас для подключения к серверу 1с*/
-    /* подключаемся через HTTP к базе и загужаем данные */
-    public class ConnectServer {
-
-        private boolean mlConnect;
-        private AsyncHttpClientUtil mAsyncHttpClientUtil;
-        private SharedPreferences mSettings;
-        private Context mContext;
-
-        public ConnectServer(Context context, byte tWay) {
-
-            mContext = context;
-             /*вызываем менеджера настроек*/
-            mSettings = ConstantsUtil.mSettings;
-
-            /*проверка есть интерент или нет*/
-            boolean isInternet = ConstantsUtil.isInternetAvailable(mContext);
-            if (!isInternet) {
-                InfoUtil.showErrorAlertDialog(context.getString(R.string.error_inet), context.getString(R.string.updata), getActivity());
-                return;
-            }
-
-            //класс работает с настройками программы
-            WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, mContext);
-
-              /* список шаблонов пути к серверу  */
-            String[] templateWay = mContext.getResources().getStringArray(R.array.template_way);
-
-            String loginServer = lWorkSharedPreferences.getMloginServer();
-            String passwordServer = lWorkSharedPreferences.getPasswordServer();
-            String IdServer = lWorkSharedPreferences.getIdServer();
-
-            AsyncHttpClientUtil utilAsyncHttpClient = null;
-            try {
-                if (mContext.getClass().equals(MainActivity.class)) {//выгрузка загрузка файлов
-                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, IdServer + templateWay[tWay]);
-                } else {
-                    utilAsyncHttpClient = new AsyncHttpClientUtil(IdServer + templateWay[tWay]);//обмен данными GPS
-                }
-
-                utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
-                utilAsyncHttpClient.setTimeout(50000);
-                utilAsyncHttpClient.setConnectTimeout(50000);
-                utilAsyncHttpClient.setResponseTimeout(50000);
-
-                setMlConnect(true);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                setMlConnect(false);
-                //Log
-                InfoUtil.setmLogLine(mContext.getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-            }
-            setAsyncHttpClientUtil(utilAsyncHttpClient);
-        }
-
-        public AsyncHttpClientUtil getAsyncHttpClientUtil() {
-            return mAsyncHttpClientUtil;
-        }
-
-        public void setAsyncHttpClientUtil(final AsyncHttpClientUtil asyncHttpClientUtil) {
-            mAsyncHttpClientUtil = asyncHttpClientUtil;
-        }
-
-        public boolean isMlConnect() {
-            return mlConnect;
-        }
-
-        public void setMlConnect(final boolean mlConnect) {
-            this.mlConnect = mlConnect;
-        }
-
-    }
 }

@@ -8,7 +8,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
-public class FileSizeLine extends AsyncTask<String, Integer, String> {
+public class SyngHttpClientUtil extends AsyncTask<String, Integer, String> {
 
     private String mBaseUrl;
     private RequestParams mParams;
@@ -16,7 +16,7 @@ public class FileSizeLine extends AsyncTask<String, Integer, String> {
     private String mPasswordServer;
     private MainActivity mMainActivity;
 
-    public FileSizeLine(final String baseUrl, final RequestParams params, final String loginServer, final String passwordServer, final MainActivity mainActivity) {
+    public SyngHttpClientUtil(final String baseUrl, final RequestParams params, final String loginServer, final String passwordServer, final MainActivity mainActivity) {
         mBaseUrl = baseUrl;
         mParams = params;
         mloginServer = loginServer;

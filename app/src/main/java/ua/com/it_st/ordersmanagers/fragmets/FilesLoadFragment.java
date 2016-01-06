@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,16 +13,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
+import ua.com.it_st.ordersmanagers.utils.ConnectServer;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.WorkFiles;
 import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 /* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
@@ -75,57 +74,24 @@ public class FilesLoadFragment extends FilesFragment {
         }
     }
 
-    /* получаем количество всех строк в файлах до загрузки всех файлов */
-    private void getSizeLine(String wayCatalog, String idServer, String loginServer, String passwordServer) {
-
-        RequestParams params = new RequestParams();
-        params.put(getString(R.string.SizeFileCatalog), wayCatalog);
-
-        FileSizeLine fileSizeLine = new FileSizeLine(idServer, params, loginServer, passwordServer, (MainActivity) getActivity());
-        fileSizeLine.execute();
-        try {
-            fileSizeLine.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            //Log
-            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            //Log
-            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-        }
-
-    }
-
     /* загружаем файлы с сервера*/
     public void dowloadFilesOfServer() {
 
-        //Log
-        InfoUtil.setmLogLine(getString(R.string.start_load));
-        getLoadFiles().setText(getString(R.string.start_load));
-         /*подключаемся к серверу*/
-        FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity(), (byte) 0);
-
-        /*подключились к базе или нет*/
-        boolean lConnect = connectData.isMlConnect();
-        //
-        if (!lConnect) {
-            //Log
-            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
-            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-            getUi_bar().setVisibility(View.INVISIBLE);
-            return;
-        }
-         /* список шаблонов пути к серверу  */
+       /* список шаблонов пути к серверу  */
         String[] templateWay = getResources().getStringArray(R.array.template_way);
         /**/
         ConstantsUtil.sizeFileLine = 0;
         //класс работает с настройками программы
         WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
-        
+
         /* получаем количество всех строк в файлах до загрузки всех файлов */
-        getSizeLine(lWorkSharedPreferences.getWayCatalog(), lWorkSharedPreferences.getIdServer() + templateWay[0], lWorkSharedPreferences.getMloginServer(), lWorkSharedPreferences.getPasswordServer());
+        WorkFiles.getSizeLine(
+                lWorkSharedPreferences.getWayCatalog(),
+                lWorkSharedPreferences.getIdServer() + templateWay[0],
+                lWorkSharedPreferences.getMloginServer(),
+                lWorkSharedPreferences.getPasswordServer(),
+                (MainActivity) getActivity(),
+                getImageViewInfo());
 
         /*если количество = 0 тогда возврат нет  смысла продолжать*/
         if (ConstantsUtil.sizeFileLine > 0) {
@@ -136,14 +102,31 @@ public class FilesLoadFragment extends FilesFragment {
             return;
         }
 
+        //Log
+        InfoUtil.setmLogLine(getString(R.string.start_load));
+        getLoadFiles().setText(getString(R.string.start_load));
+         /*подключаемся к серверу*/
+        ConnectServer сonnectServer = new ConnectServer(getActivity(), (byte) 0);
+
+        /*подключились к базе или нет*/
+        boolean lConnect = сonnectServer.isMlConnect();
+        //
+        if (!lConnect) {
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+            getUi_bar().setVisibility(View.INVISIBLE);
+            return;
+        }
+
         /* удаляем все записи из таблиц */
         SQLiteOpenHelperUtil.onDeleteValueTables(getDb());
         /*обнуляем все значения перед загрузкой*/
         nullableValues();
          /*получаем команды для записи новой строки в таблице*/
-        lTableNameInsert = getFileNameInsert();
+        lTableNameInsert = WorkFiles.getFileNameInsert();
         /*получаем заголовки таблиц*/
-        lTableName = getFileNameHeader();
+        lTableName = WorkFiles.getFileNameHeader();
 
        /* список файлов для загрузки */
         String[] nameFile = getResources().getStringArray(R.array.name_file_data);
@@ -155,7 +138,7 @@ public class FilesLoadFragment extends FilesFragment {
         mProgressDiscrete = getProgressDiscrete();
 
         /*получаем параметры подключения*/
-        AsyncHttpClientUtil utilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
+        AsyncHttpClientUtil utilAsyncHttpClient = сonnectServer.getAsyncHttpClientUtil();
         RequestParams params;
         
         /* начинаем транзакцию */
@@ -236,7 +219,7 @@ public class FilesLoadFragment extends FilesFragment {
             try {
                 final BufferedReader input = new BufferedReader(new FileReader(mFile));
                 /*вычисляем к-во строк в файле*/
-                totalLinesFile = getCountFileLines(mFile);
+                totalLinesFile = WorkFiles.getCountFileLines(mFile);
                 stotalLinesFile = totalLinesFile;
                 mProgressDiscrete = 0;
                 /*отсылаем сообщения прогрессу*/
