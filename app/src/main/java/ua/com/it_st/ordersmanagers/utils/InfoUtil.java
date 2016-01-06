@@ -42,23 +42,23 @@ public class InfoUtil {
         alert.show();
     }
 
-    /*делаем чтоб картинка мигала*/
+    /*РґРµР»Р°РµРј С‡С‚РѕР± РєР°СЂС‚РёРЅРєР° РјРёРіР°Р»Р°*/
     public static void getFleshImage(final int icon, final int anim, final ImageView iv, final MainActivity mContext) {
 
         final Animation animScale = AnimationUtils.loadAnimation(mContext, anim);
         Timer mTimer = null;
-        /*проверяем если уже работает то не запускаем*/
+        /*РїСЂРѕРІРµСЂСЏРµРј РµСЃР»Рё СѓР¶Рµ СЂР°Р±РѕС‚Р°РµС‚ С‚Рѕ РЅРµ Р·Р°РїСѓСЃРєР°РµРј*/
         if (animScale.hasStarted() & !animScale.hasEnded()) {
             return;
         }
-       /*обнуляем таймер*/
+       /*РѕР±РЅСѓР»СЏРµРј С‚Р°Р№РјРµСЂ*/
         if (mTimer != null) {
             mTimer.cancel();
         }
-         /*устанавливаем иконку*/
+         /*СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РёРєРѕРЅРєСѓ*/
         iv.setImageResource(icon);
 
-        //Вкл.таймер
+        //Р’РєР».С‚Р°Р№РјРµСЂ
         mTimer = new Timer();
         final Timer finalMTimer = mTimer;
         mTimer.schedule(new TimerTask() {
@@ -69,12 +69,12 @@ public class InfoUtil {
 
                         @Override
                         public void run() {
-                            //мигаем
+                            //РјРёРіР°РµРј
                             iv.startAnimation(animScale);
                         }
                     });
                 } else {
-                  /*обнуляем таймер*/
+                  /*РѕР±РЅСѓР»СЏРµРј С‚Р°Р№РјРµСЂ*/
                     finalMTimer.cancel();
                 }
 

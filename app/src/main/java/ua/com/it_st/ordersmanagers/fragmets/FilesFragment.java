@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Timer;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
@@ -64,7 +63,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     private int nOSeek;
     private Button BHost;
     private ImageView ImageViewInfo;
-    private Timer mTimer;
     private View ui_bar;
 
     protected static SQLiteDatabase getDb() {
@@ -139,8 +137,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
     public void onClick(final View v) {
 
     }
-
-
 
     /*обнуляем значения перед загрузкой*/
     public void nullableValues() {
