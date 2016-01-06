@@ -4,13 +4,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 public class InfoUtil {
 
@@ -19,7 +25,6 @@ public class InfoUtil {
     public static String mLogLine;
     public static List<InfoItem> mLogLineList = new ArrayList<InfoItem>();
     public static boolean isErrors;
-
 
     public static void showErrorAlertDialog(String errMessage, String errTitle, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -36,6 +41,47 @@ public class InfoUtil {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    /*делаем чтоб картинка мигала*/
+    public static void getFleshImage(final int icon, final int anim, final ImageView iv, final MainActivity mContext) {
+
+        final Animation animScale = AnimationUtils.loadAnimation(mContext, anim);
+        Timer mTimer = null;
+        /*проверяем если уже работает то не запускаем*/
+        if (animScale.hasStarted() & !animScale.hasEnded()) {
+            return;
+        }
+       /*обнуляем таймер*/
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+         /*устанавливаем иконку*/
+        iv.setImageResource(icon);
+
+        //Вкл.таймер
+        mTimer = new Timer();
+        final Timer finalMTimer = mTimer;
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (mContext != null) {
+                    mContext.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //мигаем
+                            iv.startAnimation(animScale);
+                        }
+                    });
+                } else {
+                  /*обнуляем таймер*/
+                    finalMTimer.cancel();
+                }
+
+            }
+        }, 2000, 1000); //
+    }
+
 
     public static boolean fieldValidationRegistration(final EditText[] mArrEditm) {
         boolean check = false;

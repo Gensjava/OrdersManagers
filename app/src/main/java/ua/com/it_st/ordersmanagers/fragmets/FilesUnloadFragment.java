@@ -17,11 +17,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
+import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 
 public class FilesUnloadFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -57,19 +59,21 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 InfoUtil.setmLogLine(getString(R.string.start_on_load));
                 /*подключаемся к серверу*/
                 FilesFragment.ConnectServer connectData = new FilesFragment.ConnectServer(getActivity(), (byte) 0);
+                //класс работает с настройками программы
+                WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
 
                 /*подключились к базе или нет*/
                 boolean lConnect = connectData.isMlConnect();
                 if (!lConnect) {
                     //Log
                     InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
-                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                     getUi_bar().setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 mUtilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
-                mWayCatalog = connectData.getWayCatalog();
+                mWayCatalog = lWorkSharedPreferences.getWayCatalog();
 
                 for (byte i = 0; i < 3; i++) {
                     getActivity().getSupportLoaderManager().destroyLoader(i);
@@ -135,9 +139,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                     getUi_bar().setVisibility(View.INVISIBLE);
                     /*мигаем иконкой для вывода лога*/
                     if (InfoUtil.isErrors) {
-                        getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                        InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                     } else {
-                        getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                        InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                     }
                 }
                 break;
@@ -161,9 +165,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                         getUi_bar().setVisibility(View.INVISIBLE);
                         /*мигаем иконкой для вывода лога*/
                         if (InfoUtil.isErrors) {
-                            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                         } else {
-                            getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                         }
                     }
                 }
@@ -189,9 +193,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                         getUi_bar().setVisibility(View.INVISIBLE);
                         /*мигаем иконкой для вывода лога*/
                         if (InfoUtil.isErrors) {
-                            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                         } else {
-                            getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                         }
                     }
                 }
@@ -262,9 +266,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
             getUi_bar().setVisibility(View.INVISIBLE);
             /*мигаем иконкой для вывода лога*/
             if (InfoUtil.isErrors) {
-                getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
             } else {
-                getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
             }
         }
     }

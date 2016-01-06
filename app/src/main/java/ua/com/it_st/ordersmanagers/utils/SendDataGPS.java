@@ -35,13 +35,15 @@ public class SendDataGPS extends FilesFragment {
         if (!lConnect) {
             return;
         }
+        //класс работает с настройками программы
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
 
         RequestParams params = new RequestParams();
         params.put("time", mTime);
         params.put("lat", mLat);
         params.put("lon", vLon);
         params.put("status", mStatus);
-        params.put("kodAgent", connectData.getIDUser());
+        params.put("kodAgent", lWorkSharedPreferences.getIDUser());
 
         try {
             mUtilAsyncHttpClient.postUnloadParams(params);

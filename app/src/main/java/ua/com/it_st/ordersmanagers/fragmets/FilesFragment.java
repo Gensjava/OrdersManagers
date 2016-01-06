@@ -13,8 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
@@ -49,6 +46,7 @@ import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 
 public class FilesFragment extends Fragment implements View.OnClickListener {
@@ -142,48 +140,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    /*делаем чтоб картинка мигала*/
-    public void getFleshImage(final int icon, final int anim, final ImageView iv) {
-
-        final Animation animScale = AnimationUtils.loadAnimation(getActivity(), anim);
-
-        /*проверяем если уже работает то не запускаем*/
-        if (animScale.hasStarted() & !animScale.hasEnded()) {
-            return;
-        }
-       /*обнуляем таймер*/
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-         /*устанавливаем иконку*/
-        iv.setImageResource(icon);
-
-        //Вкл.таймер
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            //мигаем
-                            iv.startAnimation(animScale);
-                        }
-                    });
-                } else {
-                  /*обнуляем таймер*/
-                    if (mTimer != null) {
-                        mTimer.cancel();
-                        mTimer = null;
-                    }
-                }
-
-            }
-        }, 2000, 1000); //
-    }
 
 
     /*обнуляем значения перед загрузкой*/
@@ -343,6 +299,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         public ConnectServer(Context context, byte tWay) {
 
             mContext = context;
+             /*вызываем менеджера настроек*/
+            mSettings = ConstantsUtil.mSettings;
+
             /*проверка есть интерент или нет*/
             boolean isInternet = ConstantsUtil.isInternetAvailable(mContext);
             if (!isInternet) {
@@ -350,20 +309,22 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
                 return;
             }
 
-            /*вызываем менеджера настроек*/
-            mSettings = ConstantsUtil.mSettings;
+            //класс работает с настройками программы
+            WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, mContext);
+
               /* список шаблонов пути к серверу  */
             String[] templateWay = mContext.getResources().getStringArray(R.array.template_way);
 
-            String loginServer = getMloginServer();
-            String passwordServer = getPasswordServer();
+            String loginServer = lWorkSharedPreferences.getMloginServer();
+            String passwordServer = lWorkSharedPreferences.getPasswordServer();
+            String IdServer = lWorkSharedPreferences.getIdServer();
 
             AsyncHttpClientUtil utilAsyncHttpClient = null;
             try {
                 if (mContext.getClass().equals(MainActivity.class)) {//выгрузка загрузка файлов
-                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, getIdServer() + templateWay[tWay]);
+                    utilAsyncHttpClient = new AsyncHttpClientUtil((MainActivity) mContext, IdServer + templateWay[tWay]);
                 } else {
-                    utilAsyncHttpClient = new AsyncHttpClientUtil(getIdServer() + templateWay[tWay]);//обмен данными GPS
+                    utilAsyncHttpClient = new AsyncHttpClientUtil(IdServer + templateWay[tWay]);//обмен данными GPS
                 }
 
                 utilAsyncHttpClient.setBasicAuth(loginServer, passwordServer);
@@ -398,86 +359,5 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
             this.mlConnect = mlConnect;
         }
 
-        public String getMloginServer() {
-
-            String loginServer = mSettings.getString(mContext.getString(R.string.login_server), null);
-            /*проверка*/
-            if (loginServer == null) {
-                InfoUtil.Tost("Введите в настройках логин!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Введите в настройках логин!", true, TEG);
-                return null;
-            }
-            return loginServer;
-        }
-
-        public String getPasswordServer() {
-
-            String passwordServer = mSettings.getString(mContext.getString(R.string.password_server), null);
-
-            if (passwordServer == null) {
-                InfoUtil.Tost("Введите в настройках пароль!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Введите в настройках пароль!", true, TEG);
-                return null;
-            }
-            return passwordServer;
-        }
-
-        public String getModeServer() {
-         /*режим сервера*/
-            String modeServer = mSettings.getString(mContext.getString(R.string.mode_server), null);
-
-            if (modeServer == null) {
-                InfoUtil.Tost("Установите в настройках режим сервера!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Установите в настройках режим сервера!", true, TEG);
-                return null;
-            }
-            return modeServer;
-        }
-
-        public String getIdServer() {
-
-        /* ид сервер удаленны или локальный*/
-            final String idServer;
-            if (getModeServer().equals(mContext.getString(R.string.remoteServer))) {
-                idServer = mSettings.getString(mContext.getString(R.string.id_remote), null);
-            } else {
-                idServer = mSettings.getString(mContext.getString(R.string.id_local), null);
-            }
-            if (idServer == null || idServer.equals("")) {
-                InfoUtil.Tost("Введите в настройках путь к серверу!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Введите в настройках путь к серверу!", true, TEG);
-            }
-            return idServer;
-        }
-
-        public String getWayCatalog() {
-
-            /*каталог на сервере пользователя*/
-            String wayCatalog = mSettings.getString(mContext.getString(R.string.way_catalog), null);
-
-            if (wayCatalog == null || wayCatalog.equals("")) {
-                InfoUtil.Tost("Введите в настройках каталог пользователя!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Введите в настройках каталог пользователя!", true, TEG);
-            }
-            return wayCatalog;
-        }
-
-        public String getIDUser() {
-
-            /*ИД пользователя*/
-            String IDUser = mSettings.getString(mContext.getString(R.string.id_user), null);
-
-            if (IDUser == null || IDUser.equals("")) {
-                InfoUtil.Tost("Введите в настройках ID пользователя!", getActivity());
-                //Log
-                InfoUtil.setmLogLine("Введите в настройках ID пользователя!", true, TEG);
-            }
-            return IDUser;
-        }
     }
 }

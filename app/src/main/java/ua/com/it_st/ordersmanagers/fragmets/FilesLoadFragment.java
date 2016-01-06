@@ -24,6 +24,7 @@ import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.FileSizeLine;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 /* Класс предназначен для принимаема данных (файлы в формате csv) с сервера
    Файлы:
@@ -92,7 +93,7 @@ public class FilesLoadFragment extends FilesFragment {
             e.printStackTrace();
             //Log
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + ": " + e.toString());
-            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
         }
 
     }
@@ -112,7 +113,7 @@ public class FilesLoadFragment extends FilesFragment {
         if (!lConnect) {
             //Log
             InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
-            getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
@@ -120,9 +121,11 @@ public class FilesLoadFragment extends FilesFragment {
         String[] templateWay = getResources().getStringArray(R.array.template_way);
         /**/
         ConstantsUtil.sizeFileLine = 0;
+        //класс работает с настройками программы
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
         
         /* получаем количество всех строк в файлах до загрузки всех файлов */
-        getSizeLine(connectData.getWayCatalog(), connectData.getIdServer() + templateWay[0], connectData.getMloginServer(), connectData.getPasswordServer());
+        getSizeLine(lWorkSharedPreferences.getWayCatalog(), lWorkSharedPreferences.getIdServer() + templateWay[0], lWorkSharedPreferences.getMloginServer(), lWorkSharedPreferences.getPasswordServer());
 
         /*если количество = 0 тогда возврат нет  смысла продолжать*/
         if (ConstantsUtil.sizeFileLine > 0) {
@@ -160,7 +163,7 @@ public class FilesLoadFragment extends FilesFragment {
         for (String i : nameFile) {
 
             params = new RequestParams();
-            params.put(getString(R.string.NameCatalog), connectData.getWayCatalog());
+            params.put(getString(R.string.NameCatalog), lWorkSharedPreferences.getWayCatalog());
             params.put(getString(R.string.name_file), i);
             params.put(getString(R.string.SizeFileCatalog), "");
 
@@ -344,9 +347,9 @@ public class FilesLoadFragment extends FilesFragment {
 
                 /*мигаем иконкой для вывода лога*/
                 if (InfoUtil.isErrors) {
-                    getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo());
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                 } else {
-                    getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo());
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
                 }
                 getButtonOrderList().setVisibility(View.VISIBLE);
                 getUi_bar().setVisibility(View.INVISIBLE);

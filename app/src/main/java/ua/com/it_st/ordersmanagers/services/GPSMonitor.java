@@ -18,7 +18,7 @@ import ua.com.it_st.ordersmanagers.utils.SendDataGPS;
 public class GPSMonitor extends Service {
 
     // constant
-    public static final long NOTIFY_INTERVAL = 60 * 1000; // 60 seconds
+    public static final long NOTIFY_INTERVAL = 30 * 60 * 1000; // полчаса
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling

@@ -55,7 +55,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
 
                         if (fragment != null) {
                         /*мигаем иконкой для вывода лога*/
-                            fragment.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo(), mMainActivity);
                             mgError++;
                         }
                     }
@@ -102,7 +102,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
                             /**/
                             fragment.getLoadFiles().setText("Выгрузка завершена!");
                             /*мигаем иконкой для вывода лога*/
-                            fragment.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, fragment.getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, fragment.getImageViewInfo(), mMainActivity);
                             fragment.getUi_bar().setVisibility(View.INVISIBLE);
                         }
                         //Log
@@ -123,7 +123,7 @@ public class AsyncHttpClientUtil extends AsyncHttpClient {
 
                         if (fragment != null) {
                         /*мигаем иконкой для вывода лога*/
-                            fragment.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo());
+                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, fragment.getImageViewInfo(), mMainActivity);
                             mgError++;
                             fragment.getUi_bar().setVisibility(View.INVISIBLE);
                             fragment.getLoadFiles().setText("Выгрузка завершена!");
