@@ -553,5 +553,6 @@
     <string name="updata">Обмен данными</string>
     <string name="question_updata">При загрузке новых данных, все старые данные будет утеряны, продолжить?</string>
     <string name="eror_add_new_order">Записать новый заказ</string>
+    <string name="btUnLoad">ВЫГРУЗИТЬ</string>
 
 </resources>

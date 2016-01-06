@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -44,42 +43,15 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         //кнопку
         getBHost().setBackgroundResource(R.drawable.roundbutton_red);
         getBHost().setOnClickListener(this);
-        getBHost().setText("ВЫГРУЗИТЬ");
+        getBHost().setText(R.string.btUnLoad);
     }
 
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.load_files_button:
-
-                /*чистим все параметры */
-                nullableValues();
-                mProgress = 0;
-                pProgressPie = 0;
-                //Log
-                InfoUtil.setmLogLine(getString(R.string.start_on_load));
-                /*подключаемся к серверу*/
-                ConnectServer connectData = new ConnectServer(getActivity(), (byte) 0);
-                //класс работает с настройками программы
-                WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
-
-                /*подключились к базе или нет*/
-                boolean lConnect = connectData.isMlConnect();
-                if (!lConnect) {
-                    //Log
-                    InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
-                    InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                    getUi_bar().setVisibility(View.INVISIBLE);
-                    return;
-                }
-
-                mUtilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
-                mWayCatalog = lWorkSharedPreferences.getWayCatalog();
-
-                for (byte i = 0; i < 3; i++) {
-                    getActivity().getSupportLoaderManager().destroyLoader(i);
-                    getActivity().getSupportLoaderManager().initLoader(i, null, this);
-                }
+               /* выгружаем файлы на сервер*/
+                UnloadFilesOfServer();
                 break;
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
@@ -93,6 +65,38 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 break;
             default:
                 break;
+        }
+    }
+
+    /* выгружаем файлы на сервер*/
+    public void UnloadFilesOfServer() {
+       /*чистим все параметры */
+        nullableValues();
+        mProgress = 0;
+        pProgressPie = 0;
+        //Log
+        InfoUtil.setmLogLine(getString(R.string.start_on_load));
+                /*подключаемся к серверу*/
+        ConnectServer connectData = new ConnectServer(getActivity(), (byte) 0);
+        //класс работает с настройками программы
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
+
+                /*подключились к базе или нет*/
+        boolean lConnect = connectData.isMlConnect();
+        if (!lConnect) {
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.action_conect_base), true, TEG + getString(R.string.error_login_password_inet));
+            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+            getUi_bar().setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        mUtilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
+        mWayCatalog = lWorkSharedPreferences.getWayCatalog();
+
+        for (byte i = 0; i < 3; i++) {
+            getActivity().getSupportLoaderManager().destroyLoader(i);
+            getActivity().getSupportLoaderManager().initLoader(i, null, this);
         }
     }
 
@@ -119,87 +123,82 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         }
     }
 
+    /*получаем количество строк двух таблиц*/
+    private void getCountLineTamle(final Cursor data) {
+
+        data.moveToNext();
+                /*получаем количество строк двух таблиц*/
+        mAcuont = data.getInt(data.getColumnIndex("sum"));
+        if (mAcuont > 0) {
+                    /*устанавливаем максимальное количество бара*/
+            getProgressPieView().setMax(mAcuont);
+        } else {
+            InfoUtil.setmLogLine("Выгрузка файла", "Заказов для выгрузки нет.", true, getTEG());
+                    /*информаци о выгрузке*/
+            getLoadFiles().setText("Заказов для выгрузки нет.");
+            getUi_bar().setVisibility(View.INVISIBLE);
+                    /*мигаем иконкой для вывода лога*/
+            if (InfoUtil.isErrors) {
+                InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+            } else {
+                InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+            }
+        }
+    }
+
+    /*формируем документ заказ шапку*/
+    private void NewCreateDocOrder(final Cursor data, final String nameFile, final String[] headerLines, String headerName) {
+
+        /*формируем документ заказ шапку*/
+        if (mAcuont > 0) {
+            /*информаци о выгрузке*/
+            getLoadFiles().setText("Выгрузка " + headerName);
+            try {
+                getAllOrdersHeaderLines(data, nameFile, headerLines);
+                //Log
+                InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                //Log
+                InfoUtil.setmLogLine("Выгрузка файла", nameFile, true, getTEG() + " " + e.toString());
+                         /*информаци о выгрузке*/
+                getLoadFiles().setText("Выгрузка завершина c ошибками!");
+                getUi_bar().setVisibility(View.INVISIBLE);
+                        /*мигаем иконкой для вывода лога*/
+                if (InfoUtil.isErrors) {
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+                } else {
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+                }
+            }
+        }
+    }
+
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
         final String nameFile;
         final String[] headerLines;
+        final String headerName;
 
         switch (loader.getId()) {
             case 0:
-                data.moveToNext();
-                /*получаем количество строк двух таблиц*/
-                mAcuont = data.getInt(data.getColumnIndex("sum"));
-                if (mAcuont > 0) {
-                    /*устанавливаем максимальное количество бара*/
-                    getProgressPieView().setMax(mAcuont);
-                } else {
-                    InfoUtil.setmLogLine("Выгрузка файла", "Заказов для выгрузки нет.", true, getTEG());
-                    /*информаци о выгрузке*/
-                    getLoadFiles().setText("Заказов для выгрузки нет.");
-                    getUi_bar().setVisibility(View.INVISIBLE);
-                    /*мигаем иконкой для вывода лога*/
-                    if (InfoUtil.isErrors) {
-                        InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                    } else {
-                        InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                    }
-                }
+                getCountLineTamle(data);
                 break;
             case 1:
-                  /*формируем документ заказ шапку*/
-                if (mAcuont > 0) {
-                    nameFile = TableOrders.FILE_NAME;
-                    headerLines = TableOrders.sHeader.split(",");
-                    /*информаци о выгрузке*/
-                    getLoadFiles().setText("Выгрузка " + TableOrders.HEADER_NAME);
-                    try {
-                        getAllOrdersHeaderLines(data, nameFile, headerLines);
-                        //Log
-                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        //Log
-                        InfoUtil.setmLogLine("Выгрузка файла", nameFile, true, getTEG() + " " + e.toString());
-                         /*информаци о выгрузке*/
-                        getLoadFiles().setText("Выгрузка завершина c ошибками!");
-                        getUi_bar().setVisibility(View.INVISIBLE);
-                        /*мигаем иконкой для вывода лога*/
-                        if (InfoUtil.isErrors) {
-                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                        } else {
-                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                        }
-                    }
-                }
+                nameFile = TableOrders.FILE_NAME;
+                headerLines = TableOrders.sHeader.split(",");
+                headerName = TableOrders.HEADER_NAME;
+
+                NewCreateDocOrder(data, nameFile, headerLines, headerName);
                 break;
             case 2:
-                if (mAcuont > 0) {
-                 /*формируем документ табличную часть*/
-                    nameFile = TableOrdersLines.FILE_NAME;
-                    headerLines = TableOrdersLines.sHeader.split(",");
-                                                             /*информаци о выгрузке*/
-                    getLoadFiles().setText("Выгрузка " + TableOrdersLines.HEADER_NAME);
-                    try {
-                        getAllOrdersHeaderLines(data, nameFile, headerLines);
-                        //Log
-                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        //Log
-                        InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
-                         /*информаци о выгрузке*/
-                        getLoadFiles().setText("Выгрузка завершина c ошибками!");
-                        getUi_bar().setVisibility(View.INVISIBLE);
-                        /*мигаем иконкой для вывода лога*/
-                        if (InfoUtil.isErrors) {
-                            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                        } else {
-                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                        }
-                    }
-                }
+                nameFile = TableOrdersLines.FILE_NAME;
+                headerLines = TableOrdersLines.sHeader.split(",");
+                headerName = TableOrdersLines.HEADER_NAME;
+
+                NewCreateDocOrder(data, nameFile, headerLines, headerName);
 
                 break;
             default:
