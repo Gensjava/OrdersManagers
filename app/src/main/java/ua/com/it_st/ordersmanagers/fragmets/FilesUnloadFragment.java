@@ -26,7 +26,7 @@ import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
-
+/* Класс предназначен для отправки данных (файлы в формате csv) на сервер*/
 public class FilesUnloadFragment extends FilesFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final String TEG = FilesUnloadFragment.class.getSimpleName();

@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.utils;
 
-
 import android.view.View;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;

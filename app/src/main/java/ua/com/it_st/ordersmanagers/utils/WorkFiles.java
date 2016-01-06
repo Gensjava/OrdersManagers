@@ -27,7 +27,6 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 public class WorkFiles {
 
     private static String TEG = WorkFiles.class.getSimpleName();
-    ;
 
     /*получаем кол-во строк в файле*/
     public static int getCountFileLines(File mFile) {
@@ -55,7 +54,7 @@ public class WorkFiles {
         RequestParams params = new RequestParams();
         params.put(pMainActivity.getString(R.string.SizeFileCatalog), wayCatalog);
 
-        SyngHttpClientUtil fileSizeLine = new SyngHttpClientUtil(idServer, params, loginServer, passwordServer, (MainActivity) pMainActivity);
+        SyngHttpClientUtil fileSizeLine = new SyngHttpClientUtil(idServer, params, loginServer, passwordServer, pMainActivity);
         fileSizeLine.execute();
         try {
             fileSizeLine.get();

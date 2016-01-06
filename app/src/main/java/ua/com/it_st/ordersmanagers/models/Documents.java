@@ -2,9 +2,7 @@ package ua.com.it_st.ordersmanagers.models;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
 
-/**
- * Created by Gens on 17.08.2015.
- */
+
 public class Documents {
 
     private String mId;

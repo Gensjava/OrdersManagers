@@ -17,7 +17,7 @@ import java.util.Map;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
-
+/* Класс предназначен для вывода информации */
 public class InfoFragment extends Fragment {
     @Nullable
     @Override

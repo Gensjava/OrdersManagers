@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
+/* Класс предназначен показа корзины*/
 public class OrderNewCartFragment extends Fragment implements View.OnClickListener {
 
     private TextView tSumCart;

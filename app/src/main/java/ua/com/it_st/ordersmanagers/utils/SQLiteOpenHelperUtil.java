@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
@@ -14,9 +13,8 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-
+import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 

@@ -17,6 +17,7 @@ import ua.com.it_st.ordersmanagers.utils.ConnectServer;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
+/* Класс предназначен показа изображения товара*/
 public class PictureFragment extends FilesFragment {
 
     private ImageView imageView;

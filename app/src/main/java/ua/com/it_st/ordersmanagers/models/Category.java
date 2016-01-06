@@ -1,8 +1,5 @@
 package ua.com.it_st.ordersmanagers.models;
 
-/**
- * Created by Gens on 19.07.2015.
- */
 public class Category {
     private String mName;
     private int mId;
