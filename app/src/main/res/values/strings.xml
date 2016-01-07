@@ -554,5 +554,15 @@
     <string name="question_updata">При загрузке новых данных, все старые данные будет утеряны, продолжить?</string>
     <string name="eror_add_new_order">Записать новый заказ</string>
     <string name="btUnLoad">ВЫГРУЗИТЬ</string>
+    <string name="zero_text">0</string>
+    <string name="zero_point_text">0.0</string>
+    <string name="point">.</string>
+    <string name="zero_procent">0%</string>
+    <string name="load_info_base">"Загружаем информацию в базу "</string>
+    <string name="totalLinesFile">totalLinesFile</string>
+    <string name="load">"Загрузка "</string>
+    <string name="load_table">"Загрузка в таблицу "</string>
+    <string name="load_end_1">, завершена!</string>
+    <string name="load_end_2">Загрузка завершена!</string>
 
 </resources>

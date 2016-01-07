@@ -98,7 +98,7 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         /*Круглый общий прогресс загрузки*/
         mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.load_files_progressPieView);
-        mProgressPieView.setText("0%");
+        mProgressPieView.setText(getString(R.string.zero_procent));
         mProgressPieView.setTextColor(getResources().getColor(R.color.main_sub_grey));
         mProgressPieView.setProgressColor(getResources().getColor(R.color.main_grey));
         mProgressPieView.setStrokeColor(getResources().getColor(R.color.main_grey));
@@ -126,9 +126,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         ConstantsUtil.nPieViewProgress = 0;
         ConstantsUtil.nPieViewdProgress = 0;
 
-        mTextProgress.setText("0%");
+        mTextProgress.setText(getString(R.string.zero_procent));
         mProgressPieView.setProgress(0);
-        mProgressPieView.setText("0%");
+        mProgressPieView.setText(getString(R.string.zero_procent));
         mButtonOrderList.setVisibility(View.INVISIBLE);
         ui_bar.setVisibility(View.VISIBLE);
 

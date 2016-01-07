@@ -101,13 +101,11 @@ public class FilesLoadFragment extends FilesFragment {
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
-
         //Log
         InfoUtil.setmLogLine(getString(R.string.start_load));
         getLoadFiles().setText(getString(R.string.start_load));
          /*подключаемся к серверу*/
         ConnectServer сonnectServer = new ConnectServer(getActivity(), (byte) 0);
-
         /*подключились к базе или нет*/
         boolean lConnect = сonnectServer.isMlConnect();
         //
@@ -118,7 +116,6 @@ public class FilesLoadFragment extends FilesFragment {
             getUi_bar().setVisibility(View.INVISIBLE);
             return;
         }
-
         /* удаляем все записи из таблиц */
         SQLiteOpenHelperUtil.onDeleteValueTables(getDb());
         /*обнуляем все значения перед загрузкой*/
@@ -179,9 +176,8 @@ public class FilesLoadFragment extends FilesFragment {
             downloadAsyncFile.execute();
         } catch (Exception e) {
             //Log
-            InfoUtil.setmLogLine("Загружаем информацию в базу ", true, TEG + ": " + fileName + "  " + e.toString());
+            InfoUtil.setmLogLine(getString(R.string.load_info_base), true, TEG + ": " + fileName + "  " + e.toString());
         }
-
     }
 
     public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
@@ -194,10 +190,10 @@ public class FilesLoadFragment extends FilesFragment {
             public void handleMessage(Message msg) {
                 Bundle bundle = msg.getData();
                 /*выставляем макс и минимум прогресса*/
-                int totalLinesFileSeekBar = bundle.getInt("totalLinesFile");
+                int totalLinesFileSeekBar = bundle.getInt(getString(R.string.totalLinesFile));
                 getDiscreteSeekBar().setMax(totalLinesFileSeekBar);
                 /**/
-                getLoadFiles().setText("Загрузка " + mNameTable + "...");
+                getLoadFiles().setText(getString(R.string.load) + mNameTable + "...");
                 getDiscreteSeekBar().setMin(0);
             }
         };
@@ -225,7 +221,7 @@ public class FilesLoadFragment extends FilesFragment {
                 /*отсылаем сообщения прогрессу*/
                 final Message msgTotalLinesFile = handlerTotalLinesFile.obtainMessage();
                 final Bundle bundleTotalLinesFile = new Bundle();
-                bundleTotalLinesFile.putInt("totalLinesFile", totalLinesFile);
+                bundleTotalLinesFile.putInt(getString(R.string.totalLinesFile), totalLinesFile);
                 msgTotalLinesFile.setData(bundleTotalLinesFile);
                 handlerTotalLinesFile.sendMessage(msgTotalLinesFile);
 
@@ -276,13 +272,12 @@ public class FilesLoadFragment extends FilesFragment {
                         sql.append(",");
                     }
                 }
-
                 input.close();
 
             } catch (IOException e) {
                 e.printStackTrace();
                 //Log
-                InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
+                InfoUtil.setmLogLine(getString(R.string.load_table), mNameTable, true, TEG + e.toString());
             }
             return null;
         }
@@ -302,14 +297,14 @@ public class FilesLoadFragment extends FilesFragment {
                 mProgress += (100 / (double) ConstantsUtil.sizeFileLine);
                 getProgressPieView().setText(String.valueOf((int) mProgress) + "%");
             } catch (Exception e) {
-                InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable, true, TEG + e.toString());
+                InfoUtil.setmLogLine(getString(R.string.load_table), mNameTable, true, TEG + e.toString());
             }
         }
         @Override
         protected void onPostExecute(final String s) {
             super.onPostExecute(s);
             //Log
-            InfoUtil.setmLogLine("Загрузка в таблицу ", mNameTable + ", завершена!");
+            InfoUtil.setmLogLine(getString(R.string.load_table), mNameTable + getString(R.string.load_end_1));
              /*счетчик файлов*/
             ConstantsUtil.nPieViewProgress++;
 
@@ -323,9 +318,9 @@ public class FilesLoadFragment extends FilesFragment {
                 mProgress += (100 / (double) ConstantsUtil.sizeFileLine) * d;
                 getProgressPieView().setText(String.valueOf((int) mProgress) + "%");
                 /**/
-                getLoadFiles().setText("Загрузка завершена!");
+                getLoadFiles().setText(R.string.load_end_2);
                 //Log
-                InfoUtil.setmLogLine("Загрузка завершена!");
+                InfoUtil.setmLogLine(getString(R.string.load_end_2));
                 getTextProgress().setText((int) mProgress + "%");
 
                 /*мигаем иконкой для вывода лога*/

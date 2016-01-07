@@ -195,22 +195,22 @@ public class MainActivity extends AppCompatActivity
                         Dialogs.editNumber.getText().length()));
 
                 if (Dialogs.editNumber.getText().toString().trim().length() == 0) {
-                    Dialogs.editNumber.setText("0");
+                    Dialogs.editNumber.setText(R.string.zero_text);
                 }
 
                 break;
             case R.id.but_dumping:
-                Dialogs.editNumber.setText("0");
+                Dialogs.editNumber.setText(R.string.zero_text);
                 break;
             case R.id.but_point:
 
-                if (!Dialogs.editNumber.getText().toString().contains(".")) {
-                    Dialogs.editNumber.setText(Dialogs.editNumber.getText() + ".");
+                if (!Dialogs.editNumber.getText().toString().contains(getString(R.string.point))) {
+                    Dialogs.editNumber.setText(Dialogs.editNumber.getText() + getString(R.string.point));
                 }
                 break;
             default:
-                if (Dialogs.editNumber.getText().toString().equals("0")
-                        || Dialogs.editNumber.getText().toString().equals("0.0")
+                if (Dialogs.editNumber.getText().toString().equals(R.string.zero_text)
+                        || Dialogs.editNumber.getText().toString().equals(getString(R.string.zero_point_text))
                         || Dialogs.editNumber.getText().toString().trim().length() == 6) {
                     Dialogs.editNumber.setText(view.getContentDescription().toString());
                 } else {
