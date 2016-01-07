@@ -67,7 +67,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 break;
         }
     }
-
     /* выгружаем файлы на сервер*/
     public void UnloadFilesOfServer() {
        /*чистим все параметры */
@@ -128,14 +127,14 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
 
         data.moveToNext();
                 /*получаем количество строк двух таблиц*/
-        mAcuont = data.getInt(data.getColumnIndex("sum"));
+        mAcuont = data.getInt(data.getColumnIndex(getString(R.string.sum)));
         if (mAcuont > 0) {
                     /*устанавливаем максимальное количество бара*/
             getProgressPieView().setMax(mAcuont);
         } else {
-            InfoUtil.setmLogLine("Выгрузка файла", "Заказов для выгрузки нет.", true, getTEG());
+            InfoUtil.setmLogLine(getString(R.string.unload_file), getString(R.string.order_unload_no), true, getTEG());
                     /*информаци о выгрузке*/
-            getLoadFiles().setText("Заказов для выгрузки нет.");
+            getLoadFiles().setText(getString(R.string.order_unload_no));
             getUi_bar().setVisibility(View.INVISIBLE);
                     /*мигаем иконкой для вывода лога*/
             if (InfoUtil.isErrors) {
@@ -152,17 +151,17 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         /*формируем документ заказ шапку*/
         if (mAcuont > 0) {
             /*информаци о выгрузке*/
-            getLoadFiles().setText("Выгрузка " + headerName);
+            getLoadFiles().setText(getString(R.string.unload) + headerName);
             try {
                 getAllOrdersHeaderLines(data, nameFile, headerLines);
                 //Log
-                InfoUtil.setmLogLine("Выгрузка файла ", nameFile);
+                InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile);
             } catch (IOException e) {
                 e.printStackTrace();
                 //Log
-                InfoUtil.setmLogLine("Выгрузка файла", nameFile, true, getTEG() + " " + e.toString());
+                InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
                          /*информаци о выгрузке*/
-                getLoadFiles().setText("Выгрузка завершина c ошибками!");
+                getLoadFiles().setText(R.string.unload_eror);
                 getUi_bar().setVisibility(View.INVISIBLE);
                         /*мигаем иконкой для вывода лога*/
                 if (InfoUtil.isErrors) {
@@ -228,7 +227,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
+            InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
         }
         final CSVWriter myFile = new CSVWriter(new FileWriter(path), ',');
         myFile.writeNext(headerLines);
@@ -260,9 +259,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            InfoUtil.setmLogLine("Выгрузка файла ", nameFile, true, getTEG() + " " + e.toString());
+            InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
                         /*информаци о выгрузке*/
-            getLoadFiles().setText("Выгрузка завершина c ошибками!");
+            getLoadFiles().setText(getString(R.string.unload_eror));
             getUi_bar().setVisibility(View.INVISIBLE);
             /*мигаем иконкой для вывода лога*/
             if (InfoUtil.isErrors) {

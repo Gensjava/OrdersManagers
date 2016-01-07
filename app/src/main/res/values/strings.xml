@@ -564,5 +564,10 @@
     <string name="load_table">"Загрузка в таблицу "</string>
     <string name="load_end_1">, завершена!</string>
     <string name="load_end_2">Загрузка завершена!</string>
+    <string name="sum">sum</string>
+    <string name="unload_file">Выгрузка файла</string>
+    <string name="order_unload_no">Заказов для выгрузки нет.</string>
+    <string name="unload">"Выгрузка "</string>
+    <string name="unload_eror">Выгрузка завершина c ошибками!</string>
 
 </resources>
