@@ -35,7 +35,7 @@ public class SendDataGPS extends FilesFragment {
             return;
         }
         //класс работает с настройками программы
-        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(ConstantsUtil.mSettings, mContext);
 
         RequestParams params = new RequestParams();
         params.put("time", mTime);

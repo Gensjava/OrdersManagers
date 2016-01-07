@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +24,10 @@ public class GPSMonitor extends Service {
     private Handler mHandler = new Handler();
     // timer handling
     private Timer mTimer = null;
+    //
+    private int initialPeriod = 8;
+    private int endPeriod = 22;
+    private int currentTime;
 
     public GPSMonitor() {
     }
@@ -63,21 +68,32 @@ public class GPSMonitor extends Service {
                 @Override
                 public void run() {
 
-                    LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    LocationListener mlocListener = new MyLocationListener();
-                    mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+                    //выставляем период времени когда отправлять
+                    Calendar c = Calendar.getInstance();
+                    currentTime = c.get(Calendar.HOUR_OF_DAY);
 
-                    if (mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        //отправляем данные на сервер
-                        SendDataGPS sendDataGPS = new SendDataGPS(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
-                                String.valueOf(MyLocationListener.latitude),
-                                String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
-                        sendDataGPS.sendDataOnServer();
+                    if (currentTime >= initialPeriod & currentTime <= endPeriod) {
+
+                        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                        LocationListener mlocListener = new MyLocationListener();
+                        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+
+                        if (mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            //отправляем данные на сервер
+                            SendDataGPS sendDataGPS = new SendDataGPS(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
+                                    String.valueOf(MyLocationListener.latitude),
+                                    String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
+                            sendDataGPS.sendDataOnServer();
+                        } else {
+                            stopSelf();
+                            mTimer.cancel();
+
+                        }
                     } else {
                         stopSelf();
                         mTimer.cancel();
-
                     }
+
                 }
             });
         }
