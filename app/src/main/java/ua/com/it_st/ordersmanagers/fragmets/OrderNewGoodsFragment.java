@@ -111,13 +111,13 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     определяем показывать к-во товара в корзине или нет
     если больше 0 тогда показываем
     */
-    public static void updateCartCount() {
+    public void updateCartCount() {
 
         if (ui_cart == null) return;
 
          /*Показываем сумму заказа в подвале*/
-        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(UpDateOrderList.getTotalOrder());
-        tSumCart.setText(tSum + " грн.");
+        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(UpDateOrderList.getTotalOrder());
+        tSumCart.setText(tSum + getString(R.string.grn));
 
         if (UpDateOrderList.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);

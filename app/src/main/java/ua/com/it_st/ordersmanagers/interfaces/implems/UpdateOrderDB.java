@@ -32,7 +32,7 @@ public class UpdateOrderDB implements OrderAction {
         if (pCurrentNumber == 0) {
             sCurrentNumber = 1;
         } else {
-            sCurrentNumber = ++sCurrentNumber;
+            sCurrentNumber = ++pCurrentNumber;
         }
     }
 
