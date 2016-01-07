@@ -23,6 +23,8 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
@@ -179,9 +181,9 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
     /* текущий новый заказ */
-        ConstantsUtil.mCurrentOrder = null;
+        UpdateOrderDB.mCurrentOrder = null;
     /* ТЧ заказа */
-        ConstantsUtil.mCart.clear();
+        UpDateOrderList.mCart.clear();
     }
 
     /*Метод для ввода количества в заказе*/

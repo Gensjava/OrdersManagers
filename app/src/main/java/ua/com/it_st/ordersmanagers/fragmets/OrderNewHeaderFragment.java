@@ -28,6 +28,7 @@ import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -67,18 +68,18 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             Bundle bundle = getArguments();
             /*редактируем документ*/
             if (bundle != null &
-                    ConstantsUtil.mCurrentOrder != null &
-                    ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+                    UpdateOrderDB.mCurrentOrder != null &
+                    UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
 
                /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListFragment.ID_ORDER);
-                ConstantsUtil.mCurrentOrder.setId(id_order);
+                UpdateOrderDB.mCurrentOrder.setId(id_order);
                /*номер документа*/
                 numberDoc = bundle.getString(OrderListFragment.NUMBER_ORDER);
-                ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
+                UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
                 /*дата док*/
                 dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
-                ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
+                UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
                 /*стктус докуента*/
                 header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
                   /* открываем подключение к БД */
@@ -90,21 +91,21 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                 /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
                 UUID uniqueKey = UUID.randomUUID();
-                ConstantsUtil.mCurrentOrder.setId(String.valueOf(uniqueKey));
+                UpdateOrderDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(ConstantsUtil.sCurrentNumber);
-                ConstantsUtil.mCurrentOrder.setDocNumber(numberDoc);
+                numberDoc = String.valueOf(UpdateOrderDB.sCurrentNumber);
+                UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
-                ConstantsUtil.mCurrentOrder.setDocDate(dateDoc);
+                UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
                 /**/
                         /*вызываем менеджера настроек*/
                 SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                       /*код на сервере пользователя*/
                 String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
-                ConstantsUtil.mCurrentOrder.setAgentId(kodAgent);
+                UpdateOrderDB.mCurrentOrder.setAgentId(kodAgent);
                /* так заполняем при операции дока копирвоать */
-                if (bundle != null & ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+                if (bundle != null & UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
                        /*получаем ID дока и подставляем в запрос*/
                     id_order = bundle.getString(OrderListFragment.ID_ORDER);
                      /*стктус докуента*/
@@ -115,7 +116,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
                     getActivity().getSupportLoaderManager().initLoader(0, null, this);
                 }
                         /*устанавливаем мод. корзины*/
-                ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(false);
+                UpdateOrderDB.mCurrentOrder.setClickModifitsirovannoiCart(false);
             }
 
             /*выводим данные дату и номер в шапку*/
@@ -143,8 +144,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
-        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
            /* выходим из загрузчкика*/
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -182,7 +183,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             case R.id.order_new_header_list_image_arrow_right:
                 /* проверка шапки*/
-                if (!ConstantsUtil.checkHeaderOrder(getActivity())) {
+                if (!UpdateOrderDB.checkHeaderOrder(getActivity())) {
                     final onEventListener someEventListener = (onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
                 }
@@ -204,20 +205,20 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
         switch (position) {
             case 0:
-                ConstantsUtil.mCurrentOrder.setFirmId(item);
+                UpdateOrderDB.mCurrentOrder.setFirmId(item);
                 break;
             case 1:
-                ConstantsUtil.mCurrentOrder.setStoreId(item);
+                UpdateOrderDB.mCurrentOrder.setStoreId(item);
                 break;
             case 2:
-                ConstantsUtil.mCurrentOrder.setClientId(item);
-                ConstantsUtil.mCurrentOrder.setAdress(subItem);
+                UpdateOrderDB.mCurrentOrder.setClientId(item);
+                UpdateOrderDB.mCurrentOrder.setAdress(subItem);
                 break;
             case 3:
-                ConstantsUtil.mCurrentOrder.setPriceCategoryId(item);
+                UpdateOrderDB.mCurrentOrder.setPriceCategoryId(item);
                 break;
             case 4:
-                ConstantsUtil.mCurrentOrder.setNote(item);
+                UpdateOrderDB.mCurrentOrder.setNote(item);
                 break;
             default:
                 break;
@@ -290,14 +291,13 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
         cData[1] = cComent;
         mItemsHeader[4] = cData;
         /*заполняем док заказ*/
-        ConstantsUtil.mCurrentOrder.setFirmId(cKodCompanies);
-        ConstantsUtil.mCurrentOrder.setStoreId(cKodStores);
-        ConstantsUtil.mCurrentOrder.setClientId(KodCounteragents);
-        ConstantsUtil.mCurrentOrder.setPriceCategoryId(cNamePrices);
-        ConstantsUtil.mCurrentOrder.setAgentId(cAgent);
+        UpdateOrderDB.mCurrentOrder.setFirmId(cKodCompanies);
+        UpdateOrderDB.mCurrentOrder.setStoreId(cKodStores);
+        UpdateOrderDB.mCurrentOrder.setClientId(KodCounteragents);
+        UpdateOrderDB.mCurrentOrder.setPriceCategoryId(cNamePrices);
+        UpdateOrderDB.mCurrentOrder.setAgentId(cAgent);
 
         mAdapter.notifyDataSetChanged();
-
     }
 
     @Override

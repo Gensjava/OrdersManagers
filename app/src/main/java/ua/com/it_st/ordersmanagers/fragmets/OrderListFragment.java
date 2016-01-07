@@ -28,6 +28,8 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -102,7 +104,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             case 0:
                 scAdapter.swapCursor(data);
                 /*следующий номер заказа*/
-                ConstantsUtil.setsCurrentNumber((short) data.getCount());
+                UpdateOrderDB.setsCurrentNumber((short) data.getCount());
                 break;
             case 2:
                 final int cSumIndex = data.getColumnIndex("sum_orders");
@@ -137,7 +139,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 final onEventListener someEventListener = (onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
                 /*чистим док заказ и содаем новый заказ*/
-                ConstantsUtil.clearOrderHeader(DocTypeOperation.NEW);
+                UpdateOrderDB.clearOrderHeader(DocTypeOperation.NEW);
                 break;
             default:
                 break;
@@ -367,17 +369,17 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                                 switch (selectedItemPosition) {
                                     case 0:
                                   /*чистим док заказ и редактируем заказ*/
-                                        ConstantsUtil.clearOrderHeader(DocTypeOperation.EDIT);
+                                        UpdateOrderDB.clearOrderHeader(DocTypeOperation.EDIT);
                                         bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_order));
                                         break;
                                     case 3:
                                   /*чистим док заказ и копируем заказ*/
-                                        ConstantsUtil.clearOrderHeader(DocTypeOperation.COPY);
+                                        UpdateOrderDB.clearOrderHeader(DocTypeOperation.COPY);
                                         bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_order));
                                         break;
                                 }
                                         /* ТЧ заказа */
-                                ConstantsUtil.mCart = new LinkedHashSet<>();
+                                UpDateOrderList.mCart = new LinkedHashSet<>();
                                 /*редактируем док*/
 
                                 bundleItem.putString(ID_ORDER, cId);

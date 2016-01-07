@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
-import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -41,7 +41,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
         View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
 
-        mListItems = ConstantsUtil.getItemsGoods();
+        mListItems = UpDateOrderList.getItemsGoods();
         /*создаем адаптер корзины*/
         sAdapter = new MyArrayAdapter(getActivity(), R.layout.order_new_cart_list_item, mListItems);
 
@@ -51,14 +51,14 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 /* открываем подключение к БД*/
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /**/
-        String numberDoc = ConstantsUtil.mCurrentOrder.getDocNumber();
-        String dateDoc = ConstantsUtil.mCurrentOrder.getDocDate();
+        String numberDoc = UpdateOrderDB.mCurrentOrder.getDocNumber();
+        String dateDoc = UpdateOrderDB.mCurrentOrder.getDocDate();
 
         TextView header = (TextView) rootView.findViewById(R.id.order_new_cart_list_header_root);
 
-        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
             header.setText(getString(R.string.edit_cart));
-        } else if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        } else if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
             header.setText(getString(R.string.copy_cart));
         }
 
@@ -84,13 +84,13 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             case R.id.order_new_cart_list_image_arrow_right:
 
                  /*проверяем пустая корзина или нет*/
-                if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                if (!UpDateOrderList.checkCartEmpty(getActivity())) {
                     boolean bCheck;
 
                     UpdateOrderDB lUpdateOrderDB = new UpdateOrderDB(DB, getActivity());
                      /* создаем новый заказ */
-                    if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.NEW) ||
-                            ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+                    if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.NEW) ||
+                            UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
                         bCheck = lUpdateOrderDB.add();
                     } else {
                         /*редактируем заказ*/
@@ -102,7 +102,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                         final onEventListener someEventListener = (onEventListener) getActivity();
                         someEventListener.onOpenFragmentClass(OrderListFragment.class);
                         /*чистим корзину*/
-                        ConstantsUtil.mCart.clear();
+                        UpDateOrderList.mCart.clear();
                     }
                 }
                 break;
@@ -122,14 +122,15 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 product.setAmount(numberInDialog);
                 product.setSum(sumInDialog);
                 /* редактируем табличную часть заказа */
-                ConstantsUtil.editCart(product);
+                UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+                lUpDateOrderList.update(product);
             }
         } else {
             //
             InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
         /*перезаписываем список товаров*/
-        mListItems = ConstantsUtil.getItemsGoods();
+        mListItems = UpDateOrderList.getItemsGoods();
         /*обновляем*/
         sAdapter.notifyDataSetChanged();
         upDataFooter();
@@ -138,8 +139,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
     /*обновляем подвал*/
     private void upDataFooter() {
           /*Показываем сумму заказа в подвале*/
-        String tSum = ConstantsUtil.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(ConstantsUtil.getTotalOrder());
-        tSumCart.setText(tSum + " грн.");
+        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(UpDateOrderList.getTotalOrder());
+        tSumCart.setText(tSum + getString(R.string.grn));
     }
 
     /* создаем класс - интефейс для открытия фрагментов */
@@ -228,13 +229,16 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                             case 0:
                                 /* удаляем товар*/
                                 mListItems.remove(itemOrderLines);
-                                ConstantsUtil.onListOrderLinesDelete(itemOrderLines);
-                                InfoUtil.Tost("Товар " + itemOrderLines.getName() + " удален из списка.", getActivity());
+
+                                UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+                                lUpDateOrderList.delete(itemOrderLines);
+
+                                InfoUtil.Tost(getString(R.string.goods) + itemOrderLines.getName() + getString(R.string.delete_list), getActivity());
                                  /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();
                                 /**/
-                                ConstantsUtil.mCurrentOrder.setClickModifitsirovannoiCart(true);
+                                UpdateOrderDB.mCurrentOrder.setClickModifitsirovannoiCart(true);
                                 break;
                             case 1:
                                 Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrderLines, OrderNewCartFragment.class.toString());

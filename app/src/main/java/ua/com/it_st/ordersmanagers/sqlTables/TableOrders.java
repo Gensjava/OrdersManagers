@@ -6,6 +6,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
@@ -66,14 +68,14 @@ public class TableOrders {
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
-        data.put(COLUMN_NUMBER, ConstantsUtil.getsCurrentNumber());
+        data.put(COLUMN_NUMBER, UpdateOrderDB.sCurrentNumber);
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, sData.getAgentId());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());
         data.put(COLUMN_STORE_ID, sData.getStoreId());
         data.put(COLUMN_CLIENT_ID, sData.getClientId());
         data.put(COLUMN_PRICE_CATEGORY_ID, sData.getPriceCategoryId());
-        data.put(COLUMN_TOTAL, ConstantsUtil.getTotalOrder());
+        data.put(COLUMN_TOTAL, UpDateOrderList.getTotalOrder());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_TIME, ConstantsUtil.getTime());
         data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
@@ -85,7 +87,7 @@ public class TableOrders {
 
         final ContentValues data = new ContentValues();
 
-        data.put(COLUMN_TOTAL, ConstantsUtil.getTotalOrder());
+        data.put(COLUMN_TOTAL, UpDateOrderList.getTotalOrder());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());
         data.put(COLUMN_STORE_ID, sData.getStoreId());
         data.put(COLUMN_CLIENT_ID, sData.getClientId());

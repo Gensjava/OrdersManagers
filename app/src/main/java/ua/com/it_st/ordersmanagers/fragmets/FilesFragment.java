@@ -25,6 +25,8 @@ import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -133,11 +135,11 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         ui_bar.setVisibility(View.VISIBLE);
 
         /*чистим док заказ и редактируем заказ*/
-        ConstantsUtil.clearOrderHeader(DocTypeOperation.NEW);
+        UpdateOrderDB.clearOrderHeader(DocTypeOperation.NEW);
         /* ТЧ заказа */
-        ConstantsUtil.mCart = new LinkedHashSet<>();
+        UpDateOrderList.mCart = new LinkedHashSet<>();
        /*текущий номер заказа*/
-        ConstantsUtil.sCurrentNumber = 0;
+        UpdateOrderDB.sCurrentNumber = 0;
         //
         nOSeek = 0;
         mProgress = 0;

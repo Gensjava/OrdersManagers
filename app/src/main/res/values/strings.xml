@@ -555,7 +555,7 @@
     <string name="eror_add_new_order">Записать новый заказ</string>
     <string name="btUnLoad">ВЫГРУЗИТЬ</string>
     <string name="zero_text">0</string>
-    <string name="zero_point_text">0.0</string>
+    <string name="zero_point_text">0.00</string>
     <string name="point">.</string>
     <string name="zero_procent">0%</string>
     <string name="load_info_base">"Загружаем информацию в базу "</string>
@@ -569,5 +569,8 @@
     <string name="order_unload_no">Заказов для выгрузки нет.</string>
     <string name="unload">"Выгрузка "</string>
     <string name="unload_eror">Выгрузка завершина c ошибками!</string>
+    <string name="grn">" грн."</string>
+    <string name="goods">"Товар "</string>
+    <string name="delete_list">" удален из списка."</string>
 
 </resources>

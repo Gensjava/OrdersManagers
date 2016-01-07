@@ -20,6 +20,7 @@ import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
@@ -172,7 +173,7 @@ public class Dialogs {
         /* поля из макета */
         final EditText eComment = (EditText) numberView.findViewById(R.id.order_new_select_header_item_coment_text);
         /*получаем из  заказа комент если он есть*/
-        eComment.setText(ConstantsUtil.mCurrentOrder.getNote());
+        eComment.setText(UpdateOrderDB.mCurrentOrder.getNote());
 
         /* открываем диалог */
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

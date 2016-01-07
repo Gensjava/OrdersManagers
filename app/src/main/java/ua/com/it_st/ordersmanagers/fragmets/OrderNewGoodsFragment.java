@@ -26,6 +26,8 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
@@ -114,14 +116,14 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         if (ui_cart == null) return;
 
          /*Показываем сумму заказа в подвале*/
-        String tSum = ConstantsUtil.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(ConstantsUtil.getTotalOrder());
+        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? "0.00" : String.valueOf(UpDateOrderList.getTotalOrder());
         tSumCart.setText(tSum + " грн.");
 
-        if (ConstantsUtil.mCart.size() == 0) {
+        if (UpDateOrderList.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);
         } else {
             ui_cart.setVisibility(View.VISIBLE);
-            ui_cart.setText(Integer.toString(ConstantsUtil.mCart.size()));
+            ui_cart.setText(Integer.toString(UpDateOrderList.mCart.size()));
         }
     }
 
@@ -133,16 +135,16 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         }
 
-        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
+            if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().initLoader(1, null, this);
                 getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
             }
         }
-        if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+        if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
             getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
@@ -155,7 +157,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             /* строка ТЧ заказа */
         OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                ConstantsUtil.mCurrentOrder.getId(),
+                UpdateOrderDB.mCurrentOrder.getId(),
                 product.getGoodsId(),
                 1,
                 numberInDialog,
@@ -168,15 +170,18 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
         /* делаем проверку товара на остатке */
         if (product.getBalance() >= numberInDialog) {
+
+            UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+
             if (numberInDialog > 0) {
                 orderTvValue.setVisibility(View.VISIBLE);
                 orderTvValue.setText(String.valueOf(numberInDialog));
                 /* добавляем в табличную часть заказа */
-                ConstantsUtil.setListOrderLines(orderLines);
+                lUpDateOrderList.add(orderLines);
             } else {
                 orderTvValue.setVisibility(View.INVISIBLE);
                 /* удаляем из табличной части заказа */
-                ConstantsUtil.onListOrderLinesDelete(orderLines);
+                lUpDateOrderList.delete(orderLines);
             }
         } else {
             //
@@ -244,15 +249,15 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         /*Отображаем сумму заказа в подвале*/
             tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-            if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                    || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+            if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                    || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-                if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
+                if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                     getActivity().getSupportLoaderManager().initLoader(1, null, this);
                 }
             }
-            if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+            if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
             }
@@ -381,7 +386,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     /*открываем корзину*/
     protected void openCart() {
          /*проверяем пустая корзина или нет*/
-        if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+        if (!UpDateOrderList.checkCartEmpty(getActivity())) {
             final onEventListener someEventListener = (onEventListener) getActivity();
             someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
         }
@@ -463,7 +468,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
             OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                    ConstantsUtil.mCurrentOrder.getId(),
+                    UpdateOrderDB.mCurrentOrder.getId(),
                     cID,
                     1,
                     isAmount,
@@ -472,7 +477,8 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                     cName,
                     cAmountStores);
 
-            ConstantsUtil.setListOrderLines(orderLines);
+            UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+            lUpDateOrderList.add(orderLines);
         }
                  /*обновляем корзину*/
         updateCartCount();
@@ -519,15 +525,15 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     public void onPause() {
         super.onPause();
 
-        if (ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || ConstantsUtil.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!ConstantsUtil.mCurrentOrder.isClickModifitsirovannoiCart()) {
+            if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().destroyLoader(1);
             }
         }
-        if (ConstantsUtil.mCurrentOrder.getStoreId() != null) {
+        if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -547,7 +553,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             case R.id.order_new_goods_container_image:
                 /*прповеряем корзину пустая или нет*/
-                if (!ConstantsUtil.checkCartEmpty(getActivity())) {
+                if (!UpDateOrderList.checkCartEmpty(getActivity())) {
                     final onEventListener someEventListener = (onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
                 }
@@ -579,7 +585,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                                     "and Prices.price_category_kod = ? " +
                                     "or Products.is_category = ? " +
                                     "and Products.id_category = ?"
-                    ), new String[]{mSelectionArgs, ConstantsUtil.mCurrentOrder.getStoreId(), ConstantsUtil.mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
+                    ), new String[]{mSelectionArgs, UpdateOrderDB.mCurrentOrder.getStoreId(), UpdateOrderDB.mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
                     });
         }
     }
