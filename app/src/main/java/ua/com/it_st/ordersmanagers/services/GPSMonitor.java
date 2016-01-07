@@ -90,8 +90,8 @@ public class GPSMonitor extends Service {
 
                         }
                     } else {
-                        stopSelf();
-                        mTimer.cancel();
+                        //stopSelf();
+                        // mTimer.cancel();
                     }
 
                 }
