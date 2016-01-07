@@ -46,6 +46,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     private static SQLiteDatabase sDb;
     private SimpleCursorAdapter scAdapter;
     private TextView ordersSum;
+    private TextView period;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +72,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
         /*устанавливаем период журнала*/
-        TextView period = (TextView) rootView.findViewById(R.id.main_heander_period);
+        period = (TextView) rootView.findViewById(R.id.main_heander_period);
         period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
         /*подвал журнал заказов */
         ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
@@ -271,6 +272,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     private class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
         private LayoutInflater mLInflater;
+        private String mPeriod;
 
         public MySimpleCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags) {
             super(context, layout, c, from, to, flags);
@@ -326,6 +328,12 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                 status.setImageResource(R.mipmap.ic_held);
             } else {
                 status.setImageResource(R.mipmap.ic_no_held);/* не проведен */
+            }
+
+            /*устанвливаем период */
+            if (mPeriod == null) {
+                period.setText("c " + cDate + " по " + ConstantsUtil.getDate());
+                mPeriod = cDate;
             }
 
             /* Настраиваем адаптер */
