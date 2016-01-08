@@ -4,22 +4,21 @@ import android.content.Context;
 
 import com.loopj.android.http.RequestParams;
 
-import ua.com.it_st.ordersmanagers.fragmets.FilesFragment;
-
 //отправляем данные на сервер
-public class SendDataGPS extends FilesFragment {
+public class SendDataGPS {
 
-    private String mTime, mLat, vLon, mStatus;
+    private String mTime, mLat, mLon, mStatus;
     private Context mContext;
 
     public SendDataGPS(String time, String lat, String lon, String status, Context context) {
 
         mTime = time;
         mLat = lat;
-        vLon = lon;
+        mLon = lon;
         mContext = context;
         mStatus = status;
     }
+
     //отправляем данные на сервер
     public void sendDataOnServer() {
 
@@ -40,7 +39,7 @@ public class SendDataGPS extends FilesFragment {
         RequestParams params = new RequestParams();
         params.put("time", mTime);
         params.put("lat", mLat);
-        params.put("lon", vLon);
+        params.put("lon", mLon);
         params.put("status", mStatus);
         params.put("kodAgent", lWorkSharedPreferences.getIDUser());
 
