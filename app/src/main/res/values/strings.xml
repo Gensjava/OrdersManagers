@@ -572,5 +572,7 @@
     <string name="grn">" грн."</string>
     <string name="goods">"Товар "</string>
     <string name="delete_list">" удален из списка."</string>
+    <string name="car_empty">Корзина пустая!</string>
+    <string name="order">Заказ</string>
 
 </resources>

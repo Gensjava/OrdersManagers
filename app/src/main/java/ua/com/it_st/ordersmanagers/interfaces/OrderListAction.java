@@ -4,6 +4,7 @@ package ua.com.it_st.ordersmanagers.interfaces;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
 public interface OrderListAction {
+
     /*добавить запись*/
     boolean add(OrderDoc.OrderLines item);
 
@@ -12,4 +13,9 @@ public interface OrderListAction {
 
     /*удалить запись*/
     boolean delete(OrderDoc.OrderLines item);
+
+    /*удалить все записи*/
+    boolean deleteAll();
+
+
 }

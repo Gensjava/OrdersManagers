@@ -83,8 +83,9 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
             case R.id.order_new_cart_list_image_arrow_right:
 
+                UpDateOrderList lUpDateOrderList = new UpDateOrderList();
                  /*проверяем пустая корзина или нет*/
-                if (!UpDateOrderList.checkCartEmpty(getActivity())) {
+                if (!lUpDateOrderList.isEmpty()) {
                     boolean bCheck;
 
                     UpdateOrderDB lUpdateOrderDB = new UpdateOrderDB(DB, getActivity());
@@ -104,6 +105,8 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                         /*чистим корзину*/
                         UpDateOrderList.mCart.clear();
                     }
+                } else {
+                    InfoUtil.showErrorAlertDialog(getString(R.string.car_empty), getString(R.string.order), getActivity());
                 }
                 break;
             default:
@@ -138,8 +141,12 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
     /*обновляем подвал*/
     private void upDataFooter() {
+
+        UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+        double sum = lUpDateOrderList.sum();
+
           /*Показываем сумму заказа в подвале*/
-        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(UpDateOrderList.getTotalOrder());
+        String tSum = sum == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(sum);
         tSumCart.setText(tSum + getString(R.string.grn));
     }
 

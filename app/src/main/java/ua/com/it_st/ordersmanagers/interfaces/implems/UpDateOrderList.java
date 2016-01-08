@@ -1,7 +1,5 @@
 package ua.com.it_st.ordersmanagers.interfaces.implems;
 
-import android.content.Context;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -10,35 +8,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.interfaces.OrderListAction;
+import ua.com.it_st.ordersmanagers.interfaces.OrderListActionDetali;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
-import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
 
-public class UpDateOrderList implements OrderListAction {
+public class UpDateOrderList implements OrderListAction, OrderListActionDetali {
 
     /* ТЧ заказа */
     public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
-
-    /* Получаем сумму всего */
-    public static double getTotalOrder() {
-        double iNumber = 0;
-
-        for (final OrderDoc.OrderLines aMCart : mCart) {
-            iNumber = iNumber + aMCart.getSum();
-        }
-        iNumber = new BigDecimal(iNumber).setScale(2, RoundingMode.UP).doubleValue();
-        return iNumber;
-    }
-
-    /*проверяем пустая корзина или нет*/
-    public static boolean checkCartEmpty(Context context) {
-        boolean bCheck = false;
-        if (mCart.size() == 0) {
-            bCheck = true;
-            InfoUtil.Tost("Корзина пустая!", context);
-        }
-        return bCheck;
-    }
 
     /*заполняем корзину в ArrayList*/
     public static ArrayList<OrderDoc.OrderLines> getItemsGoods() {
@@ -93,4 +70,30 @@ public class UpDateOrderList implements OrderListAction {
         return false;
     }
 
+    @Override
+    public boolean deleteAll() {
+        return mCart.removeAll(mCart);
+    }
+
+
+    @Override
+    public int seze() {
+        return mCart.size();
+    }
+
+    @Override
+    public double sum() {
+        double iNumber = 0;
+
+        for (final OrderDoc.OrderLines aMCart : mCart) {
+            iNumber = iNumber + aMCart.getSum();
+        }
+        iNumber = new BigDecimal(iNumber).setScale(2, RoundingMode.UP).doubleValue();
+        return iNumber;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return mCart.size() == 0;
+    }
 }

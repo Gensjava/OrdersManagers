@@ -64,6 +64,7 @@ public class TableOrders {
     public static ContentValues getContentValues(OrderDoc sData) {
 
         final ContentValues data = new ContentValues();
+        final UpDateOrderList lUpDateOrderList = new UpDateOrderList();
 
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
@@ -75,7 +76,7 @@ public class TableOrders {
         data.put(COLUMN_STORE_ID, sData.getStoreId());
         data.put(COLUMN_CLIENT_ID, sData.getClientId());
         data.put(COLUMN_PRICE_CATEGORY_ID, sData.getPriceCategoryId());
-        data.put(COLUMN_TOTAL, UpDateOrderList.getTotalOrder());
+        data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_TIME, ConstantsUtil.getTime());
         data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
@@ -86,8 +87,9 @@ public class TableOrders {
     public static ContentValues getContentValuesUpdata(OrderDoc sData) {
 
         final ContentValues data = new ContentValues();
+        final UpDateOrderList lUpDateOrderList = new UpDateOrderList();
 
-        data.put(COLUMN_TOTAL, UpDateOrderList.getTotalOrder());
+        data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());
         data.put(COLUMN_STORE_ID, sData.getStoreId());
         data.put(COLUMN_CLIENT_ID, sData.getClientId());

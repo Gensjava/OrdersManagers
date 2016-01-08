@@ -115,8 +115,11 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
         if (ui_cart == null) return;
 
+        UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+        double sum = lUpDateOrderList.sum();
+
          /*Показываем сумму заказа в подвале*/
-        String tSum = UpDateOrderList.getTotalOrder() == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(UpDateOrderList.getTotalOrder());
+        String tSum = sum == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(sum);
         tSumCart.setText(tSum + getString(R.string.grn));
 
         if (UpDateOrderList.mCart.size() == 0) {
@@ -385,10 +388,14 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
     /*открываем корзину*/
     protected void openCart() {
-         /*проверяем пустая корзина или нет*/
-        if (!UpDateOrderList.checkCartEmpty(getActivity())) {
+
+        UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+             /*проверяем пустая корзина или нет*/
+        if (!lUpDateOrderList.isEmpty()) {
             final onEventListener someEventListener = (onEventListener) getActivity();
             someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+        } else {
+            InfoUtil.showErrorAlertDialog(getString(R.string.car_empty), getString(R.string.order), getActivity());
         }
     }
 
@@ -552,10 +559,14 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         switch (view.getId()) {
 
             case R.id.order_new_goods_container_image:
+                UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+
                 /*прповеряем корзину пустая или нет*/
-                if (!UpDateOrderList.checkCartEmpty(getActivity())) {
+                if (!lUpDateOrderList.isEmpty()) {
                     final onEventListener someEventListener = (onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderNewCartFragment.class);
+                } else {
+                    InfoUtil.showErrorAlertDialog(getString(R.string.car_empty), getString(R.string.order), getActivity());
                 }
                 break;
             default:
