@@ -173,7 +173,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             mListener = (OnFragmentSelectListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + activity.getString(R.string.error_interfice));
         }
     }
 

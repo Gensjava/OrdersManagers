@@ -23,7 +23,7 @@ android {
         applicationId "ua.com.it_st.ordersmanagers"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
+        versionCode 4
         versionName "1.0"
     }
     buildTypes {

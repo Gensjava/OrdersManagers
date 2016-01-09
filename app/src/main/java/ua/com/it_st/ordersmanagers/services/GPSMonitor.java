@@ -26,7 +26,7 @@ public class GPSMonitor extends Service {
     private Timer mTimer = null;
     //
     private int initialPeriod = 8;
-    private int endPeriod = 22;
+    private int endPeriod = 19;
     private int currentTime;
 
     public GPSMonitor() {

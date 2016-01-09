@@ -461,7 +461,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         final int isAmountIndex = data.getColumnIndex(TableOrdersLines.COLUMN_AMOUNT);
         final int cPriceIndex = data.getColumnIndex(TableOrdersLines.COLUMN_PRICE);
         final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
-        final int cAmountStoresIndex = data.getColumnIndex("amount_stores");
+        final int cAmountStoresIndex = data.getColumnIndex(TableProducts.AMOUNT_STORES);
 
         // data.moveToFirst();
         while (data.moveToNext()) {

@@ -75,7 +75,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         imViewAdd.setOnClickListener(this);
         /*устанавливаем период журнала*/
         period = (TextView) rootView.findViewById(R.id.main_heander_period);
-        period.setText("c " + ConstantsUtil.getDate() + " по " + ConstantsUtil.getDate());
+        period.setText(getString(R.string.with) + ConstantsUtil.getDate() + getString(R.string.on) + ConstantsUtil.getDate());
         /*подвал журнал заказов */
         ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
         /**/
@@ -126,7 +126,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     private void updataSumOrders(String sumOrders) {
 
         if (sumOrders == null) {
-            sumOrders = "0.00";
+            sumOrders = getString(R.string.zero_point_text);
         }
         ordersSum.setText(sumOrders);
     }
@@ -334,7 +334,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
 
             /*устанвливаем период */
             if (mPeriod == null) {
-                period.setText("c " + cDate + " по " + ConstantsUtil.getDate());
+                period.setText(getString(R.string.with) + cDate + getString(R.string.on) + ConstantsUtil.getDate());
                 mPeriod = cDate;
             }
 
@@ -406,7 +406,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
                             String[] choose = getResources().getStringArray(R.array.spinner_orders_menu);
 
                             Toast toast = Toast.makeText(getActivity(),
-                                    "Операция выполнена: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                                    getString(R.string.operation_completed) + choose[selectedItemPosition], Toast.LENGTH_SHORT);
                             toast.show();
 
                             getActivity().getSupportLoaderManager().getLoader(0).forceLoad();

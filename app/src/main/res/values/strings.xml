@@ -574,5 +574,10 @@
     <string name="delete_list">" удален из списка."</string>
     <string name="car_empty">Корзина пустая!</string>
     <string name="order">Заказ</string>
+    <string name="with">"c "</string>
+    <string name="on">" по "</string>
+    <string name="operation_completed">"Операция выполнена: "</string>
+    <string name="no_data_on_number_order">"Нет данных по номеру заказа "</string>
+    <string name="error_interfice">" должен реализовывать интерфейс OnFragmentInteractionListener"</string>
 
 </resources>

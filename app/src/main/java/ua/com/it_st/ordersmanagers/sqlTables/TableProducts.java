@@ -22,6 +22,8 @@ public class TableProducts {
     public static final String COLUMN_BARCODE = "barcode";
     public static final String COLUMN_NOTE = "note";
 
+    public static final String AMOUNT_STORES = "amount_stores";
+
     public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
             + COLUMN_KOD + ", "
             + COLUMN_ID_CATEGORY + ", "

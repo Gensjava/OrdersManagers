@@ -35,6 +35,9 @@ public class ConnectServer {
         String[] templateWay = mContext.getResources().getStringArray(R.array.template_way);
 
         String loginServer = lWorkSharedPreferences.getMloginServer();
+        if (loginServer == null) {
+            return;
+        }
         String passwordServer = lWorkSharedPreferences.getPasswordServer();
         String IdServer = lWorkSharedPreferences.getIdServer();
 

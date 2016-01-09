@@ -241,7 +241,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             if (data.moveToFirst()) {
                 fillHeader(data);
             } else {
-                InfoUtil.Tost("Нет данных по номеру заказа " + id_order, getActivity());
+                InfoUtil.Tost(getString(R.string.no_data_on_number_order) + id_order, getActivity());
             }
 
         }
