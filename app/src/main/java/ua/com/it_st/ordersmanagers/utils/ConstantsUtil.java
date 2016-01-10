@@ -1,7 +1,6 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -15,8 +14,6 @@ public class ConstantsUtil {
     public static double nPieViewdProgress;
     /*общае кол-во строк при обмене всех файлов */
     public static int sizeFileLine;
-    /*вызываем менеджера настроек*/
-    public static SharedPreferences mSettings = null;
     /*держим подключнеие*/
     public static ConnectServer sConnectData = null;
 

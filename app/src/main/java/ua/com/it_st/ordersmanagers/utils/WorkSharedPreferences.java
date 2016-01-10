@@ -2,6 +2,7 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import ua.com.it_st.ordersmanagers.R;
 
@@ -11,8 +12,8 @@ public class WorkSharedPreferences {
     private SharedPreferences mSettings;
     private Context mContext;
 
-    public WorkSharedPreferences(SharedPreferences pSettings, Context pContext) {
-        mSettings = pSettings;
+    public WorkSharedPreferences(Context pContext) {
+        mSettings = PreferenceManager.getDefaultSharedPreferences(pContext);
         mContext = pContext;
     }
 

@@ -82,7 +82,7 @@ public class FilesLoadFragment extends FilesFragment {
         /**/
         ConstantsUtil.sizeFileLine = 0;
         //класс работает с настройками программы
-        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(getActivity());
 
         /* получаем количество всех строк в файлах до загрузки всех файлов */
         WorkFiles.getSizeLine(

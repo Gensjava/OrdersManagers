@@ -35,7 +35,7 @@ public class ConnectServer {
         }
 
         //класс работает с настройками программы
-        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, mContext);
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mContext);
 
               /* список шаблонов пути к серверу  */
         String[] templateWay = mContext.getResources().getStringArray(R.array.template_way);

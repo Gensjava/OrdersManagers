@@ -78,7 +78,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
                 /*подключаемся к серверу*/
         ConnectServer connectData = new ConnectServer(getActivity(), (byte) 0);
         //класс работает с настройками программы
-        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, getActivity());
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(getActivity());
 
                 /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();

@@ -3,7 +3,6 @@ package ua.com.it_st.ordersmanagers.activiteies;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -26,7 +25,6 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
-import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
@@ -84,8 +82,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*вызываем менеджера настроек*/
-        ConstantsUtil.mSettings = PreferenceManager.getDefaultSharedPreferences(this);
         //Открываем главный фрагмент
         WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
 

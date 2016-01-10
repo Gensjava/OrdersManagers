@@ -1,10 +1,8 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -36,7 +34,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
 
     private static SQLiteDatabase mDb;
     private final String TEG = FilesLoadFragment.class.getSimpleName();
-    public SharedPreferences mSettings;
     private ProgressPieView mProgressPieView;
     private DiscreteSeekBar mDiscreteSeekBar;
     private ImageView mButtonOrderList;
@@ -97,7 +94,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         ImageViewInfo.setOnClickListener(this);
         /* открываем подключение к БД */
         mDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         /*Круглый общий прогресс загрузки*/
         mProgressPieView = (ProgressPieView) rootView.findViewById(R.id.load_files_progressPieView);
         mProgressPieView.setText(getString(R.string.zero_procent));
