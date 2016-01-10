@@ -2,6 +2,7 @@ package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
@@ -20,7 +21,11 @@ public class ConnectServer {
 
         mContext = context;
              /*вызываем менеджера настроек*/
-        mSettings = ConstantsUtil.mSettings;
+        mSettings = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        if (mSettings == null || mContext == null) {
+            return;
+        }
 
             /*проверка есть интерент или нет*/
         boolean isInternet = ConstantsUtil.isInternetAvailable(mContext);
@@ -28,6 +33,7 @@ public class ConnectServer {
             InfoUtil.showErrorAlertDialog(context.getString(R.string.error_inet), context.getString(R.string.updata), mContext);
             return;
         }
+
         //класс работает с настройками программы
         WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(mSettings, mContext);
 
@@ -38,6 +44,7 @@ public class ConnectServer {
         if (loginServer == null) {
             return;
         }
+
         String passwordServer = lWorkSharedPreferences.getPasswordServer();
         String IdServer = lWorkSharedPreferences.getIdServer();
 

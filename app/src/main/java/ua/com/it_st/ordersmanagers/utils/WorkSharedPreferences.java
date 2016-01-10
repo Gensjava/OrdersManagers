@@ -58,17 +58,24 @@ public class WorkSharedPreferences {
     public String getIdServer() {
 
         /* ид сервер удаленны или локальный*/
-        final String idServer;
-        if (getModeServer().equals(mContext.getString(R.string.remoteServer))) {
-            idServer = mSettings.getString(mContext.getString(R.string.id_remote), null);
-        } else {
-            idServer = mSettings.getString(mContext.getString(R.string.id_local), null);
-        }
-        if (idServer == null || idServer.equals("")) {
+
+        String idServer = null;
+        if (getModeServer() == null) {
             InfoUtil.Tost("Введите в настройках путь к серверу!", mContext);
-            //Log
-            InfoUtil.setmLogLine("Введите в настройках путь к серверу!", true, TEG);
+            return idServer;
+        } else {
+            if (getModeServer().equals(mContext.getString(R.string.remoteServer))) {
+                idServer = mSettings.getString(mContext.getString(R.string.id_remote), null);
+            } else {
+                idServer = mSettings.getString(mContext.getString(R.string.id_local), null);
+            }
+            if (idServer == null || idServer.equals("")) {
+                InfoUtil.Tost("Введите в настройках путь к серверу!", mContext);
+                //Log
+                InfoUtil.setmLogLine("Введите в настройках путь к серверу!", true, TEG);
+            }
         }
+
         return idServer;
     }
 

@@ -1,5 +1,6 @@
 package ua.com.it_st.ordersmanagers.utils;
 
+/*клас предназначен для запросов к БД*/
 public class SQLQuery {
 
     /*

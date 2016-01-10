@@ -20,14 +20,16 @@ public class GPSMonitor extends Service {
 
     // constant
     public static final long NOTIFY_INTERVAL = 30 * 60 * 1000; // полчаса
+    public static final long FIRST_NOTIFY_INTERVAL = 5 * 1000; // 5 сек для первого запуска
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
     private Timer mTimer = null;
+    private Timer mFistTimer = null;
     //
-    private int initialPeriod = 8;
-    private int endPeriod = 19;
-    private int currentTime;
+    private int mInitialPeriod = 8;
+    private int mEndPeriod = 19;
+    private int mCurrentTime;
 
     public GPSMonitor() {
     }
@@ -40,7 +42,10 @@ public class GPSMonitor extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        SimpleWakefulReceiver.completeWakefulIntent(intent);
+        if (intent != null) {
+            SimpleWakefulReceiver.completeWakefulIntent(intent);
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -53,6 +58,16 @@ public class GPSMonitor extends Service {
             // recreate new
             mTimer = new Timer();
         }
+
+        if (mFistTimer != null) {
+            mFistTimer.cancel();
+        } else {
+            // recreate new
+            mFistTimer = new Timer();
+        }
+        // schedule task
+        mFistTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0,
+                FIRST_NOTIFY_INTERVAL);
         // schedule task
         mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0,
                 NOTIFY_INTERVAL);
@@ -70,9 +85,9 @@ public class GPSMonitor extends Service {
 
                     //выставляем период времени когда отправлять
                     Calendar c = Calendar.getInstance();
-                    currentTime = c.get(Calendar.HOUR_OF_DAY);
+                    mCurrentTime = c.get(Calendar.HOUR_OF_DAY);
 
-                    if (currentTime >= initialPeriod & currentTime <= endPeriod) {
+                    if (mCurrentTime >= mInitialPeriod & mCurrentTime <= mEndPeriod) {
 
                         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                         LocationListener mlocListener = new MyLocationListener();
@@ -84,16 +99,22 @@ public class GPSMonitor extends Service {
                                     String.valueOf(MyLocationListener.latitude),
                                     String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
                             sendDataGPS.sendDataOnServer();
+                            if (MyLocationListener.latitude > 0) {
+//                                // schedule task
+                                if (mFistTimer != null) {
+                                    mFistTimer.cancel();
+                                    mFistTimer = null;
+                                }
+                            }
+
                         } else {
                             stopSelf();
                             mTimer.cancel();
-
                         }
-                    } else {
+                        // } else {
                         //stopSelf();
                         // mTimer.cancel();
                     }
-
                 }
             });
         }

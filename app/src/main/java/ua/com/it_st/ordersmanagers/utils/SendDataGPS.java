@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.loopj.android.http.RequestParams;
 
@@ -34,7 +35,7 @@ public class SendDataGPS {
             return;
         }
         //класс работает с настройками программы
-        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(ConstantsUtil.mSettings, mContext);
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(PreferenceManager.getDefaultSharedPreferences(mContext), mContext);
 
         RequestParams params = new RequestParams();
         params.put("time", mTime);

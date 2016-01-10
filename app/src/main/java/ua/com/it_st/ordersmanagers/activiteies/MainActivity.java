@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         try {
             /*Запускаем монитор GPS*/
-            startService(new Intent(this, GPSMonitor.class));
+            startService(new Intent(getApplicationContext(), GPSMonitor.class));
         } catch (Exception e) {
 
         }
