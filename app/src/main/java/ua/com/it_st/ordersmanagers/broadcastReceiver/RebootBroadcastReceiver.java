@@ -13,6 +13,7 @@ public class RebootBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         mContext = context;
         String action = intent.getAction();
         if (action.equalsIgnoreCase(BOOT_ACTION)) {

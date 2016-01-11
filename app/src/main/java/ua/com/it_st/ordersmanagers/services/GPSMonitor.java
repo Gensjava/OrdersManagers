@@ -1,10 +1,14 @@
 package ua.com.it_st.ordersmanagers.services;
 
+import android.annotation.TargetApi;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 
@@ -20,7 +24,7 @@ public class GPSMonitor extends Service {
 
     // constant
     public static final long NOTIFY_INTERVAL = 30 * 60 * 1000; // полчаса
-    public static final long FIRST_NOTIFY_INTERVAL = 5 * 1000; // 5 сек для первого запуска
+    public static final long FIRST_NOTIFY_INTERVAL = 60 * 1000; // 60 сек для первого запуска
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
@@ -30,6 +34,14 @@ public class GPSMonitor extends Service {
     private int mInitialPeriod = 8;
     private int mEndPeriod = 19;
     private int mCurrentTime;
+    private String mBat = "-1";
+    private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra("level", 0);
+            mBat = String.valueOf(level);
+        }
+    };
 
     public GPSMonitor() {
     }
@@ -45,12 +57,12 @@ public class GPSMonitor extends Service {
         if (intent != null) {
             SimpleWakefulReceiver.completeWakefulIntent(intent);
         }
-
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onCreate() {
+
         // cancel if already existed
         if (mTimer != null) {
             mTimer.cancel();
@@ -73,6 +85,12 @@ public class GPSMonitor extends Service {
                 NOTIFY_INTERVAL);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(batteryReceiver);
+    }
+
     class TimeDisplayTimerTask extends TimerTask {
 
         @Override
@@ -80,6 +98,7 @@ public class GPSMonitor extends Service {
             // run on another thread
             mHandler.post(new Runnable() {
 
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
 
@@ -94,12 +113,21 @@ public class GPSMonitor extends Service {
                         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 
                         if (mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            //отправляем данные на сервер
-                            SendDataGPS sendDataGPS = new SendDataGPS(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
-                                    String.valueOf(MyLocationListener.latitude),
-                                    String.valueOf(MyLocationListener.longitude), "SendDataGPS", getApplicationContext());
-                            sendDataGPS.sendDataOnServer();
+
                             if (MyLocationListener.latitude > 0) {
+                                /*получаем процент зарядки батареи*/
+                                registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+                                //отправляем данные на сервер
+                                SendDataGPS sendDataGPS = new SendDataGPS(ConstantsUtil.getDate() + " " + ConstantsUtil.getTime(),
+                                        String.valueOf(MyLocationListener.latitude),
+                                        String.valueOf(MyLocationListener.longitude),
+                                        "SendDataGPS",
+                                        getApplicationContext()
+                                        , mBat);
+
+                                sendDataGPS.sendDataOnServer();
+
 //                                // schedule task
                                 if (mFistTimer != null) {
                                     mFistTimer.cancel();
@@ -110,6 +138,7 @@ public class GPSMonitor extends Service {
                         } else {
                             stopSelf();
                             mTimer.cancel();
+                            unregisterReceiver(batteryReceiver);
                         }
                         // } else {
                         //stopSelf();

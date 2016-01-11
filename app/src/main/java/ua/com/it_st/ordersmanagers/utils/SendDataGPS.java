@@ -7,16 +7,17 @@ import com.loopj.android.http.RequestParams;
 //отправляем данные на сервер
 public class SendDataGPS {
 
-    private String mTime, mLat, mLon, mStatus;
+    private String mTime, mLat, mLon, mStatus, mBat;
     private Context mContext;
 
-    public SendDataGPS(String time, String lat, String lon, String status, Context context) {
+    public SendDataGPS(String time, String lat, String lon, String status, Context context, String pBat) {
 
         mTime = time;
         mLat = lat;
         mLon = lon;
         mContext = context;
         mStatus = status;
+        mBat = pBat;
     }
 
     //отправляем данные на сервер
@@ -42,6 +43,7 @@ public class SendDataGPS {
         params.put("lon", mLon);
         params.put("status", mStatus);
         params.put("kodAgent", lWorkSharedPreferences.getIDUser());
+        params.put("batery", mBat);
 
         try {
             mUtilAsyncHttpClient.postUnloadParams(params);
