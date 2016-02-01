@@ -16,7 +16,9 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.MyLocationListener;
 import ua.com.it_st.ordersmanagers.utils.SendDataGPS;
 
@@ -25,6 +27,7 @@ public class GPSMonitor extends Service {
     // constant
     public static final long NOTIFY_INTERVAL = 30 * 60 * 1000; // полчаса
     public static final long FIRST_NOTIFY_INTERVAL = 60 * 1000; // 60 сек для первого запуска
+    private final String TEG = GPSMonitor.class.getSimpleName();
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
     // timer handling
@@ -88,7 +91,12 @@ public class GPSMonitor extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(batteryReceiver);
+        try {
+            unregisterReceiver(batteryReceiver);
+        } catch (Exception e) {
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.load_info_base), true, TEG + ": " + e.toString());
+        }
     }
 
     class TimeDisplayTimerTask extends TimerTask {
@@ -138,7 +146,13 @@ public class GPSMonitor extends Service {
                         } else {
                             stopSelf();
                             mTimer.cancel();
-                            unregisterReceiver(batteryReceiver);
+
+                            try {
+                                unregisterReceiver(batteryReceiver);
+                            } catch (Exception e) {
+                                //Log
+                                InfoUtil.setmLogLine(getString(R.string.load_info_base), true, TEG + ": " + e.toString());
+                            }
                         }
                         // } else {
                         //stopSelf();
