@@ -116,6 +116,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             default:
                 break;
         }
+
     }
     /* функция перезапуск */
     @Override

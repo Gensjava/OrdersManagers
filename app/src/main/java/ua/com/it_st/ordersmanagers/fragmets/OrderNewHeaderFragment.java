@@ -245,6 +245,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             }
 
         }
+
     }
 
     private void fillHeader(Cursor data) {

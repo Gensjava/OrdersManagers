@@ -80,9 +80,10 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                     /* параметр для запроса */
                     mSelectionArgs = item.getGoodsId();
 
+                    Loader lLoader = getActivity().getSupportLoaderManager().getLoader(0);
                     /* обновляем курсор */
-                    if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
-                        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                    if (lLoader != null) {
+                        lLoader.forceLoad();
                     }
                 }
 
@@ -252,18 +253,28 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         /*Отображаем сумму заказа в подвале*/
             tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-            if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                    || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+            if (UpdateOrderDB.mCurrentOrder != null) {
+                if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                        || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-                if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
+                    if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
-                    getActivity().getSupportLoaderManager().initLoader(1, null, this);
+                        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+                    }
+                }
+                if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
+           /* создаем лоадер для чтения данных */
+                    getActivity().getSupportLoaderManager().initLoader(0, null, this);
                 }
             }
-            if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
-           /* создаем лоадер для чтения данных */
-                getActivity().getSupportLoaderManager().initLoader(0, null, this);
-            }
+        }
+
+        //для теста
+        try {
+            sDb.execSQL("CREATE INDEX \"kod_w\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
+            sDb.execSQL("CREATE INDEX \"kod_t\" ON \"Products\" (\"kod\" ASC)");
+            sDb.execSQL("CREATE INDEX \"kod_u\" ON \"Prices\" (\"kod\" ASC)");
+        } catch (Exception e) {
 
         }
 
@@ -421,7 +432,10 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("tState", tView.getSaveState());
+        if (tView != null) {
+            outState.putString("tState", tView.getSaveState());
+        }
+
     }
 
     @Override
@@ -452,6 +466,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             default:
                 break;
         }
+
     }
 
     /*Заполняем корзину*/

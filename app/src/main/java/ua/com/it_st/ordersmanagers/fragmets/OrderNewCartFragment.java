@@ -51,8 +51,12 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
                 /* открываем подключение к БД*/
         DB = SQLiteOpenHelperUtil.getInstance().getDatabase();
         /**/
-        String numberDoc = UpdateOrderDB.mCurrentOrder.getDocNumber();
-        String dateDoc = UpdateOrderDB.mCurrentOrder.getDocDate();
+        String numberDoc = "";
+        String dateDoc = "";
+
+        if (UpdateOrderDB.mCurrentOrder != null) {
+            numberDoc = UpdateOrderDB.mCurrentOrder.getDocNumber();
+            dateDoc = UpdateOrderDB.mCurrentOrder.getDocDate();
 
         TextView header = (TextView) rootView.findViewById(R.id.order_new_cart_list_header_root);
 
@@ -60,6 +64,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             header.setText(getString(R.string.edit_cart));
         } else if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
             header.setText(getString(R.string.copy_cart));
+        }
         }
 
       /*выводим данные дату и номер в шапку*/

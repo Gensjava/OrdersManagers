@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
+
 import ua.com.it_st.ordersmanagers.R;
 
 public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeProductCategoryHolder.TreeItem> {
@@ -99,6 +101,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.isCategory = isCategory;
 
         }
+
 
         public Integer getIcon() {
             return icon;

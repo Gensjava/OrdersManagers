@@ -128,6 +128,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         } else {
             scAdapter.swapCursor(data);
         }
+
     }
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {

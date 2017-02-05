@@ -40,7 +40,10 @@ public class InfoUtil {
                             }
                         });
         AlertDialog alert = builder.create();
-        alert.show();
+        if (alert != null) {
+            alert.show();
+        }
+
     }
 
     /*делаем чтоб картинка мигала*/

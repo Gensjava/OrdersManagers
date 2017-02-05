@@ -30,7 +30,7 @@ public class ConnectServer {
             /*проверка есть интерент или нет*/
         boolean isInternet = ConstantsUtil.isInternetAvailable(mContext);
         if (!isInternet) {
-            InfoUtil.showErrorAlertDialog(context.getString(R.string.error_inet), context.getString(R.string.updata), mContext);
+            //InfoUtil.showErrorAlertDialog(context.getString(R.string.error_inet), context.getString(R.string.updata), mContext);
             return;
         }
 

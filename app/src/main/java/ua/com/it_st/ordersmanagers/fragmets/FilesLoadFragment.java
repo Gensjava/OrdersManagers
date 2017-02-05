@@ -272,6 +272,7 @@ public class FilesLoadFragment extends FilesFragment {
                         sql.append(",");
                     }
                 }
+
                 input.close();
 
             } catch (IOException e) {
@@ -279,6 +280,7 @@ public class FilesLoadFragment extends FilesFragment {
                 //Log
                 InfoUtil.setmLogLine(getString(R.string.load_table), mNameTable, true, TEG + e.toString());
             }
+
             return null;
         }
 
