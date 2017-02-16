@@ -19,7 +19,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
@@ -96,6 +96,13 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         if (oldVersion == 1 & newVersion == 2) {
             TableCounteragentsDebt.createTable(db);
         }
+
+        if (newVersion < 4) {
+            db.execSQL("CREATE INDEX \"kod_GoodsByStores\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
+            db.execSQL("CREATE INDEX \"kod_Products\" ON \"Products\" (\"kod\" ASC)");
+            db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
+        }
+
 
     }
 

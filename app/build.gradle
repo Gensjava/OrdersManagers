@@ -21,9 +21,9 @@ android {
 
     defaultConfig {
         applicationId "ua.com.it_st.ordersmanagers"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 22
-        versionCode 16
+        versionCode 19
         versionName "1.0"
     }
     buildTypes {

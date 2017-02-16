@@ -270,13 +270,13 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         }
 
         //для теста
-        try {
-            sDb.execSQL("CREATE INDEX \"kod_w\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
-            sDb.execSQL("CREATE INDEX \"kod_t\" ON \"Products\" (\"kod\" ASC)");
-            sDb.execSQL("CREATE INDEX \"kod_u\" ON \"Prices\" (\"kod\" ASC)");
-        } catch (Exception e) {
-
-        }
+//        try {
+//            sDb.execSQL("CREATE INDEX \"kod_w\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
+//            sDb.execSQL("CREATE INDEX \"kod_t\" ON \"Products\" (\"kod\" ASC)");
+//            sDb.execSQL("CREATE INDEX \"kod_u\" ON \"Prices\" (\"kod\" ASC)");
+//        } catch (Exception e) {
+//
+//        }
 
         return rootView;
     }
