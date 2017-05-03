@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Gens on 27.04.2015.
  */
 public class TableCurrencies {
-    public static final String TABLE_NAME = "TableCurrencies";
+    public static final String TABLE_NAME = "Currencies";
     public static final String FILE_NAME = "ref_currency.csv";
     public static final String HEADER_NAME = "валюты";
 

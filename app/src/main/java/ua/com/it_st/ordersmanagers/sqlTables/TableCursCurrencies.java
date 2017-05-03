@@ -8,8 +8,8 @@ import android.util.Log;
 /**
  * Created by Gens on 27.04.2015.
  */
-public class TableСursCurrencies {
-    public static final String TABLE_NAME = "TableСursCurrencies";
+public class TableCursCurrencies {
+    public static final String TABLE_NAME = "CursCurrencies";
     public static final String FILE_NAME = "ref_curs_currency.csv";
     public static final String HEADER_NAME = "валюты";
 
@@ -21,7 +21,7 @@ public class TableСursCurrencies {
             + COLUMN_CURS
             + ") VALUES ";
 
-    private static final String TAG = TableСursCurrencies.class.getSimpleName();
+    private static final String TAG = TableCursCurrencies.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");
