@@ -31,6 +31,7 @@
         <item>ref_firms.csv</item>
         <item>ref_stores.csv</item>
         <item>ref_debt.csv</item>
+        <item>ref_debtext.csv</item>
     </string-array>
 
     <string-array name="header_orders">

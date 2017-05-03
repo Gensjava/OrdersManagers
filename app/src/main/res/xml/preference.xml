@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:key="version"
-            android:summary="1.0.19"
+            android:summary="1.0.20"
             android:title="Версия программы">
         </EditTextPreference>
     </PreferenceCategory>

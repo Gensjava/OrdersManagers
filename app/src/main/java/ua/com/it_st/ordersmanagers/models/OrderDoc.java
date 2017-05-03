@@ -6,7 +6,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 /**
  * Created by Gens on 31.07.2015.
  */
-public class OrderDoc {
+public class OrderDoc extends Documents {
     private String mId;
     private DocType mDocType;
     private String mDocDate;
@@ -27,30 +27,6 @@ public class OrderDoc {
     * false - пока ни кто ничего не менял*/
     private boolean mClickModifitsirovannoiCart;
 
-    public OrderDoc(final String id, final DocType docType,
-                    final String docDate, final String docNumber,
-                    final String completed, final String agentId,
-                    final String firmId, final String storeId,
-                    final String clientId, final String priceCategoryId,
-                    final String total, final String note, final String adress,
-                    final DocTypeOperation typeOperation, final boolean clickModifitsirovannoiCart) {
-
-        mId = id;
-        mDocType = docType;
-        mDocDate = docDate;
-        mDocNumber = docNumber;
-        mCompleted = completed;
-        mAgentId = agentId;
-        mFirmId = firmId;
-        mStoreId = storeId;
-        mClientId = clientId;
-        mPriceCategoryId = priceCategoryId;
-        mTotal = total;
-        mNote = note;
-        mAdress = adress;
-        mTypeOperation = typeOperation;
-        mClickModifitsirovannoiCart = clickModifitsirovannoiCart;
-    }
 
     public OrderDoc() {
 

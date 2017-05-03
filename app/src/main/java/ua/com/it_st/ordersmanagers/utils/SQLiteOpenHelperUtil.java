@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCompanies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -15,11 +17,12 @@ import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TableСursCurrencies;
 
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 7;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
@@ -72,6 +75,9 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableOrders.onDeleteValueTable(mDb);
         TableOrdersLines.onDeleteValueTable(mDb);
         TableCounteragentsDebt.onDeleteValueTable(mDb);
+        TableCounteragentsDebtDocs.onDeleteValueTable(mDb);
+        TableCurrencies.onDeleteValueTable(mDb);
+        TableСursCurrencies.onDeleteValueTable(mDb);
 
     }
 
@@ -88,6 +94,9 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableGoodsByStores.createTable(db);
         TableTypeStores.createTable(db);
         TableCounteragentsDebt.createTable(db);
+        TableCounteragentsDebtDocs.createTable(db);
+        TableCurrencies.createTable(db);
+        TableСursCurrencies.createTable(db);
 
     }
 
@@ -97,13 +106,17 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
             TableCounteragentsDebt.createTable(db);
         }
 
-        if (newVersion < 4) {
+        if (oldVersion == 2 & newVersion == 3) {
             db.execSQL("CREATE INDEX \"kod_GoodsByStores\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
             db.execSQL("CREATE INDEX \"kod_Products\" ON \"Products\" (\"kod\" ASC)");
             db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
         }
 
-
+        if (newVersion < 7) {
+            TableCounteragentsDebtDocs.createTable(db);
+            TableCurrencies.createTable(db);
+            TableСursCurrencies.createTable(db);
+        }
     }
 
     public SQLiteDatabase getDatabase() {

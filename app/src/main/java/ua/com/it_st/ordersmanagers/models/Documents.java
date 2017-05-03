@@ -88,7 +88,4 @@ public class Documents {
         mTotal = total;
     }
 
-    private void dd() {
-
-    }
 }
