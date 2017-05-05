@@ -47,6 +47,8 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
     private View rootView;
     private String[][] mItemsHeader;
     private int mPosition;
+    private String numberDoc;
+    private String dateDoc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,9 +58,6 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
 
-            String numberDoc;
-            String dateDoc;
-
             /*расчет  позиции кнопки далее к следующему этапу*/
             TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
              /*кнопка далее к следующему этапу*/
@@ -67,57 +66,7 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
             Bundle bundle = getArguments();
             /*редактируем документ*/
-            if (bundle != null &
-                    UpdateOrderDB.mCurrentOrder != null &
-                    UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
-
-               /*получаем ID дока и подставляем в запрос*/
-                id_order = bundle.getString(OrderListFragment.ID_ORDER);
-                UpdateOrderDB.mCurrentOrder.setId(id_order);
-               /*номер документа*/
-                numberDoc = bundle.getString(OrderListFragment.NUMBER_ORDER);
-                UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
-                /*дата док*/
-                dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
-                UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
-                /*стктус докуента*/
-                header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
-                  /* открываем подключение к БД */
-                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-                 /* создаем лоадер для чтения данных */
-                getActivity().getSupportLoaderManager().initLoader(0, null, this);
-
-            } else {
-                /*создаем новый заказ*/
-                /* сгениророваный номер документа заказа ИД для 1с */
-                UUID uniqueKey = UUID.randomUUID();
-                UpdateOrderDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
-                /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(UpdateOrderDB.sCurrentNumber);
-                UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
-                /*нтекущая дата*/
-                dateDoc = ConstantsUtil.getDate();
-                UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
-                /**/
-                        /*вызываем менеджера настроек*/
-                SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                      /*код на сервере пользователя*/
-                String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
-                UpdateOrderDB.mCurrentOrder.setAgentId(kodAgent);
-               /* так заполняем при операции дока копирвоать */
-                if (bundle != null & UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
-                       /*получаем ID дока и подставляем в запрос*/
-                    id_order = bundle.getString(OrderListFragment.ID_ORDER);
-                     /*стктус докуента*/
-                    header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
-                     /* открываем подключение к БД */
-                    sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-                 /* создаем лоадер для чтения данных */
-                    getActivity().getSupportLoaderManager().initLoader(0, null, this);
-                }
-                        /*устанавливаем мод. корзины*/
-                UpdateOrderDB.mCurrentOrder.setClickModifitsirovannoiCart(false);
-            }
+            workDoc(bundle, header);
 
             /*выводим данные дату и номер в шапку*/
             TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
@@ -246,6 +195,61 @@ public class OrderNewHeaderFragment extends Fragment implements View.OnClickList
 
         }
 
+    }
+
+    private void workDoc(Bundle bundle, TextView header) {
+
+        if (bundle != null &
+                UpdateOrderDB.mCurrentOrder != null &
+                UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+
+               /*получаем ID дока и подставляем в запрос*/
+            id_order = bundle.getString(OrderListFragment.ID_ORDER);
+            UpdateOrderDB.mCurrentOrder.setId(id_order);
+               /*номер документа*/
+            numberDoc = bundle.getString(OrderListFragment.NUMBER_ORDER);
+            UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
+                /*дата док*/
+            dateDoc = bundle.getString(OrderListFragment.DATE_ORDER);
+            UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
+                /*стктус докуента*/
+            header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
+                  /* открываем подключение к БД */
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+                 /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+
+        } else {
+                /*создаем новый заказ*/
+                /* сгениророваный номер документа заказа ИД для 1с */
+            UUID uniqueKey = UUID.randomUUID();
+            UpdateOrderDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
+                /*устанавливаем дату документа и номер*/
+            numberDoc = String.valueOf(UpdateOrderDB.sCurrentNumber);
+            UpdateOrderDB.mCurrentOrder.setDocNumber(numberDoc);
+                /*нтекущая дата*/
+            dateDoc = ConstantsUtil.getDate();
+            UpdateOrderDB.mCurrentOrder.setDocDate(dateDoc);
+                /**/
+                        /*вызываем менеджера настроек*/
+            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                      /*код на сервере пользователя*/
+            String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
+            UpdateOrderDB.mCurrentOrder.setAgentId(kodAgent);
+               /* так заполняем при операции дока копирвоать */
+            if (bundle != null & UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+                       /*получаем ID дока и подставляем в запрос*/
+                id_order = bundle.getString(OrderListFragment.ID_ORDER);
+                     /*стктус докуента*/
+                header.setText(bundle.getString(OrderListFragment.DOC_TYPE_OPERATION));
+                     /* открываем подключение к БД */
+                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+                 /* создаем лоадер для чтения данных */
+                getActivity().getSupportLoaderManager().initLoader(0, null, this);
+            }
+                        /*устанавливаем мод. корзины*/
+            UpdateOrderDB.mCurrentOrder.setClickModifitsirovannoiCart(false);
+        }
     }
 
     private void fillHeader(Cursor data) {

@@ -46,18 +46,34 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     public static final String ID_ORDER = "ID_ORDER";
     public static final String DOC_TYPE_OPERATION = "DOC_TYPE_OPERATION";
     private static SQLiteDatabase sDb;
+    protected TextView summaDoc;
+    protected TextView heander_jurnal;
+    protected TextView periodDoc;
+    protected View rootView;
+    protected String mQuerysql = SQLQuery.queryOrdersSum("Orders.type  <> ?");
     private SimpleCursorAdapter scAdapter;
-    private TextView ordersSum;
-    private TextView period;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         /* макет фрагмента */
-        View rootView = inflater.inflate(R.layout.main_header_list, container,
+        rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
         /* открываем подключение к БД */
         sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+
+        /*устанавливаем период журнала*/
+        periodDoc = (TextView) rootView.findViewById(R.id.main_heander_period);
+        setPeriodDoc(getString(R.string.with) + ConstantsUtil.getDate() + getString(R.string.on) + ConstantsUtil.getDate());
+        //
+        heander_jurnal = (TextView) rootView.findViewById(R.id.main_heander_text_Jurnal);
+          /*подвал журнал заказов */
+        summaDoc = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
+       /* кнопка далее переход на следующий этап*/
+        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
+        /* слушатель кнопки далее */
+        imViewAdd.setOnClickListener(this);
+
         /* формируем столбцы сопоставления */
         String[] from = new String[]{};
         int[] to = new int[]{};
@@ -69,19 +85,17 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         /* создаем лоадер для чтения данных */
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
         getActivity().getSupportLoaderManager().initLoader(2, null, this);
-        /* кнопка далее переход на следующий этап*/
-        ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
-        /* слушатель кнопки далее */
-        imViewAdd.setOnClickListener(this);
-        /*устанавливаем период журнала*/
-        period = (TextView) rootView.findViewById(R.id.main_heander_period);
-        period.setText(getString(R.string.with) + ConstantsUtil.getDate() + getString(R.string.on) + ConstantsUtil.getDate());
-        /*подвал журнал заказов */
-        ordersSum = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
+
         /**/
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_drawer);
         MainActivity.chickMainFragment = true;
+
         return rootView;
+    }
+
+    //установка периода в журнале
+    void setPeriodDoc(String pPeriodDoc) {
+        periodDoc.setText(pPeriodDoc);
     }
     /* функция
     * отрабатывает при создании */
@@ -89,9 +103,9 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         switch (id) {
             case 0:/*получаем все заазы*/
-                return new MyCursorLoader(getActivity());
+                return new MyCursorLoader(getActivity(), mQuerysql);
             case 2:/*получаем сумму всех заазов*/
-                return new MyCursorLoaderOrdersSum(getActivity());
+                return new MyCursorLoaderOrdersSum(getActivity(), mQuerysql);
             default:
                 return null;
         }
@@ -129,7 +143,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
         if (sumOrders == null) {
             sumOrders = getString(R.string.zero_point_text);
         }
-        ordersSum.setText(sumOrders);
+        summaDoc.setText(sumOrders);
     }
     /* обработка кликов на кнопки */
     @Override
@@ -181,8 +195,12 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     * загрузка происходит в фоне */
     private static class MyCursorLoader extends CursorLoader {
 
-        public MyCursorLoader(Context context) {
+
+        private String querySQL;
+
+        public MyCursorLoader(Context context, String querySQL) {
             super(context);
+            this.querySQL = querySQL;
         }
 
         @Override
@@ -196,14 +214,17 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     * загрузка происходит в фоне */
     private static class MyCursorLoaderOrdersSum extends CursorLoader {
 
-        public MyCursorLoaderOrdersSum(Context context) {
+        private String querySQL;
+
+        public MyCursorLoaderOrdersSum(Context context, String querySQL) {
             super(context);
+            this.querySQL = querySQL;
         }
 
         @Override
         public Cursor loadInBackground() {
             return sDb
-                    .rawQuery(SQLQuery.queryOrdersSum("Orders.type  <> ?"), new String[]{"NO_HELD"});
+                    .rawQuery(querySQL, new String[]{"NO_HELD"});
         }
     }
 
@@ -275,7 +296,6 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
     private class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
         private LayoutInflater mLInflater;
-        private String mPeriod;
 
         public MySimpleCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags) {
             super(context, layout, c, from, to, flags);
@@ -334,10 +354,7 @@ public class OrderListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             /*устанвливаем период */
-            if (mPeriod == null) {
-                period.setText(getString(R.string.with) + cDate + getString(R.string.on) + ConstantsUtil.getDate());
-                mPeriod = cDate;
-            }
+            setPeriodDoc(getString(R.string.with) + cDate + getString(R.string.on) + ConstantsUtil.getDate());
 
             /* Настраиваем адаптер */
             String[] spinnerMenu = getResources().getStringArray(R.array.spinner_orders_menu);

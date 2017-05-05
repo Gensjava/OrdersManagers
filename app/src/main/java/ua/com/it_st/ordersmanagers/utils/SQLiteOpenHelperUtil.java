@@ -14,6 +14,8 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableCursCurrencies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePayDoc;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePayDocLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
@@ -22,7 +24,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
@@ -78,6 +80,8 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableCounteragentsDebtDocs.onDeleteValueTable(mDb);
         TableCurrencies.onDeleteValueTable(mDb);
         TableCursCurrencies.onDeleteValueTable(mDb);
+        TablePayDoc.onDeleteValueTable(mDb);
+        TablePayDocLines.onDeleteValueTable(mDb);
 
     }
 
@@ -97,6 +101,8 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableCounteragentsDebtDocs.createTable(db);
         TableCurrencies.createTable(db);
         TableCursCurrencies.createTable(db);
+        TablePayDoc.createTable(db);
+        TablePayDocLines.createTable(db);
 
     }
 
@@ -112,10 +118,12 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
             db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
         }
 
-        if (newVersion < 8) {
+        if (newVersion < 9) {
             TableCounteragentsDebtDocs.createTable(db);
             TableCurrencies.createTable(db);
             TableCursCurrencies.createTable(db);
+            TablePayDoc.createTable(db);
+            TablePayDocLines.createTable(db);
         }
     }
 

@@ -22,6 +22,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.PayDocListFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
@@ -119,6 +120,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_third_setings:
                 fragmentClass = MainPreferenceFragment.class;
+                break;
+            case R.id.nav_pay_doc_fragment:
+                fragmentClass = PayDocListFragment.class;
                 break;
             case R.id.nav_third_exit:
                 finish();

@@ -57,6 +57,21 @@ public class SQLQuery {
     }
 
     /*
+    запрос журнал док оплат сумма всех оплат
+    sp параметры условий запроса
+    */
+    public static String queryPayDocSum(final String sp) {
+
+        String sq;
+        sq = "Select Sum(PayDoc.total) as sum_orders " +
+                "FROM PayDoc\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+
+    /*
     запрос журнал заказов для выгрузки в файл csv
     sp параметры условий запроса
     */

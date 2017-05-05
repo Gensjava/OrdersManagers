@@ -6,6 +6,10 @@
 
             android:title="Журнал заказов"/>
         <item
+            android:id="@+id/nav_pay_doc_fragment"
+
+            android:title="Журнал оплат"/>
+        <item
             android:id="@+id/nav_second_fragment"
 
             android:title="Загрузка"/>
