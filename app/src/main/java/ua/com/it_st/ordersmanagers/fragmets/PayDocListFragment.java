@@ -6,20 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.LoaderFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
  * Created by Gena on 2017-05-04.
  */
-public class PayDocListFragment extends OrderListFragment {
+public class PayDocListFragment extends LoaderFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mQuerysql = SQLQuery.queryPayDocSum("PayDoc.type  <> ?");
+        mQuerySum = SQLQuery.queryPayDocSum("PayDoc.type  <> ?");
+        mQueryList = SQLQuery.queryPays("PayDoc._id  <> ?");
 
         super.onCreateView(inflater, container, savedInstanceState);
-        heander_jurnal.setText(R.string.JurnalPayDoc);
+        header_journal.setText(R.string.JurnalPayDoc);
 
         return rootView;
 

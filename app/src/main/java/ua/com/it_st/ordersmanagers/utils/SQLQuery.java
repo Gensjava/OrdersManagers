@@ -57,6 +57,23 @@ public class SQLQuery {
     }
 
     /*
+    запрос журнал заказов
+    sp параметры условий запроса
+    */
+    public static String queryPays(final String sp) {
+
+        String sq;
+        sq = "Select   PayDoc._id, PayDoc.type,  PayDoc.view_id, PayDoc.date, PayDoc.number, PayDoc.total," +
+                "Counteragents.name, Counteragents.address\n" +
+                "FROM PayDoc\n" +
+                "LEFT OUTER JOIN Counteragents ON PayDoc.client_id  = Counteragents.kod " +
+                "and PayDoc.client_adress  = Counteragents.address\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+    /*
     запрос журнал док оплат сумма всех оплат
     sp параметры условий запроса
     */
