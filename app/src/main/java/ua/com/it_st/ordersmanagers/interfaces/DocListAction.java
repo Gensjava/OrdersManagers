@@ -3,7 +3,7 @@ package ua.com.it_st.ordersmanagers.interfaces;
 
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
-public interface OrderListAction {
+public interface DocListAction {
 
     /*добавить запись*/
     boolean add(OrderDoc.OrderLines item);

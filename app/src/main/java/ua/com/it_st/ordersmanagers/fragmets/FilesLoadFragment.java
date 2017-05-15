@@ -62,7 +62,7 @@ public class FilesLoadFragment extends FilesFragment {
             case R.id.load_files_image_button_n:
                 /*переходим в журанл заказаов*/
                 onEventListener someEventListener = (onEventListener) getActivity();
-                someEventListener.onOpenFragmentClass(OrderListFragment.class);
+                someEventListener.onOpenFragmentClass(OrderListDocFragment.class);
                 break;
             case R.id.load_files_imageView:
                 /*переходим в список ощибок*/

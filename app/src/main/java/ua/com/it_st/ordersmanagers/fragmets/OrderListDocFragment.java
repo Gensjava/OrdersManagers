@@ -6,14 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.utils.LoaderFragment;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
-
 
 /* Класс отображает список заказов сделанные курьером
 *  В списке есть контекстное меню построенное на  Spinner */
 
-public class OrderListFragment extends LoaderFragment {
+public class OrderListDocFragment extends LoaderDocFragment {
 
     public static final String NUMBER_ORDER = "NUMBER_ORDER";
     public static final String DATE_ORDER = "DATE_ORDER";
@@ -30,7 +29,5 @@ public class OrderListFragment extends LoaderFragment {
         header_journal.setText(R.string.JurnalOrders);
 
         return rootView;
-
-
     }
 }

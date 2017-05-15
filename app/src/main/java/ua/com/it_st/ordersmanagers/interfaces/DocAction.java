@@ -1,7 +1,7 @@
 package ua.com.it_st.ordersmanagers.interfaces;
 
 
-public interface OrderAction {
+public interface DocAction {
 
     /*добавить запись*/
     boolean add();

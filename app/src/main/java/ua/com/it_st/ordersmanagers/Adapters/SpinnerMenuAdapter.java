@@ -14,12 +14,12 @@ import ua.com.it_st.ordersmanagers.R;
  * Created by Gena on 2017-05-14.
  */
 
-public class MenuCustomAdapter extends ArrayAdapter {
+public class SpinnerMenuAdapter extends ArrayAdapter {
     private String[] objects;
     private LayoutInflater mLInflater;
 
-    public MenuCustomAdapter(Context context, int textViewResourceId,
-                             String[] objects) {
+    public SpinnerMenuAdapter(Context context, int textViewResourceId,
+                              String[] objects) {
         super(context, textViewResourceId, objects);
         this.objects = objects;
         mLInflater = (LayoutInflater) context

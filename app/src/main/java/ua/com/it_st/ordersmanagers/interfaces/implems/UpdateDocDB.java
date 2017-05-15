@@ -5,14 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.OrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.DocAction;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
-public class UpdateOrderDB implements OrderAction {
+public class UpdateDocDB implements DocAction {
 
     /* текущий новый заказ */
     public static OrderDoc mCurrentOrder = new OrderDoc();
@@ -21,7 +21,7 @@ public class UpdateOrderDB implements OrderAction {
     private SQLiteDatabase mDB;
     private Context mContext;
 
-    public UpdateOrderDB(SQLiteDatabase pDB, Context pContext) {
+    public UpdateDocDB(SQLiteDatabase pDB, Context pContext) {
         mDB = pDB;
         mContext = pContext;
     }
@@ -80,7 +80,7 @@ public class UpdateOrderDB implements OrderAction {
         }
          /* табличная часть*/
         /*создаем новые позиции заказа*/
-        for (final OrderDoc.OrderLines aMCart : UpDateOrderList.mCart) {
+        for (final OrderDoc.OrderLines aMCart : UpDateDocList.mCart) {
             long inTableLines = mDB.insert(
                     TableOrdersLines.TABLE_NAME,
                     null,
@@ -128,7 +128,7 @@ public class UpdateOrderDB implements OrderAction {
                 new String[]{mCurrentOrder.getId()});
 
         /*обновляем позиции заказа (создаем новые)*/
-        for (final OrderDoc.OrderLines aMCart : UpDateOrderList.mCart) {
+        for (final OrderDoc.OrderLines aMCart : UpDateDocList.mCart) {
 
             long inTableLinesNew = mDB.insert(TableOrdersLines.TABLE_NAME,
                     null,

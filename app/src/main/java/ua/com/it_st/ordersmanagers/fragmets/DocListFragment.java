@@ -27,7 +27,7 @@ public class DocListFragment extends Fragment {
 //        String[] from = new String[]{};
 //        int[] to = new int[]{};
 //        /* создааем адаптер и настраиваем список */
-//        scAdapter = new MySimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
+//        scAdapter = new LoaderDocCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0);
 //        /* сам список */
 //        ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
 //        lvData.setAdapter(scAdapter);
@@ -50,12 +50,12 @@ public class DocListFragment extends Fragment {
 //    }
 //    /* делаем свой адаптер т.к нужно обрабытывать
 //    клик на контекстное меню*/
-//    private class MySimpleCursorAdapter extends SimpleCursorAdapter {
+//    private class LoaderDocCursorAdapter extends SimpleCursorAdapter {
 //
 //        private LayoutInflater mLInflater;
 //        private String mPeriod;
 //
-//        public MySimpleCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags) {
+//        public LoaderDocCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags) {
 //            super(context, layout, c, from, to, flags);
 //            mLInflater = (LayoutInflater) mContext
 //                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -120,7 +120,7 @@ public class DocListFragment extends Fragment {
 //            /* Настраиваем адаптер */
 //            String[] spinnerMenu = getResources().getStringArray(R.array.spinner_orders_menu);
 //            /**/
-//            final MenuCustomAdapter adapter = new MenuCustomAdapter(getActivity(), R.layout.spinner_row, spinnerMenu);
+//            final SpinnerMenuAdapter adapter = new SpinnerMenuAdapter(getActivity(), R.layout.spinner_row, spinnerMenu);
 //            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //
 //            /* Вызываем адаптер */
@@ -148,24 +148,24 @@ public class DocListFragment extends Fragment {
 //                                switch (selectedItemPosition) {
 //                                    case 0:
 //                                  /*чистим док заказ и редактируем заказ*/
-//                                        UpdateOrderDB.clearOrderHeader(DocTypeOperation.EDIT);
+//                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.EDIT);
 //                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_order));
 //                                        break;
 //                                    case 3:
 //                                  /*чистим док заказ и копируем заказ*/
-//                                        UpdateOrderDB.clearOrderHeader(DocTypeOperation.COPY);
+//                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.COPY);
 //                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_order));
 //                                        break;
 //                                }
 //                                        /* ТЧ заказа */
-//                                UpDateOrderList.mCart = new LinkedHashSet<>();
+//                                UpDateDocList.mCart = new LinkedHashSet<>();
 //                                /*редактируем док*/
 //
 //                                bundleItem.putString(ID_ORDER, cId);
 //                                bundleItem.putString(NUMBER_ORDER, cNumber);
 //                                bundleItem.putString(DATE_ORDER, cDate);
 //
-//                                final OrderListFragment.onEventListener someEventListener = (OrderListFragment.onEventListener) getActivity();
+//                                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
 //                                someEventListener.onOpenFragmentClassBundle(OrderNewHeaderFragment.class, bundleItem);
 //                            case 1:
 //                                /*проводим док*/

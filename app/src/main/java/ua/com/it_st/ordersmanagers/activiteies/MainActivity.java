@@ -17,28 +17,25 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
-import ua.com.it_st.ordersmanagers.fragmets.PayDocListFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
+import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
-public class MainActivity extends AppCompatActivity
-
-        implements
-        OrderListFragment.onEventListener,
+public class MainActivity extends AppCompatActivity implements
+        OrderListDocFragment.onEventListener,
         OrderNewHeaderFragment.onEventListener,
         OrderNewGoodsFragment.onEventListener,
         OrderNewSelectHeaderFragment.OnFragmentSelectListener,
         OrderNewCartFragment.onEventListener,
         FilesLoadFragment.onEventListener
-
 {
 
     public static boolean chickMainFragment;
@@ -84,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         //Открываем главный фрагмент
-        WorkFragment.onNewInstanceFragment(OrderListFragment.class, this);
+        WorkFragment.onNewInstanceFragment(OrderListDocFragment.class, this);
 
     }
 
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         Class fragmentClass = null;
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = OrderListFragment.class;
+                fragmentClass = OrderListDocFragment.class;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = FilesLoadFragment.class;
@@ -122,7 +119,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = MainPreferenceFragment.class;
                 break;
             case R.id.nav_pay_doc_fragment:
-                fragmentClass = PayDocListFragment.class;
+                fragmentClass = PayDocListDocFragment.class;
                 break;
             case R.id.nav_third_exit:
                 finish();
@@ -143,7 +140,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -181,13 +177,13 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
     /* текущий новый заказ */
-        UpdateOrderDB.mCurrentOrder = null;
+        UpdateDocDB.mCurrentOrder = null;
     /* ТЧ заказа */
-        UpDateOrderList.mCart.clear();
+        UpDateDocList.mCart.clear();
     }
 
     /*Метод для ввода количества в заказе*/
-    public void OnClickNamber(View view) {
+    public void OnClickNumber(View view) {
 
         switch (view.getId()) {
             case R.id.but_del:
@@ -228,7 +224,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
 
-        OrderListFragment mainFragment = (OrderListFragment) getSupportFragmentManager().findFragmentByTag(OrderListFragment.class.toString());
+        OrderListDocFragment mainFragment = (OrderListDocFragment) getSupportFragmentManager().findFragmentByTag(OrderListDocFragment.class.toString());
 
         if (checkFragment(mainFragment)) {
             chickMainFragment = true;

@@ -7,12 +7,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ua.com.it_st.ordersmanagers.interfaces.OrderListAction;
+import ua.com.it_st.ordersmanagers.interfaces.DocListAction;
 import ua.com.it_st.ordersmanagers.interfaces.OrderListActionDetali;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 
-
-public class UpDateOrderList implements OrderListAction, OrderListActionDetali {
+public class UpDateDocList implements DocListAction, OrderListActionDetali {
 
     /* ТЧ заказа */
     public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
@@ -21,7 +20,7 @@ public class UpDateOrderList implements OrderListAction, OrderListActionDetali {
     public static ArrayList<OrderDoc.OrderLines> getItemsGoods() {
         ArrayList<OrderDoc.OrderLines> lCartOrders = new ArrayList<OrderDoc.OrderLines>();
 
-        OrderDoc.OrderLines[] cartOrders = UpDateOrderList.mCart.toArray(new OrderDoc.OrderLines[mCart.size()]);
+        OrderDoc.OrderLines[] cartOrders = UpDateDocList.mCart.toArray(new OrderDoc.OrderLines[mCart.size()]);
 
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;
@@ -33,7 +32,6 @@ public class UpDateOrderList implements OrderListAction, OrderListActionDetali {
     */
     @Override
     public boolean add(OrderDoc.OrderLines item) {
-
         /* удаляем товар */
         delete(item);
        /* добавляем только если больше чем 0 */
@@ -46,7 +44,6 @@ public class UpDateOrderList implements OrderListAction, OrderListActionDetali {
     /*изменяем количество товара*/
     @Override
     public boolean update(OrderDoc.OrderLines item) {
-
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
         for (OrderDoc.OrderLines iC : mCart) {
             if (iC.getGoodsId().equals(item.getGoodsId())) {

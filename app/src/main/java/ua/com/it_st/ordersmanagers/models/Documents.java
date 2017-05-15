@@ -1,9 +1,14 @@
 package ua.com.it_st.ordersmanagers.models;
 
+import android.support.v4.app.Fragment;
+
+import java.util.List;
+import java.util.Map;
+
 import ua.com.it_st.ordersmanagers.enums.DocType;
 
 
-public class Documents {
+public abstract class Documents {
 
     private String mId;
     private DocType mDocType;
@@ -15,6 +20,7 @@ public class Documents {
     private String mTotal;
     private String mNote;
 
+    public abstract List<Map<String, ?>> getListHeaders(Fragment fragment);
 
     public String getNote() {
         return mNote;

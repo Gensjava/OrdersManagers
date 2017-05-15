@@ -19,29 +19,28 @@ import java.util.LinkedHashSet;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
-import ua.com.it_st.ordersmanagers.utils.LoaderFragment;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 /**
  * Created by Gena on 2017-05-14.
  */
 
-public class MySimpleCursorAdapter extends SimpleCursorAdapter {
+public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
-    private LoaderFragment loaderFragment;
+    private LoaderDocFragment loaderDocFragment;
 
-    public MySimpleCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, LoaderFragment loaderFragment) {
+    public LoaderDocCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, LoaderDocFragment loaderDocFragment) {
         super(context, layout, c, from, to, flags);
         mLInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.loaderFragment = loaderFragment;
-
+        this.loaderDocFragment = loaderDocFragment;
     }
 
     @Override
@@ -95,12 +94,12 @@ public class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
             /*устанвливаем период */
 
-        loaderFragment.setPeriodDoc(mContext.getString(R.string.with) + cDate + mContext.getString(R.string.on) + ConstantsUtil.getDate());
+        loaderDocFragment.setPeriodDoc(mContext.getString(R.string.with) + cDate + mContext.getString(R.string.on) + ConstantsUtil.getDate());
 
             /* Настраиваем адаптер */
         String[] spinnerMenu = mContext.getResources().getStringArray(R.array.spinner_orders_menu);
             /**/
-        final MenuCustomAdapter adapter = new MenuCustomAdapter(mContext, R.layout.spinner_row, spinnerMenu);
+        final SpinnerMenuAdapter adapter = new SpinnerMenuAdapter(mContext, R.layout.spinner_row, spinnerMenu);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             /* Вызываем адаптер */
@@ -128,24 +127,24 @@ public class MySimpleCursorAdapter extends SimpleCursorAdapter {
                             switch (selectedItemPosition) {
                                 case 0:
                                   /*чистим док заказ и редактируем заказ*/
-                                    UpdateOrderDB.clearOrderHeader(DocTypeOperation.EDIT);
-                                    bundleItem.putString(LoaderFragment.DOC_TYPE_OPERATION, loaderFragment.getString(R.string.edit_order));
+                                    UpdateDocDB.clearOrderHeader(DocTypeOperation.EDIT);
+                                    bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, loaderDocFragment.getString(R.string.edit_order));
                                     break;
                                 case 3:
                                   /*чистим док заказ и копируем заказ*/
-                                    UpdateOrderDB.clearOrderHeader(DocTypeOperation.COPY);
-                                    bundleItem.putString(LoaderFragment.DOC_TYPE_OPERATION, loaderFragment.getString(R.string.copy_order));
+                                    UpdateDocDB.clearOrderHeader(DocTypeOperation.COPY);
+                                    bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, loaderDocFragment.getString(R.string.copy_order));
                                     break;
                             }
                                         /* ТЧ заказа */
-                            UpDateOrderList.mCart = new LinkedHashSet<>();
+                            UpDateDocList.mCart = new LinkedHashSet<>();
                                 /*редактируем док*/
 
-                            bundleItem.putString(LoaderFragment.ID_ORDER, cId);
-                            bundleItem.putString(LoaderFragment.NUMBER_ORDER, cNumber);
-                            bundleItem.putString(LoaderFragment.DATE_ORDER, cDate);
+                            bundleItem.putString(LoaderDocFragment.ID_ORDER, cId);
+                            bundleItem.putString(LoaderDocFragment.NUMBER_ORDER, cNumber);
+                            bundleItem.putString(LoaderDocFragment.DATE_ORDER, cDate);
 
-                            final OrderListFragment.onEventListener someEventListener = (OrderListFragment.onEventListener) mContext;
+                            final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) mContext;
                             someEventListener.onOpenFragmentClassBundle(OrderNewHeaderFragment.class, bundleItem);
                         case 1:
                                 /*проводим док*/
@@ -161,14 +160,14 @@ public class MySimpleCursorAdapter extends SimpleCursorAdapter {
                         /*меняем статус у документов (проведен, не проведен)*/
                     if (!cId.equals("") & selectedItemPosition == 1 || selectedItemPosition == 2) {
 
-                        LoaderFragment.sDb.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
-                        String[] choose = loaderFragment.getResources().getStringArray(R.array.spinner_orders_menu);
+                        LoaderDocFragment.sDb.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
+                        String[] choose = loaderDocFragment.getResources().getStringArray(R.array.spinner_orders_menu);
 
                         Toast toast = Toast.makeText(mContext,
                                 R.string.operation_completed + choose[selectedItemPosition], Toast.LENGTH_SHORT);
                         toast.show();
 
-                        loaderFragment.getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                        loaderDocFragment.getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                     }
                 } else {
                     iCurrentSelection[0] = selectedItemPosition;

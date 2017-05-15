@@ -26,8 +26,8 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateOrderList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
@@ -116,18 +116,18 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
         if (ui_cart == null) return;
 
-        UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+        UpDateDocList lUpDateOrderList = new UpDateDocList();
         double sum = lUpDateOrderList.sum();
 
          /*Показываем сумму заказа в подвале*/
         String tSum = sum == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(sum);
         tSumCart.setText(tSum + getString(R.string.grn));
 
-        if (UpDateOrderList.mCart.size() == 0) {
+        if (UpDateDocList.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);
         } else {
             ui_cart.setVisibility(View.VISIBLE);
-            ui_cart.setText(Integer.toString(UpDateOrderList.mCart.size()));
+            ui_cart.setText(Integer.toString(UpDateDocList.mCart.size()));
         }
     }
 
@@ -139,16 +139,16 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         }
 
-        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
+            if (!UpdateDocDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().initLoader(1, null, this);
                 getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
             }
         }
-        if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
+        if (UpdateDocDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
             getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
@@ -161,7 +161,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             /* строка ТЧ заказа */
         OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                UpdateOrderDB.mCurrentOrder.getId(),
+                UpdateDocDB.mCurrentOrder.getId(),
                 product.getGoodsId(),
                 1,
                 numberInDialog,
@@ -175,7 +175,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         /* делаем проверку товара на остатке */
         if (product.getBalance() >= numberInDialog) {
 
-            UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+            UpDateDocList lUpDateOrderList = new UpDateDocList();
 
             if (numberInDialog > 0) {
                 orderTvValue.setVisibility(View.VISIBLE);
@@ -253,16 +253,16 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         /*Отображаем сумму заказа в подвале*/
             tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-            if (UpdateOrderDB.mCurrentOrder != null) {
-                if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                        || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+            if (UpdateDocDB.mCurrentOrder != null) {
+                if (UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                        || UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-                    if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
+                    if (!UpdateDocDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                         getActivity().getSupportLoaderManager().initLoader(1, null, this);
                     }
                 }
-                if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
+                if (UpdateDocDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
                     getActivity().getSupportLoaderManager().initLoader(0, null, this);
                 }
@@ -400,7 +400,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     /*открываем корзину*/
     protected void openCart() {
 
-        UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+        UpDateDocList lUpDateOrderList = new UpDateDocList();
              /*проверяем пустая корзина или нет*/
         if (!lUpDateOrderList.isEmpty()) {
             final onEventListener someEventListener = (onEventListener) getActivity();
@@ -490,7 +490,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
             final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
             OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
-                    UpdateOrderDB.mCurrentOrder.getId(),
+                    UpdateDocDB.mCurrentOrder.getId(),
                     cID,
                     1,
                     isAmount,
@@ -499,7 +499,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                     cName,
                     cAmountStores);
 
-            UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+            UpDateDocList lUpDateOrderList = new UpDateDocList();
             lUpDateOrderList.add(orderLines);
         }
                  /*обновляем корзину*/
@@ -547,15 +547,15 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     public void onPause() {
         super.onPause();
 
-        if (UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || UpdateOrderDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
+                || UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
 
-            if (!UpdateOrderDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
+            if (!UpdateDocDB.mCurrentOrder.isClickModifitsirovannoiCart()) {
                 /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().destroyLoader(1);
             }
         }
-        if (UpdateOrderDB.mCurrentOrder.getStoreId() != null) {
+        if (UpdateDocDB.mCurrentOrder.getStoreId() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -574,7 +574,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
         switch (view.getId()) {
 
             case R.id.order_new_goods_container_image:
-                UpDateOrderList lUpDateOrderList = new UpDateOrderList();
+                UpDateDocList lUpDateOrderList = new UpDateDocList();
 
                 /*прповеряем корзину пустая или нет*/
                 if (!lUpDateOrderList.isEmpty()) {
@@ -611,7 +611,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
                                     "and Prices.price_category_kod = ? " +
                                     "or Products.is_category = ? " +
                                     "and Products.id_category = ?"
-                    ), new String[]{mSelectionArgs, UpdateOrderDB.mCurrentOrder.getStoreId(), UpdateOrderDB.mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
+                    ), new String[]{mSelectionArgs, UpdateDocDB.mCurrentOrder.getStoreId(), UpdateDocDB.mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
                     });
         }
     }

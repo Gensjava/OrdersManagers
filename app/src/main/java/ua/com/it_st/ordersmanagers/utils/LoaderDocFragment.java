@@ -15,19 +15,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import ua.com.it_st.ordersmanagers.Adapters.MySimpleCursorAdapter;
+import ua.com.it_st.ordersmanagers.Adapters.LoaderDocCursorAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.fragmets.OrderListFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateOrderDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 
 /**
  * Created by Gena on 2017-05-13.
  */
 
-public abstract class LoaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public abstract class LoaderDocFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     public static final String NUMBER_ORDER = "NUMBER_ORDER";
     public static final String DATE_ORDER = "DATE_ORDER";
@@ -68,7 +68,7 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
         String[] from = new String[]{};
         int[] to = new int[]{};
         /* создааем адаптер и настраиваем список */
-        scAdapter = new MySimpleCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0, this);
+        scAdapter = new LoaderDocCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0, this);
         /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
         lvData.setAdapter(scAdapter);
@@ -110,7 +110,7 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
             case 0:
                 scAdapter.swapCursor(data);
                 /*следующий номер заказа*/
-                UpdateOrderDB.setsCurrentNumber((short) data.getCount());
+                UpdateDocDB.setsCurrentNumber((short) data.getCount());
                 break;
             case 2:
                 final int cSumIndex = data.getColumnIndex("sum_orders");
@@ -142,13 +142,13 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
     /* обработка кликов на кнопки */
     @Override
     public void onClick(final View view) {
-        switch (view.getId()) {
 
+        switch (view.getId()) {
             case R.id.main_heander_image_plus:
-                final OrderListFragment.onEventListener someEventListener = (OrderListFragment.onEventListener) getActivity();
+                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
                 /*чистим док заказ и содаем новый заказ*/
-                UpdateOrderDB.clearOrderHeader(DocTypeOperation.NEW);
+                UpdateDocDB.clearOrderHeader(DocTypeOperation.NEW);
                 break;
             default:
                 break;
@@ -178,7 +178,6 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
-
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 }
