@@ -45,6 +45,12 @@
         <item>Комментарий</item>
     </string-array>
 
+    <string-array name="header_pays">
+        <item>Организация</item>
+        <item>Клиент</item>
+        <item>Комментарий</item>
+    </string-array>
+
     <string-array name="header_orders_table">
         <item>Сompanys</item>
         <item>TypeStores</item>
@@ -543,9 +549,9 @@
     <string name="SizeFileCatalog">SizeFileCatalog</string>
     <string name="fix_amount">Зафиксировать к-во</string>
     <string name="show_picture">Показать изображение</string>
-    <string name="edit_order">Редактирование заказа</string>
+    <string name="edit_doc">Редактирование</string>
     <string name="edit_cart">Редактирование корзины</string>
-    <string name="copy_order">Копирование заказа</string>
+    <string name="copy_doc">Копирование</string>
     <string name="copy_cart">Копирование корзины</string>
     <string name="start_load">Начало загрузки</string>
     <string name="start_on_load">Начало выгрузки!</string>

@@ -8,24 +8,28 @@ import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 
 /**
  * Created by Gens on 17.08.2015.
  */
 public class PayDoc extends Documents {
 
+    private DocTypeOperation mTypeOperation;
+
+    public PayDoc() {
+    }
+
     @Override
     public List<Map<String, ?>> getListHeaders(Fragment fragment) {
          /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
-                        R.mipmap.ic_stores,
                         R.mipmap.ic_client,
-                        R.mipmap.ic_tipe_price,
                         R.mipmap.ic_coment
                 };
         /*массив заголовков шапки заказа*/
-        String[] headerOrders = fragment.getResources().getStringArray(R.array.header_orders);
+        String[] headerOrders = fragment.getResources().getStringArray(R.array.header_pays);
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
@@ -37,5 +41,9 @@ public class PayDoc extends Documents {
             items.add(map);
         }
         return items;
+    }
+
+    public void setTypeOperation(final DocTypeOperation typeOperation) {
+        mTypeOperation = typeOperation;
     }
 }

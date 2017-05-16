@@ -149,12 +149,12 @@ public class DocListFragment extends Fragment {
 //                                    case 0:
 //                                  /*чистим док заказ и редактируем заказ*/
 //                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.EDIT);
-//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_order));
+//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_doc));
 //                                        break;
 //                                    case 3:
 //                                  /*чистим док заказ и копируем заказ*/
 //                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.COPY);
-//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_order));
+//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_doc));
 //                                        break;
 //                                }
 //                                        /* ТЧ заказа */
@@ -166,7 +166,7 @@ public class DocListFragment extends Fragment {
 //                                bundleItem.putString(DATE_ORDER, cDate);
 //
 //                                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
-//                                someEventListener.onOpenFragmentClassBundle(OrderNewHeaderFragment.class, bundleItem);
+//                                someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
 //                            case 1:
 //                                /*проводим док*/
 //                                data.put(TableOrders.COLUMN_TYPE, DocType.HELD.toString());

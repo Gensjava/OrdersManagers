@@ -7,6 +7,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.DocAction;
 import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.PayDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
@@ -16,6 +17,8 @@ public class UpdateDocDB implements DocAction {
 
     /* текущий новый заказ */
     public static OrderDoc mCurrentOrder = new OrderDoc();
+    /* it is a new play doc */
+    public static PayDoc mCurrentPayDoc = new PayDoc();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
     private SQLiteDatabase mDB;
@@ -59,6 +62,12 @@ public class UpdateDocDB implements DocAction {
     public static void clearOrderHeader(final DocTypeOperation docTypeOperation) {
         mCurrentOrder = new OrderDoc();
         mCurrentOrder.setTypeOperation(docTypeOperation);
+    }
+
+    /*чистим документ заказа и устанавливаем вид операции дока*/
+    public static void clearPayHeader(final DocTypeOperation docTypeOperation) {
+        mCurrentPayDoc = new PayDoc();
+        mCurrentPayDoc.setTypeOperation(docTypeOperation);
     }
 
     @Override

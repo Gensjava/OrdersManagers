@@ -43,7 +43,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         Bundle bundle = getArguments();
         if (bundle != null) {
             /*получаем имя таблицы и подставляем в запрос*/
-            nameTable = bundle.getString(OrderNewHeaderFragment.NAME_TABLE);
+            nameTable = bundle.getString(HeaderOrderDoc.NAME_TABLE);
             /*если это таблица клиентов тогда нам нужен суб текст
                         *  * чтоб можно было физ.адресс показать*/
             if (nameTable != null) {

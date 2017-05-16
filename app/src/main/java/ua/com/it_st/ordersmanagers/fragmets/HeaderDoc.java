@@ -21,13 +21,13 @@ import android.widget.TextView;
 
 import java.util.UUID;
 
-import ua.com.it_st.ordersmanagers.Adapters.NewDocHeaderAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
@@ -35,7 +35,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  * Created by Gena on 2017-05-14.
  */
 
-public abstract class NewDocHeaderFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class HeaderDoc extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
     public static String id_order;
@@ -63,17 +63,12 @@ public abstract class NewDocHeaderFragment extends Fragment implements View.OnCl
 
             Bundle bundle = getArguments();
             /*редактируем документ*/
-            workDoc(bundle, header);
+            setHeader(bundle, header);
 
             /*выводим данные дату и номер в шапку*/
             TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
             period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
 
-            /* создаем адаптер */
-            mAdapter = new NewDocHeaderAdapter(getActivity(), UpdateDocDB.mCurrentOrder.getListHeaders(this),
-                    R.layout.order_new_header_list_item,
-                    new String[]{"title", "imageAvatar"},
-                    new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this);
             /* список шапка заказа*/
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
@@ -101,7 +96,7 @@ public abstract class NewDocHeaderFragment extends Fragment implements View.OnCl
             case R.id.order_new_header_list_image_arrow_right:
                 /* проверка шапки*/
                 if (!UpdateDocDB.checkHeaderOrder(getActivity())) {
-                    final OrderNewHeaderFragment.onEventListener someEventListener = (OrderNewHeaderFragment.onEventListener) getActivity();
+                    final HeaderOrderDoc.onEventListener someEventListener = (HeaderOrderDoc.onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
                 }
                 break;
@@ -165,59 +160,61 @@ public abstract class NewDocHeaderFragment extends Fragment implements View.OnCl
         }
     }
 
-    private void workDoc(Bundle bundle, TextView header) {
+    private void setHeader(Bundle bundle, TextView header) {
 
-        if (bundle != null &
-                UpdateDocDB.mCurrentOrder != null &
-                UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)) {
+        if (bundle == null) return;
 
-               /*получаем ID дока и подставляем в запрос*/
-            id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
-            UpdateDocDB.mCurrentOrder.setId(id_order);
-               /*номер документа*/
-            numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
-            UpdateDocDB.mCurrentOrder.setDocNumber(numberDoc);
-                /*дата док*/
-            dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
-            UpdateDocDB.mCurrentOrder.setDocDate(dateDoc);
-                /*стктус докуента*/
-            header.setText(bundle.getString(OrderListDocFragment.DOC_TYPE_OPERATION));
-                  /* открываем подключение к БД */
-            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-                 /* создаем лоадер для чтения данных */
-            getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        DocTypeOperation docTypeOperation = DocTypeOperation.valueOf(bundle.getString(OrderListDocFragment.DOC_TYPE_OPERATION));
 
-        } else {
-                /*создаем новый заказ*/
+        switch (docTypeOperation) {
+            case NEW:
+                 /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
-            UUID uniqueKey = UUID.randomUUID();
-            UpdateDocDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
+                UUID uniqueKey = UUID.randomUUID();
+                UpdateDocDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
-            numberDoc = String.valueOf(UpdateDocDB.sCurrentNumber);
-            UpdateDocDB.mCurrentOrder.setDocNumber(numberDoc);
+                numberDoc = String.valueOf(UpdateDocDB.sCurrentNumber);
+                UpdateDocDB.mCurrentOrder.setDocNumber(numberDoc);
                 /*нтекущая дата*/
-            dateDoc = ConstantsUtil.getDate();
-            UpdateDocDB.mCurrentOrder.setDocDate(dateDoc);
-                /**/
-                        /*вызываем менеджера настроек*/
-            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                dateDoc = ConstantsUtil.getDate();
+                /**//*вызываем менеджера настроек*/
+                SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                       /*код на сервере пользователя*/
-            String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
-            UpdateDocDB.mCurrentOrder.setAgentId(kodAgent);
-               /* так заполняем при операции дока копирвоать */
-            if (bundle != null & UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
-                       /*получаем ID дока и подставляем в запрос*/
+                String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
+                UpdateDocDB.mCurrentOrder.setAgentId(kodAgent);
+                        /*устанавливаем мод. корзины*/
+                UpdateDocDB.mCurrentOrder.setClickModifitsirovannoiCart(false);
+                break;
+
+            case EDIT:
+                /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
-                     /*стктус докуента*/
-                header.setText(bundle.getString(OrderListDocFragment.DOC_TYPE_OPERATION));
+                UpdateDocDB.mCurrentOrder.setId(id_order);
+               /*номер документа*/
+                numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
+                /*дата док*/
+                dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
+                  /* открываем подключение к БД */
+                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+                 /* создаем лоадер для чтения данных */
+                getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                break;
+
+            case COPY:
+                   /*получаем ID дока и подставляем в запрос*/
+                id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
                      /* открываем подключение к БД */
                 sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
                  /* создаем лоадер для чтения данных */
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
-            }
-                        /*устанавливаем мод. корзины*/
-            UpdateDocDB.mCurrentOrder.setClickModifitsirovannoiCart(false);
+                break;
         }
+
+        /*стктус докуента*/
+        header.setText(bundle.getString(String.valueOf(LoaderDocFragment.DOC_TYPE_OPERATION)));
+        UpdateDocDB.mCurrentOrder.setDocDate(dateDoc);
+        UpdateDocDB.mCurrentOrder.setDocNumber(numberDoc);
+
     }
 
     private void fillHeader(Cursor data) {
@@ -301,6 +298,14 @@ public abstract class NewDocHeaderFragment extends Fragment implements View.OnCl
 
     public void setmPosition(int mPosition) {
         this.mPosition = mPosition;
+    }
+
+    public SimpleAdapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public void setmAdapter(SimpleAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

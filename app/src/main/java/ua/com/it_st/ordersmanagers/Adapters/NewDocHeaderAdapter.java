@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.fragmets.NewDocHeaderFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
+import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
@@ -28,15 +28,15 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
     private String[] mHeaderOrdersNameTable;
     private LayoutInflater mInflater;
     private ArrayList mHeaderOrders;
-    private NewDocHeaderFragment newDocHeaderFragment;
+    private HeaderDoc headerDoc;
 
-    public NewDocHeaderAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to, NewDocHeaderFragment newDocHeaderFragment) {
+    public NewDocHeaderAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to, HeaderDoc headerDoc) {
         super(context, data, resource, from, to);
 
         mInflater = LayoutInflater.from(context);
         mHeaderOrders = (ArrayList) data;
-        this.newDocHeaderFragment = newDocHeaderFragment;
-        mHeaderOrdersNameTable = newDocHeaderFragment.getResources().getStringArray(R.array.header_orders_table);
+        this.headerDoc = headerDoc;
+        mHeaderOrdersNameTable = headerDoc.getResources().getStringArray(R.array.header_orders_table);
     }
 
     @Override
@@ -54,10 +54,10 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
             /* заголовок*/
         final TextView header = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
             /* позиция шапки */
-        String itemP[] = newDocHeaderFragment.getmItemsHeader()[position];
+        String itemP[] = headerDoc.getmItemsHeader()[position];
             /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
         if (itemP[0] == null) {
-            header.setHint(items.get(newDocHeaderFragment.getString(R.string.title)).toString());
+            header.setHint(items.get(headerDoc.getString(R.string.title)).toString());
         } else {
 
             header.setText(itemP[0]);
@@ -72,7 +72,7 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
                 sub_header.setText(sub_text);
             }
 
-            newDocHeaderFragment.onfillOrder(position, itemP[1], sub_text);
+            headerDoc.onfillOrder(position, itemP[1], sub_text);
                 /* суб заголовок*/
         }
 
@@ -81,24 +81,24 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
             @Override
             public void onClick(final View v) {
 
-                newDocHeaderFragment.setmPosition(position);
+                headerDoc.setmPosition(position);
                     /* если это не поле коментарий
                     * если комент вызываем диалог*/
-                if (newDocHeaderFragment.getmPosition() != 4) {
+                if (headerDoc.getmPosition() != 4) {
                     Bundle bundleItem = new Bundle();
-                    bundleItem.putString(newDocHeaderFragment.NAME_TABLE, mHeaderOrdersNameTable[position]);
+                    bundleItem.putString(headerDoc.NAME_TABLE, mHeaderOrdersNameTable[position]);
                         /*открываем окно для выбора значения*/
-                    final OrderNewHeaderFragment.onEventListener someEventListener = (OrderNewHeaderFragment.onEventListener) newDocHeaderFragment.getActivity();
+                    final HeaderOrderDoc.onEventListener someEventListener = (HeaderOrderDoc.onEventListener) headerDoc.getActivity();
                     someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
                 } else {
                         /*вызывваем диалог для ввода комента*/
-                    Dialogs.showCustomAlertDialogEditComment(newDocHeaderFragment.getActivity(), newDocHeaderFragment.getString(R.string.enter_your_coment));
+                    Dialogs.showCustomAlertDialogEditComment(headerDoc.getActivity(), headerDoc.getString(R.string.enter_your_coment));
                 }
             }
         });
             /*устанвливаем аватар для каждого параметра шапки*/
         ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
-        imageView.setImageResource((Integer) items.get(newDocHeaderFragment.getString(R.string.imageAvatar)));
+        imageView.setImageResource((Integer) items.get(headerDoc.getString(R.string.imageAvatar)));
 
         return convertView;
     }

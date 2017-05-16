@@ -629,7 +629,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             return sDb
                     .rawQuery(SQLQuery.queryOrdersLinesEdit("OrdersLines.doc_id = ?"
-                    ), new String[]{OrderNewHeaderFragment.id_order
+                    ), new String[]{HeaderOrderDoc.id_order
 
                     });
         }

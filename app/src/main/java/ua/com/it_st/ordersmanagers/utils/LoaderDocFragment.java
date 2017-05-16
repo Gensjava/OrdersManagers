@@ -18,9 +18,6 @@ import android.widget.TextView;
 import ua.com.it_st.ordersmanagers.Adapters.LoaderDocCursorAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 
 /**
@@ -137,22 +134,6 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
             sumOrders = getString(R.string.zero_point_text);
         }
         summaDoc.setText(sumOrders);
-    }
-
-    /* обработка кликов на кнопки */
-    @Override
-    public void onClick(final View view) {
-
-        switch (view.getId()) {
-            case R.id.main_heander_image_plus:
-                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
-                someEventListener.onOpenFragmentClass(OrderNewHeaderFragment.class);
-                /*чистим док заказ и содаем новый заказ*/
-                UpdateDocDB.clearOrderHeader(DocTypeOperation.NEW);
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

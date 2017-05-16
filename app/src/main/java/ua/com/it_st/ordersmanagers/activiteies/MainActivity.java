@@ -16,11 +16,11 @@ import android.view.View;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
+import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
@@ -31,7 +31,7 @@ import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
         OrderListDocFragment.onEventListener,
-        OrderNewHeaderFragment.onEventListener,
+        HeaderOrderDoc.onEventListener,
         OrderNewGoodsFragment.onEventListener,
         OrderNewSelectHeaderFragment.OnFragmentSelectListener,
         OrderNewCartFragment.onEventListener,
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void OnFragmentSelectListener(final String[] link) {
 
-        OrderNewHeaderFragment fragment = (OrderNewHeaderFragment) getSupportFragmentManager().findFragmentByTag(OrderNewHeaderFragment.class.toString());
+        HeaderOrderDoc fragment = (HeaderOrderDoc) getSupportFragmentManager().findFragmentByTag(HeaderOrderDoc.class.toString());
         if (fragment != null) {
             //Открываем фрагмент
             fragment.setSelectUpdate(link);
