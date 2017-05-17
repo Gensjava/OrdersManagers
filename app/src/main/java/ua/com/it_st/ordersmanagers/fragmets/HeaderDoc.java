@@ -38,23 +38,25 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 public abstract class HeaderDoc extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
+    public static final String NAME_TAG = "NAME_TAG";
     public static String id_order;
     private static SQLiteDatabase sDb;
+    protected View rootView;
+    protected String[][] mItemsHeader;
     private SimpleAdapter mAdapter;
-    private View rootView;
-    private String[][] mItemsHeader;
     private int mPosition;
     private String numberDoc;
     private String dateDoc;
+    private DocTypeOperation docTypeOperation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         if (rootView == null) {
+
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-
             /*расчет  позиции кнопки далее к следующему этапу*/
             TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
              /*кнопка далее к следующему этапу*/
@@ -73,6 +75,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
             lv.setAdapter(mAdapter);
         }
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_arrow_left);
         MainActivity.chickMainFragment = false;
 
@@ -82,8 +85,8 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
-        if (UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
-                || UpdateDocDB.mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
+        if (docTypeOperation == DocTypeOperation.EDIT
+                || docTypeOperation == DocTypeOperation.COPY) {
            /* выходим из загрузчкика*/
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -164,7 +167,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
         if (bundle == null) return;
 
-        DocTypeOperation docTypeOperation = DocTypeOperation.valueOf(bundle.getString(OrderListDocFragment.DOC_TYPE_OPERATION));
+        docTypeOperation = DocTypeOperation.valueOf(bundle.getString(OrderListDocFragment.DOC_TYPE_OPERATION));
 
         switch (docTypeOperation) {
             case NEW:
@@ -310,9 +313,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
-
         void onOpenFragmentClass(Class<?> fClass);
-
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 

@@ -32,6 +32,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     private SimpleCursorAdapter scAdapter;
     private OnFragmentSelectListener mListener;
     private boolean mIsSubText;
+    private String nameTegFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +44,15 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         Bundle bundle = getArguments();
         if (bundle != null) {
             /*получаем имя таблицы и подставляем в запрос*/
-            nameTable = bundle.getString(HeaderOrderDoc.NAME_TABLE);
+            nameTable = bundle.getString(HeaderDoc.NAME_TABLE);
+            nameTegFragment = bundle.getString(HeaderDoc.NAME_TAG);
+
             /*если это таблица клиентов тогда нам нужен суб текст
                         *  * чтоб можно было физ.адресс показать*/
             if (nameTable != null) {
                 mIsSubText = nameTable.equals(TableCounteragents.TABLE_NAME);
             }
+
         }
 
         /* открываем подключение к БД */
@@ -63,20 +67,18 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             to = new int[]{R.id.order_new_select_header_item_text};
             // создааем адаптер и настраиваем список
             scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_item, null, from, to, 0);
+
+            /* создаем лоадер для чтения данных */
+            getActivity().getSupportLoaderManager().initLoader(0, null, this);
         } else {
             from = new String[]{getString(R.string.name), TableCounteragents.COLUMN_ADDRESS, TableCounteragentsDebt.COLUMN_DEBT};
             to = new int[]{R.id.order_new_select_header_sub_item_text, R.id.order_new_select_header_sub_sub_item_text, R.id.order_new_select_header_sub_item_text_debt};
             // создааем адаптер и настраиваем список
             scAdapter = new SimpleCursorAdapter(getActivity(), R.layout.order_new_select_header_sub_item, null, from, to, 0);
-        }
-        if (!mIsSubText) {
-             /* создаем лоадер для чтения данных */
-            getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        } else {
+
              /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(1, null, this);
         }
-
 
         /**/
         final ListView lvData = (ListView) rootView.findViewById(R.id.lvMain);
@@ -104,7 +106,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 }
 
                 /* Посылаем данные Activity */
-                mListener.OnFragmentSelectListener(cData);
+                mListener.OnFragmentSelectListener(cData, nameTegFragment);
                 getActivity().onBackPressed();
             }
         });
@@ -180,7 +182,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
 
     public interface OnFragmentSelectListener {
 
-        void OnFragmentSelectListener(String[] link);
+        void OnFragmentSelectListener(String[] link, String nameTegFragment);
     }
 
     /* создаем класс для загрузки данных из БД общие данные

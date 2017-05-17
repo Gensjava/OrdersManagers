@@ -15,7 +15,6 @@ import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
-import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
@@ -86,9 +85,11 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
                     * если комент вызываем диалог*/
                 if (headerDoc.getmPosition() != 4) {
                     Bundle bundleItem = new Bundle();
-                    bundleItem.putString(headerDoc.NAME_TABLE, mHeaderOrdersNameTable[position]);
+                    bundleItem.putString(HeaderDoc.NAME_TABLE, mHeaderOrdersNameTable[position]);
+                    bundleItem.putString(HeaderDoc.NAME_TAG, headerDoc.getTag());
+
                         /*открываем окно для выбора значения*/
-                    final HeaderOrderDoc.onEventListener someEventListener = (HeaderOrderDoc.onEventListener) headerDoc.getActivity();
+                    final HeaderDoc.onEventListener someEventListener = (HeaderDoc.onEventListener) headerDoc.getActivity();
                     someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
                 } else {
                         /*вызывваем диалог для ввода комента*/

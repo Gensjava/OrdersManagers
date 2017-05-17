@@ -16,6 +16,7 @@ import android.view.View;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
+import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
@@ -164,9 +165,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void OnFragmentSelectListener(final String[] link) {
+    public void OnFragmentSelectListener(final String[] link, String nameTegFragment) {
 
-        HeaderOrderDoc fragment = (HeaderOrderDoc) getSupportFragmentManager().findFragmentByTag(HeaderOrderDoc.class.toString());
+        HeaderDoc fragment = (HeaderDoc) getSupportFragmentManager().findFragmentByTag(nameTegFragment);
         if (fragment != null) {
             //Открываем фрагмент
             fragment.setSelectUpdate(link);
