@@ -18,7 +18,6 @@ import android.widget.TextView;
 import ua.com.it_st.ordersmanagers.Adapters.LoaderDocCursorAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 
 /**
  * Created by Gena on 2017-05-13.
@@ -107,7 +106,7 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
             case 0:
                 scAdapter.swapCursor(data);
                 /*следующий номер заказа*/
-                UpdateDocDB.setsCurrentNumber((short) data.getCount());
+//                UpdateDocDB.setsCurrentNumber((short) data.getCount());
                 break;
             case 2:
                 final int cSumIndex = data.getColumnIndex("sum_orders");

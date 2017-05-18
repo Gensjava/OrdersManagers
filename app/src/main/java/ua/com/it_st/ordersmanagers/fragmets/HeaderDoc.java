@@ -19,12 +19,17 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.models.Companies;
+import ua.com.it_st.ordersmanagers.models.Counteragents;
+import ua.com.it_st.ordersmanagers.models.Prices;
+import ua.com.it_st.ordersmanagers.models.Stores;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
@@ -43,6 +48,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     private static SQLiteDatabase sDb;
     protected View rootView;
     protected String[][] mItemsHeader;
+    protected ArrayList<Object> dataHelder;
     private SimpleAdapter mAdapter;
     private int mPosition;
     private String numberDoc;
@@ -57,6 +63,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
+            dataHelder = new ArrayList<>();
             /*расчет  позиции кнопки далее к следующему этапу*/
             TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
              /*кнопка далее к следующему этапу*/
@@ -221,6 +228,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     }
 
     private void fillHeader(Cursor data) {
+
      /*имя*/
         String cNameCompanies = data.getString(data.getColumnIndex("name_comp"));
         String cNameStores = data.getString(data.getColumnIndex("name_type_stores"));
@@ -235,34 +243,15 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
             /*адресс контрагента*/
         String cCounteragentsAddress = data.getString(data.getColumnIndex("address_contr"));
         String cComent = data.getString(data.getColumnIndex("note"));
+
             /*создаем массив шапку*/
             /* создаем массив для передачи в шапку заказа*/
-            /*фирма*/
-        String[] cData = new String[2];
-        cData[0] = cNameCompanies;
-        cData[1] = cKodCompanies;
-        mItemsHeader[0] = cData;
-             /*склад*/
-        cData = new String[2];
-        cData[0] = cNameStores;
-        cData[1] = cKodStores;
-        mItemsHeader[1] = cData;
-             /*контрагент*/
-        cData = new String[3];
-        cData[0] = cNameCounteragents;
-        cData[1] = KodCounteragents;
-        cData[2] = cCounteragentsAddress;
-        mItemsHeader[2] = cData;
-             /*прайс*/
-        cData = new String[2];
-        cData[0] = cNamePrices;
-        cData[1] = cKodPrices;
-        mItemsHeader[3] = cData;
-         /*комент*/
-        cData = new String[2];
-        cData[0] = cComent;
-        cData[1] = cComent;
-        mItemsHeader[4] = cData;
+        dataHelder.add(new Companies(cKodCompanies, cNameCompanies));
+        dataHelder.add(new Stores(cKodStores, cNameStores));
+        dataHelder.add(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
+        dataHelder.add(new Prices(cKodPrices, cNamePrices));
+        dataHelder.add(cComent);
+
         /*заполняем док заказ*/
         UpdateDocDB.mCurrentOrder.setFirmId(cKodCompanies);
         UpdateDocDB.mCurrentOrder.setStoreId(cKodStores);
@@ -309,6 +298,14 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     public void setmAdapter(SimpleAdapter mAdapter) {
         this.mAdapter = mAdapter;
+    }
+
+    public ArrayList<Object> getDataHelder() {
+        return dataHelder;
+    }
+
+    public void setDataHelder(ArrayList<Object> dataHelder) {
+        this.dataHelder = dataHelder;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

@@ -29,6 +29,7 @@ public class OrderDoc extends Documents {
     private String mNote;
     private String mAdress;
     private DocTypeOperation mTypeOperation;
+    private ArrayList<Object> dataHelder;
 
     /*этот флаг предназначен для режима редактирования заказа его таб.части
     * true - осзначает что в корзине что-то изменили
@@ -37,6 +38,12 @@ public class OrderDoc extends Documents {
 
 
     public OrderDoc() {
+        dataHelder = new ArrayList<>();
+        dataHelder.add(new Companies(mFirmId, ""));
+        dataHelder.add(new Stores(mStoreId, ""));
+        dataHelder.add(new Counteragents(mClientId, "", ""));
+        dataHelder.add(new Prices(mPriceCategoryId, ""));
+        dataHelder.add(new String());
     }
 
     public String getId() {
@@ -171,14 +178,19 @@ public class OrderDoc extends Documents {
                         R.mipmap.ic_coment
                 };
         /*массив заголовков шапки заказа*/
-        String[] headerOrders = fragment.getResources().getStringArray(R.array.header_orders);
+        // String[] headerOrders = fragment.getResources().getStringArray(R.array.header_orders);
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
-        for (byte x = 0; x < headerOrders.length; x++) {
+        for (byte x = 0; x < dataHelder.size(); x++) {
 
             Map<String, Object> map = new HashMap<>();
-            map.put(fragment.getString(R.string.title), headerOrders[x]);
+
+            if (!dataHelder.get(x).equals("")) {
+                map.put(fragment.getString(R.string.title), ((Catalogs) dataHelder.get(x)).nameNativeLanguage);
+            } else {
+                map.put(fragment.getString(R.string.title), "Комментарий");
+            }
             map.put(fragment.getString(R.string.imageAvatar), mPictures[x]);
             items.add(map);
         }

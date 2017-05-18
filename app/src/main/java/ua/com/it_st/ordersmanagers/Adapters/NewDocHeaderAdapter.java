@@ -81,6 +81,8 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
             public void onClick(final View v) {
 
                 headerDoc.setmPosition(position);
+
+                Object object = headerDoc.getDataHelder().get(position);
                     /* если это не поле коментарий
                     * если комент вызываем диалог*/
                 if (headerDoc.getmPosition() != 4) {
