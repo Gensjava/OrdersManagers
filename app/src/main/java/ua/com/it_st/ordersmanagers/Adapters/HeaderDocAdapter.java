@@ -16,20 +16,23 @@ import java.util.Map;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.models.Catalogs;
+import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
 /**
  * Created by Gena on 2017-05-14.
  */
 
-public class NewDocHeaderAdapter extends SimpleAdapter {
+public class HeaderDocAdapter extends SimpleAdapter {
 
     private String[] mHeaderOrdersNameTable;
     private LayoutInflater mInflater;
     private ArrayList mHeaderOrders;
     private HeaderDoc headerDoc;
+    private Catalogs catalogs;
 
-    public NewDocHeaderAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to, HeaderDoc headerDoc) {
+    public HeaderDocAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to, HeaderDoc headerDoc) {
         super(context, data, resource, from, to);
 
         mInflater = LayoutInflater.from(context);
@@ -46,51 +49,58 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
-            /*получаем заголовки шапки*/
-        final Map<String, ?> items = (Map<String, ?>) mHeaderOrders.get(position);
         convertView = mInflater.inflate(R.layout.order_new_header_list_item, parent, false);
-
-            /* заголовок*/
+        /* заголовок*/
         final TextView header = (TextView) convertView.findViewById(R.id.order_header_list_item_text);
-            /* позиция шапки */
-        String itemP[] = headerDoc.getmItemsHeader()[position];
-            /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
-        if (itemP[0] == null) {
-            header.setHint(items.get(headerDoc.getString(R.string.title)).toString());
-        } else {
+        /*получаем заголовки шапки*/
+        final Map<String, ?> itemsCatalogs = (Map<String, ?>) mHeaderOrders.get(position);
+               /*устанвливаем аватар для каждого параметра шапки*/
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
+        // imageView.setImageResource((Integer) itemsCatalogs.get(R.string.imageAvatar));
+        /* позиция шапки */
+        final Object object = itemsCatalogs.get(String.valueOf(position));
+        String sub_address = null;
 
-            header.setText(itemP[0]);
-                /**/
-            String sub_text = null;
-                /*заполняем шапку заказа*/
-            if (position == 2) {
-                sub_text = itemP[2];
+        /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
+        if (object instanceof Catalogs) {
+            catalogs = (Catalogs) object;
+
+            header.setHint(catalogs.nameNativeLanguage);
+            header.setText(catalogs.getName());
+
+            if (catalogs instanceof Counteragents) {
+                Counteragents counteragent = (Counteragents) catalogs;
+                sub_address = counteragent.getAddress();
 
                 TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
                 sub_header.setVisibility(View.VISIBLE);
-                sub_header.setText(sub_text);
+                sub_header.setText(sub_address);
             }
+            headerDoc.onfillOrder(position, catalogs.getKod(), sub_address);
+        } else {
 
-            headerDoc.onfillOrder(position, itemP[1], sub_text);
-                /* суб заголовок*/
+            if (object.toString().equals("")) {
+                header.setHint("Комментарий");
+            } else {
+                header.setText(object.toString());
+            }
         }
 
             /*клик на любом месте поля вызываем список занчений*/
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
-                headerDoc.setmPosition(position);
-
-                Object object = headerDoc.getDataHelder().get(position);
                     /* если это не поле коментарий
                     * если комент вызываем диалог*/
-                if (headerDoc.getmPosition() != 4) {
+                if (!(object.getClass() == String.class)) {
+
                     Bundle bundleItem = new Bundle();
                     bundleItem.putString(HeaderDoc.NAME_TABLE, mHeaderOrdersNameTable[position]);
                     bundleItem.putString(HeaderDoc.NAME_TAG, headerDoc.getTag());
+                    bundleItem.putString(HeaderDoc.ID_POSITION, String.valueOf(position));
+                    bundleItem.putString(HeaderDoc.NAME_CLASS, object.getClass().getName());
 
-                        /*открываем окно для выбора значения*/
+                    /*открываем окно для выбора значения*/
                     final HeaderDoc.onEventListener someEventListener = (HeaderDoc.onEventListener) headerDoc.getActivity();
                     someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
                 } else {
@@ -99,9 +109,6 @@ public class NewDocHeaderAdapter extends SimpleAdapter {
                 }
             }
         });
-            /*устанвливаем аватар для каждого параметра шапки*/
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
-        imageView.setImageResource((Integer) items.get(headerDoc.getString(R.string.imageAvatar)));
 
         return convertView;
     }
