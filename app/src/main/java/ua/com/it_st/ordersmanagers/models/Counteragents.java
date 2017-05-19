@@ -7,8 +7,7 @@ package ua.com.it_st.ordersmanagers.models;
 public class Counteragents extends Catalogs {
     private String address;
 
-    public Counteragents(String kod, String name) {
-        super(kod, name);
+    public Counteragents() {
     }
 
     public Counteragents(String kod, String name, String address) {
@@ -19,5 +18,13 @@ public class Counteragents extends Catalogs {
     @Override
     public void setNameNativeLanguage() {
         nameNativeLanguage = "Контрагент";
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

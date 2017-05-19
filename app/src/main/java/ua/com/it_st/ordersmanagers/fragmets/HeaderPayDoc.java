@@ -21,7 +21,7 @@ public class HeaderPayDoc extends HeaderDoc {
         /*массив принимает выбранные занчения шапки и передает их в адаптер*/
             setmItemsHeader(new String[3][3]);
         /* создаем адаптер */
-            setmAdapter(new NewDocHeaderAdapter(getActivity(), UpdateDocDB.mCurrentPayDoc.getListHeaders(this),
+            setmAdapter(new NewDocHeaderAdapter(getActivity(), UpdateDocDB.mCurrentPayDoc.fillListHeaders(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));

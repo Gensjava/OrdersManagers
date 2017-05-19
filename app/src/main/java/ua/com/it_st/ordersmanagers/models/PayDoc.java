@@ -1,7 +1,5 @@
 package ua.com.it_st.ordersmanagers.models;
 
-import android.support.v4.app.Fragment;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,19 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 public class PayDoc extends Documents {
 
     private DocTypeOperation mTypeOperation;
+    private ArrayList<Object> dataHeader;
+    private List<Map<String, ?>> listDataHeader;
 
     public PayDoc() {
+        dataHeader = new ArrayList<>();
+//        dataHeader.add(new Companies(mFirmId, ""));
+//        dataHeader.add(new Stores(mStoreId, ""));
+//        dataHeader.add(new Counteragents(mClientId, "", ""));
+//        dataHeader.add(new Prices(mPriceCategoryId, ""));
     }
 
     @Override
-    public List<Map<String, ?>> getListHeaders(Fragment fragment) {
+    public List<Map<String, ?>> fillListHeaders() {
          /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
@@ -29,15 +34,16 @@ public class PayDoc extends Documents {
                         R.mipmap.ic_coment
                 };
         /*массив заголовков шапки заказа*/
-        String[] headerOrders = fragment.getResources().getStringArray(R.array.header_pays);
+        // String[] headerOrders = getStringArray(R.array.header_pays);
+        String[] headerOrders = new String[0];
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
-        for (byte x = 0; x < headerOrders.length; x++) {
+        for (byte x = 0; x < dataHeader.size(); x++) {
 
             Map<String, Object> map = new HashMap<>();
-            map.put(fragment.getString(R.string.title), headerOrders[x]);
-            map.put(fragment.getString(R.string.imageAvatar), mPictures[x]);
+            map.put(String.valueOf(R.string.title), headerOrders[x]);
+            map.put(String.valueOf(R.string.imageAvatar), mPictures[x]);
             items.add(map);
         }
         return items;

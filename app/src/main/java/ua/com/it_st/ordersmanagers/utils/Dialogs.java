@@ -197,7 +197,7 @@ public class Dialogs {
                         HeaderOrderDoc fragment = (HeaderOrderDoc) mAk.getSupportFragmentManager().findFragmentByTag(HeaderOrderDoc.class.toString());
                         if (fragment != null) {
                             /*передаем данные комента и записывем их в заказ*/
-                            fragment.setSelectUpdate(cData);
+                            fragment.setSelectUpdate(cData, String.valueOf(id));
                         }
                         dialog.cancel();
                     }

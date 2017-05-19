@@ -10,9 +10,13 @@ public class Companies extends Catalogs {
         super(kod, name);
     }
 
+    public Companies() {
+    }
+
     @Override
     public void setNameNativeLanguage() {
         nameNativeLanguage = "Организация";
     }
 
+    ;
 }

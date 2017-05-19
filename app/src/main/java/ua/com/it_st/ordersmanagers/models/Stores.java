@@ -9,8 +9,11 @@ public class Stores extends Catalogs {
         super(kod, name);
     }
 
+    public Stores() {
+    }
     @Override
     public void setNameNativeLanguage() {
         nameNativeLanguage = "Склад";
     }
+
 }

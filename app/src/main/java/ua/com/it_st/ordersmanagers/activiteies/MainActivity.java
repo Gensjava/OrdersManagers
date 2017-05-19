@@ -26,6 +26,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
@@ -164,15 +165,6 @@ public class MainActivity extends AppCompatActivity implements
         WorkFragment.onNewInstanceFragment(fClass, bundleItem, this);
     }
 
-    @Override
-    public void OnFragmentSelectListener(final String[] link, String nameTegFragment) {
-
-        HeaderDoc fragment = (HeaderDoc) getSupportFragmentManager().findFragmentByTag(nameTegFragment);
-        if (fragment != null) {
-            //Открываем фрагмент
-            fragment.setSelectUpdate(link);
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -259,5 +251,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void OnFragmentSelectListener(Catalogs link, String nameTegFragment, String id) {
+        HeaderDoc fragment = (HeaderDoc) getSupportFragmentManager().findFragmentByTag(nameTegFragment);
+        if (fragment != null) {
+            //Открываем фрагмент
+            fragment.setSelectUpdate(link, id);
+        }
+
     }
 }

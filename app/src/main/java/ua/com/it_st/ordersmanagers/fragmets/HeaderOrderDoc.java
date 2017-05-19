@@ -22,9 +22,10 @@ public class HeaderOrderDoc extends HeaderDoc {
         if (rootView == null) {
            /*массив принимает выбранные занчения шапки и передает их в адаптер*/
             setmItemsHeader(new String[5][3]);
+            setDataHelder(UpdateDocDB.mCurrentOrder.getDataHeader());
 
         /* создаем адаптер */
-            setmAdapter(new NewDocHeaderAdapter(getActivity(), UpdateDocDB.mCurrentOrder.getListHeaders(this),
+            setmAdapter(new NewDocHeaderAdapter(getActivity(), UpdateDocDB.mCurrentOrder.getListDataHeader(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));
