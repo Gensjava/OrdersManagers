@@ -1,5 +1,7 @@
 package ua.com.it_st.ordersmanagers.models;
 
+import android.support.v4.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +29,7 @@ public class OrderDoc extends Documents {
     private String mNote;
     private String mAdress;
     private DocTypeOperation mTypeOperation;
-    private ArrayList<Object> dataHeader;
-    private List<Map<String, ?>> listDataHeader;
+    private ArrayList<Object> dataHelder;
 
     /*этот флаг предназначен для режима редактирования заказа его таб.части
     * true - осзначает что в корзине что-то изменили
@@ -37,13 +38,12 @@ public class OrderDoc extends Documents {
 
 
     public OrderDoc() {
-        dataHeader = new ArrayList<>();
-        dataHeader.add(new Companies(mFirmId, ""));
-        dataHeader.add(new Stores(mStoreId, ""));
-        dataHeader.add(new Counteragents(mClientId, "", ""));
-        dataHeader.add(new Prices(mPriceCategoryId, ""));
-        dataHeader.add(new String());
-        setListDataHeader(fillListHeaders());
+        dataHelder = new ArrayList<>();
+        dataHelder.add(new Companies(mFirmId, ""));
+        dataHelder.add(new Stores(mStoreId, ""));
+        dataHelder.add(new Counteragents(mClientId, "", ""));
+        dataHelder.add(new Prices(mPriceCategoryId, ""));
+        dataHelder.add(new String());
     }
 
     public String getId() {
@@ -134,7 +134,6 @@ public class OrderDoc extends Documents {
         mTotal = total;
     }
 
-
     public String getNote() {
         return mNote;
     }
@@ -169,7 +168,7 @@ public class OrderDoc extends Documents {
 
     /* создаем список - шапку  для адаптера
    * Иконки и заголовки*/
-    public List<Map<String, ?>> fillListHeaders() {
+    public List<Map<String, ?>> getListHeaders(Fragment fragment) {
         /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
@@ -183,35 +182,19 @@ public class OrderDoc extends Documents {
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
-        for (byte x = 0; x < dataHeader.size(); x++) {
+        for (byte x = 0; x < dataHelder.size(); x++) {
 
             Map<String, Object> map = new HashMap<>();
 
-            if (!dataHeader.get(x).equals("")) {
-                map.put(String.valueOf(x), dataHeader.get(x));
+            if (!dataHelder.get(x).equals("")) {
+                map.put(fragment.getString(R.string.title), ((Catalogs) dataHelder.get(x)).nameNativeLanguage);
             } else {
-                map.put(String.valueOf(x), "");
+                map.put(fragment.getString(R.string.title), "Комментарий");
             }
-            map.put(String.valueOf(R.string.imageAvatar), mPictures[x]);
+            map.put(fragment.getString(R.string.imageAvatar), mPictures[x]);
             items.add(map);
         }
         return items;
-    }
-
-    public ArrayList<Object> getDataHeader() {
-        return dataHeader;
-    }
-
-    public void setDataHeader(ArrayList<Object> dataHeader) {
-        this.dataHeader = dataHeader;
-    }
-
-    public List<Map<String, ?>> getListDataHeader() {
-        return listDataHeader;
-    }
-
-    public void setListDataHeader(List<Map<String, ?>> listDataHeader) {
-        this.listDataHeader = listDataHeader;
     }
 
     //табличная часть заказа

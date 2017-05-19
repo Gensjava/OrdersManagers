@@ -187,13 +187,17 @@ public class Dialogs {
                                         int id) {
                         /*получаем комент из View*/
                         String editText = String.valueOf(eComment.getText());
+                        /* создаем массив для передачи в шапку заказа*/
+                        String[] cData = new String[2];
+                        cData[0] = editText;
+                        cData[1] = editText;
                          /*преобразуем тип*/
                         MainActivity mAk = (MainActivity) mContext;
                            /*делаем поиск шапки для передачи параметра*/
                         HeaderOrderDoc fragment = (HeaderOrderDoc) mAk.getSupportFragmentManager().findFragmentByTag(HeaderOrderDoc.class.toString());
                         if (fragment != null) {
                             /*передаем данные комента и записывем их в заказ*/
-                            fragment.setSelectUpdate(editText, String.valueOf(4));
+                            fragment.setSelectUpdate(cData);
                         }
                         dialog.cancel();
                     }

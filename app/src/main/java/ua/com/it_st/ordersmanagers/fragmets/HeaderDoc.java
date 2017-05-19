@@ -20,8 +20,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.R;
@@ -46,13 +44,13 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     public static final String NAME_TABLE = "NAME_TABLE";
     public static final String NAME_TAG = "NAME_TAG";
-    public static final String NAME_CLASS = "NAME_CLASS";
-    public static final String ID_POSITION = "ID_POSITION";
     public static String id_order;
     private static SQLiteDatabase sDb;
     protected View rootView;
+    protected String[][] mItemsHeader;
     protected ArrayList<Object> dataHelder;
     private SimpleAdapter mAdapter;
+    private int mPosition;
     private String numberDoc;
     private String dateDoc;
     private DocTypeOperation docTypeOperation;
@@ -65,7 +63,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
             rootView = inflater.inflate(R.layout.order_new_header_list, container,
                     false);
-
+            dataHelder = new ArrayList<>();
             /*расчет  позиции кнопки далее к следующему этапу*/
             TextView header = (TextView) rootView.findViewById(R.id.order_new_header_list_header_root);
              /*кнопка далее к следующему этапу*/
@@ -121,12 +119,8 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     записываем и обновляем выбранные данные
     заполняем шапку
     */
-    public void setSelectUpdate(final Object item, String id) {
-
-        List<Map<String, ?>> listDataHeader = UpdateDocDB.mCurrentOrder.getListDataHeader();
-        final Map<String, Object> itemsCatalogs = (Map<String, Object>) listDataHeader.get(Integer.valueOf(id));
-        itemsCatalogs.put(id, item);
-
+    public void setSelectUpdate(final String[] item) {
+        mItemsHeader[mPosition] = item;
         mAdapter.notifyDataSetChanged();
     }
 
@@ -230,6 +224,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         header.setText(bundle.getString(String.valueOf(LoaderDocFragment.DOC_TYPE_OPERATION)));
         UpdateDocDB.mCurrentOrder.setDocDate(dateDoc);
         UpdateDocDB.mCurrentOrder.setDocNumber(numberDoc);
+
     }
 
     private void fillHeader(Cursor data) {
@@ -281,8 +276,32 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         }
     }
 
+    public String[][] getmItemsHeader() {
+        return mItemsHeader;
+    }
+
+    public void setmItemsHeader(String[][] mItemsHeader) {
+        this.mItemsHeader = mItemsHeader;
+    }
+
+    public int getmPosition() {
+        return mPosition;
+    }
+
+    public void setmPosition(int mPosition) {
+        this.mPosition = mPosition;
+    }
+
+    public SimpleAdapter getmAdapter() {
+        return mAdapter;
+    }
+
     public void setmAdapter(SimpleAdapter mAdapter) {
         this.mAdapter = mAdapter;
+    }
+
+    public ArrayList<Object> getDataHelder() {
+        return dataHelder;
     }
 
     public void setDataHelder(ArrayList<Object> dataHelder) {
