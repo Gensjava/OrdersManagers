@@ -1,7 +1,5 @@
 package ua.com.it_st.ordersmanagers.models;
 
-import android.support.v4.app.Fragment;
-
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +18,7 @@ public abstract class Documents {
     private String mTotal;
     private String mNote;
 
-    public abstract List<Map<String, ?>> getListHeaders(Fragment fragment);
+    public abstract List<Map<String, ?>> fillListHeaders();
 
     public String getNote() {
         return mNote;

@@ -9,6 +9,9 @@ public class Prices extends Catalogs {
         super(kod, name);
     }
 
+    public Prices() {
+    }
+
     @Override
     public void setNameNativeLanguage() {
         nameNativeLanguage = "Тип цен";

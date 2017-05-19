@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.models.Catalogs;
+import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebt;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
@@ -31,8 +33,10 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     private static String nameTable;
     private SimpleCursorAdapter scAdapter;
     private OnFragmentSelectListener mListener;
-    private boolean mIsSubText;
+    private boolean isContragents;
     private String nameTegFragment;
+    private String idPoisson;
+    private Class<?> nameClassSelect;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,11 +50,17 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
             /*получаем имя таблицы и подставляем в запрос*/
             nameTable = bundle.getString(HeaderDoc.NAME_TABLE);
             nameTegFragment = bundle.getString(HeaderDoc.NAME_TAG);
+            try {
+                nameClassSelect = Class.forName(bundle.getString(HeaderDoc.NAME_CLASS));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            idPoisson = bundle.getString(HeaderDoc.ID_POSITION);
 
             /*если это таблица клиентов тогда нам нужен суб текст
                         *  * чтоб можно было физ.адресс показать*/
             if (nameTable != null) {
-                mIsSubText = nameTable.equals(TableCounteragents.TABLE_NAME);
+                isContragents = nameTable.equals(TableCounteragents.TABLE_NAME);
             }
 
         }
@@ -62,7 +72,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         final String[] from;
         final int[] to;
 
-        if (!mIsSubText) {
+        if (!isContragents) {
             from = new String[]{getString(R.string.name)};
             to = new int[]{R.id.order_new_select_header_item_text};
             // создааем адаптер и настраиваем список
@@ -92,21 +102,24 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
                 String cName = itemCursor.getString(itemCursor.getColumnIndex(getString(R.string.name)));
                 String cKod = itemCursor.getString(itemCursor.getColumnIndex(getString(R.string.kod)));
 
-                String[] cData;
-                if (!mIsSubText) {
-                    cData = new String[2];
-                    cData[0] = cName;
-                    cData[1] = cKod;
+                Object catalogs = null;
+
+                if (!isContragents) {
+                    try {
+                        catalogs = Class.forName(nameClassSelect.getName()).newInstance();
+                        ((Catalogs) catalogs).setKod(cKod);
+                        ((Catalogs) catalogs).setName(cName);
+
+                    } catch (java.lang.InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     String cAdres = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
-                    cData = new String[3];
-                    cData[0] = cName;
-                    cData[1] = cKod;
-                    cData[2] = cAdres;
+                    catalogs = new Counteragents(cKod, cName, cAdres);
                 }
 
                 /* Посылаем данные Activity */
-                mListener.OnFragmentSelectListener(cData, nameTegFragment);
+                mListener.OnFragmentSelectListener((Catalogs) catalogs, nameTegFragment, idPoisson);
                 getActivity().onBackPressed();
             }
         });
@@ -140,7 +153,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
     public void onPause() {
         super.onPause();
 
-        if (!mIsSubText) {
+        if (!isContragents) {
              /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().destroyLoader(0);
         } else {
@@ -156,7 +169,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
         if (sDb == null) {
             sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
         }
-        if (!mIsSubText) {
+        if (!isContragents) {
              /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
                  /* обновляем курсор */
@@ -182,7 +195,7 @@ public class OrderNewSelectHeaderFragment extends Fragment implements LoaderMana
 
     public interface OnFragmentSelectListener {
 
-        void OnFragmentSelectListener(String[] link, String nameTegFragment);
+        void OnFragmentSelectListener(Catalogs link, String nameTegFragment, String id);
     }
 
     /* создаем класс для загрузки данных из БД общие данные
