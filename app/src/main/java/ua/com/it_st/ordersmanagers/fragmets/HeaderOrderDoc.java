@@ -11,17 +11,15 @@ import android.view.ViewGroup;
 import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.models.Orders;
 
 public class HeaderOrderDoc extends HeaderDoc {
-
-    public static final String NAME_TABLE = "NAME_TABLE";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if (rootView == null) {
-           /*массив принимает выбранные занчения шапки и передает их в адаптер*/
-            setDataHelder(UpdateDocDB.mCurrentOrder.getDataHeader());
+            CurrentNewDog = new Orders();
         /* создаем адаптер */
             setmAdapter(new HeaderDocAdapter(getActivity(), UpdateDocDB.mCurrentOrder.getListDataHeader(),
                     R.layout.order_new_header_list_item,
@@ -34,6 +32,5 @@ public class HeaderOrderDoc extends HeaderDoc {
         return rootView;
 
     }
-
 
 }

@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,10 +27,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.Companies;
-import ua.com.it_st.ordersmanagers.models.Counteragents;
-import ua.com.it_st.ordersmanagers.models.Stores;
-import ua.com.it_st.ordersmanagers.models.TypePrices;
+import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
@@ -48,14 +44,16 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     public static final String NAME_TAG = "NAME_TAG";
     public static final String NAME_CLASS = "NAME_CLASS";
     public static final String ID_POSITION = "ID_POSITION";
+
     public static String id_order;
+    public static Documents CurrentNewDog;
     private static SQLiteDatabase sDb;
     protected View rootView;
-    protected ArrayList<Object> dataHelder;
     private SimpleAdapter mAdapter;
     private String numberDoc;
     private String dateDoc;
     private DocTypeOperation docTypeOperation;
+    private UUID uniqueKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -186,7 +184,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
             case NEW:
                  /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
-                UUID uniqueKey = UUID.randomUUID();
+                uniqueKey = UUID.randomUUID();
                 UpdateDocDB.mCurrentOrder.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
                 numberDoc = String.valueOf(UpdateDocDB.sCurrentNumber);
@@ -249,14 +247,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         String cCounteragentsAddress = data.getString(data.getColumnIndex("address_contr"));
         String cComent = data.getString(data.getColumnIndex("note"));
 
-            /*создаем массив шапку*/
-            /* создаем массив для передачи в шапку заказа*/
-        dataHelder.add(new Companies(cKodCompanies, cNameCompanies));
-        dataHelder.add(new Stores(cKodStores, cNameStores));
-        dataHelder.add(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
-        dataHelder.add(new TypePrices(cKodPrices, cNamePrices));
-        dataHelder.add(cComent);
-
         /*заполняем док заказ*/
         UpdateDocDB.mCurrentOrder.setFirmId(cKodCompanies);
         UpdateDocDB.mCurrentOrder.setStoreId(cKodStores);
@@ -285,10 +275,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         this.mAdapter = mAdapter;
     }
 
-    public void setDataHelder(ArrayList<Object> dataHelder) {
-        this.dataHelder = dataHelder;
-    }
-
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
@@ -309,4 +295,5 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
                     .rawQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"), new String[]{id_order});
         }
     }
+
 }
