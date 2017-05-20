@@ -21,13 +21,13 @@ import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
 public class Dialogs {
 
     public static EditText editNumber;
-    public static OrderDoc.OrderLines product;
+    public static Orders.OrderLines product;
     public static Animation animScale;
     public static double numberD;
     public static boolean openDialog;
@@ -46,7 +46,7 @@ public class Dialogs {
             product = (TreeProductCategoryHolder.TreeItem) object;
             limitAmuont = 0;
         } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
-            product = (OrderDoc.OrderLines) object;
+            product = (Orders.OrderLines) object;
             limitAmuont = 1;
         }
 

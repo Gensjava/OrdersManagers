@@ -26,11 +26,9 @@ import ua.com.it_st.ordersmanagers.utils.Dialogs;
 
 public class HeaderDocAdapter extends SimpleAdapter {
 
-    private String[] mHeaderOrdersNameTable;
     private LayoutInflater mInflater;
     private ArrayList mHeaderOrders;
     private HeaderDoc headerDoc;
-    private Catalogs catalogs;
 
     public HeaderDocAdapter(final Context context, final List<? extends Map<String, ?>> data, final int resource, final String[] from, final int[] to, HeaderDoc headerDoc) {
         super(context, data, resource, from, to);
@@ -38,7 +36,6 @@ public class HeaderDocAdapter extends SimpleAdapter {
         mInflater = LayoutInflater.from(context);
         mHeaderOrders = (ArrayList) data;
         this.headerDoc = headerDoc;
-        mHeaderOrdersNameTable = headerDoc.getResources().getStringArray(R.array.header_orders_table);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
 
         /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
         if (object instanceof Catalogs) {
-            catalogs = (Catalogs) object;
+            Catalogs catalogs = (Catalogs) object;
 
             header.setHint(catalogs.nameNativeLanguage);
             header.setText(catalogs.getName());
@@ -95,7 +92,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
                 if (!(object.getClass() == String.class)) {
 
                     Bundle bundleItem = new Bundle();
-                    bundleItem.putString(HeaderDoc.NAME_TABLE, mHeaderOrdersNameTable[position]);
+                    bundleItem.putString(HeaderDoc.NAME_TABLE, object.getClass().getSimpleName());
                     bundleItem.putString(HeaderDoc.NAME_TAG, headerDoc.getTag());
                     bundleItem.putString(HeaderDoc.ID_POSITION, String.valueOf(position));
                     bundleItem.putString(HeaderDoc.NAME_CLASS, object.getClass().getName());

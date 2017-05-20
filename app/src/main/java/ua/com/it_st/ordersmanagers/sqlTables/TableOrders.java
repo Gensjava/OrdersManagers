@@ -8,7 +8,7 @@ import android.util.Log;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 public class TableOrders {
@@ -61,7 +61,7 @@ public class TableOrders {
 
     }
 
-    public static ContentValues getContentValues(OrderDoc sData) {
+    public static ContentValues getContentValues(Orders sData) {
 
         final ContentValues data = new ContentValues();
         final UpDateDocList lUpDateOrderList = new UpDateDocList();
@@ -84,7 +84,7 @@ public class TableOrders {
         return data;
     }
 
-    public static ContentValues getContentValuesUpdata(OrderDoc sData) {
+    public static ContentValues getContentValuesUpdata(Orders sData) {
 
         final ContentValues data = new ContentValues();
         final UpDateDocList lUpDateOrderList = new UpDateDocList();

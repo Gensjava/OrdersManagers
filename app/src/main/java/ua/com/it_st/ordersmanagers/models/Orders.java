@@ -12,7 +12,7 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 /**
  * Created by Gens on 31.07.2015.
  */
-public class OrderDoc extends Documents {
+public class Orders extends Documents {
     private String mId;
     private DocType mDocType;
     private String mDocDate;
@@ -36,12 +36,12 @@ public class OrderDoc extends Documents {
     private boolean mClickModifitsirovannoiCart;
 
 
-    public OrderDoc() {
+    public Orders() {
         dataHeader = new ArrayList<>();
         dataHeader.add(new Companies(mFirmId, ""));
         dataHeader.add(new Stores(mStoreId, ""));
         dataHeader.add(new Counteragents(mClientId, "", ""));
-        dataHeader.add(new Prices(mPriceCategoryId, ""));
+        dataHeader.add(new TypePrices(mPriceCategoryId, ""));
         dataHeader.add(new String());
         setListDataHeader(fillListHeaders());
     }
@@ -178,8 +178,7 @@ public class OrderDoc extends Documents {
                         R.mipmap.ic_tipe_price,
                         R.mipmap.ic_coment
                 };
-        /*массив заголовков шапки заказа*/
-        // String[] headerOrders = fragment.getResources().getStringArray(R.array.header_orders);
+
         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
@@ -202,10 +201,6 @@ public class OrderDoc extends Documents {
         return dataHeader;
     }
 
-    public void setDataHeader(ArrayList<Object> dataHeader) {
-        this.dataHeader = dataHeader;
-    }
-
     public List<Map<String, ?>> getListDataHeader() {
         return listDataHeader;
     }
@@ -215,7 +210,7 @@ public class OrderDoc extends Documents {
     }
 
     //табличная часть заказа
-    public static class OrderLines extends Product {
+    public static class OrderLines extends Products {
 
         private double mBalance;
 

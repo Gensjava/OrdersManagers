@@ -11,18 +11,18 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 /**
  * Created by Gens on 17.08.2015.
  */
-public class PayDoc extends Documents {
+public class Pays extends Documents {
 
     private DocTypeOperation mTypeOperation;
     private ArrayList<Object> dataHeader;
     private List<Map<String, ?>> listDataHeader;
+    private String mClientId;
 
-    public PayDoc() {
+    public Pays() {
         dataHeader = new ArrayList<>();
-//        dataHeader.add(new Companies(mFirmId, ""));
-//        dataHeader.add(new Stores(mStoreId, ""));
-//        dataHeader.add(new Counteragents(mClientId, "", ""));
-//        dataHeader.add(new Prices(mPriceCategoryId, ""));
+        dataHeader.add(new Companies(getFirmId(), ""));
+        dataHeader.add(new Counteragents(mClientId, "", ""));
+        dataHeader.add(new String());
     }
 
     @Override
@@ -33,16 +33,18 @@ public class PayDoc extends Documents {
                         R.mipmap.ic_client,
                         R.mipmap.ic_coment
                 };
-        /*массив заголовков шапки заказа*/
-        // String[] headerOrders = getStringArray(R.array.header_pays);
-        String[] headerOrders = new String[0];
-        /* список параметров шапки заказа */
+         /* список параметров шапки заказа */
         List<Map<String, ?>> items = new ArrayList<Map<String, ?>>();
         /*заполняем шапку заказа*/
         for (byte x = 0; x < dataHeader.size(); x++) {
 
             Map<String, Object> map = new HashMap<>();
-            map.put(String.valueOf(R.string.title), headerOrders[x]);
+
+            if (!dataHeader.get(x).equals("")) {
+                map.put(String.valueOf(x), dataHeader.get(x));
+            } else {
+                map.put(String.valueOf(x), "");
+            }
             map.put(String.valueOf(R.string.imageAvatar), mPictures[x]);
             items.add(map);
         }

@@ -2,6 +2,7 @@ package ua.com.it_st.ordersmanagers.activiteies;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
@@ -47,6 +49,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            SQLiteDatabase db = SQLiteOpenHelperUtil.getInstance().getDatabase();
+            db.execSQL("ALTER TABLE Сompanys RENAME TO Companies");
+            db.execSQL("ALTER TABLE PayDoc RENAME TO Pays");
+            db.execSQL("ALTER TABLE TypeStores RENAME TO Stores");
+            db.execSQL("ALTER TABLE PayDogLines RENAME TO PaysLines");
+        } catch (Exception e) {
+
+        }
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -84,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //Открываем главный фрагмент
         WorkFragment.onNewInstanceFragment(OrderListDocFragment.class, this);
+
 
     }
 

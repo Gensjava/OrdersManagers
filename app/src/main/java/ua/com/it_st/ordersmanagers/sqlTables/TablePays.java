@@ -8,11 +8,11 @@ import android.util.Log;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
-public class TablePayDoc {
-    public static final String TABLE_NAME = "PayDoc";
+public class TablePays {
+    public static final String TABLE_NAME = "Pays";
     public static final String FILE_NAME = "doc_pay.csv";
     public static final String sHeader = "Id, DocType, DocDate, DocNumber, Completed, AgentId, FirmId, ClientId, Total, Note,";
     public static final String HEADER_NAME = "шапка оплат";
@@ -32,7 +32,7 @@ public class TablePayDoc {
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_CLIENT_ADRESS = "client_adress";
 
-    private static final String TAG = TablePayDoc.class.getSimpleName();
+    private static final String TAG = TablePays.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");
@@ -61,7 +61,7 @@ public class TablePayDoc {
 
     }
 
-    public static ContentValues getContentValues(OrderDoc sData) {
+    public static ContentValues getContentValues(Orders sData) {
 
         final ContentValues data = new ContentValues();
         final UpDateDocList lUpDateOrderList = new UpDateDocList();
@@ -82,7 +82,7 @@ public class TablePayDoc {
         return data;
     }
 
-    public static ContentValues getContentValuesUpdata(OrderDoc sData) {
+    public static ContentValues getContentValuesUpdata(Orders sData) {
 
         final ContentValues data = new ContentValues();
         final UpDateDocList lUpDateOrderList = new UpDateDocList();

@@ -1,6 +1,6 @@
 package ua.com.it_st.ordersmanagers.models;
 
-public class Product {
+public class Products {
 
     private String mDocId;
     private String mGoodsId;
@@ -10,17 +10,17 @@ public class Product {
     private double mSum;
     private String mName;
 
-    public Product() {
+    public Products() {
 
     }
 
-    public Product(final String docId,
-                   final String goodsId,
-                   final int rate,
-                   final double amount,
-                   final double price,
-                   final double sum,
-                   final String name) {
+    public Products(final String docId,
+                    final String goodsId,
+                    final int rate,
+                    final double amount,
+                    final double price,
+                    final double sum,
+                    final String name) {
         mDocId = docId;
         mGoodsId = goodsId;
         mRate = rate;
@@ -35,7 +35,7 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final Product that = (Product) o;
+        final Products that = (Products) o;
 
         if (mDocId != null ? !mDocId.equals(that.mDocId) : that.mDocId != null) return false;
         return !(mGoodsId != null ? !mGoodsId.equals(that.mGoodsId) : that.mGoodsId != null);

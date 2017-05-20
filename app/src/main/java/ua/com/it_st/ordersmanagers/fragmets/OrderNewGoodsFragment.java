@@ -28,7 +28,7 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -160,7 +160,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
     public void setDialogAmount(final double numberInDialog, final double sumInDialog, final TreeProductCategoryHolder.TreeItem product) {
 
             /* строка ТЧ заказа */
-        OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
+        Orders.OrderLines orderLines = new Orders.OrderLines(
                 UpdateDocDB.mCurrentOrder.getId(),
                 product.getGoodsId(),
                 1,
@@ -273,7 +273,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 //        try {
 //            sDb.execSQL("CREATE INDEX \"kod_w\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
 //            sDb.execSQL("CREATE INDEX \"kod_t\" ON \"Products\" (\"kod\" ASC)");
-//            sDb.execSQL("CREATE INDEX \"kod_u\" ON \"Prices\" (\"kod\" ASC)");
+//            sDb.execSQL("CREATE INDEX \"kod_u\" ON \"TypePrices\" (\"kod\" ASC)");
 //        } catch (Exception e) {
 //
 //        }
@@ -489,7 +489,7 @@ public class OrderNewGoodsFragment extends FilesFragment implements LoaderManage
 
             final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
-            OrderDoc.OrderLines orderLines = new OrderDoc.OrderLines(
+            Orders.OrderLines orderLines = new Orders.OrderLines(
                     UpdateDocDB.mCurrentOrder.getId(),
                     cID,
                     1,

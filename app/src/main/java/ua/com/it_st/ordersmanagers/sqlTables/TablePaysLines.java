@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 
-public class TablePayDocLines {
-    public static final String TABLE_NAME = "PayDogLines";
+public class TablePaysLines {
+    public static final String TABLE_NAME = "PaysLines";
     public static final String FILE_NAME = "doc_pay_lines.csv";
     public static final String sHeader = "DocId,currency_id,Amount,";
     public static final String HEADER_NAME = "табличной части заказов";
@@ -17,7 +17,7 @@ public class TablePayDocLines {
     public static final String COLUMN_GOODS_ID = "currency_id";
     public static final String COLUMN_AMOUNT = "amount";
 
-    private static final String TAG = TablePayDocLines.class.getSimpleName();
+    private static final String TAG = TablePaysLines.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");
@@ -35,7 +35,7 @@ public class TablePayDocLines {
 
     }
 
-    public static ContentValues getContentValues(OrderDoc.OrderLines sData, String idDoc) {
+    public static ContentValues getContentValues(Orders.OrderLines sData, String idDoc) {
 
         final ContentValues data = new ContentValues();
 

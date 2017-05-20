@@ -9,18 +9,18 @@ import java.util.Set;
 
 import ua.com.it_st.ordersmanagers.interfaces.DocListAction;
 import ua.com.it_st.ordersmanagers.interfaces.OrderListActionDetali;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 
 public class UpDateDocList implements DocListAction, OrderListActionDetali {
 
     /* ТЧ заказа */
-    public static Set<OrderDoc.OrderLines> mCart = new LinkedHashSet<OrderDoc.OrderLines>();
+    public static Set<Orders.OrderLines> mCart = new LinkedHashSet<Orders.OrderLines>();
 
     /*заполняем корзину в ArrayList*/
-    public static ArrayList<OrderDoc.OrderLines> getItemsGoods() {
-        ArrayList<OrderDoc.OrderLines> lCartOrders = new ArrayList<OrderDoc.OrderLines>();
+    public static ArrayList<Orders.OrderLines> getItemsGoods() {
+        ArrayList<Orders.OrderLines> lCartOrders = new ArrayList<Orders.OrderLines>();
 
-        OrderDoc.OrderLines[] cartOrders = UpDateDocList.mCart.toArray(new OrderDoc.OrderLines[mCart.size()]);
+        Orders.OrderLines[] cartOrders = UpDateDocList.mCart.toArray(new Orders.OrderLines[mCart.size()]);
 
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;
@@ -31,7 +31,7 @@ public class UpDateDocList implements DocListAction, OrderListActionDetali {
     если есть такой товар тогда делаем замену
     */
     @Override
-    public boolean add(OrderDoc.OrderLines item) {
+    public boolean add(Orders.OrderLines item) {
         /* удаляем товар */
         delete(item);
        /* добавляем только если больше чем 0 */
@@ -43,9 +43,9 @@ public class UpDateDocList implements DocListAction, OrderListActionDetali {
 
     /*изменяем количество товара*/
     @Override
-    public boolean update(OrderDoc.OrderLines item) {
+    public boolean update(Orders.OrderLines item) {
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
-        for (OrderDoc.OrderLines iC : mCart) {
+        for (Orders.OrderLines iC : mCart) {
             if (iC.getGoodsId().equals(item.getGoodsId())) {
 
                 iC.setAmount(item.getAmount());
@@ -59,7 +59,7 @@ public class UpDateDocList implements DocListAction, OrderListActionDetali {
 
     /*удаляем товар из корзины*/
     @Override
-    public boolean delete(OrderDoc.OrderLines item) {
+    public boolean delete(Orders.OrderLines item) {
 
         if (mCart.contains(item)) {
             return mCart.remove(item);
@@ -82,7 +82,7 @@ public class UpDateDocList implements DocListAction, OrderListActionDetali {
     public double sum() {
         double iNumber = 0;
 
-        for (final OrderDoc.OrderLines aMCart : mCart) {
+        for (final Orders.OrderLines aMCart : mCart) {
             iNumber = iNumber + aMCart.getSum();
         }
         iNumber = new BigDecimal(iNumber).setScale(2, RoundingMode.UP).doubleValue();

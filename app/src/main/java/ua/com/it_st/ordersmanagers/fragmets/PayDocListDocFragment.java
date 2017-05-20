@@ -19,8 +19,8 @@ public class PayDocListDocFragment extends LoaderDocFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mQuerySum = SQLQuery.queryPayDocSum("PayDoc.type  <> ?");
-        mQueryList = SQLQuery.queryPays("PayDoc._id  <> ?");
+        mQuerySum = SQLQuery.queryPayDocSum("Pays.type  <> ?");
+        mQueryList = SQLQuery.queryPays("Pays._id  <> ?");
 
         super.onCreateView(inflater, container, savedInstanceState);
         header_journal.setText(R.string.JurnalPayDoc);

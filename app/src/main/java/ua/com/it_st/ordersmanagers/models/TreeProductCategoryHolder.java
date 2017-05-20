@@ -64,7 +64,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
         }
     }
 
-    public static class TreeItem extends OrderDoc.OrderLines {
+    public static class TreeItem extends Orders.OrderLines {
 
         private Integer icon;
         private boolean isCategory;

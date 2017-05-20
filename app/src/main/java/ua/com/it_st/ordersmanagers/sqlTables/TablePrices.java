@@ -21,7 +21,7 @@ public class TablePrices {
             + COLUMN_PRICE_CATEGORY_KOD + ", "
             + COLUMN_PRICE
             + ") VALUES ";
-    public static final String insertSql = "insert into Prices ("
+    public static final String insertSql = "insert into TypePrices ("
             + TablePrices.COLUMN_KOD + ", " +
             TablePrices.COLUMN_PRICE_CATEGORY_KOD + ", " +
             TablePrices.COLUMN_PRICE + ") values (?, ?, ?);";

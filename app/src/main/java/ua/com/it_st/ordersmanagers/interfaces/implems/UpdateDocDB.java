@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.DocAction;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
-import ua.com.it_st.ordersmanagers.models.PayDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
@@ -16,9 +16,9 @@ import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 public class UpdateDocDB implements DocAction {
 
     /* текущий новый заказ */
-    public static OrderDoc mCurrentOrder = new OrderDoc();
+    public static Orders mCurrentOrder = new Orders();
     /* it is a new play doc */
-    public static PayDoc mCurrentPayDoc = new PayDoc();
+    public static Pays mCurrentPays = new Pays();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
     private SQLiteDatabase mDB;
@@ -60,14 +60,14 @@ public class UpdateDocDB implements DocAction {
 
     /*чистим документ заказа и устанавливаем вид операции дока*/
     public static void clearOrderHeader(final DocTypeOperation docTypeOperation) {
-        mCurrentOrder = new OrderDoc();
+        mCurrentOrder = new Orders();
         mCurrentOrder.setTypeOperation(docTypeOperation);
     }
 
     /*чистим документ заказа и устанавливаем вид операции дока*/
     public static void clearPayHeader(final DocTypeOperation docTypeOperation) {
-        mCurrentPayDoc = new PayDoc();
-        mCurrentPayDoc.setTypeOperation(docTypeOperation);
+        mCurrentPays = new Pays();
+        mCurrentPays.setTypeOperation(docTypeOperation);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UpdateDocDB implements DocAction {
         }
          /* табличная часть*/
         /*создаем новые позиции заказа*/
-        for (final OrderDoc.OrderLines aMCart : UpDateDocList.mCart) {
+        for (final Orders.OrderLines aMCart : UpDateDocList.mCart) {
             long inTableLines = mDB.insert(
                     TableOrdersLines.TABLE_NAME,
                     null,
@@ -137,7 +137,7 @@ public class UpdateDocDB implements DocAction {
                 new String[]{mCurrentOrder.getId()});
 
         /*обновляем позиции заказа (создаем новые)*/
-        for (final OrderDoc.OrderLines aMCart : UpDateDocList.mCart) {
+        for (final Orders.OrderLines aMCart : UpDateDocList.mCart) {
 
             long inTableLinesNew = mDB.insert(TableOrdersLines.TABLE_NAME,
                     null,

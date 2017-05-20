@@ -30,8 +30,8 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.models.Companies;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
-import ua.com.it_st.ordersmanagers.models.Prices;
 import ua.com.it_st.ordersmanagers.models.Stores;
+import ua.com.it_st.ordersmanagers.models.TypePrices;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
@@ -254,7 +254,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         dataHelder.add(new Companies(cKodCompanies, cNameCompanies));
         dataHelder.add(new Stores(cKodStores, cNameStores));
         dataHelder.add(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
-        dataHelder.add(new Prices(cKodPrices, cNamePrices));
+        dataHelder.add(new TypePrices(cKodPrices, cNamePrices));
         dataHelder.add(cComent);
 
         /*заполняем док заказ*/

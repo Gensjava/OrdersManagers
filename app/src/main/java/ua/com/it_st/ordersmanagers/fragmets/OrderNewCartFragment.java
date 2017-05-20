@@ -20,8 +20,8 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
-import ua.com.it_st.ordersmanagers.models.OrderDoc.OrderLines;
+import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.Orders.OrderLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -31,7 +31,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
     private TextView tSumCart;
     private ArrayAdapter<OrderLines> sAdapter;
-    private ArrayList<OrderDoc.OrderLines> mListItems = new ArrayList<>();
+    private ArrayList<Orders.OrderLines> mListItems = new ArrayList<>();
     private SQLiteDatabase DB;
 
     @Override
@@ -165,7 +165,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
 
         private LayoutInflater mLInflater;
 
-        public MyArrayAdapter(final Context context, final int resource, final ArrayList<OrderDoc.OrderLines> objects) {
+        public MyArrayAdapter(final Context context, final int resource, final ArrayList<Orders.OrderLines> objects) {
             super(context, resource, objects);
             mLInflater = LayoutInflater.from(context);
             mListItems = objects;
@@ -182,7 +182,7 @@ public class OrderNewCartFragment extends Fragment implements View.OnClickListen
             convertView = mLInflater.inflate(R.layout.order_new_cart_list_item, parent, false);
 
             /*позиция*/
-            final OrderDoc.OrderLines itemOrderLines = mListItems.get(position);
+            final Orders.OrderLines itemOrderLines = mListItems.get(position);
 
              /* номер позиции */
             short iPosition = (short) position;

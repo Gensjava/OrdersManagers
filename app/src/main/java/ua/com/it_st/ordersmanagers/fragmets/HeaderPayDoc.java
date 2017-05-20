@@ -19,7 +19,7 @@ public class HeaderPayDoc extends HeaderDoc {
 
         if (rootView == null) {
         /* создаем адаптер */
-            setmAdapter(new HeaderDocAdapter(getActivity(), UpdateDocDB.mCurrentPayDoc.fillListHeaders(),
+            setmAdapter(new HeaderDocAdapter(getActivity(), UpdateDocDB.mCurrentPays.fillListHeaders(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));

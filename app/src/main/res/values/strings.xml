@@ -51,13 +51,6 @@
         <item>Комментарий</item>
     </string-array>
 
-    <string-array name="header_orders_table">
-        <item>Сompanys</item>
-        <item>TypeStores</item>
-        <item>Counteragents</item>
-        <item>TypePrices</item>
-    </string-array>
-
     <string-array name="spinner_orders_menu">
         <item>Pедактировать</item>
         <item>Провести</item>

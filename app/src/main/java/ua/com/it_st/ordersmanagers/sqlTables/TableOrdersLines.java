@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ua.com.it_st.ordersmanagers.models.OrderDoc;
+import ua.com.it_st.ordersmanagers.models.Orders;
 
 public class TableOrdersLines {
     public static final String TABLE_NAME = "OrdersLines";
@@ -39,7 +39,7 @@ public class TableOrdersLines {
 
     }
 
-    public static ContentValues getContentValues(OrderDoc.OrderLines sData, String idDoc) {
+    public static ContentValues getContentValues(Orders.OrderLines sData, String idDoc) {
 
         final ContentValues data = new ContentValues();
 
