@@ -15,13 +15,12 @@ public class Pays extends Documents {
 
     private DocTypeOperation mTypeOperation;
     private ArrayList<Object> dataHeader;
-    private List<Map<String, ?>> listDataHeader;
-    private String mClientId;
+    private Counteragents counteragent;
 
     public Pays() {
         dataHeader = new ArrayList<>();
-        dataHeader.add(new Companies(getFirmId(), ""));
-        dataHeader.add(new Counteragents(mClientId, "", ""));
+        dataHeader.add(new Companies(getCompany().getKod(), ""));
+        dataHeader.add(new Counteragents(counteragent.getKod(), "", ""));
         dataHeader.add(new String());
     }
 
@@ -53,5 +52,13 @@ public class Pays extends Documents {
 
     public void setTypeOperation(final DocTypeOperation typeOperation) {
         mTypeOperation = typeOperation;
+    }
+
+    public Counteragents getCounteragent() {
+        return counteragent;
+    }
+
+    public void setCounteragent(Counteragents counteragent) {
+        this.counteragent = counteragent;
     }
 }

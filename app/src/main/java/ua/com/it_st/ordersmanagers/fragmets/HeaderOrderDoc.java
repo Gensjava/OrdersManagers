@@ -4,10 +4,8 @@ package ua.com.it_st.ordersmanagers.fragmets;
 * Все поля кроме коммнтария являются обязательными для заполнения*/
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
+import ua.com.it_st.ordersmanagers.models.Agents;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -46,9 +45,7 @@ public class HeaderOrderDoc extends HeaderDoc {
 
             CurrentNewDog.setTypeOperation(getDocTypeOperation());
         }
-
         return rootView;
-
     }
 
     /* проверяем на обязательные поля шапки документа*/
@@ -58,10 +55,10 @@ public class HeaderOrderDoc extends HeaderDoc {
 
         if (CurrentNewDog.getDocNumber() == null
                 || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgentId() == null
-                || CurrentNewDog.getFirmId() == null
-                || CurrentNewDog.getPriceCategoryId() == null
-                || CurrentNewDog.getClientId() == null
+                || CurrentNewDog.getAgent().getKod() == null
+                || CurrentNewDog.getCompany().getKod() == null
+                || CurrentNewDog.getTypePrices().getKod() == null
+                || CurrentNewDog.getCounteragent().getKod() == null
                 || CurrentNewDog.getAdress() == null) {
 
             bCheck = true;
@@ -75,17 +72,17 @@ public class HeaderOrderDoc extends HeaderDoc {
 
         switch (position) {
             case 0:
-                CurrentNewDog.setFirmId(item);
+                CurrentNewDog.getCompany().setKod(item);
                 break;
             case 1:
-                CurrentNewDog.setStoreId(item);
+                CurrentNewDog.getStore().setKod(item);
                 break;
             case 2:
-                CurrentNewDog.setClientId(item);
+                CurrentNewDog.getCounteragent().setKod(item);
                 CurrentNewDog.setAdress(subItem);
                 break;
             case 3:
-                CurrentNewDog.setPriceCategoryId(item);
+                CurrentNewDog.getTypePrices().setKod(item);
                 break;
             case 4:
                 CurrentNewDog.setNote(item);
@@ -93,8 +90,6 @@ public class HeaderOrderDoc extends HeaderDoc {
             default:
                 break;
         }
-
-
     }
 
     @Override
@@ -115,11 +110,11 @@ public class HeaderOrderDoc extends HeaderDoc {
         String cComent = data.getString(data.getColumnIndex("note"));
 
         /*заполняем док заказ*/
-        CurrentNewDog.setFirmId(cKodCompanies);
-        CurrentNewDog.setStoreId(cKodStores);
-        CurrentNewDog.setClientId(KodCounteragents);
-        CurrentNewDog.setPriceCategoryId(cNamePrices);
-        CurrentNewDog.setAgentId(cAgent);
+        CurrentNewDog.getCompany().setKod(cKodCompanies);
+        CurrentNewDog.getStore().setKod(cKodStores);
+        CurrentNewDog.getCounteragent().setKod(KodCounteragents);
+        CurrentNewDog.getTypePrices().setKod(cNamePrices);
+        CurrentNewDog.getAgent().setKod(cAgent);
 
         mAdapter.notifyDataSetChanged();
     }
@@ -142,12 +137,7 @@ public class HeaderOrderDoc extends HeaderDoc {
                 CurrentNewDog.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
-                /**//*вызываем менеджера настроек*/
-                SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                      /*код на сервере пользователя*/
-                String kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
-                CurrentNewDog.setAgentId(kodAgent);
-                        /*устанавливаем мод. корзины*/
+                /*устанавливаем мод. корзины*/
                 CurrentNewDog.setClickModifitsirovannoiCart(false);
                 break;
 
@@ -175,6 +165,7 @@ public class HeaderOrderDoc extends HeaderDoc {
                 break;
         }
 
+        CurrentNewDog.setAgent(new Agents(kodAgent, kodAgent));
         CurrentNewDog.setDocDate(dateDoc);
         CurrentNewDog.setDocNumber(numberDoc);
     }

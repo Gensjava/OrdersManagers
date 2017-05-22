@@ -167,7 +167,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                         getActivity().getSupportLoaderManager().initLoader(1, null, this);
                     }
                 }
-                if (mCurrentOrder.getStoreId() != null) {
+                if (mCurrentOrder.getStore().getKod() != null) {
            /* создаем лоадер для чтения данных */
                     getActivity().getSupportLoaderManager().initLoader(0, null, this);
                 }
@@ -217,7 +217,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                 getActivity().getSupportLoaderManager().getLoader(1).forceLoad();
             }
         }
-        if (mCurrentOrder.getStoreId() != null) {
+        if (mCurrentOrder.getStore().getKod() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
             getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
@@ -549,7 +549,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                 getActivity().getSupportLoaderManager().destroyLoader(1);
             }
         }
-        if (mCurrentOrder.getStoreId() != null) {
+        if (mCurrentOrder.getStore().getKod() != null) {
            /* создаем лоадер для чтения данных */
             getActivity().getSupportLoaderManager().destroyLoader(0);
         }
@@ -608,7 +608,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                                     "and Prices.price_category_kod = ? " +
                                     "or Products.is_category = ? " +
                                     "and Products.id_category = ?"
-                    ), new String[]{mSelectionArgs, mCurrentOrder.getStoreId(), mCurrentOrder.getPriceCategoryId(), "true", mSelectionArgs
+                    ), new String[]{mSelectionArgs, mCurrentOrder.getStore().getKod(), mCurrentOrder.getTypePrices().getKod(), "true", mSelectionArgs
                     });
         }
     }

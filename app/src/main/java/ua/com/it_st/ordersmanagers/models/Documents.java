@@ -3,20 +3,16 @@ package ua.com.it_st.ordersmanagers.models;
 import java.util.List;
 import java.util.Map;
 
-import ua.com.it_st.ordersmanagers.enums.DocType;
-
 
 public abstract class Documents {
 
     private String mId;
-    private DocType mDocType;
     private String mDocDate;
     private String mDocNumber;
-    private String mCompleted;
-    private String mAgentId;
-    private String mFirmId;
-    private String mTotal;
     private String mNote;
+
+    private Companies company;
+    private Agents agent;
 
     public abstract List<Map<String, ?>> fillListHeaders();
 
@@ -36,14 +32,6 @@ public abstract class Documents {
         mId = id;
     }
 
-    public DocType getDocType() {
-        return mDocType;
-    }
-
-    public void setDocType(final DocType docType) {
-        mDocType = docType;
-    }
-
     public String getDocDate() {
         return mDocDate;
     }
@@ -60,36 +48,19 @@ public abstract class Documents {
         mDocNumber = docNumber;
     }
 
-    public String getCompleted() {
-        return mCompleted;
+    public Companies getCompany() {
+        return company;
     }
 
-    public void setCompleted(final String completed) {
-        mCompleted = completed;
+    public void setCompany(Companies company) {
+        this.company = company;
     }
 
-    public String getAgentId() {
-        return mAgentId;
+    public Agents getAgent() {
+        return agent;
     }
 
-    public void setAgentId(final String agentId) {
-        mAgentId = agentId;
+    public void setAgent(Agents agent) {
+        this.agent = agent;
     }
-
-    public String getFirmId() {
-        return mFirmId;
-    }
-
-    public void setFirmId(final String firmId) {
-        mFirmId = firmId;
-    }
-
-    public String getTotal() {
-        return mTotal;
-    }
-
-    public void setTotal(final String total) {
-        mTotal = total;
-    }
-
 }

@@ -71,9 +71,9 @@ public class TablePays {
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
         data.put(COLUMN_NUMBER, DocActionOrder.sCurrentNumber);
         data.put(COLUMN_COMPLETED, "");
-        data.put(COLUMN_AGENT_ID, sData.getAgentId());
-        data.put(COLUMN_COMPANY_ID, sData.getFirmId());
-        data.put(COLUMN_CLIENT_ID, sData.getClientId());
+        data.put(COLUMN_AGENT_ID, sData.getAgent().getKod());
+        data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());
+        data.put(COLUMN_CLIENT_ID, sData.getCounteragent().getKod());
         data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_TIME, ConstantsUtil.getTime());
@@ -88,8 +88,8 @@ public class TablePays {
         final DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
 
         data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
-        data.put(COLUMN_COMPANY_ID, sData.getFirmId());
-        data.put(COLUMN_CLIENT_ID, sData.getClientId());
+        data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());
+        data.put(COLUMN_CLIENT_ID, sData.getCounteragent().getKod());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
 

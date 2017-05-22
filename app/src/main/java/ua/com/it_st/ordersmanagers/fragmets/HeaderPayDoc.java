@@ -45,8 +45,8 @@ public class HeaderPayDoc extends HeaderDoc {
 
         if (CurrentNewDog.getDocNumber() == null
                 || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgentId() == null
-                || CurrentNewDog.getFirmId() == null) {
+                || CurrentNewDog.getAgent().getKod() == null
+                || CurrentNewDog.getCompany().getKod() == null) {
 
             bCheck = true;
             InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
@@ -77,8 +77,8 @@ public class HeaderPayDoc extends HeaderDoc {
         String cComent = data.getString(data.getColumnIndex("note"));
 
         /*заполняем док заказ*/
-        CurrentNewDog.setFirmId(cKodCompanies);
-        CurrentNewDog.setAgentId(cAgent);
+        CurrentNewDog.getCompany().setKod(cKodCompanies);
+        CurrentNewDog.getAgent().setKod(cAgent);
 
         mAdapter.notifyDataSetChanged();
     }

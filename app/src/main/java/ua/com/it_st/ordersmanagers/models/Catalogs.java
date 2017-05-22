@@ -15,6 +15,7 @@ public abstract class Catalogs {
     }
 
     public Catalogs() {
+        setNameNativeLanguage();
     }
 
     public String getKod() {

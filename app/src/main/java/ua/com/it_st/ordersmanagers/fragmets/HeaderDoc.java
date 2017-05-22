@@ -1,9 +1,11 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -47,6 +49,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     protected String dateDoc;
     protected DocTypeOperation docTypeOperation;
     protected UUID uniqueKey;
+    protected String kodAgent;
     private List<Map<String, ?>> listDataHeader;
 
     public abstract boolean checkHeader(Context context);
@@ -68,6 +71,11 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
              /*кнопка далее к следующему этапу*/
             ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.order_new_header_list_image_arrow_right);
             imViewAdd.setOnClickListener(this);
+
+            /**//*вызываем менеджера настроек*/
+            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                      /*код на сервере пользователя*/
+            kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
 
             Bundle bundle = getArguments();
             /*редактируем документ*/
