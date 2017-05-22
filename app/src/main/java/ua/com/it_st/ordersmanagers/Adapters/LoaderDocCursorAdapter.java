@@ -21,7 +21,7 @@ import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -131,7 +131,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                                     break;
                             }
                                         /* ТЧ заказа */
-                            UpDateDocList.mCart = new LinkedHashSet<>();
+                            DocCartOrderAction.mCart = new LinkedHashSet<>();
                                 /*редактируем док*/
 
                             bundleItem.putString(LoaderDocFragment.ID_ORDER, cId);

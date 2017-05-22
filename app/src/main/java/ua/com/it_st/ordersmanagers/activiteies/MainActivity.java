@@ -20,12 +20,12 @@ import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
@@ -36,9 +36,9 @@ import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 public class MainActivity extends AppCompatActivity implements
         OrderListDocFragment.onEventListener,
         HeaderOrderDoc.onEventListener,
-        OrderNewGoodsFragment.onEventListener,
+        OrderCatalogGoodsFragment.onEventListener,
         OrderNewSelectHeaderFragment.OnFragmentSelectListener,
-        OrderNewCartFragment.onEventListener,
+        OrderCartFragment.onEventListener,
         FilesLoadFragment.onEventListener
 {
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements
     /* текущий новый заказ */
         mCurrentNewDog = null;
     /* ТЧ заказа */
-        UpDateDocList.mCart.clear();
+        DocCartOrderAction.mCart.clear();
     }
 
     /*Метод для ввода количества в заказе*/

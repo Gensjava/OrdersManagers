@@ -18,7 +18,7 @@ import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -43,6 +43,8 @@ public class HeaderOrderDoc extends HeaderDoc {
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));
 
             super.onCreateView(inflater, container, savedInstanceState);
+
+            CurrentNewDog.setTypeOperation(getDocTypeOperation());
         }
 
         return rootView;
@@ -136,7 +138,7 @@ public class HeaderOrderDoc extends HeaderDoc {
                 uniqueKey = UUID.randomUUID();
                 CurrentNewDog.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(UpdateDocDB.sCurrentNumber);
+                numberDoc = String.valueOf(DocActionOrder.sCurrentNumber);
                 CurrentNewDog.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();

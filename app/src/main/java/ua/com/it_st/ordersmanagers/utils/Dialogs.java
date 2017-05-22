@@ -18,9 +18,8 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewCartFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
@@ -42,10 +41,10 @@ public class Dialogs {
         mContext = activity;
         mLayoutInflater = LayoutInflater.from(activity);
 
-        if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
+        if (fClass.equals(OrderCatalogGoodsFragment.class.toString())) {
             product = (TreeProductCategoryHolder.TreeItem) object;
             limitAmuont = 0;
-        } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
+        } else if (fClass.equals(OrderCartFragment.class.toString())) {
             product = (Orders.OrderLines) object;
             limitAmuont = 1;
         }
@@ -113,16 +112,16 @@ public class Dialogs {
                         /*преобразуем тип*/
                         final MainActivity mAk = (MainActivity) mContext;
 
-                        if (fClass.equals(OrderNewGoodsFragment.class.toString())) {
+                        if (fClass.equals(OrderCatalogGoodsFragment.class.toString())) {
                          /*делаем поиск списка товаров для передачи параметра*/
-                            final OrderNewGoodsFragment fragment = (OrderNewGoodsFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderNewGoodsFragment.class.toString());
+                            final OrderCatalogGoodsFragment fragment = (OrderCatalogGoodsFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderCatalogGoodsFragment.class.toString());
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
                                 fragment.setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
                             }
-                        } else if (fClass.equals(OrderNewCartFragment.class.toString())) {
+                        } else if (fClass.equals(OrderCartFragment.class.toString())) {
                            /*делаем поиск списка товаров для передачи параметра*/
-                            final OrderNewCartFragment fragment = (OrderNewCartFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderNewCartFragment.class.toString());
+                            final OrderCartFragment fragment = (OrderCartFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderCartFragment.class.toString());
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
                                 fragment.setDialogAmount(numberInDialog, sumInDialog, product);
@@ -166,6 +165,7 @@ public class Dialogs {
 
         mContext = activity;
         mLayoutInflater = LayoutInflater.from(activity);
+        Orders orders = (Orders) ((MainActivity) activity).getmCurrentNewDog();
 
         final View numberView;
         /* каст макет */
@@ -173,7 +173,7 @@ public class Dialogs {
         /* поля из макета */
         final EditText eComment = (EditText) numberView.findViewById(R.id.order_new_select_header_item_coment_text);
         /*получаем из  заказа комент если он есть*/
-        eComment.setText(UpdateDocDB.mCurrentOrder.getNote());
+        eComment.setText(orders.getNote());
 
         /* открываем диалог */
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

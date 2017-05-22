@@ -23,8 +23,8 @@ import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -133,9 +133,9 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         /*чистим док заказ и редактируем док*/
         ((MainActivity) getActivity()).setmCurrentNewDog(null);
         /* ТЧ заказа */
-        UpDateDocList.mCart = new LinkedHashSet<>();
+        DocCartOrderAction.mCart = new LinkedHashSet<>();
        /*текущий номер заказа*/
-        UpdateDocDB.sCurrentNumber = 0;
+        DocActionOrder.sCurrentNumber = 0;
         //
         nOSeek = 0;
         mProgress = 0;

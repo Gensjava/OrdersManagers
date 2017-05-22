@@ -6,8 +6,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
@@ -64,12 +64,12 @@ public class TablePays {
     public static ContentValues getContentValues(Orders sData) {
 
         final ContentValues data = new ContentValues();
-        final UpDateDocList lUpDateOrderList = new UpDateDocList();
+        final DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
 
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
-        data.put(COLUMN_NUMBER, UpdateDocDB.sCurrentNumber);
+        data.put(COLUMN_NUMBER, DocActionOrder.sCurrentNumber);
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, sData.getAgentId());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());
@@ -85,7 +85,7 @@ public class TablePays {
     public static ContentValues getContentValuesUpdata(Orders sData) {
 
         final ContentValues data = new ContentValues();
-        final UpDateDocList lUpDateOrderList = new UpDateDocList();
+        final DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
 
         data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_COMPANY_ID, sData.getFirmId());

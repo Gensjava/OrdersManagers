@@ -5,25 +5,21 @@ import android.database.sqlite.SQLiteDatabase;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.interfaces.DocAction;
+import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.models.Orders;
-import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
-public class UpdateDocDB implements DocAction {
+public class DocActionOrder implements DocAction {
 
-    /* текущий новый заказ */
-    public static Orders mCurrentOrder = new Orders();
-    /* it is a new play doc */
-    public static Pays mCurrentPays = new Pays();
     /*текущий номер заказа*/
     public static short sCurrentNumber;
     private SQLiteDatabase mDB;
     private Context mContext;
 
-    public UpdateDocDB(SQLiteDatabase pDB, Context pContext) {
+    public DocActionOrder(SQLiteDatabase pDB, Context pContext) {
         mDB = pDB;
         mContext = pContext;
     }
@@ -39,8 +35,10 @@ public class UpdateDocDB implements DocAction {
     }
 
     @Override
-    public boolean add() {
-/* начинаем транзакцию */
+    public boolean add(Documents documents) {
+
+        Orders orders = (Orders) documents;
+        /* начинаем транзакцию */
         mDB.beginTransaction();
         /* Делаем запись заказа
         * */
@@ -48,7 +46,7 @@ public class UpdateDocDB implements DocAction {
         long inTable = mDB.insert(
                 TableOrders.TABLE_NAME,
                 null,
-                TableOrders.getContentValues(mCurrentOrder));
+                TableOrders.getContentValues(orders));
 
         if (inTable == -1) {
             InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.eror_add_new_order), mContext);
@@ -57,14 +55,14 @@ public class UpdateDocDB implements DocAction {
         }
          /* табличная часть*/
         /*создаем новые позиции заказа*/
-        for (final Orders.OrderLines aMCart : UpDateDocList.mCart) {
+        for (final Orders.OrderLines aMCart : DocCartOrderAction.mCart) {
             long inTableLines = mDB.insert(
                     TableOrdersLines.TABLE_NAME,
                     null,
-                    TableOrdersLines.getContentValues(aMCart, mCurrentOrder.getId()));
+                    TableOrdersLines.getContentValues(aMCart, orders.getId()));
 
             if (inTableLines == -1) {
-                InfoUtil.Tost(mContext.getString(R.string.error_position) + mCurrentOrder.getId() + ")", mContext);
+                InfoUtil.Tost(mContext.getString(R.string.error_position) + orders.getId() + ")", mContext);
                 mDB.endTransaction();
                 return false;
             }
@@ -78,8 +76,9 @@ public class UpdateDocDB implements DocAction {
     }
 
     @Override
-    public boolean update() {
+    public boolean update(Documents documents) {
 
+        Orders orders = (Orders) documents;
          /* начинаем транзакцию */
         mDB.beginTransaction();
         /* Делаем запись заказа
@@ -87,9 +86,9 @@ public class UpdateDocDB implements DocAction {
         /* шапка*/
         long inTable = mDB.update(
                 TableOrders.TABLE_NAME,
-                TableOrders.getContentValuesUpdata(mCurrentOrder),
+                TableOrders.getContentValuesUpdata(orders),
                 "Orders.view_id = ?",
-                new String[]{mCurrentOrder.getId()});
+                new String[]{orders.getId()});
 
         if (inTable == -1) {
             InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.eror_add_new_order), mContext);
@@ -102,17 +101,17 @@ public class UpdateDocDB implements DocAction {
         long inTableLines = mDB.delete(
                 TableOrdersLines.TABLE_NAME,
                 "OrdersLines.doc_id = ?",
-                new String[]{mCurrentOrder.getId()});
+                new String[]{orders.getId()});
 
         /*обновляем позиции заказа (создаем новые)*/
-        for (final Orders.OrderLines aMCart : UpDateDocList.mCart) {
+        for (final Orders.OrderLines aMCart : DocCartOrderAction.mCart) {
 
             long inTableLinesNew = mDB.insert(TableOrdersLines.TABLE_NAME,
                     null,
-                    TableOrdersLines.getContentValues(aMCart, mCurrentOrder.getId()));
+                    TableOrdersLines.getContentValues(aMCart, orders.getId()));
 
             if (inTableLines == -1 || inTableLinesNew == -1) {
-                InfoUtil.Tost(mContext.getString(R.string.error_position) + mCurrentOrder.getId() + ")", mContext);
+                InfoUtil.Tost(mContext.getString(R.string.error_position) + orders.getId() + ")", mContext);
                 mDB.endTransaction();
                 return false;
             }
@@ -126,7 +125,7 @@ public class UpdateDocDB implements DocAction {
     }
 
     @Override
-    public boolean delete() {
+    public boolean delete(Documents documents) {
         return false;
     }
 

@@ -148,17 +148,17 @@ public class DocListFragment extends Fragment {
 //                                switch (selectedItemPosition) {
 //                                    case 0:
 //                                  /*чистим док заказ и редактируем заказ*/
-//                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.EDIT);
+//                                        DocActionOrder.clearOrderHeader(DocTypeOperation.EDIT);
 //                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_doc));
 //                                        break;
 //                                    case 3:
 //                                  /*чистим док заказ и копируем заказ*/
-//                                        UpdateDocDB.clearOrderHeader(DocTypeOperation.COPY);
+//                                        DocActionOrder.clearOrderHeader(DocTypeOperation.COPY);
 //                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_doc));
 //                                        break;
 //                                }
 //                                        /* ТЧ заказа */
-//                                UpDateDocList.mCart = new LinkedHashSet<>();
+//                                DocCartOrderAction.mCart = new LinkedHashSet<>();
 //                                /*редактируем док*/
 //
 //                                bundleItem.putString(ID_ORDER, cId);

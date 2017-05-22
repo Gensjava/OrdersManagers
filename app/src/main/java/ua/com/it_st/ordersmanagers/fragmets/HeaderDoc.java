@@ -50,11 +50,8 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     private List<Map<String, ?>> listDataHeader;
 
     public abstract boolean checkHeader(Context context);
-
     public abstract void setHeaderSelection(int position, String item, String subItem);
-
     public abstract void fillHeaderFromCursor(Cursor data);
-
     public abstract void onCreateHeader(Bundle bundle);
 
     @Override
@@ -121,7 +118,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
                 /* проверка шапки*/
                 if (!checkHeader(getActivity())) {
                     final HeaderOrderDoc.onEventListener someEventListener = (HeaderOrderDoc.onEventListener) getActivity();
-                    someEventListener.onOpenFragmentClass(OrderNewGoodsFragment.class);
+                    someEventListener.onOpenFragmentClass(OrderCatalogGoodsFragment.class);
                 }
                 break;
             default:

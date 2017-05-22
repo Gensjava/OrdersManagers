@@ -7,11 +7,10 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ua.com.it_st.ordersmanagers.interfaces.DocListAction;
 import ua.com.it_st.ordersmanagers.interfaces.OrderListActionDetali;
 import ua.com.it_st.ordersmanagers.models.Orders;
 
-public class UpDateDocList implements DocListAction, OrderListActionDetali {
+public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interfaces.DocListAction, OrderListActionDetali {
 
     /* ТЧ заказа */
     public static Set<Orders.OrderLines> mCart = new LinkedHashSet<Orders.OrderLines>();
@@ -20,7 +19,7 @@ public class UpDateDocList implements DocListAction, OrderListActionDetali {
     public static ArrayList<Orders.OrderLines> getItemsGoods() {
         ArrayList<Orders.OrderLines> lCartOrders = new ArrayList<Orders.OrderLines>();
 
-        Orders.OrderLines[] cartOrders = UpDateDocList.mCart.toArray(new Orders.OrderLines[mCart.size()]);
+        Orders.OrderLines[] cartOrders = DocCartOrderAction.mCart.toArray(new Orders.OrderLines[mCart.size()]);
 
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;

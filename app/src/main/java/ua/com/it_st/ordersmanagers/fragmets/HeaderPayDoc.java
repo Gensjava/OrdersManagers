@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
@@ -29,7 +28,7 @@ public class HeaderPayDoc extends HeaderDoc {
             CurrentNewDog = new Pays();
             ((MainActivity) getActivity()).setmCurrentNewDog(new Pays());
         /* создаем адаптер */
-            setmAdapter(new HeaderDocAdapter(getActivity(), UpdateDocDB.mCurrentPays.fillListHeaders(),
+            setmAdapter(new HeaderDocAdapter(getActivity(), CurrentNewDog.fillListHeaders(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));

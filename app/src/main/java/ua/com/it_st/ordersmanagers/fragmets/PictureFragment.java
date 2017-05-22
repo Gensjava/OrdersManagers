@@ -43,11 +43,11 @@ public class PictureFragment extends FilesFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             /*получаем код товара*/
-            String goodsKod = bundle.getString(OrderNewGoodsFragment.GOODS_KOD);
+            String goodsKod = bundle.getString(OrderCatalogGoodsFragment.GOODS_KOD);
 
             if (goodsKod != null) {
                 RequestParams params = new RequestParams();
-                params.put(OrderNewGoodsFragment.GOODS_KOD, goodsKod);
+                params.put(OrderCatalogGoodsFragment.GOODS_KOD, goodsKod);
 
                 try {
                 /* загружаем файл */
