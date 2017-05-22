@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
@@ -36,8 +34,6 @@ public class PayDocListDocFragment extends LoaderDocFragment {
             case R.id.main_heander_image_plus:
                 final PayDocListDocFragment.onEventListener someEventListener = (PayDocListDocFragment.onEventListener) getActivity();
                 someEventListener.onOpenFragmentClass(HeaderPayDoc.class);
-                /*чистим док и содаем новый */
-                UpdateDocDB.clearPayHeader(DocTypeOperation.NEW);
                 break;
             default:
                 break;

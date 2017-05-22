@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
@@ -41,13 +40,10 @@ public class OrderListDocFragment extends LoaderDocFragment {
             case R.id.main_heander_image_plus:
                 Bundle bundleItem = new Bundle();
 
-                bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.NEW.getDescription());
+                bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.NEW.toString());
 
                 final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
                 someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
-
-                /*чистим док заказ и содаем новый заказ*/
-                UpdateDocDB.clearOrderHeader(DocTypeOperation.NEW);
 
                 break;
             default:

@@ -73,7 +73,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
                 sub_header.setVisibility(View.VISIBLE);
                 sub_header.setText(sub_address);
             }
-            headerDoc.onfillOrder(position, catalogs.getKod(), sub_address);
+            headerDoc.setHeaderSelection(position, catalogs.getKod(), sub_address);
         } else {
 
             if (object.toString().equals("")) {

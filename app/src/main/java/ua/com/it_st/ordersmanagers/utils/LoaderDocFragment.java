@@ -80,6 +80,26 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
         return rootView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        /* выходим из загрузчкика*/
+        getActivity().getSupportLoaderManager().destroyLoader(0);
+        getActivity().getSupportLoaderManager().destroyLoader(2);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        /* создаем загрузчик */
+        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        getActivity().getSupportLoaderManager().initLoader(2, null, this);
+         /* обновляем курсор */
+        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+        getActivity().getSupportLoaderManager().getLoader(2).forceLoad();
+    }
+
     //установка периода в журнале
     public void setPeriodDoc(String pPeriodDoc) {
         periodDoc.setText(pPeriodDoc);
@@ -134,26 +154,6 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
             sumOrders = getString(R.string.zero_point_text);
         }
         summaDoc.setText(sumOrders);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        /* выходим из загрузчкика*/
-        getActivity().getSupportLoaderManager().destroyLoader(0);
-        getActivity().getSupportLoaderManager().destroyLoader(2);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        /* создаем загрузчик */
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        getActivity().getSupportLoaderManager().initLoader(2, null, this);
-         /* обновляем курсор */
-        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
-        getActivity().getSupportLoaderManager().getLoader(2).forceLoad();
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

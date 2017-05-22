@@ -26,8 +26,8 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderNewGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
+import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements
     public static boolean chickMainFragment;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
+    private Documents mCurrentNewDog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
     /* текущий новый заказ */
-        UpdateDocDB.mCurrentOrder = null;
+        mCurrentNewDog = null;
     /* ТЧ заказа */
         UpDateDocList.mCart.clear();
     }
@@ -275,5 +276,13 @@ public class MainActivity extends AppCompatActivity implements
             fragment.setSelectUpdate(link, id);
         }
 
+    }
+
+    public Documents getmCurrentNewDog() {
+        return mCurrentNewDog;
+    }
+
+    public void setmCurrentNewDog(Documents mCurrentNewDog) {
+        this.mCurrentNewDog = mCurrentNewDog;
     }
 }

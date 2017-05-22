@@ -22,7 +22,6 @@ import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
-import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -124,12 +123,10 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                             switch (selectedItemPosition) {
                                 case 0:
                                   /*чистим док заказ и редактируем заказ*/
-                                    UpdateDocDB.clearOrderHeader(DocTypeOperation.EDIT);
                                     bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.EDIT.toString());
                                     break;
                                 case 3:
                                   /*чистим док заказ и копируем заказ*/
-                                    UpdateDocDB.clearOrderHeader(DocTypeOperation.COPY);
                                     bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.COPY.toString());
                                     break;
                             }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.DocAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Pays;
@@ -37,37 +36,6 @@ public class UpdateDocDB implements DocAction {
         } else {
             sCurrentNumber = ++pCurrentNumber;
         }
-    }
-
-    /* проверяем на обязательные поля шапки документа*/
-    public static boolean checkHeaderOrder(Context context) {
-
-        boolean bCheck = false;
-
-        if (mCurrentOrder.getDocNumber() == null
-                || mCurrentOrder.getDocDate() == null
-                || mCurrentOrder.getAgentId() == null
-                || mCurrentOrder.getFirmId() == null
-                || mCurrentOrder.getPriceCategoryId() == null
-                || mCurrentOrder.getClientId() == null
-                || mCurrentOrder.getAdress() == null) {
-
-            bCheck = true;
-            InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
-        }
-        return bCheck;
-    }
-
-    /*чистим документ заказа и устанавливаем вид операции дока*/
-    public static void clearOrderHeader(final DocTypeOperation docTypeOperation) {
-        mCurrentOrder = new Orders();
-        mCurrentOrder.setTypeOperation(docTypeOperation);
-    }
-
-    /*чистим документ заказа и устанавливаем вид операции дока*/
-    public static void clearPayHeader(final DocTypeOperation docTypeOperation) {
-        mCurrentPays = new Pays();
-        mCurrentPays.setTypeOperation(docTypeOperation);
     }
 
     @Override

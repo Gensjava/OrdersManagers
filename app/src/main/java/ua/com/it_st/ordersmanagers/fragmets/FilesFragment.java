@@ -22,7 +22,7 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpDateDocList;
 import ua.com.it_st.ordersmanagers.interfaces.implems.UpdateDocDB;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -130,8 +130,8 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         mButtonOrderList.setVisibility(View.INVISIBLE);
         ui_bar.setVisibility(View.VISIBLE);
 
-        /*чистим док заказ и редактируем заказ*/
-        UpdateDocDB.clearOrderHeader(DocTypeOperation.NEW);
+        /*чистим док заказ и редактируем док*/
+        ((MainActivity) getActivity()).setmCurrentNewDog(null);
         /* ТЧ заказа */
         UpDateDocList.mCart = new LinkedHashSet<>();
        /*текущий номер заказа*/
