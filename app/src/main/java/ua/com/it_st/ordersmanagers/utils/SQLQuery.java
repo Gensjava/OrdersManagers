@@ -194,7 +194,9 @@ public class SQLQuery {
     public static String queryCounteragentsDebtDocs(final String sp) {
 
         String sq;
-        sq = "Select* From CounteragentsDebtDocs \n" +
+        sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.name, CounteragentsDebtDocs._id \n" +
+                "From CounteragentsDebtDocs\n" +
+                "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod \n" +
                 "WHERE " + sp + ";";
         return sq;
     }

@@ -13,16 +13,18 @@ public class GlobalCursorLoader extends CursorLoader {
 
     private String querySQL;
     private SQLiteDatabase sDb;
+    private String[] params;
 
-    public GlobalCursorLoader(Context context, String querySQL, SQLiteDatabase sDb) {
+    public GlobalCursorLoader(Context context, String querySQL, String[] params, SQLiteDatabase sDb) {
         super(context);
         this.querySQL = querySQL;
         this.sDb = sDb;
+        this.params = params;
     }
 
     @Override
     public Cursor loadInBackground() {
         return sDb
-                .rawQuery(querySQL, new String[]{"null"});
+                .rawQuery(querySQL, params);
     }
 }

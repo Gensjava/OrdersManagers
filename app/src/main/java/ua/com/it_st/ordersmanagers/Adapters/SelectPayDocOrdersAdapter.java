@@ -11,6 +11,7 @@ import android.widget.TextView;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
+import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 /**
@@ -34,12 +35,13 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         convertView = mLInflater.inflate(R.layout.pay_list_item, parent, false);
             /*позиция*/
         Cursor itemCursor = (Cursor) getItem(position);
+        String sPosition = String.valueOf(position + 1);
             /*получаем колонки*/
 
         final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_DATE));
         final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_NUMBER));
         final String cDebet = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DEBT));
-        final String currency = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_KOD_CURRENCY));
+        final String сСurrency = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_NAME));
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
 
             /*дата */
@@ -48,12 +50,18 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         /*сумма*/
         final TextView total = (TextView) convertView.findViewById(R.id.pay_summa);
         total.setText(cTotal);
+        //валюта
+        final TextView currency = (TextView) convertView.findViewById(R.id.pay_currency);
+        currency.setText(сСurrency);
              /*номер*/
         final TextView number = (TextView) convertView.findViewById(R.id.pay_doc_number);
         number.setText(cNumber);
-            /*статус*/
-        final TextView debet = (TextView) convertView.findViewById(R.id.pay_debt);
+            /*долг*/
+        final TextView debet = (TextView) convertView.findViewById(R.id.pay_summa_debet);
         debet.setText(cDebet);
+
+        final TextView pay_number = (TextView) convertView.findViewById(R.id.pay_number);
+        pay_number.setText(sPosition);
 
         return convertView;
     }

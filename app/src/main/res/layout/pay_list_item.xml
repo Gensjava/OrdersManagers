@@ -1,68 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/layout_list_item_pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        tools:ignore="DisableBaselineAlignment">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/pay_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.1" />
 
-            <TextView
-                android:id="@+id/pay_doc_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="Дата" />
+        <CheckBox
+            android:id="@+id/pay_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="vertical"
+            android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/pay_doc_number"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/pay_doc_data"
-                android:text="Номер" />
+                android:layout_alignParentTop="true"
+                android:text="Номер"
+                android:textSize="12dp"
+                tools:ignore="ObsoleteLayoutParam" />
+
+            <TextView
+                android:id="@+id/pay_doc_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/main_list_item_image_status"
+                android:layout_toRightOf="@+id/main_list_item_image_status"
+                android:text="@string/header_date"
+                android:textIsSelectable="true"
+                android:textSize="12sp"
+                tools:ignore="ObsoleteLayoutParam,UnknownIdInLayout" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            tools:ignore="ObsoleteLayoutParam">
 
             <TextView
                 android:id="@+id/pay_summa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/doc_name"
-                android:layout_marginStart="13dp"
-                android:layout_toStartOf="@+id/pay_currency"
-                android:text="Сумма" />
-
-            <TextView
-                android:id="@+id/pay_debt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/summa"
-                android:text="Долг" />
+                android:layout_alignTop="@+id/main_list_item_text_client"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/main_list_item_image_menu"
+                android:layout_toStartOf="@+id/main_list_item_image_menu"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="right"
+                android:paddingTop="12dp"
+                android:text="@string/header_sum"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/pay_currency"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/pay_checkBox_doc"
-                android:text="Валюта" />
+                android:layout_alignTop="@+id/main_list_item_text_client"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/main_list_item_image_menu"
+                android:layout_toStartOf="@+id/main_list_item_image_menu"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="left"
+                android:paddingTop="12dp"
+                android:text="Валюта"
+                android:textSize="12sp" />
 
-            <CheckBox
-                android:id="@+id/pay_checkBox_doc"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/pay_summa_debet"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignTop="@+id/main_list_item_text_client"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/main_list_item_image_menu"
+                android:layout_toStartOf="@+id/main_list_item_image_menu"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="right"
+                android:paddingTop="12dp"
+                android:text="Долг"
+                android:textColor="@color/red_indicator"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_weight="0.1"
+            android:gravity="right|center_horizontal"
+            android:orientation="horizontal"
+            tools:ignore="ObsoleteLayoutParam">
+
+            <EditText
+                android:id="@+id/pay_summa_pay"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:textSize="12sp"
+                tools:ignore="InefficientWeight,LabelFor" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

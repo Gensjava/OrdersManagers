@@ -111,9 +111,9 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         switch (id) {
             case 0:/*получаем все заазы*/
-                return new GlobalCursorLoader(getActivity(), mQueryList, sDb);
+                return new GlobalCursorLoader(getActivity(), mQueryList, new String[]{"null"}, sDb);
             case 2:/*получаем сумму всех заазов*/
-                return new GlobalCursorLoader(getActivity(), mQuerySum, sDb);
+                return new GlobalCursorLoader(getActivity(), mQuerySum, new String[]{"null"}, sDb);
             default:
                 return null;
         }

@@ -31,7 +31,7 @@ public class PayDocSelectOrders extends CursorLoderFragment {
         View rootView = inflater.inflate(R.layout.main_list, container, false);
 
         setCountLoad((byte) 1);
-        setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs._id  <> ?"));
+        setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -49,7 +49,7 @@ public class PayDocSelectOrders extends CursorLoderFragment {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new GlobalCursorLoader(getActivity(), getQuery(), CursorLoderFragment.sDb);
+        return new GlobalCursorLoader(getActivity(), getQuery(), new String[]{"11 041"}, CursorLoderFragment.sDb);
     }
 
     @Override
