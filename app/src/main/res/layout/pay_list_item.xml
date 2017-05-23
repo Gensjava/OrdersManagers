@@ -7,62 +7,60 @@
     <LinearLayout
         android:id="@+id/layout_list_item_pay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/pay_doc_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="TextView" />
+                android:text="Дата" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/pay_doc_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView4"
-                android:text="TextView" />
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/pay_doc_data"
+                android:text="Номер" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/pay_summa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView5"
+                android:layout_alignBottom="@+id/doc_name"
                 android:layout_marginStart="13dp"
-                android:layout_toEndOf="@+id/textView5"
-                android:text="TextView" />
+                android:layout_toStartOf="@+id/pay_currency"
+                android:text="Сумма" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/pay_debt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView9"
-                android:text="TextView" />
+                android:layout_toEndOf="@+id/summa"
+                android:text="Долг" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/pay_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView10"
-                android:text="TextView" />
+                android:layout_toStartOf="@+id/pay_checkBox_doc"
+                android:text="Валюта" />
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/pay_checkBox_doc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView11"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView11"
-                android:text="CheckBox" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true" />
 
         </RelativeLayout>
 

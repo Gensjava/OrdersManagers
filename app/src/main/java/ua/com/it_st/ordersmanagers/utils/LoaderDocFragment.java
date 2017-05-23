@@ -134,7 +134,6 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
                 data.moveToFirst();
                 final String cSum = data.getString(cSumIndex);
                 updataSumOrders(cSum);
-
                 break;
             default:
                 break;
@@ -158,7 +157,6 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
 
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onLoaderDocListener {
-        void onOpenFragmentClass(Class<?> fClass);
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
 }

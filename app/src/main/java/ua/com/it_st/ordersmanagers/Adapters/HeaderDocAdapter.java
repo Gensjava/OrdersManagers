@@ -57,7 +57,6 @@ public class HeaderDocAdapter extends SimpleAdapter {
 
         /* позиция шапки */
         final Object object = itemsCatalogs.get(String.valueOf(position));
-        String sub_address = null;
 
         /*если параметр шапки не заполнен тогда устанвливаем заголовок*/
         if (object instanceof Catalogs) {
@@ -71,7 +70,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
 
                 TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
                 sub_header.setVisibility(View.VISIBLE);
-                sub_header.setText(sub_address);
+                sub_header.setText(counteragent.getAddress());
             }
             headerDoc.setHeaderSelection(position, catalogs);
         } else {

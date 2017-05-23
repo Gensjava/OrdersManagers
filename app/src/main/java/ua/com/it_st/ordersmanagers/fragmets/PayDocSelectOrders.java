@@ -7,8 +7,13 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import ua.com.it_st.ordersmanagers.Adapters.SelectPayDocOrdersAdapter;
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
  * Created by Gena on 2017-05-22.
@@ -16,29 +21,51 @@ import ua.com.it_st.ordersmanagers.R;
 
 public class PayDocSelectOrders extends CursorLoderFragment {
 
+    private SelectPayDocOrdersAdapter scAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
 
         /* макет фрагмента */
-        View rootView = inflater.inflate(R.layout.main_header_list, container,
-                false);
+        View rootView = inflater.inflate(R.layout.main_list, container, false);
+
+        setCountLoad((byte) 1);
+        setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs._id  <> ?"));
+
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        /* формируем столбцы сопоставления */
+        String[] from = new String[]{};
+        int[] to = new int[]{};
+        /* создааем адаптер и настраиваем список */
+        scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, from, to, 0, this);
+         /* сам список */
+        ListView lvData = (ListView) rootView.findViewById(R.id.lvMain);
+        lvData.setAdapter(scAdapter);
+
         return rootView;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        return new GlobalCursorLoader(getActivity(), getQuery(), CursorLoderFragment.sDb);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        if (data.isClosed()) {
+            //err
+            InfoUtil.Tost("Нет данных!", getActivity());
+        } else {
+            scAdapter.swapCursor(data);
+        }
+        scAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        scAdapter.swapCursor(null);
     }
 }

@@ -53,7 +53,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     private List<Map<String, ?>> listDataHeader;
 
     public abstract boolean checkHeader(Context context);
-
     public abstract void setHeaderSelection(int position, Object item);
     public abstract void fillHeaderFromCursor(Cursor data);
     public abstract void onCreateHeader(Bundle bundle);
@@ -185,7 +184,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     /* создаем класс для загрузки данных из БД
         * загрузка происходит в фоне */
-    private static class MyCursorLoader extends CursorLoader {
+    private class MyCursorLoader extends CursorLoader {
 
         public MyCursorLoader(Context context) {
             super(context);

@@ -13,9 +13,9 @@ public class TableCounteragentsDebtDocs {
     public static final String FILE_NAME = "ref_debtext.csv";
     public static final String HEADER_NAME = "долг контрагентов по документам";
 
-    public static final String COLUMN_KOD = "ClientId";
+    public static final String COLUMN_CLIENT_ID = "ClientId";
     public static final String COLUMN_DOC_DATE = "DocDate";
-    public static final String COLUMN_DOC_NAME = "DocName";
+    public static final String COLUMN_DOC_NUMBER = "DocName";
     public static final String COLUMN_SUMMA = "summa";
     public static final String COLUMN_DEBT = "Debt";
     public static final String COLUMN_KOD_CURRENCY = "currency";
@@ -23,9 +23,9 @@ public class TableCounteragentsDebtDocs {
 
 
     public static final String INSERT_VALUES = "INSERT INTO " + TABLE_NAME + " ("
-            + COLUMN_KOD + ", "
+            + COLUMN_CLIENT_ID + ", "
             + COLUMN_DOC_DATE + ", "
-            + COLUMN_DOC_NAME + ", "
+            + COLUMN_DOC_NUMBER + ", "
             + COLUMN_SUMMA + ", "
             + COLUMN_DEBT + ", "
             + COLUMN_KOD_CURRENCY + ", "
@@ -38,9 +38,9 @@ public class TableCounteragentsDebtDocs {
         Log.i(TAG, "createTable");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + BaseColumns._ID + " integer PRIMARY KEY AUTOINCREMENT"
-                + " ," + COLUMN_KOD + " text"
+                + " ," + COLUMN_CLIENT_ID + " text"
                 + " ," + COLUMN_DOC_DATE + " text"
-                + " ," + COLUMN_DOC_NAME + " text"
+                + " ," + COLUMN_DOC_NUMBER + " text"
                 + " ," + COLUMN_SUMMA + " real"
                 + " ," + COLUMN_DEBT + " real"
                 + " ," + COLUMN_KOD_CURRENCY + " text"
@@ -58,9 +58,9 @@ public class TableCounteragentsDebtDocs {
 
         final ContentValues data = new ContentValues();
 
-        data.put(COLUMN_KOD, sData[0]);
+        data.put(COLUMN_CLIENT_ID, sData[0]);
         data.put(COLUMN_DOC_DATE, sData[1]);
-        data.put(COLUMN_DOC_NAME, sData[2]);
+        data.put(COLUMN_DOC_NUMBER, sData[2]);
         data.put(COLUMN_SUMMA, sData[3]);
         data.put(COLUMN_DEBT, sData[4]);
         data.put(COLUMN_KOD_CURRENCY, sData[5]);

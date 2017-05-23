@@ -187,4 +187,15 @@ public class SQLQuery {
                 "GROUP by Counteragents.name,Counteragents.kod, Counteragents.address, CounteragentsDebt.debt;";
         return sq;
     }
+
+    /* запрос получаем долг клиентов по документам
+    sp параметры условий запроса
+    */
+    public static String queryCounteragentsDebtDocs(final String sp) {
+
+        String sq;
+        sq = "Select* From CounteragentsDebtDocs \n" +
+                "WHERE " + sp + ";";
+        return sq;
+    }
 }

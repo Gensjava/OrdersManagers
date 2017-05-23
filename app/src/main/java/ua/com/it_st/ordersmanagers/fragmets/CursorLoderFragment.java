@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,17 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
+
 /**
  * Created by Gena on 2017-05-22.
  */
 
 public abstract class CursorLoderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    byte countLoad;
+    public static SQLiteDatabase sDb;
+    protected String query;
+    private byte countLoad;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
 
         for (byte x = 0; x < countLoad; x++) {
             getActivity().getSupportLoaderManager().initLoader(x, null, this);
@@ -40,6 +47,10 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
     @Override
     public void onResume() {
         super.onResume();
+        /* открываем подключение к БД */
+        if (sDb == null) {
+            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        }
 
         for (byte x = 0; x < countLoad; x++) {
                /* создаем загрузчик */
@@ -57,4 +68,11 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
         this.countLoad = countLoad;
     }
 
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
 }
