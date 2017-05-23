@@ -27,7 +27,7 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-public class HeaderOrderDoc extends HeaderDoc {
+public class OrderHeaderDoc extends HeaderDoc {
 
     private Orders CurrentNewDog;
     @Override
@@ -62,8 +62,7 @@ public class HeaderOrderDoc extends HeaderDoc {
                 || CurrentNewDog.getAgent().getKod() == null
                 || CurrentNewDog.getCompany().getKod() == null
                 || CurrentNewDog.getTypePrices().getKod() == null
-                || CurrentNewDog.getCounteragent().getKod() == null
-                || CurrentNewDog.getAdress() == null) {
+                || CurrentNewDog.getCounteragent().getKod() == null) {
 
             bCheck = true;
             InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
@@ -72,24 +71,39 @@ public class HeaderOrderDoc extends HeaderDoc {
     }
 
     @Override
-    public void setHeaderSelection(int position, String item, String subItem) {
+    public void onClick(final View view) {
+        switch (view.getId()) {
+
+            case R.id.order_new_header_list_image_arrow_right:
+                /* проверка шапки*/
+                if (!checkHeader(getActivity())) {
+                    final OrderHeaderDoc.onEventListener someEventListener = (OrderHeaderDoc.onEventListener) getActivity();
+                    someEventListener.onOpenFragmentClass(OrderCatalogGoodsFragment.class);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void setHeaderSelection(int position, Object item) {
 
         switch (position) {
             case 0:
-                CurrentNewDog.getCompany().setKod(item);
+                CurrentNewDog.setCompany((Companies) item);
                 break;
             case 1:
-                CurrentNewDog.getStore().setKod(item);
+                CurrentNewDog.setStore((Stores) item);
                 break;
             case 2:
-                CurrentNewDog.getCounteragent().setKod(item);
-                CurrentNewDog.setAdress(subItem);
+                CurrentNewDog.setCounteragent((Counteragents) item);
                 break;
             case 3:
-                CurrentNewDog.getTypePrices().setKod(item);
+                CurrentNewDog.setTypePrices((TypePrices) item);
                 break;
             case 4:
-                CurrentNewDog.setNote(item);
+                CurrentNewDog.setNote(item.toString());
                 break;
             default:
                 break;

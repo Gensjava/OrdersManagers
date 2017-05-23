@@ -68,13 +68,12 @@ public class HeaderDocAdapter extends SimpleAdapter {
 
             if (catalogs instanceof Counteragents) {
                 Counteragents counteragent = (Counteragents) catalogs;
-                sub_address = counteragent.getAddress();
 
                 TextView sub_header = (TextView) convertView.findViewById(R.id.order_header_list_item_sub_text);
                 sub_header.setVisibility(View.VISIBLE);
                 sub_header.setText(sub_address);
             }
-            headerDoc.setHeaderSelection(position, catalogs.getKod(), sub_address);
+            headerDoc.setHeaderSelection(position, catalogs);
         } else {
 
             if (object.toString().equals("")) {
@@ -82,6 +81,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
             } else {
                 header.setText(object.toString());
             }
+            headerDoc.setHeaderSelection(position, object);
         }
 
             /*клик на любом месте поля вызываем список занчений*/

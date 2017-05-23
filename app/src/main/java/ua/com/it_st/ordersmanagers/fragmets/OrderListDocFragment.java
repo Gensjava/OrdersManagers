@@ -39,11 +39,10 @@ public class OrderListDocFragment extends LoaderDocFragment {
         switch (view.getId()) {
             case R.id.main_heander_image_plus:
                 Bundle bundleItem = new Bundle();
-
                 bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.NEW.toString());
 
                 final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
-                someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
+                someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);
 
                 break;
             default:

@@ -9,12 +9,12 @@ import android.support.v4.content.CursorLoader;
  * Created by Gena on 2017-05-14.
  */
 
-public class MyCursorLoader extends CursorLoader {
+public class GlobalCursorLoader extends CursorLoader {
 
     private String querySQL;
     private SQLiteDatabase sDb;
 
-    public MyCursorLoader(Context context, String querySQL, SQLiteDatabase sDb) {
+    public GlobalCursorLoader(Context context, String querySQL, SQLiteDatabase sDb) {
         super(context);
         this.querySQL = querySQL;
         this.sDb = sDb;

@@ -626,7 +626,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
 
             return sDb
                     .rawQuery(SQLQuery.queryOrdersLinesEdit("OrdersLines.doc_id = ?"
-                    ), new String[]{HeaderOrderDoc.id_order
+                    ), new String[]{OrderHeaderDoc.id_order
 
                     });
         }

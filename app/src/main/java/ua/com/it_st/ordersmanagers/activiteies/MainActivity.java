@@ -18,10 +18,10 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
-import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
@@ -36,7 +36,7 @@ import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderDocFragment.onLoaderDocListener,
-        HeaderOrderDoc.onEventListener,
+        OrderHeaderDoc.onEventListener,
         OrderCatalogGoodsFragment.onEventListener,
         OrderSelectHeaderFragment.OnFragmentSelectListener,
         OrderCartFragment.onEventListener,

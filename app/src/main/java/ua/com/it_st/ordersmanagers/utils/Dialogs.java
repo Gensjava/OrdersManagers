@@ -17,9 +17,9 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
-import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 
@@ -190,7 +190,7 @@ public class Dialogs {
                          /*преобразуем тип*/
                         MainActivity mAk = (MainActivity) mContext;
                            /*делаем поиск шапки для передачи параметра*/
-                        HeaderOrderDoc fragment = (HeaderOrderDoc) mAk.getSupportFragmentManager().findFragmentByTag(HeaderOrderDoc.class.toString());
+                        OrderHeaderDoc fragment = (OrderHeaderDoc) mAk.getSupportFragmentManager().findFragmentByTag(OrderHeaderDoc.class.toString());
                         if (fragment != null) {
                             /*передаем данные комента и записывем их в заказ*/
                             fragment.setSelectUpdate(editText, String.valueOf(4));

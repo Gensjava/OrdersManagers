@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
@@ -32,8 +33,11 @@ public class PayDocListDocFragment extends LoaderDocFragment {
 
         switch (view.getId()) {
             case R.id.main_heander_image_plus:
+                Bundle bundleItem = new Bundle();
+                bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.NEW.toString());
+
                 final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
-                someEventListener.onOpenFragmentClass(HeaderPayDoc.class);
+                someEventListener.onOpenFragmentClassBundle(PayHeaderDoc.class, bundleItem);
                 break;
             default:
                 break;
