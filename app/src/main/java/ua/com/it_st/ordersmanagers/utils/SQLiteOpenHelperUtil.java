@@ -18,8 +18,8 @@ import ua.com.it_st.ordersmanagers.sqlTables.TablePays;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePaysLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.sqlTables.TableStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
@@ -72,7 +72,7 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TablePrices.onDeleteValueTable(mDb);
         TableProducts.onDeleteValueTable(mDb);
         TableTypePrices.onDeleteValueTable(mDb);
-        TableTypeStores.onDeleteValueTable(mDb);
+        TableStores.onDeleteValueTable(mDb);
         TableGoodsByStores.onDeleteValueTable(mDb);
         TableOrders.onDeleteValueTable(mDb);
         TableOrdersLines.onDeleteValueTable(mDb);
@@ -96,7 +96,7 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableTypePrices.createTable(db);
         TableCompanies.createTable(db);
         TableGoodsByStores.createTable(db);
-        TableTypeStores.createTable(db);
+        TableStores.createTable(db);
         TableCounteragentsDebt.createTable(db);
         TableCounteragentsDebtDocs.createTable(db);
         TableCurrencies.createTable(db);

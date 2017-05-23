@@ -32,7 +32,7 @@ public class PayDocListDocFragment extends LoaderDocFragment {
 
         switch (view.getId()) {
             case R.id.main_heander_image_plus:
-                final PayDocListDocFragment.onEventListener someEventListener = (PayDocListDocFragment.onEventListener) getActivity();
+                final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
                 someEventListener.onOpenFragmentClass(HeaderPayDoc.class);
                 break;
             default:

@@ -23,21 +23,22 @@ import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        OrderListDocFragment.onEventListener,
+        LoaderDocFragment.onLoaderDocListener,
         HeaderOrderDoc.onEventListener,
         OrderCatalogGoodsFragment.onEventListener,
-        OrderNewSelectHeaderFragment.OnFragmentSelectListener,
+        OrderSelectHeaderFragment.OnFragmentSelectListener,
         OrderCartFragment.onEventListener,
         FilesLoadFragment.onEventListener
 {

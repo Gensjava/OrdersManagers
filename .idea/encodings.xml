@@ -9,8 +9,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableOrdersLines.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TablePrices.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableProducts.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableStores.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypePrices.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/sqlTables/TableTypeStores.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/AppDeliveriMan.java" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/InfoUtil.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/ua/com/it_st/ordersmanagers/utils/SQLiteOpenHelperUtil.java" charset="UTF-8" />

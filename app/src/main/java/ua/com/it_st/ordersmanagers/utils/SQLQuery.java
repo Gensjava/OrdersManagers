@@ -111,13 +111,13 @@ public class SQLQuery {
 
         String sq;
         sq = "Select Orders._id, Orders.note, Orders.agent_id," +
-                "Сompanys.name as name_comp, Сompanys.kod as kod_comp,\n" +
-                "TypeStores.name as name_type_stores, TypeStores.kod as kod_type_stores,\n" +
+                "Companies.name as name_comp, Companies.kod as kod_comp,\n" +
+                "Stores.name as name_type_stores, Stores.kod as kod_type_stores,\n" +
                 "Counteragents.name as name_contr, Counteragents.address as address_contr, Counteragents.kod as kod_contr,\n" +
                 "TypePrices.name as name_type_price, TypePrices.kod as kod_type_price\n" +
                 "FROM Orders\n" +
-                "LEFT OUTER JOIN Сompanys ON Orders.company_id  = Сompanys.kod " +
-                "LEFT OUTER JOIN TypeStores ON Orders.store_id  = TypeStores.kod \n" +
+                "LEFT OUTER JOIN Companies ON Orders.company_id  = Companies.kod " +
+                "LEFT OUTER JOIN Stores ON Orders.store_id  = Stores.kod \n" +
                 "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod \n" +
                 "LEFT OUTER JOIN TypePrices ON Orders.price_id  = TypePrices.kod \n" +
                 "WHERE " + sp + "\n";

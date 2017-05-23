@@ -165,7 +165,7 @@ public class DocListFragment extends Fragment {
 //                                bundleItem.putString(NUMBER_ORDER, cNumber);
 //                                bundleItem.putString(DATE_ORDER, cDate);
 //
-//                                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
+//                                final OrderListDocFragment.onLoaderDocListener someEventListener = (OrderListDocFragment.onLoaderDocListener) getActivity();
 //                                someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
 //                            case 1:
 //                                /*проводим док*/

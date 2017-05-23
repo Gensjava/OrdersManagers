@@ -157,7 +157,7 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
     }
 
     /* создаем класс - интефейс для открытия фрагментов */
-    public interface onEventListener {
+    public interface onLoaderDocListener {
         void onOpenFragmentClass(Class<?> fClass);
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }

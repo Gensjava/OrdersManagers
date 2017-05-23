@@ -5,6 +5,7 @@ package ua.com.it_st.ordersmanagers.models;
  */
 
 public class TypePrices extends Catalogs {
+
     public TypePrices(String kod, String name) {
         super(kod, name);
     }

@@ -134,16 +134,19 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         }
     }
 
+    public void setItemHeader(final Object item, String id) {
+        List<Map<String, ?>> listDataHeader = getListDataHeader();
+        final Map<String, Object> itemsCatalogs = (Map<String, Object>) listDataHeader.get(Integer.valueOf(id));
+        itemsCatalogs.put(id, item);
+    }
+
     /*
     записываем и обновляем выбранные данные
     заполняем шапку
     */
     public void setSelectUpdate(final Object item, String id) {
 
-        List<Map<String, ?>> listDataHeader = getListDataHeader();
-        final Map<String, Object> itemsCatalogs = (Map<String, Object>) listDataHeader.get(Integer.valueOf(id));
-        itemsCatalogs.put(id, item);
-
+        setItemHeader(item, id);
         mAdapter.notifyDataSetChanged();
     }
 

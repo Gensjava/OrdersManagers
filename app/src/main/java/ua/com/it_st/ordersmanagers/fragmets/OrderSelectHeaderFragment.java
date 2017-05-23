@@ -27,7 +27,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 /*Класс предназначен для выбора значений из списка для оформления шапки
  документа заказа
   */
-public class OrderNewSelectHeaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class OrderSelectHeaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static SQLiteDatabase sDb;
     private static String nameTable;

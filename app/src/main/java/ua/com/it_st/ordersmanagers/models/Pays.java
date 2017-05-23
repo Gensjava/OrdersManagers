@@ -16,16 +16,22 @@ public class Pays extends Documents {
     private DocTypeOperation mTypeOperation;
     private ArrayList<Object> dataHeader;
     private Counteragents counteragent;
+    private List<Map<String, ?>> listDataHeader;
 
     public Pays() {
-        dataHeader = new ArrayList<>();
-        dataHeader.add(new Companies(getCompany().getKod(), ""));
-        dataHeader.add(new Counteragents(counteragent.getKod(), "", ""));
-        dataHeader.add(new String());
+        setCompany(new Companies());
+        setCounteragent(new Counteragents());
+        setListDataHeader(fillListHeaders());
     }
 
     @Override
     public List<Map<String, ?>> fillListHeaders() {
+
+        dataHeader = new ArrayList<>();
+        dataHeader.add(getCompany());
+        dataHeader.add(getCounteragent());
+        dataHeader.add(new String());
+
          /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,
@@ -60,5 +66,13 @@ public class Pays extends Documents {
 
     public void setCounteragent(Counteragents counteragent) {
         this.counteragent = counteragent;
+    }
+
+    public List<Map<String, ?>> getListDataHeader() {
+        return listDataHeader;
+    }
+
+    public void setListDataHeader(List<Map<String, ?>> listDataHeader) {
+        this.listDataHeader = listDataHeader;
     }
 }

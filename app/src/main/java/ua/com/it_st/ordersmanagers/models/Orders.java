@@ -33,14 +33,6 @@ public class Orders extends Documents {
         setStore(new Stores());
         setCounteragent(new Counteragents());
         setTypePrices(new TypePrices());
-
-        dataHeader = new ArrayList<>();
-        dataHeader.add(getCompany());
-        dataHeader.add(getStore());
-        dataHeader.add(getCounteragent());
-        dataHeader.add(getTypePrices());
-        dataHeader.add(new String());
-
         setListDataHeader(fillListHeaders());
     }
 
@@ -103,6 +95,14 @@ public class Orders extends Documents {
     /* создаем список - шапку  для адаптера
   * Иконки и заголовки*/
     public List<Map<String, ?>> fillListHeaders() {
+
+        dataHeader = new ArrayList<>();
+        dataHeader.add(getCompany());
+        dataHeader.add(getStore());
+        dataHeader.add(getCounteragent());
+        dataHeader.add(getTypePrices());
+        dataHeader.add(new String());
+
         /* иконки к шапке заказа */
         Integer[] mPictures = new Integer[]
                 {R.mipmap.ic_organization,

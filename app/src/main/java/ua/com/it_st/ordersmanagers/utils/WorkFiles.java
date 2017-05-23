@@ -24,8 +24,8 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableCursCurrencies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
+import ua.com.it_st.ordersmanagers.sqlTables.TableStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
-import ua.com.it_st.ordersmanagers.sqlTables.TableTypeStores;
 
 public class WorkFiles {
 
@@ -82,7 +82,7 @@ public class WorkFiles {
         lTableNameInsert.put(TablePrices.FILE_NAME, TablePrices.INSERT_VALUES);
         lTableNameInsert.put(TableProducts.FILE_NAME, TableProducts.INSERT_VALUES);
         lTableNameInsert.put(TableTypePrices.FILE_NAME, TableTypePrices.INSERT_VALUES);
-        lTableNameInsert.put(TableTypeStores.FILE_NAME, TableTypeStores.INSERT_VALUES);
+        lTableNameInsert.put(TableStores.FILE_NAME, TableStores.INSERT_VALUES);
         lTableNameInsert.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.INSERT_VALUES);
         lTableNameInsert.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.INSERT_VALUES);
         lTableNameInsert.put(TableCounteragentsDebtDocs.FILE_NAME, TableCounteragentsDebtDocs.INSERT_VALUES);
@@ -101,7 +101,7 @@ public class WorkFiles {
         lTableName.put(TablePrices.FILE_NAME, TablePrices.HEADER_NAME);
         lTableName.put(TableProducts.FILE_NAME, TableProducts.HEADER_NAME);
         lTableName.put(TableTypePrices.FILE_NAME, TableTypePrices.HEADER_NAME);
-        lTableName.put(TableTypeStores.FILE_NAME, TableTypeStores.HEADER_NAME);
+        lTableName.put(TableStores.FILE_NAME, TableStores.HEADER_NAME);
         lTableName.put(TableGoodsByStores.FILE_NAME, TableGoodsByStores.HEADER_NAME);
         lTableName.put(TableCounteragentsDebt.FILE_NAME, TableCounteragentsDebt.HEADER_NAME);
         lTableName.put(TableCounteragentsDebtDocs.FILE_NAME, TableCounteragentsDebtDocs.HEADER_NAME);

@@ -42,7 +42,7 @@ public class OrderListDocFragment extends LoaderDocFragment {
 
                 bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.NEW.toString());
 
-                final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) getActivity();
+                final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
                 someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
 
                 break;

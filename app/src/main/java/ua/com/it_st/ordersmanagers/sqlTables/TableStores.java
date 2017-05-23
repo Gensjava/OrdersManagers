@@ -8,7 +8,7 @@ import android.util.Log;
 /**
  * Created by Gens on 27.04.2015.
  */
-public class TableTypeStores {
+public class TableStores {
     public static final String TABLE_NAME = "Stores";
     public static final String FILE_NAME = "ref_stores.csv";
     public static final String HEADER_NAME = "типы складов";
@@ -21,7 +21,7 @@ public class TableTypeStores {
             + COLUMN_NAME + ", "
             + COLUMN_NOTE
             + ") VALUES ";
-    private static final String TAG = TableTypeStores.class.getSimpleName();
+    private static final String TAG = TableStores.class.getSimpleName();
 
     public static void createTable(final SQLiteDatabase db) {
         Log.i(TAG, "createTable");

@@ -18,7 +18,11 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
 import ua.com.it_st.ordersmanagers.models.Agents;
+import ua.com.it_st.ordersmanagers.models.Companies;
+import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.Stores;
+import ua.com.it_st.ordersmanagers.models.TypePrices;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -110,11 +114,18 @@ public class HeaderOrderDoc extends HeaderDoc {
         String cComent = data.getString(data.getColumnIndex("note"));
 
         /*заполняем док заказ*/
-        CurrentNewDog.getCompany().setKod(cKodCompanies);
-        CurrentNewDog.getStore().setKod(cKodStores);
-        CurrentNewDog.getCounteragent().setKod(KodCounteragents);
-        CurrentNewDog.getTypePrices().setKod(cNamePrices);
+        CurrentNewDog.setCompany(new Companies(cKodCompanies, cNameCompanies));
+        CurrentNewDog.setStore(new Stores(cKodStores, cNameStores));
+        CurrentNewDog.setCounteragent(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
+        CurrentNewDog.setTypePrices(new TypePrices(cKodPrices, cNamePrices));
+        CurrentNewDog.setNote(cComent == null ? "" : cComent);
         CurrentNewDog.getAgent().setKod(cAgent);
+
+        setItemHeader(CurrentNewDog.getCompany(), "0");
+        setItemHeader(CurrentNewDog.getStore(), "1");
+        setItemHeader(CurrentNewDog.getCounteragent(), "2");
+        setItemHeader(CurrentNewDog.getTypePrices(), "3");
+        setItemHeader(CurrentNewDog.getNote(), "4");
 
         mAdapter.notifyDataSetChanged();
     }

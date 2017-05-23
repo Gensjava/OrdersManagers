@@ -20,7 +20,6 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderOrderDoc;
-import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
@@ -138,7 +137,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                             bundleItem.putString(LoaderDocFragment.NUMBER_ORDER, cNumber);
                             bundleItem.putString(LoaderDocFragment.DATE_ORDER, cDate);
 
-                            final OrderListDocFragment.onEventListener someEventListener = (OrderListDocFragment.onEventListener) mContext;
+                            final LoaderDocFragment.onLoaderDocListener someEventListener = (LoaderDocFragment.onLoaderDocListener) mContext;
                             someEventListener.onOpenFragmentClassBundle(HeaderOrderDoc.class, bundleItem);
                         case 1:
                                 /*проводим док*/

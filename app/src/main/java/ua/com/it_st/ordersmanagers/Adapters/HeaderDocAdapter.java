@@ -15,7 +15,7 @@ import java.util.Map;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
-import ua.com.it_st.ordersmanagers.fragmets.OrderNewSelectHeaderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
@@ -53,7 +53,8 @@ public class HeaderDocAdapter extends SimpleAdapter {
         final Map<String, ?> itemsCatalogs = (Map<String, ?>) mHeaderOrders.get(position);
                /*устанвливаем аватар для каждого параметра шапки*/
         ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
-        // imageView.setImageResource((Integer) itemsCatalogs.get(R.string.imageAvatar));
+        //imageView.setImageResource((Integer) itemsCatalogs.get(R.string.imageAvatar));
+
         /* позиция шапки */
         final Object object = itemsCatalogs.get(String.valueOf(position));
         String sub_address = null;
@@ -99,7 +100,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
 
                     /*открываем окно для выбора значения*/
                     final HeaderDoc.onEventListener someEventListener = (HeaderDoc.onEventListener) headerDoc.getActivity();
-                    someEventListener.onOpenFragmentClassBundle(OrderNewSelectHeaderFragment.class, bundleItem);
+                    someEventListener.onOpenFragmentClassBundle(OrderSelectHeaderFragment.class, bundleItem);
                 } else {
                         /*вызывваем диалог для ввода комента*/
                     Dialogs.showCustomAlertDialogEditComment(headerDoc.getActivity(), headerDoc.getString(R.string.enter_your_coment));
