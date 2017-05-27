@@ -75,4 +75,18 @@ public class Pays extends Documents {
     public void setListDataHeader(List<Map<String, ?>> listDataHeader) {
         this.listDataHeader = listDataHeader;
     }
+
+    //табличная часть
+    public static class PayLines extends TableDoc {
+        private String dateDoc;
+        private String numberDoc;
+        private double sum;
+
+        public PayLines(String dateDoc, String numberDoc, double sum, String docId) {
+            this.dateDoc = dateDoc;
+            this.numberDoc = numberDoc;
+            this.sum = sum;
+            setDocId(docId);
+        }
+    }
 }

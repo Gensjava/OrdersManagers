@@ -28,7 +28,7 @@ public class PayDocSelectOrders extends CursorLoderFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         /* макет фрагмента */
-        View rootView = inflater.inflate(R.layout.main_list, container, false);
+        View rootView = inflater.inflate(R.layout.pay_dogs_select_container, container, false);
 
         setCountLoad((byte) 1);
         setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
@@ -41,7 +41,7 @@ public class PayDocSelectOrders extends CursorLoderFragment {
         /* создааем адаптер и настраиваем список */
         scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, from, to, 0, this);
          /* сам список */
-        ListView lvData = (ListView) rootView.findViewById(R.id.lvMain);
+        ListView lvData = (ListView) rootView.findViewById(R.id.pay_select_dogs);
         lvData.setAdapter(scAdapter);
 
         return rootView;

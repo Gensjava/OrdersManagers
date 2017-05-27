@@ -31,11 +31,12 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
     */
     @Override
     public boolean add(Orders.OrderLines item) {
+        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
         /* удаляем товар */
         delete(item);
        /* добавляем только если больше чем 0 */
-        if (item.getAmount() > 0) {
-            return mCart.add(item);
+        if (itemOrder.getAmount() > 0) {
+            return mCart.add(itemOrder);
         }
         return false;
     }
@@ -43,11 +44,12 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
     /*изменяем количество товара*/
     @Override
     public boolean update(Orders.OrderLines item) {
+        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
         for (Orders.OrderLines iC : mCart) {
-            if (iC.getGoodsId().equals(item.getGoodsId())) {
+            if (iC.getGoodsId().equals(itemOrder.getGoodsId())) {
 
-                iC.setAmount(item.getAmount());
+                iC.setAmount(itemOrder.getAmount());
                 double newSum = new BigDecimal(iC.getAmount() * iC.getPrice()).setScale(2, RoundingMode.UP).doubleValue();
                 iC.setSum(newSum);
                 return true;
@@ -59,9 +61,10 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
     /*удаляем товар из корзины*/
     @Override
     public boolean delete(Orders.OrderLines item) {
+        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
 
-        if (mCart.contains(item)) {
-            return mCart.remove(item);
+        if (mCart.contains(itemOrder)) {
+            return mCart.remove(itemOrder);
         }
         return false;
     }

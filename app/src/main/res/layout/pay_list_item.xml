@@ -22,7 +22,7 @@
 
         <CheckBox
             android:id="@+id/pay_checkBox"
-            android:layout_width="wrap_content"
+            android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="0.1" />
@@ -36,21 +36,23 @@
 
             <TextView
                 android:id="@+id/pay_doc_number"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:gravity="center"
                 android:text="Номер"
                 android:textSize="12dp"
                 tools:ignore="ObsoleteLayoutParam" />
 
             <TextView
                 android:id="@+id/pay_doc_data"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/main_list_item_image_status"
                 android:layout_toRightOf="@+id/main_list_item_image_status"
+                android:gravity="center"
                 android:text="@string/header_date"
                 android:textIsSelectable="true"
                 android:textSize="12sp"
@@ -77,7 +79,7 @@
                 android:layout_toStartOf="@+id/main_list_item_image_menu"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="right"
+                android:gravity="center"
                 android:paddingTop="12dp"
                 android:text="@string/header_sum"
                 android:textSize="12sp"
@@ -112,8 +114,7 @@
                 android:layout_weight="1"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="right"
-                android:paddingTop="12dp"
+                android:gravity="center"
                 android:text="Долг"
                 android:textColor="@color/red_indicator"
                 android:textSize="12sp"
@@ -132,12 +133,14 @@
 
             <EditText
                 android:id="@+id/pay_summa_pay"
-                android:layout_width="35dp"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:gravity="center"
                 android:inputType="number"
+                android:textColor="@color/new_green"
                 android:textSize="12sp"
                 tools:ignore="InefficientWeight,LabelFor" />
         </LinearLayout>
