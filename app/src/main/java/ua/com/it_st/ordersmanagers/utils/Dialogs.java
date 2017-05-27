@@ -105,7 +105,7 @@ public class Dialogs {
                                         int id) {
 
                         /* Количество товара */
-                        final double numberInDialog = Double.parseDouble(String.valueOf(editNumber.getText()));
+                        final double amountInDialog = Double.parseDouble(String.valueOf(editNumber.getText()));
                         //Сумма товара
                         final double sumInDialog = Double.parseDouble(String.valueOf(textSum.getText()));
 
@@ -117,14 +117,14 @@ public class Dialogs {
                             final OrderCatalogGoodsFragment fragment = (OrderCatalogGoodsFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderCatalogGoodsFragment.class.toString());
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
-                                fragment.setDialogAmount(numberInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
+                                fragment.setDialogAmount(amountInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
                             }
                         } else if (fClass.equals(OrderCartFragment.class.toString())) {
                            /*делаем поиск списка товаров для передачи параметра*/
                             final OrderCartFragment fragment = (OrderCartFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderCartFragment.class.toString());
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
-                                fragment.setDialogAmount(numberInDialog, sumInDialog, product);
+                                fragment.setDialogAmount(amountInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
                             }
                         }
 

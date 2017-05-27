@@ -23,6 +23,7 @@ import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Orders.OrderLines;
+import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -124,7 +125,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
     }
 
     /*обновление после выбора к-во товара в списке товаров*/
-    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final OrderLines product) {
+    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final TreeProductCategoryHolder.TreeItem product) {
 
         /* делаем проверку товара на остатке */
         if (product.getBalance() >= numberInDialog) {
@@ -194,7 +195,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
             final TextView number = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_number);
             number.setText(lNumber);
              /* наименвоание товара */
-            String lName = itemOrderLines.getName();
+            String lName = itemOrderLines.getProduct().getName();
             final TextView name = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_name);
             name.setText(lName);
             /* количество товара */
@@ -249,7 +250,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                                 DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
                                 lUpDateOrderList.delete(itemOrderLines);
 
-                                InfoUtil.Tost(getString(R.string.goods) + itemOrderLines.getName() + getString(R.string.delete_list), getActivity());
+                                InfoUtil.Tost(getString(R.string.goods) + itemOrderLines.getProduct().getName() + getString(R.string.delete_list), getActivity());
                                  /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();

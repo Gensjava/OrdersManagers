@@ -40,7 +40,7 @@ public class TablePaysLines {
         final ContentValues data = new ContentValues();
 
         data.put(COLUMN_DOC_ID, idDoc);
-        data.put(COLUMN_GOODS_ID, sData.getGoodsId());
+        data.put(COLUMN_GOODS_ID, sData.getProduct().getKod());
         data.put(COLUMN_AMOUNT, sData.getAmount());
 
         return data;

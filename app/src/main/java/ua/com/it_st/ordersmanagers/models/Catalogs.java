@@ -35,4 +35,22 @@ public abstract class Catalogs {
     }
 
     public abstract void setNameNativeLanguage();
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Catalogs that = (Catalogs) o;
+
+        if (kod != null ? !kod.equals(that.kod) : that.kod != null) return false;
+        return !(name != null ? !name.equals(that.name) : that.name != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = kod != null ? kod.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
 }

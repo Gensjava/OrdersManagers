@@ -28,6 +28,7 @@ import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.Products;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
@@ -72,12 +73,12 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
             outState = null;
             /* Текущая позиция дерева */
             mNode = node;
-            if (item.isCategory()) {
+            if (item.getProduct().isCategory()) {
                 if (!item.isClick()) {
                     /* записываем клик на позиции чтоб два раза не строить ветки */
                     item.setClick(true);
                     /* параметр для запроса */
-                    mSelectionArgs = item.getGoodsId();
+                    mSelectionArgs = item.getProduct().getKod();
 
                     Loader lLoader = getActivity().getSupportLoaderManager().getLoader(0);
                     /* обновляем курсор */
@@ -97,7 +98,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
 
                 } else if (bModePicture) {//показываем картинки
                     Bundle bundle = new Bundle();
-                    bundle.putString(GOODS_KOD, item.getGoodsId());
+                    bundle.putString(GOODS_KOD, item.getProduct().getKod());
                     WorkFragment.onNewInstanceFragment(PictureFragment.class, bundle, (MainActivity) getActivity());
 
                 } else {//повтор к-во товаров
@@ -121,8 +122,11 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
             final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
      /* Это корень */
             TreeNode root = TreeNode.root();
-            TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-            TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+            //  TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
+            // TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
+
+            TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, new Products("", getString(R.string.root), true), true));
+            TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, new Products("", "Каталог товаров", true), true));
         /* создаем ветки */
             myRoot.addChildren(myCatalog);
             root.addChildren(myCatalog);
@@ -226,43 +230,39 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
     }
 
     /*обновление после выбора к-во товара в списке товаров*/
-    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final TreeProductCategoryHolder.TreeItem product) {
+    public void setDialogAmount(final double amount, final double sum, final TreeProductCategoryHolder.TreeItem product) {
 
-            /* строка ТЧ заказа */
-        Orders.OrderLines orderLines = new Orders.OrderLines(
-                mCurrentOrder.getId(),
-                product.getGoodsId(),
-                1,
-                numberInDialog,
+        TreeProductCategoryHolder.TreeItem treeItem = new TreeItem(
+                product.getProduct(),
+                amount,
                 product.getPrice(),
-                sumInDialog,
-                product.getName(),
-                product.getBalance());
+                sum,
+                product.getBalance(), true
+        );
+
         /* к-во заказа */
         final TextView orderTvValue = (TextView) mNode.getViewHolder().getView().findViewById(R.id.order_new_goods_node_item_order_value);
 
         /* делаем проверку товара на остатке */
-        if (product.getBalance() >= numberInDialog) {
+        if (product.getBalance() >= amount) {
 
             DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
 
-            if (numberInDialog > 0) {
+            if (amount > 0) {
                 orderTvValue.setVisibility(View.VISIBLE);
-                orderTvValue.setText(String.valueOf(numberInDialog));
+                orderTvValue.setText(String.valueOf(amount));
                 /* добавляем в табличную часть заказа */
-                lUpDateOrderList.add(orderLines);
+                lUpDateOrderList.add(treeItem);
             } else {
                 orderTvValue.setVisibility(View.INVISIBLE);
                 /* удаляем из табличной части заказа */
-                lUpDateOrderList.delete(orderLines);
+                lUpDateOrderList.delete(treeItem);
             }
         } else {
             //
             InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
-        /*записываем в элемент дерева тоже чтоб потом можно было получить обратно*/
-        product.setAmount(numberInDialog);
-        product.setSum(sumInDialog);
+
         /* обновляем корзину */
         updateCartCount();
     }
@@ -472,7 +472,6 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         final int cNameIndex = data.getColumnIndex(TableProducts.COLUMN_NAME);
         final int cAmountStoresIndex = data.getColumnIndex(TableProducts.AMOUNT_STORES);
 
-        // data.moveToFirst();
         while (data.moveToNext()) {
 
             final String cID = data.getString(cIDIndex);
@@ -481,17 +480,17 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
             final String cName = data.getString(cNameIndex);
             final double cAmountStores = data.getDouble(cAmountStoresIndex);
 
+            Products products = new Products(cID, cName);
+
             final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
             Orders.OrderLines orderLines = new Orders.OrderLines(
                     mCurrentOrder.getId(),
-                    cID,
-                    1,
+                    products,
                     isAmount,
                     cPrice,
-                    newSum,
-                    cName,
-                    cAmountStores);
+                    newSum
+            );
 
             DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
             lUpDateOrderList.add(orderLines);
@@ -519,18 +518,17 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                 final String isCategory = data.getString(isCategoryIndex);
                 final String cKod = data.getString(cKodIndex);
 
+                Products product = new Products(cKod, cName, isCategory.equals("true"));
+
                 final TreeNode newTreeItem;
 
-                switch (isCategory) {
-                    case "true":
-                        newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, cName, cKod, false, true));
-                        break;
-                    default:
-                        double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
-                        double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
+                if (product.isCategory()) {
+                    newTreeItem = new TreeNode(new TreeItem(R.string.ic_folder, product, false));
+                } else {
+                    double sBalance = data.getDouble(data.getColumnIndex(TableGoodsByStores.COLUMN_AMOUNT));
+                    double sPrice = data.getDouble(data.getColumnIndex(TablePrices.COLUMN_PRICE));
 
-                        newTreeItem = new TreeNode(new TreeItem(cName, cKod, false, sBalance, 0, false, sPrice));
-                        break;
+                    newTreeItem = new TreeNode(new TreeItem(product, 0, sPrice, 0, sBalance, false));
                 }
 
                 tView.addNode(mNode, newTreeItem);

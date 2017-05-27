@@ -26,13 +26,13 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
         final LayoutInflater inflater = LayoutInflater.from(context);
 
         final TextView tvValue;
-        isCategory = value.isCategory;
+        isCategory = value.getProduct().isCategory();
 
         if (isCategory) {
 
             view = inflater.inflate(R.layout.order_new_goods_node, null, false);
             tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_value);
-            tvValue.setText(value.getName());
+            tvValue.setText(value.getProduct().getName());
 
             final PrintView iconView = (PrintView) view.findViewById(R.id.icon);
 
@@ -42,7 +42,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             view = inflater.inflate(R.layout.order_new_goods_node_item, null, false);
 
             tvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_node_value);
-            tvValue.setText(value.getName());
+            tvValue.setText(value.getProduct().getName());
 
             TextView balanceTvValue = (TextView) view.findViewById(R.id.order_new_goods_node_item_balance_value);
             balanceTvValue.setText(String.valueOf(value.getBalance()));
@@ -67,41 +67,64 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
     public static class TreeItem extends Orders.OrderLines {
 
         private Integer icon;
-        private boolean isCategory;
         private boolean click;
+        private double balance;
 
-        //category
-        public TreeItem(Integer icon,
-                        String text,
-                        String id,
-                        boolean click,
-                        boolean isCategory) {
-            super.setName(text);
-            super.setGoodsId(id);
+        public TreeItem(Integer icon, Products product, boolean click) {
+            super(product);
             this.icon = icon;
             this.click = click;
-            this.isCategory = isCategory;
         }
 
-        //goods
-        public TreeItem(final String text,
-                        final String id,
-                        final boolean click,
-                        final double balance,
-                        final double order,
-                        boolean isCategory,
-                        double price) {
-
-            super.setName(text);
-            super.setGoodsId(id);
+        public TreeItem(Products product, double amount, double price, double sum, double balance, boolean click) {
+            super(product);
             super.setPrice(price);
-            super.setAmount(order);
-            super.setBalance(balance);
+            super.setAmount(amount);
+            super.setSum(sum);
+            this.balance = balance;
             this.click = click;
-            this.isCategory = isCategory;
+        }
+        //  (cName, cKod, false, sBalance, 0, false, sPrice)
 
+//        //category
+//        public TreeItem(Integer icon,
+//                        String text,
+//                        String id,
+//                        boolean click,
+//                        boolean isCategory) {
+//            super.setName(text);
+//            super.setKod(id);
+//            this.icon = icon;
+//            this.click = click;
+//            this.isCategory = isCategory;
+//        }
+//
+//        //goods
+//        public TreeItem(final String text,
+//                        final String id,
+//                        final boolean click,
+//                        final double balance,
+//                        final double order,
+//                        boolean isCategory,
+//                        double price) {
+//
+//            super.setName(text);
+//            super.setKod(id);
+//            super.setPrice(price);
+//            super.setAmount(order);
+//            super.setBalance(balance);
+//            this.click = click;
+//            this.isCategory = isCategory;
+//
+//        }
+
+        public double getBalance() {
+            return balance;
         }
 
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
 
         public Integer getIcon() {
             return icon;
@@ -117,15 +140,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
 
         public void setClick(final boolean click) {
             this.click = click;
-        }
-
-
-        public boolean isCategory() {
-            return isCategory;
-        }
-
-        public void setIsCategory(final boolean isCategory) {
-            this.isCategory = isCategory;
         }
 
     }

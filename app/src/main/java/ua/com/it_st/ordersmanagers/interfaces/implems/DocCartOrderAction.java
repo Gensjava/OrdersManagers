@@ -47,7 +47,7 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
         Orders.OrderLines itemOrder = (Orders.OrderLines) item;
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
         for (Orders.OrderLines iC : mCart) {
-            if (iC.getGoodsId().equals(itemOrder.getGoodsId())) {
+            if (iC.getProduct().getKod().equals(itemOrder.getProduct().getKod())) {
 
                 iC.setAmount(itemOrder.getAmount());
                 double newSum = new BigDecimal(iC.getAmount() * iC.getPrice()).setScale(2, RoundingMode.UP).doubleValue();

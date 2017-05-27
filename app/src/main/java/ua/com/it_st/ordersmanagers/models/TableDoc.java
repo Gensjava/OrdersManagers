@@ -6,9 +6,14 @@ package ua.com.it_st.ordersmanagers.models;
 
 public abstract class TableDoc {
     private String docId;
+    private int ordinal;
     private double total;
 
     public TableDoc() {
+    }
+
+    public TableDoc(String docId) {
+        this.docId = docId;
     }
 
     public String getDocId() {
@@ -25,5 +30,13 @@ public abstract class TableDoc {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public int getOrdinal() {
+        return ordinal;
+    }
+
+    public void setOrdinal(int ordinal) {
+        this.ordinal = ordinal;
     }
 }

@@ -131,32 +131,67 @@ public class Orders extends Documents {
     }
 
     //табличная часть заказа
-    public static class OrderLines extends Products {
+    public static class OrderLines extends TableDoc {
 
-        private double mBalance;
-
-        public OrderLines(final String docId,
-                          final String goodsId,
-                          final int rate,
-                          final double amount,
-                          final double price,
-                          final double sum,
-                          final String name,
-                          final double balance) {
-
-            super(docId, goodsId, rate, amount, price, sum, name);
-            mBalance = balance;
-        }
+        private Products product;
+        private double amount;
+        private double price;
+        private double sum;
+        private int rate;
 
         public OrderLines() {
         }
 
-        public double getBalance() {
-            return mBalance;
+        public OrderLines(Products product) {
+            this.product = product;
         }
 
-        public void setBalance(final double balance) {
-            mBalance = balance;
+        public OrderLines(String docId, Products product, double amount, double price, double sum) {
+            super(docId);
+            this.product = product;
+            this.amount = amount;
+            this.price = price;
+            this.sum = sum;
+        }
+
+        public int getRate() {
+            return rate;
+        }
+
+        public void setRate(int rate) {
+            this.rate = rate;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public double getSum() {
+            return sum;
+        }
+
+        public void setSum(double sum) {
+            this.sum = sum;
+        }
+
+        public Products getProduct() {
+            return product;
+        }
+
+        public void setProduct(Products product) {
+            this.product = product;
         }
     }
 
