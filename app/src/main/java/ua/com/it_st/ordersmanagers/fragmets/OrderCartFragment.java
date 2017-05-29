@@ -20,9 +20,9 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
-import ua.com.it_st.ordersmanagers.models.Orders.OrderLines;
+import ua.com.it_st.ordersmanagers.models.Orders.OrdersLines;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -32,8 +32,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 public class OrderCartFragment extends Fragment implements View.OnClickListener {
 
     private TextView tSumCart;
-    private ArrayAdapter<OrderLines> sAdapter;
-    private ArrayList<Orders.OrderLines> mListItems = new ArrayList<>();
+    private ArrayAdapter<OrdersLines> sAdapter;
+    private ArrayList<OrdersLines> mListItems = new ArrayList<>();
     private SQLiteDatabase DB;
     private Orders mCurrentOrder;
 
@@ -44,7 +44,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
         View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
 
-        mListItems = DocCartOrderAction.getItemsGoods();
+        mListItems = DocListOrderAction.getItemsGoods();
         /*создаем адаптер корзины*/
         sAdapter = new MyArrayAdapter(getActivity(), R.layout.order_new_cart_list_item, mListItems);
 
@@ -57,7 +57,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
         String numberDoc = "";
         String dateDoc = "";
 
-        mCurrentOrder = (Orders) ((MainActivity) getActivity()).getmCurrentNewDog();
+        mCurrentOrder = (Orders) ((MainActivity) getActivity()).getmCurrentOrder();
 
         if (mCurrentOrder != null) {
             numberDoc = mCurrentOrder.getDocNumber();
@@ -93,7 +93,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
 
             case R.id.order_new_cart_list_image_arrow_right:
 
-                DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
                  /*проверяем пустая корзина или нет*/
                 if (!lUpDateOrderList.isEmpty()) {
                     boolean bCheck;
@@ -113,7 +113,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                         final onEventListener someEventListener = (onEventListener) getActivity();
                         someEventListener.onOpenFragmentClass(OrderListDocFragment.class);
                         /*чистим корзину*/
-                        DocCartOrderAction.mCart.clear();
+                        DocListOrderAction.mCart.clear();
                     }
                 } else {
                     InfoUtil.showErrorAlertDialog(getString(R.string.car_empty), getString(R.string.order), getActivity());
@@ -135,7 +135,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                 product.setAmount(numberInDialog);
                 product.setSum(sumInDialog);
                 /* редактируем табличную часть заказа */
-                DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
                 lUpDateOrderList.update(product);
             }
         } else {
@@ -143,7 +143,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
             InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
         /*перезаписываем список товаров*/
-        mListItems = DocCartOrderAction.getItemsGoods();
+        mListItems = DocListOrderAction.getItemsGoods();
         /*обновляем*/
         sAdapter.notifyDataSetChanged();
         upDataFooter();
@@ -152,7 +152,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
     /*обновляем подвал*/
     private void upDataFooter() {
 
-        DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
         double sum = lUpDateOrderList.sum();
 
           /*Показываем сумму заказа в подвале*/
@@ -166,11 +166,11 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
     }
 
     /*создаем свой адаптер для списка товаров*/
-    private class MyArrayAdapter extends ArrayAdapter<OrderLines> {
+    private class MyArrayAdapter extends ArrayAdapter<OrdersLines> {
 
         private LayoutInflater mLInflater;
 
-        public MyArrayAdapter(final Context context, final int resource, final ArrayList<Orders.OrderLines> objects) {
+        public MyArrayAdapter(final Context context, final int resource, final ArrayList<OrdersLines> objects) {
             super(context, resource, objects);
             mLInflater = LayoutInflater.from(context);
             mListItems = objects;
@@ -187,7 +187,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
             convertView = mLInflater.inflate(R.layout.order_new_cart_list_item, parent, false);
 
             /*позиция*/
-            final Orders.OrderLines itemOrderLines = mListItems.get(position);
+            final OrdersLines itemOrdersLines = mListItems.get(position);
 
              /* номер позиции */
             short iPosition = (short) position;
@@ -195,19 +195,19 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
             final TextView number = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_number);
             number.setText(lNumber);
              /* наименвоание товара */
-            String lName = itemOrderLines.getProduct().getName();
+            String lName = itemOrdersLines.getProduct().getName();
             final TextView name = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_name);
             name.setText(lName);
             /* количество товара */
-            String lAmount = String.valueOf(itemOrderLines.getAmount());
+            String lAmount = String.valueOf(itemOrdersLines.getAmount());
             final TextView amount = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_name_amount);
             amount.setText(lAmount);
              /* цена товара */
-            String lPrice = String.valueOf(itemOrderLines.getPrice());
+            String lPrice = String.valueOf(itemOrdersLines.getPrice());
             final TextView price = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_price);
             price.setText(lPrice);
             /* сумма товара */
-            String lSum = String.valueOf(itemOrderLines.getSum());
+            String lSum = String.valueOf(itemOrdersLines.getSum());
             final TextView sum = (TextView) convertView.findViewById(R.id.order_new_cart_list_item_sum);
             sum.setText(lSum);
 
@@ -245,12 +245,12 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                         switch (selectedItemPosition) {
                             case 0:
                                 /* удаляем товар*/
-                                mListItems.remove(itemOrderLines);
+                                mListItems.remove(itemOrdersLines);
 
-                                DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
-                                lUpDateOrderList.delete(itemOrderLines);
+                                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+                                lUpDateOrderList.delete(itemOrdersLines);
 
-                                InfoUtil.Tost(getString(R.string.goods) + itemOrderLines.getProduct().getName() + getString(R.string.delete_list), getActivity());
+                                InfoUtil.Tost(getString(R.string.goods) + itemOrdersLines.getProduct().getName() + getString(R.string.delete_list), getActivity());
                                  /* обновляем */
                                 notifyDataSetChanged();
                                 upDataFooter();
@@ -258,7 +258,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                                 mCurrentOrder.setClickModifitsirovannoiCart(true);
                                 break;
                             case 1:
-                                Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrderLines, OrderCartFragment.class.toString());
+                                Dialogs.showCustomAlertDialogEnterNumber(getActivity(), getString(R.string.addCart), itemOrdersLines, OrderCartFragment.class.toString());
                                 break;
                             default:
                                 break;

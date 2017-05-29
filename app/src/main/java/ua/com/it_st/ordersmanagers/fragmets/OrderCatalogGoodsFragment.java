@@ -26,7 +26,7 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Products;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
@@ -122,8 +122,6 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
             final ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
      /* Это корень */
             TreeNode root = TreeNode.root();
-            //  TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, getString(R.string.root), "", true, true));
-            // TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, "Каталог товаров", "", true, true));
 
             TreeNode myRoot = new TreeNode(new TreeItem(R.string.ic_folder, new Products("", getString(R.string.root), true), true));
             TreeNode myCatalog = new TreeNode(new TreeItem(R.string.ic_folder, new Products("", "Каталог товаров", true), true));
@@ -160,7 +158,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         /*Отображаем сумму заказа в подвале*/
             tSumCart = (TextView) rootView.findViewById(R.id.order_new_goods_container_sum_cart);
 
-            mCurrentOrder = (Orders) ((MainActivity) getActivity()).getmCurrentNewDog();
+            mCurrentOrder = (Orders) ((MainActivity) getActivity()).getmCurrentOrder();
 
             if (mCurrentOrder != null) {
                 if (mCurrentOrder.getTypeOperation().equals(DocTypeOperation.EDIT)
@@ -189,18 +187,18 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
 
         if (ui_cart == null) return;
 
-        DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
         double sum = lUpDateOrderList.sum();
 
          /*Показываем сумму заказа в подвале*/
         String tSum = sum == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(sum);
         tSumCart.setText(tSum + getString(R.string.grn));
 
-        if (DocCartOrderAction.mCart.size() == 0) {
+        if (DocListOrderAction.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);
         } else {
             ui_cart.setVisibility(View.VISIBLE);
-            ui_cart.setText(Integer.toString(DocCartOrderAction.mCart.size()));
+            ui_cart.setText(Integer.toString(DocListOrderAction.mCart.size()));
         }
     }
 
@@ -246,7 +244,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         /* делаем проверку товара на остатке */
         if (product.getBalance() >= amount) {
 
-            DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+            DocListOrderAction lUpDateOrderList = new DocListOrderAction();
 
             if (amount > 0) {
                 orderTvValue.setVisibility(View.VISIBLE);
@@ -394,7 +392,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
     /*открываем корзину*/
     protected void openCart() {
 
-        DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
              /*проверяем пустая корзина или нет*/
         if (!lUpDateOrderList.isEmpty()) {
             final onEventListener someEventListener = (onEventListener) getActivity();
@@ -484,7 +482,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
 
             final double newSum = new BigDecimal(isAmount * cPrice).setScale(2, RoundingMode.UP).doubleValue();
 
-            Orders.OrderLines orderLines = new Orders.OrderLines(
+            Orders.OrdersLines tableOrders = new Orders.OrdersLines(
                     mCurrentOrder.getId(),
                     products,
                     isAmount,
@@ -492,8 +490,8 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                     newSum
             );
 
-            DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
-            lUpDateOrderList.add(orderLines);
+            DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+            lUpDateOrderList.add(tableOrders);
         }
                  /*обновляем корзину*/
         updateCartCount();
@@ -566,7 +564,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         switch (view.getId()) {
 
             case R.id.order_new_goods_container_image:
-                DocCartOrderAction lUpDateOrderList = new DocCartOrderAction();
+                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
 
                 /*прповеряем корзину пустая или нет*/
                 if (!lUpDateOrderList.isEmpty()) {

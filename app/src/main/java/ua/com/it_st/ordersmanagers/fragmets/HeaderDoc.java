@@ -52,10 +52,11 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     protected String kodAgent;
     private List<Map<String, ?>> listDataHeader;
 
-    public abstract boolean checkHeader(Context context);
     public abstract void setHeaderSelection(int position, Object item);
     public abstract void fillHeaderFromCursor(Cursor data);
     public abstract void onCreateHeader(Bundle bundle);
+
+    public abstract boolean onRecord();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

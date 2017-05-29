@@ -1,7 +1,7 @@
 package ua.com.it_st.ordersmanagers.interfaces;
 
 
-public interface OrderListActionDetali {
+public interface OrderBasementAction {
 
     /*количество всех элементов записей*/
     int seze();

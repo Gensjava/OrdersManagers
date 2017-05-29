@@ -20,7 +20,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -82,7 +82,6 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
             /*устанвливаем период */
         loaderDocFragment.setPeriodDoc(mContext.getString(R.string.with) + cDate + mContext.getString(R.string.on) + ConstantsUtil.getDate());
 
-
           /*menu*/
         final Spinner spinner = (Spinner) convertView.findViewById(R.id.main_list_item_image_menu);
 
@@ -130,7 +129,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                                     break;
                             }
                                         /* ТЧ заказа */
-                            DocCartOrderAction.mCart = new LinkedHashSet<>();
+                            DocListOrderAction.mCart = new LinkedHashSet<>();
                                 /*редактируем док*/
 
                             bundleItem.putString(LoaderDocFragment.ID_ORDER, cId);

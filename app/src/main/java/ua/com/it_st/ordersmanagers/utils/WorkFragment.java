@@ -9,7 +9,7 @@ import android.util.Log;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
-public class WorkFragment {
+public abstract class WorkFragment {
 
     public static void onNewInstanceFragment(final Class<?> fragmentClass, final Bundle bundleItem, final MainActivity context) {
 

@@ -39,7 +39,7 @@ public class TableOrdersLines {
 
     }
 
-    public static ContentValues getContentValues(Orders.OrderLines sData, String idDoc) {
+    public static ContentValues getContentValues(Orders.OrdersLines sData, String idDoc) {
 
         final ContentValues data = new ContentValues();
 

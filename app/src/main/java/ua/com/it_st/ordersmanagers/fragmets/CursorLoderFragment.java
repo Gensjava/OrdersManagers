@@ -22,6 +22,8 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
     protected String query;
     private byte countLoad;
 
+    public abstract boolean onRecord();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

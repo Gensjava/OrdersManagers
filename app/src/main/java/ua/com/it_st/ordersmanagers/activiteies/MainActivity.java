@@ -25,7 +25,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocCartOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements
     public static boolean chickMainFragment;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
-    private Documents mCurrentNewDog;
+
+    private Documents mCurrentOrder;
+    private Documents mCurrentPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
     /* текущий новый заказ */
-        mCurrentNewDog = null;
+        mCurrentOrder = null;
     /* ТЧ заказа */
-        DocCartOrderAction.mCart.clear();
+        DocListOrderAction.mCart.clear();
     }
 
     /*Метод для ввода количества в заказе*/
@@ -279,11 +281,20 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    public Documents getmCurrentNewDog() {
-        return mCurrentNewDog;
+    public Documents getmCurrentOrder() {
+        return mCurrentOrder;
     }
 
-    public void setmCurrentNewDog(Documents mCurrentNewDog) {
-        this.mCurrentNewDog = mCurrentNewDog;
+    public void setmCurrentOrder(Documents mCurrentOrder) {
+        this.mCurrentOrder = mCurrentOrder;
     }
+
+    public Documents getmCurrentPay() {
+        return mCurrentPay;
+    }
+
+    public void setmCurrentPay(Documents mCurrentPay) {
+        this.mCurrentPay = mCurrentPay;
+    }
+
 }

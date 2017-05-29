@@ -27,7 +27,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableStores;
 import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 
-public class WorkFiles {
+public abstract class WorkFiles {
 
     private static String TEG = WorkFiles.class.getSimpleName();
 

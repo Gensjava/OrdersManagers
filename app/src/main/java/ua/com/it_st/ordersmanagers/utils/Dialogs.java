@@ -26,7 +26,7 @@ import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 public class Dialogs {
 
     public static EditText editNumber;
-    public static Orders.OrderLines product;
+    public static Orders.OrdersLines product;
     public static Animation animScale;
     public static double numberD;
     public static boolean openDialog;
@@ -45,7 +45,7 @@ public class Dialogs {
             product = (TreeProductCategoryHolder.TreeItem) object;
             limitAmuont = 0;
         } else if (fClass.equals(OrderCartFragment.class.toString())) {
-            product = (Orders.OrderLines) object;
+            product = (Orders.OrdersLines) object;
             limitAmuont = 1;
         }
 
@@ -165,7 +165,7 @@ public class Dialogs {
 
         mContext = activity;
         mLayoutInflater = LayoutInflater.from(activity);
-        Orders orders = (Orders) ((MainActivity) activity).getmCurrentNewDog();
+        Orders orders = (Orders) ((MainActivity) activity).getmCurrentOrder();
 
         final View numberView;
         /* каст макет */

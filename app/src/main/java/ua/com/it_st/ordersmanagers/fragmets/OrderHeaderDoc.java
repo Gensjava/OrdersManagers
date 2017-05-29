@@ -3,7 +3,6 @@ package ua.com.it_st.ordersmanagers.fragmets;
 /*Класс предназначен для отображения и заполнения шапки документа заказа
 * Все поля кроме коммнтария являются обязательными для заполнения*/
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ public class OrderHeaderDoc extends HeaderDoc {
         if (rootView == null) {
             CurrentNewDog = new Orders();
 
-            ((MainActivity) getActivity()).setmCurrentNewDog(CurrentNewDog);
+            ((MainActivity) getActivity()).setmCurrentOrder(CurrentNewDog);
             setListDataHeader(CurrentNewDog.getListDataHeader());
 
         /* создаем адаптер */
@@ -52,31 +51,13 @@ public class OrderHeaderDoc extends HeaderDoc {
         return rootView;
     }
 
-    /* проверяем на обязательные поля шапки документа*/
-    public boolean checkHeader(Context context) {
-
-        boolean bCheck = false;
-
-        if (CurrentNewDog.getDocNumber() == null
-                || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null
-                || CurrentNewDog.getTypePrices().getKod() == null
-                || CurrentNewDog.getCounteragent().getKod() == null) {
-
-            bCheck = true;
-            InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
-        }
-        return bCheck;
-    }
-
     @Override
     public void onClick(final View view) {
         switch (view.getId()) {
 
             case R.id.order_new_header_list_image_arrow_right:
                 /* проверка шапки*/
-                if (!checkHeader(getActivity())) {
+                if (!onRecord()) {
                     final OrderHeaderDoc.onEventListener someEventListener = (OrderHeaderDoc.onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(OrderCatalogGoodsFragment.class);
                 }
@@ -193,6 +174,24 @@ public class OrderHeaderDoc extends HeaderDoc {
         CurrentNewDog.setAgent(new Agents(kodAgent, kodAgent));
         CurrentNewDog.setDocDate(dateDoc);
         CurrentNewDog.setDocNumber(numberDoc);
+    }
+
+    @Override
+    public boolean onRecord() {
+
+        boolean bCheck = false;
+         /* проверяем на обязательные поля шапки документа*/
+        if (CurrentNewDog.getDocNumber() == null
+                || CurrentNewDog.getDocDate() == null
+                || CurrentNewDog.getAgent().getKod() == null
+                || CurrentNewDog.getCompany().getKod() == null
+                || CurrentNewDog.getTypePrices().getKod() == null
+                || CurrentNewDog.getCounteragent().getKod() == null) {
+
+            bCheck = true;
+            InfoUtil.Tost(getActivity().getString(R.string.not_all_cap_mandatory_filled), getActivity());
+        }
+        return bCheck;
     }
 
 

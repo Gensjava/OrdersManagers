@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,7 +36,7 @@ public class PayHeaderDoc extends HeaderDoc {
 
             CurrentNewDog = new Pays();
 
-            ((MainActivity) getActivity()).setmCurrentNewDog(new Pays());
+            ((MainActivity) getActivity()).setmCurrentPay(new Pays());
             setListDataHeader(CurrentNewDog.getListDataHeader());
 
         /* создаем адаптер */
@@ -53,29 +52,12 @@ public class PayHeaderDoc extends HeaderDoc {
     }
 
     @Override
-    public boolean checkHeader(Context context) {
-        boolean bCheck = false;
-
-        if (CurrentNewDog.getDocNumber() == null
-                || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null
-                || CurrentNewDog.getCounteragent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null) {
-
-            bCheck = true;
-            InfoUtil.Tost(context.getString(R.string.not_all_cap_mandatory_filled), context);
-        }
-        return bCheck;
-    }
-
-    @Override
     public void onClick(final View view) {
         switch (view.getId()) {
 
             case R.id.order_new_header_list_image_arrow_right:
                 /* проверка шапки*/
-                if (!checkHeader(getActivity())) {
+                if (!onRecord()) {
                     final PayHeaderDoc.onEventListener someEventListener = (PayHeaderDoc.onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(PayDocSelectOrders.class);
                 }
@@ -175,5 +157,21 @@ public class PayHeaderDoc extends HeaderDoc {
         CurrentNewDog.setDocNumber(numberDoc);
     }
 
+    @Override
+    public boolean onRecord() {
+        boolean bCheck = false;
+
+        if (CurrentNewDog.getDocNumber() == null
+                || CurrentNewDog.getDocDate() == null
+                || CurrentNewDog.getAgent().getKod() == null
+                || CurrentNewDog.getCompany().getKod() == null
+                || CurrentNewDog.getCounteragent().getKod() == null
+                || CurrentNewDog.getCompany().getKod() == null) {
+
+            bCheck = true;
+            InfoUtil.Tost(getActivity().getString(R.string.not_all_cap_mandatory_filled), getActivity());
+        }
+        return bCheck;
+    }
 
 }

@@ -12,10 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
+import ua.com.it_st.ordersmanagers.interfaces.implems.DocListPayAction;
+import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
-import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -23,13 +23,16 @@ import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
-    private LoaderDocFragment loaderDocFragment;
+    private DocListPayAction docListPayAction;
+    private Pays pays;
 
-    public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, PayDocSelectOrders loaderDocFragment) {
+    public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, Pays pays) {
         super(context, layout, c, from, to, flags);
-        mLInflater = (LayoutInflater) mContext
+        this.mLInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //  this.loaderDocFragment = loaderDocFragment;
+
+        this.docListPayAction = new DocListPayAction(pays.getPaysLines());
+        this.pays = pays;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             /*получаем колонки*/
         final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_DATE));
         final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_NUMBER));
-        final String cDebet = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DEBT));
+        final double cDebet = itemCursor.getDouble(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DEBT));
         final String сСurrency = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_NAME));
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
 
@@ -60,6 +63,8 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
             viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
 
+            viewHolder.payLines = new Pays.PaysLines(pays.getId(), viewHolder.date.getText().toString(), viewHolder.number.getText().toString(), 0, сСurrency);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -69,7 +74,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         viewHolder.total.setText(cTotal);
         viewHolder.currency.setText(сСurrency);
         viewHolder.number.setText(cNumber);
-        viewHolder.debet.setText(cDebet);
+        viewHolder.debet.setText(String.valueOf(cDebet));
         viewHolder.pay_number.setText(sPosition);
         //
         OnClickChekBox(viewHolder);
@@ -84,8 +89,13 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     viewHolder.pay_summa_pay.setText(viewHolder.debet.getText());
+
+                    viewHolder.payLines.setSum(Double.valueOf(viewHolder.pay_summa_pay.getText().toString()));
+                    docListPayAction.add(viewHolder.payLines);
+
                 } else {
                     viewHolder.pay_summa_pay.setText("");
+                    docListPayAction.delete(viewHolder.payLines);
                 }
             }
         });
@@ -100,6 +110,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         TextView pay_number;
         CheckBox pay_checkBox;
         EditText pay_summa_pay;
+        Pays.PaysLines payLines;
     }
 }
 

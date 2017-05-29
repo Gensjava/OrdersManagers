@@ -64,7 +64,7 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
         }
     }
 
-    public static class TreeItem extends Orders.OrderLines {
+    public static class TreeItem extends Orders.OrdersLines {
 
         private Integer icon;
         private boolean click;
@@ -84,39 +84,6 @@ public class TreeProductCategoryHolder extends TreeNode.BaseNodeViewHolder<TreeP
             this.balance = balance;
             this.click = click;
         }
-        //  (cName, cKod, false, sBalance, 0, false, sPrice)
-
-//        //category
-//        public TreeItem(Integer icon,
-//                        String text,
-//                        String id,
-//                        boolean click,
-//                        boolean isCategory) {
-//            super.setName(text);
-//            super.setKod(id);
-//            this.icon = icon;
-//            this.click = click;
-//            this.isCategory = isCategory;
-//        }
-//
-//        //goods
-//        public TreeItem(final String text,
-//                        final String id,
-//                        final boolean click,
-//                        final double balance,
-//                        final double order,
-//                        boolean isCategory,
-//                        double price) {
-//
-//            super.setName(text);
-//            super.setKod(id);
-//            super.setPrice(price);
-//            super.setAmount(order);
-//            super.setBalance(balance);
-//            this.click = click;
-//            this.isCategory = isCategory;
-//
-//        }
 
         public double getBalance() {
             return balance;

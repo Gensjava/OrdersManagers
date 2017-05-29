@@ -7,7 +7,6 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.interfaces.DocAction;
 import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.models.Orders;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -44,9 +43,9 @@ public class DocActionOrder implements DocAction {
         * */
         /* шапка*/
         long inTable = mDB.insert(
-                TableOrders.TABLE_NAME,
+                ua.com.it_st.ordersmanagers.sqlTables.TableOrders.TABLE_NAME,
                 null,
-                TableOrders.getContentValues(orders));
+                ua.com.it_st.ordersmanagers.sqlTables.TableOrders.getContentValues(orders));
 
         if (inTable == -1) {
             InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.eror_add_new_order), mContext);
@@ -55,7 +54,7 @@ public class DocActionOrder implements DocAction {
         }
          /* табличная часть*/
         /*создаем новые позиции заказа*/
-        for (final Orders.OrderLines aMCart : DocCartOrderAction.mCart) {
+        for (final Orders.OrdersLines aMCart : DocListOrderAction.mCart) {
             long inTableLines = mDB.insert(
                     TableOrdersLines.TABLE_NAME,
                     null,
@@ -85,8 +84,8 @@ public class DocActionOrder implements DocAction {
         * */
         /* шапка*/
         long inTable = mDB.update(
-                TableOrders.TABLE_NAME,
-                TableOrders.getContentValuesUpdata(orders),
+                ua.com.it_st.ordersmanagers.sqlTables.TableOrders.TABLE_NAME,
+                ua.com.it_st.ordersmanagers.sqlTables.TableOrders.getContentValuesUpdata(orders),
                 "Orders.view_id = ?",
                 new String[]{orders.getId()});
 
@@ -104,7 +103,7 @@ public class DocActionOrder implements DocAction {
                 new String[]{orders.getId()});
 
         /*обновляем позиции заказа (создаем новые)*/
-        for (final Orders.OrderLines aMCart : DocCartOrderAction.mCart) {
+        for (final Orders.OrdersLines aMCart : DocListOrderAction.mCart) {
 
             long inTableLinesNew = mDB.insert(TableOrdersLines.TABLE_NAME,
                     null,

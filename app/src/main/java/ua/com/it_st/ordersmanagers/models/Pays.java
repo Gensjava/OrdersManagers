@@ -17,11 +17,14 @@ public class Pays extends Documents {
     private ArrayList<Object> dataHeader;
     private Counteragents counteragent;
     private List<Map<String, ?>> listDataHeader;
+    private List<PaysLines> paysLines;
 
     public Pays() {
         setCompany(new Companies());
         setCounteragent(new Counteragents());
         setListDataHeader(fillListHeaders());
+
+        this.paysLines = new ArrayList<>();
     }
 
     @Override
@@ -76,17 +79,47 @@ public class Pays extends Documents {
         this.listDataHeader = listDataHeader;
     }
 
+    public List<PaysLines> getPaysLines() {
+        return paysLines;
+    }
+
+    public void setPaysLines(List<PaysLines> paysLines) {
+        this.paysLines = paysLines;
+    }
+
     //табличная часть
-    public static class PayLines extends TableDoc {
+    public static class PaysLines extends TableLines {
         private String dateDoc;
         private String numberDoc;
         private double sum;
+        private String currency;
 
-        public PayLines(String dateDoc, String numberDoc, double sum, String docId) {
+        public PaysLines(String docId, String dateDoc, String numberDoc, double sum, String currency) {
             this.dateDoc = dateDoc;
             this.numberDoc = numberDoc;
             this.sum = sum;
+            this.currency = currency;
             setDocId(docId);
+        }
+
+        public String getDateDoc() {
+            return dateDoc;
+        }
+
+        public String getNumberDoc() {
+            return numberDoc;
+        }
+
+        public double getSum() {
+            return sum;
+        }
+
+        public void setSum(double sum) {
+            this.sum = sum;
+        }
+
+        public String getCurrency() {
+            return currency;
         }
     }
 }

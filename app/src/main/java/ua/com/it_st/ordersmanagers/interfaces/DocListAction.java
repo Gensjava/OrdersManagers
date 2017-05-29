@@ -1,18 +1,18 @@
 package ua.com.it_st.ordersmanagers.interfaces;
 
 
-import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.TableLines;
 
 public interface DocListAction {
 
     /*добавить запись*/
-    boolean add(Orders.OrderLines item);
+    boolean add(TableLines item);
 
     /*обновить запись*/
-    boolean update(Orders.OrderLines item);
+    boolean update(TableLines item);
 
     /*удалить запись*/
-    boolean delete(Orders.OrderLines item);
+    boolean delete(TableLines item);
 
     /*удалить все записи*/
     boolean deleteAll();

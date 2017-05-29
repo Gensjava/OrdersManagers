@@ -18,5 +18,4 @@ public class Companies extends Catalogs {
         nameNativeLanguage = "Организация";
     }
 
-    ;
 }

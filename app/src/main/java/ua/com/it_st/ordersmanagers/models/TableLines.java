@@ -4,15 +4,15 @@ package ua.com.it_st.ordersmanagers.models;
  * Created by Gena on 2017-05-26.
  */
 
-public abstract class TableDoc {
+public abstract class TableLines {
     private String docId;
     private int ordinal;
     private double total;
 
-    public TableDoc() {
+    public TableLines() {
     }
 
-    public TableDoc(String docId) {
+    public TableLines(String docId) {
         this.docId = docId;
     }
 

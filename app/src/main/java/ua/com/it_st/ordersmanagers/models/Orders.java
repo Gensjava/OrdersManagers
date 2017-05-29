@@ -131,7 +131,7 @@ public class Orders extends Documents {
     }
 
     //табличная часть заказа
-    public static class OrderLines extends TableDoc {
+    public static class OrdersLines extends TableLines {
 
         private Products product;
         private double amount;
@@ -139,14 +139,14 @@ public class Orders extends Documents {
         private double sum;
         private int rate;
 
-        public OrderLines() {
+        public OrdersLines() {
         }
 
-        public OrderLines(Products product) {
+        public OrdersLines(Products product) {
             this.product = product;
         }
 
-        public OrderLines(String docId, Products product, double amount, double price, double sum) {
+        public OrdersLines(String docId, Products product, double amount, double price, double sum) {
             super(docId);
             this.product = product;
             this.amount = amount;

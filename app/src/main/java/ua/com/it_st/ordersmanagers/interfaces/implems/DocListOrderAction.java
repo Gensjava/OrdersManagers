@@ -7,19 +7,20 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ua.com.it_st.ordersmanagers.interfaces.OrderListActionDetali;
+import ua.com.it_st.ordersmanagers.interfaces.OrderBasementAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.TableLines;
 
-public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interfaces.DocListAction, OrderListActionDetali {
+public class DocListOrderAction implements ua.com.it_st.ordersmanagers.interfaces.DocListAction, OrderBasementAction {
 
     /* ТЧ заказа */
-    public static Set<Orders.OrderLines> mCart = new LinkedHashSet<Orders.OrderLines>();
+    public static Set<Orders.OrdersLines> mCart = new LinkedHashSet<Orders.OrdersLines>();
 
     /*заполняем корзину в ArrayList*/
-    public static ArrayList<Orders.OrderLines> getItemsGoods() {
-        ArrayList<Orders.OrderLines> lCartOrders = new ArrayList<Orders.OrderLines>();
+    public static ArrayList<Orders.OrdersLines> getItemsGoods() {
+        ArrayList<Orders.OrdersLines> lCartOrders = new ArrayList<Orders.OrdersLines>();
 
-        Orders.OrderLines[] cartOrders = DocCartOrderAction.mCart.toArray(new Orders.OrderLines[mCart.size()]);
+        Orders.OrdersLines[] cartOrders = DocListOrderAction.mCart.toArray(new Orders.OrdersLines[mCart.size()]);
 
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;
@@ -30,8 +31,8 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
     если есть такой товар тогда делаем замену
     */
     @Override
-    public boolean add(Orders.OrderLines item) {
-        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
+    public boolean add(TableLines item) {
+        Orders.OrdersLines itemOrder = (Orders.OrdersLines) item;
         /* удаляем товар */
         delete(item);
        /* добавляем только если больше чем 0 */
@@ -43,10 +44,10 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
 
     /*изменяем количество товара*/
     @Override
-    public boolean update(Orders.OrderLines item) {
-        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
+    public boolean update(TableLines item) {
+        Orders.OrdersLines itemOrder = (Orders.OrdersLines) item;
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
-        for (Orders.OrderLines iC : mCart) {
+        for (Orders.OrdersLines iC : mCart) {
             if (iC.getProduct().getKod().equals(itemOrder.getProduct().getKod())) {
 
                 iC.setAmount(itemOrder.getAmount());
@@ -60,8 +61,8 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
 
     /*удаляем товар из корзины*/
     @Override
-    public boolean delete(Orders.OrderLines item) {
-        Orders.OrderLines itemOrder = (Orders.OrderLines) item;
+    public boolean delete(TableLines item) {
+        Orders.OrdersLines itemOrder = (Orders.OrdersLines) item;
 
         if (mCart.contains(itemOrder)) {
             return mCart.remove(itemOrder);
@@ -74,7 +75,6 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
         return mCart.removeAll(mCart);
     }
 
-
     @Override
     public int seze() {
         return mCart.size();
@@ -84,7 +84,7 @@ public class DocCartOrderAction implements ua.com.it_st.ordersmanagers.interface
     public double sum() {
         double iNumber = 0;
 
-        for (final Orders.OrderLines aMCart : mCart) {
+        for (final Orders.OrdersLines aMCart : mCart) {
             iNumber = iNumber + aMCart.getSum();
         }
         iNumber = new BigDecimal(iNumber).setScale(2, RoundingMode.UP).doubleValue();
