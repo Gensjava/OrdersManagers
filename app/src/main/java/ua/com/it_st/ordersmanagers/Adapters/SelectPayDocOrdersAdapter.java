@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.R;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListPayAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.PayListDocAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
@@ -23,7 +23,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
 
 public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
-    private DocListPayAction docListPayAction;
+    private PayListDocAction payListDocAction;
     private Pays pays;
 
     public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, Pays pays) {
@@ -31,7 +31,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         this.mLInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.docListPayAction = new DocListPayAction(pays.getPaysLines());
+        this.payListDocAction = new PayListDocAction(pays.getPaysLines());
         this.pays = pays;
     }
 
@@ -91,11 +91,11 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
                     viewHolder.pay_summa_pay.setText(viewHolder.debet.getText());
 
                     viewHolder.payLines.setSum(Double.valueOf(viewHolder.pay_summa_pay.getText().toString()));
-                    docListPayAction.add(viewHolder.payLines);
+                    payListDocAction.add(viewHolder.payLines);
 
                 } else {
                     viewHolder.pay_summa_pay.setText("");
-                    docListPayAction.delete(viewHolder.payLines);
+                    payListDocAction.delete(viewHolder.payLines);
                 }
             }
         });

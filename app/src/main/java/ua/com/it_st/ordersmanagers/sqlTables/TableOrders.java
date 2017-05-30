@@ -6,8 +6,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
@@ -64,12 +64,12 @@ public class TableOrders {
     public static ContentValues getContentValues(Orders sData) {
 
         final ContentValues data = new ContentValues();
-        final DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+        final OrderListAction lUpDateOrderList = new OrderListAction();
 
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, ConstantsUtil.getDate());
-        data.put(COLUMN_NUMBER, DocActionOrder.sCurrentNumber);
+        data.put(COLUMN_NUMBER, OrderDocAction.sCurrentNumber);
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, sData.getAgent().getKod());
         data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());
@@ -79,7 +79,7 @@ public class TableOrders {
         data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_NOTE, sData.getNote());
         data.put(COLUMN_TIME, ConstantsUtil.getTime());
-        data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
+        data.put(COLUMN_CLIENT_ADRESS, sData.getCounteragent().getAddress());
 
         return data;
     }
@@ -87,7 +87,7 @@ public class TableOrders {
     public static ContentValues getContentValuesUpdata(Orders sData) {
 
         final ContentValues data = new ContentValues();
-        final DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+        final OrderListAction lUpDateOrderList = new OrderListAction();
 
         data.put(COLUMN_TOTAL, lUpDateOrderList.sum());
         data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());
@@ -95,7 +95,7 @@ public class TableOrders {
         data.put(COLUMN_CLIENT_ID, sData.getCounteragent().getKod());
         data.put(COLUMN_PRICE_CATEGORY_ID, sData.getTypePrices().getKod());
         data.put(COLUMN_NOTE, sData.getNote());
-        data.put(COLUMN_CLIENT_ADRESS, sData.getAdress());
+        data.put(COLUMN_CLIENT_ADRESS, sData.getCounteragent().getAddress());
 
         return data;
     }

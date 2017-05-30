@@ -7,11 +7,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ua.com.it_st.ordersmanagers.interfaces.OrderBasementAction;
+import ua.com.it_st.ordersmanagers.interfaces.DocBasementAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.TableLines;
 
-public class DocListOrderAction implements ua.com.it_st.ordersmanagers.interfaces.DocListAction, OrderBasementAction {
+public class OrderListAction implements ua.com.it_st.ordersmanagers.interfaces.DocListAction, DocBasementAction {
 
     /* ТЧ заказа */
     public static Set<Orders.OrdersLines> mCart = new LinkedHashSet<Orders.OrdersLines>();
@@ -20,7 +20,7 @@ public class DocListOrderAction implements ua.com.it_st.ordersmanagers.interface
     public static ArrayList<Orders.OrdersLines> getItemsGoods() {
         ArrayList<Orders.OrdersLines> lCartOrders = new ArrayList<Orders.OrdersLines>();
 
-        Orders.OrdersLines[] cartOrders = DocListOrderAction.mCart.toArray(new Orders.OrdersLines[mCart.size()]);
+        Orders.OrdersLines[] cartOrders = OrderListAction.mCart.toArray(new Orders.OrdersLines[mCart.size()]);
 
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;
@@ -76,7 +76,7 @@ public class DocListOrderAction implements ua.com.it_st.ordersmanagers.interface
     }
 
     @Override
-    public int seze() {
+    public int size() {
         return mCart.size();
     }
 

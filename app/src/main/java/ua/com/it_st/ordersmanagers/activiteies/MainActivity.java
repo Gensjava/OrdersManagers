@@ -25,7 +25,7 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Documents;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements
     /* текущий новый заказ */
         mCurrentOrder = null;
     /* ТЧ заказа */
-        DocListOrderAction.mCart.clear();
+        OrderListAction.mCart.clear();
     }
 
     /*Метод для ввода количества в заказе*/

@@ -19,8 +19,9 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 public abstract class CursorLoderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static SQLiteDatabase sDb;
-    protected String query;
+    private String query;
     private byte countLoad;
+    private String[] params;
 
     public abstract boolean onRecord();
 
@@ -76,5 +77,13 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public String[] getParams() {
+        return params;
+    }
+
+    public void setParams(String[] params) {
+        this.params = params;
     }
 }

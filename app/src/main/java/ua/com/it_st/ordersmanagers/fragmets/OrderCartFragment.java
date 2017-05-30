@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Orders.OrdersLines;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
@@ -44,7 +44,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
         View rootView = inflater.inflate(R.layout.order_new_cart_list, container,
                 false);
 
-        mListItems = DocListOrderAction.getItemsGoods();
+        mListItems = OrderListAction.getItemsGoods();
         /*создаем адаптер корзины*/
         sAdapter = new MyArrayAdapter(getActivity(), R.layout.order_new_cart_list_item, mListItems);
 
@@ -93,12 +93,12 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
 
             case R.id.order_new_cart_list_image_arrow_right:
 
-                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+                OrderListAction lUpDateOrderList = new OrderListAction();
                  /*проверяем пустая корзина или нет*/
                 if (!lUpDateOrderList.isEmpty()) {
                     boolean bCheck;
 
-                    DocActionOrder lUpdateOrderDB = new DocActionOrder(DB, getActivity());
+                    OrderDocAction lUpdateOrderDB = new OrderDocAction(DB, getActivity());
                      /* создаем новый заказ */
                     if (mCurrentOrder.getTypeOperation().equals(DocTypeOperation.NEW) ||
                             mCurrentOrder.getTypeOperation().equals(DocTypeOperation.COPY)) {
@@ -113,7 +113,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                         final onEventListener someEventListener = (onEventListener) getActivity();
                         someEventListener.onOpenFragmentClass(OrderListDocFragment.class);
                         /*чистим корзину*/
-                        DocListOrderAction.mCart.clear();
+                        OrderListAction.mCart.clear();
                     }
                 } else {
                     InfoUtil.showErrorAlertDialog(getString(R.string.car_empty), getString(R.string.order), getActivity());
@@ -135,7 +135,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                 product.setAmount(numberInDialog);
                 product.setSum(sumInDialog);
                 /* редактируем табличную часть заказа */
-                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+                OrderListAction lUpDateOrderList = new OrderListAction();
                 lUpDateOrderList.update(product);
             }
         } else {
@@ -143,7 +143,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
             InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
         }
         /*перезаписываем список товаров*/
-        mListItems = DocListOrderAction.getItemsGoods();
+        mListItems = OrderListAction.getItemsGoods();
         /*обновляем*/
         sAdapter.notifyDataSetChanged();
         upDataFooter();
@@ -152,7 +152,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
     /*обновляем подвал*/
     private void upDataFooter() {
 
-        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+        OrderListAction lUpDateOrderList = new OrderListAction();
         double sum = lUpDateOrderList.sum();
 
           /*Показываем сумму заказа в подвале*/
@@ -247,7 +247,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                                 /* удаляем товар*/
                                 mListItems.remove(itemOrdersLines);
 
-                                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+                                OrderListAction lUpDateOrderList = new OrderListAction();
                                 lUpDateOrderList.delete(itemOrdersLines);
 
                                 InfoUtil.Tost(getString(R.string.goods) + itemOrdersLines.getProduct().getName() + getString(R.string.delete_list), getActivity());

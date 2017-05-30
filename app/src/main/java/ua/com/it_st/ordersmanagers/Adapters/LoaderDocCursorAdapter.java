@@ -20,7 +20,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -129,7 +129,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                                     break;
                             }
                                         /* ТЧ заказа */
-                            DocListOrderAction.mCart = new LinkedHashSet<>();
+                            OrderListAction.mCart = new LinkedHashSet<>();
                                 /*редактируем док*/
 
                             bundleItem.putString(LoaderDocFragment.ID_ORDER, cId);
@@ -156,7 +156,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                         String[] choose = loaderDocFragment.getResources().getStringArray(R.array.spinner_orders_menu);
 
                         Toast toast = Toast.makeText(mContext,
-                                R.string.operation_completed + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                                "Операция выполнена: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
                         toast.show();
 
                         loaderDocFragment.getActivity().getSupportLoaderManager().getLoader(0).forceLoad();

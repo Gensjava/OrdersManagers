@@ -26,7 +26,7 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocListOrderAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Products;
 import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
@@ -187,18 +187,18 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
 
         if (ui_cart == null) return;
 
-        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+        OrderListAction lUpDateOrderList = new OrderListAction();
         double sum = lUpDateOrderList.sum();
 
          /*Показываем сумму заказа в подвале*/
         String tSum = sum == 0.0 ? getString(R.string.zero_point_text) : String.valueOf(sum);
         tSumCart.setText(tSum + getString(R.string.grn));
 
-        if (DocListOrderAction.mCart.size() == 0) {
+        if (OrderListAction.mCart.size() == 0) {
             ui_cart.setVisibility(View.INVISIBLE);
         } else {
             ui_cart.setVisibility(View.VISIBLE);
-            ui_cart.setText(Integer.toString(DocListOrderAction.mCart.size()));
+            ui_cart.setText(Integer.toString(OrderListAction.mCart.size()));
         }
     }
 
@@ -244,7 +244,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         /* делаем проверку товара на остатке */
         if (product.getBalance() >= amount) {
 
-            DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+            OrderListAction lUpDateOrderList = new OrderListAction();
 
             if (amount > 0) {
                 orderTvValue.setVisibility(View.VISIBLE);
@@ -392,7 +392,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
     /*открываем корзину*/
     protected void openCart() {
 
-        DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+        OrderListAction lUpDateOrderList = new OrderListAction();
              /*проверяем пустая корзина или нет*/
         if (!lUpDateOrderList.isEmpty()) {
             final onEventListener someEventListener = (onEventListener) getActivity();
@@ -490,7 +490,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
                     newSum
             );
 
-            DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+            OrderListAction lUpDateOrderList = new OrderListAction();
             lUpDateOrderList.add(tableOrders);
         }
                  /*обновляем корзину*/
@@ -564,7 +564,7 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         switch (view.getId()) {
 
             case R.id.order_new_goods_container_image:
-                DocListOrderAction lUpDateOrderList = new DocListOrderAction();
+                OrderListAction lUpDateOrderList = new OrderListAction();
 
                 /*прповеряем корзину пустая или нет*/
                 if (!lUpDateOrderList.isEmpty()) {

@@ -18,6 +18,7 @@ public class Pays extends Documents {
     private Counteragents counteragent;
     private List<Map<String, ?>> listDataHeader;
     private List<PaysLines> paysLines;
+    private double total;
 
     public Pays() {
         setCompany(new Companies());
@@ -85,6 +86,14 @@ public class Pays extends Documents {
 
     public void setPaysLines(List<PaysLines> paysLines) {
         this.paysLines = paysLines;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     //табличная часть

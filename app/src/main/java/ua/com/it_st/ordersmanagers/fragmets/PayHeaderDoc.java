@@ -12,14 +12,13 @@ import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocActionOrder;
+import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.models.Agents;
 import ua.com.it_st.ordersmanagers.models.Companies;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
-import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -36,7 +35,7 @@ public class PayHeaderDoc extends HeaderDoc {
 
             CurrentNewDog = new Pays();
 
-            ((MainActivity) getActivity()).setmCurrentPay(new Pays());
+            ((MainActivity) getActivity()).setmCurrentPay(CurrentNewDog);
             setListDataHeader(CurrentNewDog.getListDataHeader());
 
         /* создаем адаптер */
@@ -122,7 +121,7 @@ public class PayHeaderDoc extends HeaderDoc {
                 uniqueKey = UUID.randomUUID();
                 CurrentNewDog.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(DocActionOrder.sCurrentNumber);
+                numberDoc = String.valueOf(OrderDocAction.sCurrentNumber);
                 CurrentNewDog.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
@@ -136,19 +135,13 @@ public class PayHeaderDoc extends HeaderDoc {
                 numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
                 /*дата док*/
                 dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
-                  /* открываем подключение к БД */
-                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-                 /* создаем лоадер для чтения данных */
-                getActivity().getSupportLoaderManager().initLoader(0, null, this);
+
                 break;
 
             case COPY:
                    /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
-                     /* открываем подключение к БД */
-                sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-                 /* создаем лоадер для чтения данных */
-                getActivity().getSupportLoaderManager().initLoader(0, null, this);
+
                 break;
         }
 

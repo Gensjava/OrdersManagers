@@ -1,10 +1,10 @@
 package ua.com.it_st.ordersmanagers.interfaces;
 
 
-public interface OrderBasementAction {
+public interface DocBasementAction {
 
     /*количество всех элементов записей*/
-    int seze();
+    int size();
 
     /* Получаем сумму всех элементов */
     double sum();

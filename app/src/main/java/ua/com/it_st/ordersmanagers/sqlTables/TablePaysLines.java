@@ -39,19 +39,18 @@ public class TablePaysLines {
 
     }
 
-    public static ContentValues getContentValues(Pays.PaysLines sData, String idDoc) {
+    public static ContentValues getContentValues(Pays.PaysLines sData) {
 
         final ContentValues data = new ContentValues();
 
-        data.put(COLUMN_DOC_ID, idDoc);
+        data.put(COLUMN_DOC_ID, sData.getDocId());
         data.put(COLUMN_CURRENCY_ID, sData.getCurrency());
         data.put(COLUMN_AMOUNT, sData.getSum());
-        // data.put(COLUMN_DOC_DATE, sData.getDateDoc());
-        // data.put(COLUMN_NUMBER_DOC, sData.getNumberDoc());
+        data.put(COLUMN_DOC_DATE, sData.getDateDoc());
+        data.put(COLUMN_NUMBER_DOC, sData.getNumberDoc());
 
         return data;
     }
-
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");

@@ -11,14 +11,14 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
-public class DocActionOrder implements DocAction {
+public class OrderDocAction implements DocAction {
 
     /*текущий номер заказа*/
     public static short sCurrentNumber;
     private SQLiteDatabase mDB;
     private Context mContext;
 
-    public DocActionOrder(SQLiteDatabase pDB, Context pContext) {
+    public OrderDocAction(SQLiteDatabase pDB, Context pContext) {
         mDB = pDB;
         mContext = pContext;
     }
@@ -54,7 +54,7 @@ public class DocActionOrder implements DocAction {
         }
          /* табличная часть*/
         /*создаем новые позиции заказа*/
-        for (final Orders.OrdersLines aMCart : DocListOrderAction.mCart) {
+        for (final Orders.OrdersLines aMCart : OrderListAction.mCart) {
             long inTableLines = mDB.insert(
                     TableOrdersLines.TABLE_NAME,
                     null,
@@ -103,7 +103,7 @@ public class DocActionOrder implements DocAction {
                 new String[]{orders.getId()});
 
         /*обновляем позиции заказа (создаем новые)*/
-        for (final Orders.OrdersLines aMCart : DocListOrderAction.mCart) {
+        for (final Orders.OrdersLines aMCart : OrderListAction.mCart) {
 
             long inTableLinesNew = mDB.insert(TableOrdersLines.TABLE_NAME,
                     null,

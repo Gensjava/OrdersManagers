@@ -15,18 +15,19 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  * Created by Gena on 2017-05-28.
  */
 
-public class DocPaySQLAction implements SQLAction {
+public class PayDocSQLAction implements SQLAction {
 
     private static SQLiteDatabase mDB;
     private Context mContext;
 
-    public DocPaySQLAction(Context mContext) {
+    public PayDocSQLAction(Context mContext) {
         this.mContext = mContext;
         mDB = SQLiteOpenHelperUtil.getInstance().getDatabase();
     }
 
     @Override
     public boolean add(Object object) {
+
         Pays pays = (Pays) object;
         /* начинаем транзакцию */
         mDB.beginTransaction();
@@ -39,7 +40,7 @@ public class DocPaySQLAction implements SQLAction {
                 TablePays.getContentValues(pays));
 
         if (inTable == -1) {
-            InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.eror_add_new_order), mContext);
+            InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.error_position), mContext);
             mDB.endTransaction();
             return false;
         }
@@ -49,7 +50,7 @@ public class DocPaySQLAction implements SQLAction {
             long inTableLines = mDB.insert(
                     TablePaysLines.TABLE_NAME,
                     null,
-                    TablePaysLines.getContentValues(pay, pays.getId()));
+                    TablePaysLines.getContentValues(pay));
 
             if (inTableLines == -1) {
                 InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);

@@ -10,11 +10,11 @@ import ua.com.it_st.ordersmanagers.models.TableLines;
  * Created by Gena on 2017-05-27.
  */
 
-public class DocListPayAction implements DocListAction {
+public class PayListDocAction implements DocListAction {
 
     private List<Pays.PaysLines> paysLines;
 
-    public DocListPayAction(List<Pays.PaysLines> paysLines) {
+    public PayListDocAction(List<Pays.PaysLines> paysLines) {
         this.paysLines = paysLines;
     }
 

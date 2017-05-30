@@ -63,7 +63,7 @@ public class SQLQuery {
     public static String queryPays(final String sp) {
 
         String sq;
-        sq = "Select   Pays._id, Pays.type,  Pays.view_id, Pays.date, Pays.number, Pays.total," +
+        sq = "Select  Pays._id, Pays.type,  Pays.view_id, Pays.date, Pays.number, Pays.total," +
                 "Counteragents.name, Counteragents.address\n" +
                 "FROM Pays\n" +
                 "LEFT OUTER JOIN Counteragents ON Pays.client_id  = Counteragents.kod " +

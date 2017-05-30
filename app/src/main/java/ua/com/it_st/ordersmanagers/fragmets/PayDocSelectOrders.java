@@ -13,10 +13,10 @@ import android.widget.ListView;
 import ua.com.it_st.ordersmanagers.Adapters.SelectPayDocOrdersAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.DocPaySQLAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocBasementAction;
+import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocSQLAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
-import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
@@ -35,12 +35,13 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
         /* макет фрагмента */
         View rootView = inflater.inflate(R.layout.pay_dogs_select_container, container, false);
 
+        pays = (Pays) ((MainActivity) getActivity()).getmCurrentPay();
+
         setCountLoad((byte) 1);
         setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
+        setParams(new String[]{pays.getCounteragent().getKod()});
 
         super.onCreateView(inflater, container, savedInstanceState);
-
-        pays = (Pays) ((MainActivity) getActivity()).getmCurrentPay();
 
         /* создааем адаптер и настраиваем список */
         scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, new String[]{}, new int[]{}, 0, pays);
@@ -57,18 +58,12 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new GlobalCursorLoader(getActivity(), getQuery(), new String[]{"11 041"}, CursorLoderFragment.sDb);
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), CursorLoderFragment.sDb);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        if (data.isClosed()) {
-            //err
-            InfoUtil.Tost("Нет данных!", getActivity());
-        } else {
-            scAdapter.swapCursor(data);
-        }
+        scAdapter.swapCursor(data);
         scAdapter.notifyDataSetChanged();
     }
 
@@ -80,9 +75,7 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
             case R.id.pay_dogs_container_image:
-
                 if (onRecord()) {
                     final PayHeaderDoc.onEventListener someEventListener = (PayHeaderDoc.onEventListener) getActivity();
                     someEventListener.onOpenFragmentClass(PayDocListDocFragment.class);
@@ -95,7 +88,10 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
 
     @Override
     public boolean onRecord() {
-        DocPaySQLAction docPaySQLAction = new DocPaySQLAction(getActivity());
-        return docPaySQLAction.add(pays);
+        PayDocBasementAction payDocBasementAction = new PayDocBasementAction(pays);
+        payDocBasementAction.sum();
+
+        PayDocSQLAction payDocSQLAction = new PayDocSQLAction(getActivity());
+        return payDocSQLAction.add(pays);
     }
 }

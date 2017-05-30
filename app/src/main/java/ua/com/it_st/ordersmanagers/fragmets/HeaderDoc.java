@@ -1,14 +1,10 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -26,15 +22,14 @@ import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
-import ua.com.it_st.ordersmanagers.utils.SQLQuery;
-import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 /**
  * Created by Gena on 2017-05-14.
  */
 
-public abstract class HeaderDoc extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class HeaderDoc extends CursorLoderFragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
     public static final String NAME_TAG = "NAME_TAG";
@@ -42,7 +37,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     public static final String ID_POSITION = "ID_POSITION";
 
     public static String id_order;
-    protected static SQLiteDatabase sDb;
     protected View rootView;
     protected SimpleAdapter mAdapter;
     protected String numberDoc;
@@ -56,7 +50,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     public abstract void fillHeaderFromCursor(Cursor data);
     public abstract void onCreateHeader(Bundle bundle);
 
-    public abstract boolean onRecord();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,14 +103,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        /* открываем подключение к БД */
-        if (sDb == null) {
-            sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
-        }
-    }
 
     public void setItemHeader(final Object item, String id) {
         List<Map<String, ?>> listDataHeader = getListDataHeader();
@@ -137,7 +122,7 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new MyCursorLoader(getActivity());
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), sDb);
     }
 
     @Override
@@ -158,7 +143,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
-
     }
 
     public DocTypeOperation getDocTypeOperation() {
@@ -181,21 +165,6 @@ public abstract class HeaderDoc extends Fragment implements View.OnClickListener
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
-    }
-
-    /* создаем класс для загрузки данных из БД
-        * загрузка происходит в фоне */
-    private class MyCursorLoader extends CursorLoader {
-
-        public MyCursorLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-            return sDb
-                    .rawQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"), new String[]{id_order});
-        }
     }
 
 }
