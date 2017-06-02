@@ -22,8 +22,6 @@ import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
-import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -41,6 +39,7 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
     protected SimpleAdapter mAdapter;
     protected String numberDoc;
     protected String dateDoc;
+    protected TextView period;
     protected DocTypeOperation docTypeOperation;
     protected UUID uniqueKey;
     protected String kodAgent;
@@ -49,7 +48,6 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
     public abstract void setHeaderSelection(int position, Object item);
     public abstract void fillHeaderFromCursor(Cursor data);
     public abstract void onCreateHeader(Bundle bundle);
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,15 +70,16 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
             kodAgent = mSettings.getString(getActivity().getString(R.string.id_user), null);
 
             Bundle bundle = getArguments();
+
             /*редактируем документ*/
             onCreateHeader(bundle);
+            //super.onCreateView(inflater, container, savedInstanceState);
 
             /*стктус докуента*/
             header.setText(docTypeOperation.toString());
 
             /*выводим данные дату и номер в шапку*/
-            TextView period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
-            period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
+            period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
 
             /* список шапка заказа*/
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);
@@ -96,13 +95,7 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
     @Override
     public void onPause() {
         super.onPause();
-        if (docTypeOperation == DocTypeOperation.EDIT
-                || docTypeOperation == DocTypeOperation.COPY) {
-           /* выходим из загрузчкика*/
-            getActivity().getSupportLoaderManager().destroyLoader(0);
-        }
     }
-
 
     public void setItemHeader(final Object item, String id) {
         List<Map<String, ?>> listDataHeader = getListDataHeader();
@@ -118,27 +111,6 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
 
         setItemHeader(item, id);
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), sDb);
-    }
-
-    @Override
-    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-
-        if (data.isClosed()) {
-            //err
-
-        } else {
-            /*переходим к первой строке*/
-            if (data.moveToFirst()) {
-                fillHeaderFromCursor(data);
-            } else {
-                InfoUtil.Tost(getString(R.string.no_data_on_number_order) + id_order, getActivity());
-            }
-        }
     }
 
     @Override

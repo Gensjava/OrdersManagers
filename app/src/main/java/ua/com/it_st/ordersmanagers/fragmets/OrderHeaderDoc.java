@@ -5,6 +5,7 @@ package ua.com.it_st.ordersmanagers.fragmets;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,21 +24,23 @@ import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Stores;
 import ua.com.it_st.ordersmanagers.models.TypePrices;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class OrderHeaderDoc extends HeaderDoc {
 
-    private Orders CurrentNewDog;
+    private Orders orders;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if (rootView == null) {
-            CurrentNewDog = new Orders();
+            orders = new Orders();
+            setCountLoad((byte) 1);
 
-            ((MainActivity) getActivity()).setmCurrentOrder(CurrentNewDog);
+            ((MainActivity) getActivity()).setmCurrentOrder(orders);
 
-            setListDataHeader(CurrentNewDog.getListDataHeader());
+            setListDataHeader(orders.getListDataHeader());
 
         /* создаем адаптер */
             setmAdapter(new HeaderDocAdapter(getActivity(), getListDataHeader(),
@@ -47,9 +50,7 @@ public class OrderHeaderDoc extends HeaderDoc {
 
             super.onCreateView(inflater, container, savedInstanceState);
 
-            CurrentNewDog.setTypeOperation(getDocTypeOperation());
-            setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
-            setParams(new String[]{id_order});
+            orders.setTypeOperation(getDocTypeOperation());
 
         }
         return rootView;
@@ -72,23 +73,55 @@ public class OrderHeaderDoc extends HeaderDoc {
     }
 
     @Override
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), sDb);
+    }
+
+    @Override
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+
+            /*переходим к первой строке*/
+        if (data.moveToFirst()) {
+            switch (docTypeOperation) {
+                case NEW:
+                    /*следующий номер заказа*/
+                    orders.setDocNumber(String.valueOf((short) data.getCount() + 1));
+                    /*устанавливаем дату документа и номер*/
+                    numberDoc = orders.getDocNumber();
+                    period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
+                    break;
+                case EDIT:
+                case COPY:
+                    fillHeaderFromCursor(data);
+                    break;
+                default:
+                    break;
+            }
+
+        } else {
+            InfoUtil.Tost(getString(R.string.no_data_on_number_order) + id_order, getActivity());
+        }
+    }
+
+    @Override
     public void setHeaderSelection(int position, Object item) {
 
         switch (position) {
             case 0:
-                CurrentNewDog.setCompany((Companies) item);
+                orders.setCompany((Companies) item);
                 break;
             case 1:
-                CurrentNewDog.setStore((Stores) item);
+                orders.setStore((Stores) item);
                 break;
             case 2:
-                CurrentNewDog.setCounteragent((Counteragents) item);
+                orders.setCounteragent((Counteragents) item);
                 break;
             case 3:
-                CurrentNewDog.setTypePrices((TypePrices) item);
+                orders.setTypePrices((TypePrices) item);
                 break;
             case 4:
-                CurrentNewDog.setNote(item.toString());
+                orders.setNote(item.toString());
                 break;
             default:
                 break;
@@ -113,18 +146,18 @@ public class OrderHeaderDoc extends HeaderDoc {
         String cComent = data.getString(data.getColumnIndex("note"));
 
         /*заполняем док заказ*/
-        CurrentNewDog.setCompany(new Companies(cKodCompanies, cNameCompanies));
-        CurrentNewDog.setStore(new Stores(cKodStores, cNameStores));
-        CurrentNewDog.setCounteragent(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
-        CurrentNewDog.setTypePrices(new TypePrices(cKodPrices, cNamePrices));
-        CurrentNewDog.setNote(cComent == null ? "" : cComent);
-        CurrentNewDog.getAgent().setKod(cAgent);
+        orders.setCompany(new Companies(cKodCompanies, cNameCompanies));
+        orders.setStore(new Stores(cKodStores, cNameStores));
+        orders.setCounteragent(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
+        orders.setTypePrices(new TypePrices(cKodPrices, cNamePrices));
+        orders.setNote(cComent == null ? "" : cComent);
+        orders.getAgent().setKod(cAgent);
 
-        setItemHeader(CurrentNewDog.getCompany(), "0");
-        setItemHeader(CurrentNewDog.getStore(), "1");
-        setItemHeader(CurrentNewDog.getCounteragent(), "2");
-        setItemHeader(CurrentNewDog.getTypePrices(), "3");
-        setItemHeader(CurrentNewDog.getNote(), "4");
+        setItemHeader(orders.getCompany(), "0");
+        setItemHeader(orders.getStore(), "1");
+        setItemHeader(orders.getCounteragent(), "2");
+        setItemHeader(orders.getTypePrices(), "3");
+        setItemHeader(orders.getNote(), "4");
 
         mAdapter.notifyDataSetChanged();
     }
@@ -138,49 +171,56 @@ public class OrderHeaderDoc extends HeaderDoc {
 
         switch (docTypeOperation) {
             case NEW:
+                setQuery(SQLQuery.queryOrdersDocsAmount("Orders.view_id <> ?"));
+                setParams(new String[]{"null"});
+
                  /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
                 uniqueKey = UUID.randomUUID();
-                CurrentNewDog.setId(String.valueOf(uniqueKey));
-                /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(OrderDocAction.sCurrentNumber);
-                CurrentNewDog.setDocNumber(numberDoc);
+                orders.setId(String.valueOf(uniqueKey));
+
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 /*устанавливаем мод. корзины*/
-                CurrentNewDog.setClickModifitsirovannoiCart(false);
+                orders.setClickModifitsirovannoiCart(false);
                 break;
 
             case EDIT:
                 /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
-                CurrentNewDog.setId(id_order);
+
+                setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
+                setParams(new String[]{id_order});
+
+                orders.setId(id_order);
                /*номер документа*/
                 numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
                 /*дата док*/
                 dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
 
-                setCountLoad((byte) 1);
                 break;
 
             case COPY:
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
+
+                setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
+                setParams(new String[]{id_order});
+
                  /*устанавливаем дату документа и номер*/
                 numberDoc = String.valueOf(OrderDocAction.sCurrentNumber);
-                CurrentNewDog.setDocNumber(numberDoc);
+                orders.setDocNumber(numberDoc);
                  /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
                 uniqueKey = UUID.randomUUID();
-                CurrentNewDog.setId(String.valueOf(uniqueKey));
-                setCountLoad((byte) 1);
+                orders.setId(String.valueOf(uniqueKey));
                 break;
         }
 
-        CurrentNewDog.setAgent(new Agents(kodAgent, kodAgent));
-        CurrentNewDog.setDocDate(dateDoc);
-        CurrentNewDog.setDocNumber(numberDoc);
+        orders.setAgent(new Agents(kodAgent, kodAgent));
+        orders.setDocDate(dateDoc);
+        orders.setDocNumber(numberDoc);
     }
 
     @Override
@@ -188,12 +228,12 @@ public class OrderHeaderDoc extends HeaderDoc {
 
         boolean bCheck = false;
          /* проверяем на обязательные поля шапки документа*/
-        if (CurrentNewDog.getDocNumber() == null
-                || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null
-                || CurrentNewDog.getTypePrices().getKod() == null
-                || CurrentNewDog.getCounteragent().getKod() == null) {
+        if (orders.getDocNumber() == null
+                || orders.getDocDate() == null
+                || orders.getAgent().getKod() == null
+                || orders.getCompany().getKod() == null
+                || orders.getTypePrices().getKod() == null
+                || orders.getCounteragent().getKod() == null) {
 
             bCheck = true;
             InfoUtil.Tost(getActivity().getString(R.string.not_all_cap_mandatory_filled), getActivity());

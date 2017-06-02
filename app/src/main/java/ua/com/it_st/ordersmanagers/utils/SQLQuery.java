@@ -32,7 +32,7 @@ public class SQLQuery {
     public static String queryOrders(final String sp) {
 
         String sq;
-        sq = "Select   Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total," +
+        sq = "Select Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total, " +
                 "Counteragents.name, Counteragents.address\n" +
                 "FROM Orders\n" +
                 "LEFT OUTER JOIN Counteragents ON Orders.client_id  = Counteragents.kod " +
@@ -197,6 +197,28 @@ public class SQLQuery {
         sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.name, CounteragentsDebtDocs._id \n" +
                 "From CounteragentsDebtDocs\n" +
                 "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod \n" +
+                "WHERE " + sp + ";";
+        return sq;
+    }
+
+    /* запрос считам сколько документов
+   sp параметры условий запроса
+   */
+    public static String queryOrdersDocsAmount(String sp) {
+
+        String sq;
+        sq = "select  Orders.view_id from Orders " +
+                "WHERE " + sp + ";";
+        return sq;
+    }
+
+    /* запрос считам сколько документов
+   sp параметры условий запроса
+   */
+    public static String queryPaysDocsAmount(final String sp) {
+
+        String sq;
+        sq = "select  COUNT(*) from Pays " +
                 "WHERE " + sp + ";";
         return sq;
     }

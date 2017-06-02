@@ -27,7 +27,8 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
-import ua.com.it_st.ordersmanagers.models.Documents;
+import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
 
-    private Documents mCurrentOrder;
-    private Documents mCurrentPay;
+    private Orders mCurrentOrder;
+    private Pays mCurrentPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,19 +282,19 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    public Documents getmCurrentOrder() {
+    public Orders getmCurrentOrder() {
         return mCurrentOrder;
     }
 
-    public void setmCurrentOrder(Documents mCurrentOrder) {
+    public void setmCurrentOrder(Orders mCurrentOrder) {
         this.mCurrentOrder = mCurrentOrder;
     }
 
-    public Documents getmCurrentPay() {
+    public Pays getmCurrentPay() {
         return mCurrentPay;
     }
 
-    public void setmCurrentPay(Documents mCurrentPay) {
+    public void setmCurrentPay(Pays mCurrentPay) {
         this.mCurrentPay = mCurrentPay;
     }
 

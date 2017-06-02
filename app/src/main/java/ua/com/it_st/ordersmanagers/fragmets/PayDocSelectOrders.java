@@ -35,7 +35,7 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
         /* макет фрагмента */
         View rootView = inflater.inflate(R.layout.pay_dogs_select_container, container, false);
 
-        pays = (Pays) ((MainActivity) getActivity()).getmCurrentPay();
+        pays = ((MainActivity) getActivity()).getmCurrentPay();
 
         setCountLoad((byte) 1);
         setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));

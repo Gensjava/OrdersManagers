@@ -3,7 +3,6 @@ package ua.com.it_st.ordersmanagers.utils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -18,13 +17,13 @@ import android.widget.TextView;
 import ua.com.it_st.ordersmanagers.Adapters.LoaderDocCursorAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
+import ua.com.it_st.ordersmanagers.fragmets.CursorLoderFragment;
 
 /**
  * Created by Gena on 2017-05-13.
  */
 
-public abstract class LoaderDocFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public abstract class LoaderDocFragment extends CursorLoderFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     public static final String NUMBER_ORDER = "NUMBER_ORDER";
     public static final String DATE_ORDER = "DATE_ORDER";
@@ -46,8 +45,9 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
         /* макет фрагмента */
         rootView = inflater.inflate(R.layout.main_header_list, container,
                 false);
-        /* открываем подключение к БД */
         sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
+        /* открываем подключение к БД */
+        setCountLoad((byte) 2);
 
         /*устанавливаем период журнала*/
         periodDoc = (TextView) rootView.findViewById(R.id.main_heander_period);
@@ -61,17 +61,11 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
         /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
 
-        /* формируем столбцы сопоставления */
-        String[] from = new String[]{};
-        int[] to = new int[]{};
-        /* создааем адаптер и настраиваем список */
-        scAdapter = new LoaderDocCursorAdapter(getActivity(), R.layout.main_list_item, null, from, to, 0, this);
+       /* создааем адаптер и настраиваем список */
+        scAdapter = new LoaderDocCursorAdapter(getActivity(), R.layout.main_list_item, null, new String[]{}, new int[]{}, 0, this);
         /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
         lvData.setAdapter(scAdapter);
-        /* создаем лоадер для чтения данных */
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        getActivity().getSupportLoaderManager().initLoader(2, null, this);
 
         /**/
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_drawer);
@@ -80,65 +74,11 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
         return rootView;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        /* выходим из загрузчкика*/
-        getActivity().getSupportLoaderManager().destroyLoader(0);
-        getActivity().getSupportLoaderManager().destroyLoader(2);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        /* создаем загрузчик */
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
-        getActivity().getSupportLoaderManager().initLoader(2, null, this);
-         /* обновляем курсор */
-        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
-        getActivity().getSupportLoaderManager().getLoader(2).forceLoad();
-    }
-
     //установка периода в журнале
     public void setPeriodDoc(String pPeriodDoc) {
         periodDoc.setText(pPeriodDoc);
     }
 
-    /* функция
-    * отрабатывает при создании */
-    @Override
-    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        switch (id) {
-            case 0:/*получаем все заазы*/
-                return new GlobalCursorLoader(getActivity(), mQueryList, new String[]{"null"}, sDb);
-            case 2:/*получаем сумму всех заазов*/
-                return new GlobalCursorLoader(getActivity(), mQuerySum, new String[]{"null"}, sDb);
-            default:
-                return null;
-        }
-    }
-
-    /*функция отрабатывает после выполнения*/
-    @Override
-    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-
-        switch (loader.getId()) {
-            case 0:
-                scAdapter.swapCursor(data);
-                /*следующий номер заказа*/
-                OrderDocAction.setsCurrentNumber((short) data.getCount());
-                break;
-            case 2:
-                final int cSumIndex = data.getColumnIndex("sum_orders");
-                data.moveToFirst();
-                final String cSum = data.getString(cSumIndex);
-                updataSumOrders(cSum);
-                break;
-            default:
-                break;
-        }
-    }
 
     /* функция перезапуск */
     @Override
@@ -147,7 +87,7 @@ public abstract class LoaderDocFragment extends Fragment implements LoaderManage
     }
 
     /*Обновляем подвал сумму заказов*/
-    private void updataSumOrders(String sumOrders) {
+    public void updataSumOrders(String sumOrders) {
 
         if (sumOrders == null) {
             sumOrders = getString(R.string.zero_point_text);

@@ -23,7 +23,6 @@ import java.util.LinkedHashSet;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
@@ -134,8 +133,6 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         ((MainActivity) getActivity()).setmCurrentOrder(null);
         /* ТЧ заказа */
         OrderListAction.mCart = new LinkedHashSet<>();
-       /*текущий номер заказа*/
-        OrderDocAction.sCurrentNumber = 0;
         //
         nOSeek = 0;
         mProgress = 0;
