@@ -14,23 +14,12 @@ import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 public class OrderDocAction implements DocAction {
 
     /*текущий номер заказа*/
-    public static short sCurrentNumber;
     private SQLiteDatabase mDB;
     private Context mContext;
 
     public OrderDocAction(SQLiteDatabase pDB, Context pContext) {
         mDB = pDB;
         mContext = pContext;
-    }
-
-    /* записываем новый номер заказа */
-    public static void setsCurrentNumber(short pCurrentNumber) {
-
-        if (pCurrentNumber == 0) {
-            sCurrentNumber = 1;
-        } else {
-            sCurrentNumber = ++pCurrentNumber;
-        }
     }
 
     @Override

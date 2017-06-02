@@ -13,13 +13,13 @@ import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.models.Agents;
 import ua.com.it_st.ordersmanagers.models.Companies;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -122,7 +122,8 @@ public class PayHeaderDoc extends HeaderDoc {
                 uniqueKey = UUID.randomUUID();
                 CurrentNewDog.setId(String.valueOf(uniqueKey));
                 /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(OrderDocAction.sCurrentNumber);
+                      /*номер документа*/
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                 CurrentNewDog.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
@@ -130,12 +131,12 @@ public class PayHeaderDoc extends HeaderDoc {
 
             case EDIT:
                 /*получаем ID дока и подставляем в запрос*/
-                id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
+                id_order = bundle.getString(LoaderDocFragment.ID_DOC);
                 CurrentNewDog.setId(id_order);
                /*номер документа*/
-                numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                 /*дата док*/
-                dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
+                dateDoc = bundle.getString(LoaderDocFragment.DATE_DOC);
 
                 break;
 

@@ -14,13 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.LinkedHashSet;
-
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -121,20 +118,18 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                             switch (selectedItemPosition) {
                                 case 0:
                                   /*чистим док заказ и редактируем заказ*/
-                                    bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.EDIT.toString());
+                                    bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.EDIT.toString());
+                                    bundleItem.putString(LoaderDocFragment.NUMBER_DOC, cNumber);
+                                    bundleItem.putString(LoaderDocFragment.DATE_DOC, cDate);
+                                    bundleItem.putString(LoaderDocFragment.ID_DOC, cId);
                                     break;
                                 case 3:
                                   /*чистим док заказ и копируем заказ*/
-                                    bundleItem.putString(LoaderDocFragment.DOC_TYPE_OPERATION, DocTypeOperation.COPY.toString());
+                                    bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.COPY.toString());
+                                    bundleItem.putString(LoaderDocFragment.NUMBER_DOC, String.valueOf(loaderDocFragment.getNextNumberDoc()));
+                                    bundleItem.putString(LoaderDocFragment.ID_DOC, cId);
                                     break;
                             }
-                                        /* ТЧ заказа */
-                            OrderListAction.mCart = new LinkedHashSet<>();
-                                /*редактируем док*/
-
-                            bundleItem.putString(LoaderDocFragment.ID_ORDER, cId);
-                            bundleItem.putString(LoaderDocFragment.NUMBER_ORDER, cNumber);
-                            bundleItem.putString(LoaderDocFragment.DATE_ORDER, cDate);
 
                             final LoaderDocFragment.onLoaderDocListener someEventListener = (LoaderDocFragment.onLoaderDocListener) mContext;
                             someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);

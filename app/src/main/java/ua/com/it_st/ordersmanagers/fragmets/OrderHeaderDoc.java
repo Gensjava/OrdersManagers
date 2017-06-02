@@ -16,7 +16,6 @@ import ua.com.it_st.ordersmanagers.Adapters.HeaderDocAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.models.Agents;
 import ua.com.it_st.ordersmanagers.models.Companies;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
@@ -26,6 +25,7 @@ import ua.com.it_st.ordersmanagers.models.TypePrices;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
+import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class OrderHeaderDoc extends HeaderDoc {
@@ -36,7 +36,6 @@ public class OrderHeaderDoc extends HeaderDoc {
 
         if (rootView == null) {
             orders = new Orders();
-            setCountLoad((byte) 1);
 
             ((MainActivity) getActivity()).setmCurrentOrder(orders);
 
@@ -83,22 +82,7 @@ public class OrderHeaderDoc extends HeaderDoc {
 
             /*переходим к первой строке*/
         if (data.moveToFirst()) {
-            switch (docTypeOperation) {
-                case NEW:
-                    /*следующий номер заказа*/
-                    orders.setDocNumber(String.valueOf((short) data.getCount() + 1));
-                    /*устанавливаем дату документа и номер*/
-                    numberDoc = orders.getDocNumber();
-                    period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
-                    break;
-                case EDIT:
-                case COPY:
-                    fillHeaderFromCursor(data);
-                    break;
-                default:
-                    break;
-            }
-
+            fillHeaderFromCursor(data);
         } else {
             InfoUtil.Tost(getString(R.string.no_data_on_number_order) + id_order, getActivity());
         }
@@ -171,14 +155,12 @@ public class OrderHeaderDoc extends HeaderDoc {
 
         switch (docTypeOperation) {
             case NEW:
-                setQuery(SQLQuery.queryOrdersDocsAmount("Orders.view_id <> ?"));
-                setParams(new String[]{"null"});
-
                  /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
                 uniqueKey = UUID.randomUUID();
                 orders.setId(String.valueOf(uniqueKey));
-
+                /*номер документа*/
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 /*устанавливаем мод. корзины*/
@@ -186,6 +168,7 @@ public class OrderHeaderDoc extends HeaderDoc {
                 break;
 
             case EDIT:
+                setCountLoad((byte) 1);
                 /*получаем ID дока и подставляем в запрос*/
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
 
@@ -194,21 +177,20 @@ public class OrderHeaderDoc extends HeaderDoc {
 
                 orders.setId(id_order);
                /*номер документа*/
-                numberDoc = bundle.getString(OrderListDocFragment.NUMBER_ORDER);
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                 /*дата док*/
-                dateDoc = bundle.getString(OrderListDocFragment.DATE_ORDER);
-
+                dateDoc = bundle.getString(LoaderDocFragment.DATE_DOC);
                 break;
 
             case COPY:
+                setCountLoad((byte) 1);
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
 
                 setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
                 setParams(new String[]{id_order});
 
-                 /*устанавливаем дату документа и номер*/
-                numberDoc = String.valueOf(OrderDocAction.sCurrentNumber);
-                orders.setDocNumber(numberDoc);
+                /*номер документа*/
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                  /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 /*создаем новый заказ*/

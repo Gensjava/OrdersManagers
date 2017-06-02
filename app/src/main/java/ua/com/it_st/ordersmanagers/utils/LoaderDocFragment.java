@@ -25,19 +25,21 @@ import ua.com.it_st.ordersmanagers.fragmets.CursorLoderFragment;
 
 public abstract class LoaderDocFragment extends CursorLoderFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    public static final String NUMBER_ORDER = "NUMBER_ORDER";
-    public static final String DATE_ORDER = "DATE_ORDER";
-    public static final String ID_ORDER = "ID_ORDER";
-    public static final String DOC_TYPE_OPERATION = "DOC_TYPE_OPERATION";
+    public static final String NUMBER_DOC = "NUMBER_DOC";
+    public static final String DATE_DOC = "DATE_DOC";
+    public static final String ID_DOC = "ID_DOC";
+    public static final String TYPE_OPERATION_DOC = "TYPE_OPERATION_DOC";
     public static SQLiteDatabase sDb;
 
     protected TextView summaDoc;
     protected TextView header_journal;
     protected TextView periodDoc;
     protected View rootView;
-    protected String mQuerySum;
-    protected String mQueryList;
-    protected SimpleCursorAdapter scAdapter;
+
+    private String mQuerySum;
+    private String mQueryList;
+    private SimpleCursorAdapter scAdapter;
+    private short nextNumberDoc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +81,40 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
         periodDoc.setText(pPeriodDoc);
     }
 
+    /* функция
+        * отрабатывает при создании */
+    @Override
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+        switch (id) {
+            case 0:/*получаем все заазы*/
+                return new GlobalCursorLoader(getActivity(), mQueryList, getParams(), sDb);
+            case 1:/*получаем сумму всех заазов*/
+                return new GlobalCursorLoader(getActivity(), mQuerySum, getParams(), sDb);
+            default:
+                return null;
+        }
+    }
 
+    /*функция отрабатывает после выполнения*/
+    @Override
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+
+        switch (loader.getId()) {
+            case 0:
+                scAdapter.swapCursor(data);
+                /*следующий номер заказа*/
+                setNextNumberDoc((short) (data.getCount() + 1));
+                break;
+            case 1:
+                final int cSumIndex = data.getColumnIndex("sum_orders");
+                data.moveToFirst();
+                final String cSum = data.getString(cSumIndex);
+                updataSumOrders(cSum);
+                break;
+            default:
+                break;
+        }
+    }
     /* функция перезапуск */
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
@@ -93,6 +128,30 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
             sumOrders = getString(R.string.zero_point_text);
         }
         summaDoc.setText(sumOrders);
+    }
+
+    public short getNextNumberDoc() {
+        return nextNumberDoc;
+    }
+
+    public void setNextNumberDoc(short nextNumberDoc) {
+        this.nextNumberDoc = nextNumberDoc;
+    }
+
+    public String getmQuerySum() {
+        return mQuerySum;
+    }
+
+    public void setmQuerySum(String mQuerySum) {
+        this.mQuerySum = mQuerySum;
+    }
+
+    public String getmQueryList() {
+        return mQueryList;
+    }
+
+    public void setmQueryList(String mQueryList) {
+        this.mQueryList = mQueryList;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

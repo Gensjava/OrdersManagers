@@ -73,13 +73,13 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
 
             /*редактируем документ*/
             onCreateHeader(bundle);
-            //super.onCreateView(inflater, container, savedInstanceState);
 
             /*стктус докуента*/
             header.setText(docTypeOperation.toString());
 
             /*выводим данные дату и номер в шапку*/
             period = (TextView) rootView.findViewById(R.id.order_new_heander_period);
+            period.setText(getString(R.string.rNumber) + numberDoc + " " + getString(R.string.rOf) + " " + dateDoc);
 
             /* список шапка заказа*/
             final ListView lv = (ListView) rootView.findViewById(R.id.order_new_header_list_position);

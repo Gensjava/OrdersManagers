@@ -6,7 +6,6 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
-import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
@@ -67,7 +66,7 @@ public class TablePays {
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, sData.getDocDate());
-        data.put(COLUMN_NUMBER, OrderDocAction.sCurrentNumber);
+        data.put(COLUMN_NUMBER, sData.getDocNumber());
         data.put(COLUMN_COMPLETED, "");
         data.put(COLUMN_AGENT_ID, "");
         data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());

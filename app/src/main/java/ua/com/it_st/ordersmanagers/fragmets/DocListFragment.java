@@ -149,21 +149,21 @@ public class DocListFragment extends Fragment {
 //                                    case 0:
 //                                  /*чистим док заказ и редактируем заказ*/
 //                                        DocActionOrder.clearOrderHeader(DocTypeOperation.EDIT);
-//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.edit_doc));
+//                                        bundleItem.putString(TYPE_OPERATION_DOC, getString(R.string.edit_doc));
 //                                        break;
 //                                    case 3:
 //                                  /*чистим док заказ и копируем заказ*/
 //                                        DocActionOrder.clearOrderHeader(DocTypeOperation.COPY);
-//                                        bundleItem.putString(DOC_TYPE_OPERATION, getString(R.string.copy_doc));
+//                                        bundleItem.putString(TYPE_OPERATION_DOC, getString(R.string.copy_doc));
 //                                        break;
 //                                }
 //                                        /* ТЧ заказа */
 //                                DocCartOrderAction.mCart = new LinkedHashSet<>();
 //                                /*редактируем док*/
 //
-//                                bundleItem.putString(ID_ORDER, cId);
-//                                bundleItem.putString(NUMBER_ORDER, cNumber);
-//                                bundleItem.putString(DATE_ORDER, cDate);
+//                                bundleItem.putString(ID_DOC, cId);
+//                                bundleItem.putString(NUMBER_DOC, cNumber);
+//                                bundleItem.putString(DATE_DOC, cDate);
 //
 //                                final OrderListDocFragment.onLoaderDocListener someEventListener = (OrderListDocFragment.onLoaderDocListener) getActivity();
 //                                someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);
