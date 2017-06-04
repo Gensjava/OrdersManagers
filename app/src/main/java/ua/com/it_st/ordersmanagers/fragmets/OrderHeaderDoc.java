@@ -40,6 +40,7 @@ public class OrderHeaderDoc extends HeaderDoc {
             ((MainActivity) getActivity()).setmCurrentOrder(orders);
 
             setListDataHeader(orders.getListDataHeader());
+            setDocuments(orders);
 
         /* создаем адаптер */
             setmAdapter(new HeaderDocAdapter(getActivity(), getListDataHeader(),
@@ -74,7 +75,7 @@ public class OrderHeaderDoc extends HeaderDoc {
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 
-        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), sDb);
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParamsQuery(), sDb);
     }
 
     @Override
@@ -173,7 +174,7 @@ public class OrderHeaderDoc extends HeaderDoc {
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
 
                 setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
-                setParams(new String[]{id_order});
+                setParamsQuery(new String[]{id_order});
 
                 orders.setId(id_order);
                /*номер документа*/
@@ -187,7 +188,7 @@ public class OrderHeaderDoc extends HeaderDoc {
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
 
                 setQuery(SQLQuery.queryOrdersHeader("Orders.view_id = ?"));
-                setParams(new String[]{id_order});
+                setParamsQuery(new String[]{id_order});
 
                 /*номер документа*/
                 numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);

@@ -15,8 +15,6 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class OrderListDocFragment extends LoaderDocFragment {
 
-    public static final String NUMBER_ORDER = "NUMBER_DOC";
-    public static final String DATE_ORDER = "DATE_DOC";
     public static final String ID_ORDER = "ID_DOC";
     public static final String DOC_TYPE_OPERATION = "TYPE_OPERATION_DOC";
 
@@ -30,7 +28,8 @@ public class OrderListDocFragment extends LoaderDocFragment {
 
         setmQuerySum(SQLQuery.queryOrdersSum("Orders.type  <> ?"));
         setmQueryList(SQLQuery.queryOrders("Orders._id  <> ?"));
-        setParams(new String[]{"null"});
+        setParamsQuery(new String[]{"null"});
+        setaClass(OrderHeaderDoc.class);
 
         super.onCreateView(inflater, container, savedInstanceState);
         header_journal.setText(R.string.JurnalOrders);

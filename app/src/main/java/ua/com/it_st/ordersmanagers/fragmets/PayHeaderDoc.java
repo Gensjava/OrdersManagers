@@ -18,8 +18,10 @@ import ua.com.it_st.ordersmanagers.models.Companies;
 import ua.com.it_st.ordersmanagers.models.Counteragents;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -27,27 +29,28 @@ import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 
 public class PayHeaderDoc extends HeaderDoc {
 
-    private Pays CurrentNewDog;
+    private Pays pays;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if (rootView == null) {
 
-            CurrentNewDog = new Pays();
+            pays = new Pays();
+            // Gen<Pays> gen = new Gen<>(pays);
 
-            ((MainActivity) getActivity()).setmCurrentPay(CurrentNewDog);
-            setListDataHeader(CurrentNewDog.getListDataHeader());
+            ((MainActivity) getActivity()).setmCurrentPay(pays);
+            setListDataHeader(pays.getListDataHeader());
 
         /* создаем адаптер */
-            setmAdapter(new HeaderDocAdapter(getActivity(), CurrentNewDog.getListDataHeader(),
+            setmAdapter(new HeaderDocAdapter(getActivity(), pays.getListDataHeader(),
                     R.layout.order_new_header_list_item,
                     new String[]{"title", "imageAvatar"},
                     new int[]{R.id.order_header_list_item_text, R.id.order_header_list_item_image_avatar}, this));
 
             super.onCreateView(inflater, container, savedInstanceState);
         }
-        CurrentNewDog.setTypeOperation(getDocTypeOperation());
+
         return rootView;
     }
 
@@ -72,13 +75,13 @@ public class PayHeaderDoc extends HeaderDoc {
 
         switch (position) {
             case 0:
-                CurrentNewDog.setCompany((Companies) item);
+                pays.setCompany((Companies) item);
                 break;
             case 1:
-                CurrentNewDog.setCounteragent((Counteragents) item);
+                pays.setCounteragent((Counteragents) item);
                 break;
             case 2:
-                CurrentNewDog.setNote(item.toString());
+                pays.setNote(item.toString());
                 break;
             default:
                 break;
@@ -89,22 +92,24 @@ public class PayHeaderDoc extends HeaderDoc {
     public void fillHeaderFromCursor(Cursor data) {
         /*имя*/
         String cNameCompanies = data.getString(data.getColumnIndex("name_comp"));
-        String cNameStores = data.getString(data.getColumnIndex("name_type_stores"));
         String cNameCounteragents = data.getString(data.getColumnIndex("name_contr"));
-        String cNamePrices = data.getString(data.getColumnIndex("name_type_price"));
         String cAgent = data.getString(data.getColumnIndex("agent_id"));
             /*код*/
         String cKodCompanies = data.getString(data.getColumnIndex("kod_comp"));
-        String cKodStores = data.getString(data.getColumnIndex("kod_type_stores"));
         String KodCounteragents = data.getString(data.getColumnIndex("kod_contr"));
-        String cKodPrices = data.getString(data.getColumnIndex("kod_type_price"));
             /*адресс контрагента*/
         String cCounteragentsAddress = data.getString(data.getColumnIndex("address_contr"));
         String cComent = data.getString(data.getColumnIndex("note"));
 
-        /*заполняем док заказ*/
-        CurrentNewDog.getCompany().setKod(cKodCompanies);
-        CurrentNewDog.getAgent().setKod(cAgent);
+         /*заполняем док заказ*/
+        pays.setCompany(new Companies(cKodCompanies, cNameCompanies));
+        pays.setCounteragent(new Counteragents(KodCounteragents, cNameCounteragents, cCounteragentsAddress));
+        pays.setNote(cComent == null ? "" : cComent);
+        pays.getAgent().setKod(cAgent);
+
+        setItemHeader(pays.getCompany(), "0");
+        setItemHeader(pays.getCounteragent(), "1");
+        setItemHeader(pays.getNote(), "2");
 
         mAdapter.notifyDataSetChanged();
     }
@@ -120,48 +125,62 @@ public class PayHeaderDoc extends HeaderDoc {
                  /*создаем новый заказ*/
                 /* сгениророваный номер документа заказа ИД для 1с */
                 uniqueKey = UUID.randomUUID();
-                CurrentNewDog.setId(String.valueOf(uniqueKey));
-                /*устанавливаем дату документа и номер*/
-                      /*номер документа*/
+                pays.setId(String.valueOf(uniqueKey));
+                /*номер документа*/
                 numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
-                CurrentNewDog.setDocNumber(numberDoc);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 break;
 
             case EDIT:
+                setCountLoad((byte) 1);
                 /*получаем ID дока и подставляем в запрос*/
-                id_order = bundle.getString(LoaderDocFragment.ID_DOC);
-                CurrentNewDog.setId(id_order);
+                id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
+
+                setQuery(SQLQuery.queryPaysHeader("Pays.view_id = ?"));
+                setParamsQuery(new String[]{id_order});
+
+                pays.setId(id_order);
                /*номер документа*/
                 numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                 /*дата док*/
                 dateDoc = bundle.getString(LoaderDocFragment.DATE_DOC);
-
                 break;
 
             case COPY:
-                   /*получаем ID дока и подставляем в запрос*/
+                setCountLoad((byte) 1);
                 id_order = bundle.getString(OrderListDocFragment.ID_ORDER);
 
+                setQuery(SQLQuery.queryPaysHeader("Pays.view_id = ?"));
+                setParamsQuery(new String[]{id_order});
+
+                /*номер документа*/
+                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
+                 /*нтекущая дата*/
+                dateDoc = ConstantsUtil.getDate();
+                /*создаем новый заказ*/
+                /* сгениророваный номер документа заказа ИД для 1с */
+                uniqueKey = UUID.randomUUID();
+                pays.setId(String.valueOf(uniqueKey));
                 break;
         }
 
-        CurrentNewDog.setAgent(new Agents(kodAgent, kodAgent));
-        CurrentNewDog.setDocDate(dateDoc);
-        CurrentNewDog.setDocNumber(numberDoc);
+        pays.setAgent(new Agents(kodAgent, kodAgent));
+        pays.setDocDate(dateDoc);
+        pays.setDocNumber(numberDoc);
+        pays.setTypeOperation(getDocTypeOperation());
     }
 
     @Override
     public boolean onRecord() {
         boolean bCheck = false;
 
-        if (CurrentNewDog.getDocNumber() == null
-                || CurrentNewDog.getDocDate() == null
-                || CurrentNewDog.getAgent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null
-                || CurrentNewDog.getCounteragent().getKod() == null
-                || CurrentNewDog.getCompany().getKod() == null) {
+        if (pays.getDocNumber() == null
+                || pays.getDocDate() == null
+                || pays.getAgent().getKod() == null
+                || pays.getCompany().getKod() == null
+                || pays.getCounteragent().getKod() == null
+                || pays.getCompany().getKod() == null) {
 
             bCheck = true;
             InfoUtil.Tost(getActivity().getString(R.string.not_all_cap_mandatory_filled), getActivity());
@@ -170,12 +189,19 @@ public class PayHeaderDoc extends HeaderDoc {
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParamsQuery(), sDb);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
+            /*переходим к первой строке*/
+        if (data.moveToFirst()) {
+            fillHeaderFromCursor(data);
+        } else {
+            InfoUtil.Tost(getString(R.string.no_data_on_number_order) + id_order, getActivity());
+        }
     }
 }

@@ -22,6 +22,7 @@ import java.util.UUID;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.models.Documents;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -44,6 +45,7 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
     protected UUID uniqueKey;
     protected String kodAgent;
     private List<Map<String, ?>> listDataHeader;
+    private Documents documents;
 
     public abstract void setHeaderSelection(int position, Object item);
     public abstract void fillHeaderFromCursor(Cursor data);
@@ -133,10 +135,17 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
         this.mAdapter = mAdapter;
     }
 
+    public Documents getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Documents documents) {
+        this.documents = documents;
+    }
+
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
         void onOpenFragmentClassBundle(Class<?> fClass, Bundle bundleItem);
     }
-
 }

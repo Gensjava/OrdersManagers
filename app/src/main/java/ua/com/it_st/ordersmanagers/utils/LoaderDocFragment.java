@@ -40,6 +40,7 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
     private String mQueryList;
     private SimpleCursorAdapter scAdapter;
     private short nextNumberDoc;
+    private Class aClass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,9 +88,9 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         switch (id) {
             case 0:/*получаем все заазы*/
-                return new GlobalCursorLoader(getActivity(), mQueryList, getParams(), sDb);
+                return new GlobalCursorLoader(getActivity(), mQueryList, getParamsQuery(), sDb);
             case 1:/*получаем сумму всех заазов*/
-                return new GlobalCursorLoader(getActivity(), mQuerySum, getParams(), sDb);
+                return new GlobalCursorLoader(getActivity(), mQuerySum, getParamsQuery(), sDb);
             default:
                 return null;
         }
@@ -138,20 +139,21 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
         this.nextNumberDoc = nextNumberDoc;
     }
 
-    public String getmQuerySum() {
-        return mQuerySum;
-    }
 
     public void setmQuerySum(String mQuerySum) {
         this.mQuerySum = mQuerySum;
     }
 
-    public String getmQueryList() {
-        return mQueryList;
-    }
-
     public void setmQueryList(String mQueryList) {
         this.mQueryList = mQueryList;
+    }
+
+    public Class getaClass() {
+        return aClass;
+    }
+
+    public void setaClass(Class aClass) {
+        this.aClass = aClass;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

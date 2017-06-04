@@ -21,7 +21,7 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
     public static SQLiteDatabase sDb;
     private String query;
     private byte countLoad;
-    private String[] params;
+    private String[] paramsQuery;
 
     public abstract boolean onRecord();
 
@@ -79,11 +79,11 @@ public abstract class CursorLoderFragment extends Fragment implements LoaderMana
         this.query = query;
     }
 
-    public String[] getParams() {
-        return params;
+    public String[] getParamsQuery() {
+        return paramsQuery;
     }
 
-    public void setParams(String[] params) {
-        this.params = params;
+    public void setParamsQuery(String[] paramsQuery) {
+        this.paramsQuery = paramsQuery;
     }
 }

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -132,7 +131,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                             }
 
                             final LoaderDocFragment.onLoaderDocListener someEventListener = (LoaderDocFragment.onLoaderDocListener) mContext;
-                            someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);
+                            someEventListener.onOpenFragmentClassBundle(loaderDocFragment.getaClass(), bundleItem);
                         case 1:
                                 /*проводим док*/
                             data.put(TableOrders.COLUMN_TYPE, DocType.HELD.toString());

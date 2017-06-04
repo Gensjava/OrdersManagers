@@ -39,7 +39,7 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
 
         setCountLoad((byte) 1);
         setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
-        setParams(new String[]{pays.getCounteragent().getKod()});
+        setParamsQuery(new String[]{pays.getCounteragent().getKod()});
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -58,7 +58,7 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new GlobalCursorLoader(getActivity(), getQuery(), getParams(), CursorLoderFragment.sDb);
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParamsQuery(), CursorLoderFragment.sDb);
     }
 
     @Override

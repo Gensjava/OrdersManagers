@@ -25,7 +25,8 @@ public class PayDocListDocFragment extends LoaderDocFragment {
 
         setmQuerySum(SQLQuery.queryPayDocSum("Pays.type  <> ?"));
         setmQueryList(SQLQuery.queryPays("Pays._id  <> ?"));
-        setParams(new String[]{"null"});
+        setParamsQuery(new String[]{"null"});
+        setaClass(PayHeaderDoc.class);
 
         super.onCreateView(inflater, container, savedInstanceState);
         header_journal.setText(R.string.JurnalPayDoc);

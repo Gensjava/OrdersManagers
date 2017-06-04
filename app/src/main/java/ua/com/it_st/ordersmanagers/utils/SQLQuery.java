@@ -125,6 +125,23 @@ public class SQLQuery {
         return sq;
     }
 
+    /*
+        запрос шапки документа
+        sp параметры условий запроса
+        */
+    public static String queryPaysHeader(final String sp) {
+
+        String sq;
+        sq = "Select Pays._id, Pays.note, Pays.agent_id,\n" +
+                "Companies.name as name_comp, Companies.kod as kod_comp,\n" +
+                "Counteragents.name as name_contr, Counteragents.address as address_contr, Counteragents.kod as kod_contr\n" +
+                "FROM Pays\n" +
+                "LEFT OUTER JOIN Companies ON Pays.company_id  = Companies.kod\n" +
+                "LEFT OUTER JOIN Counteragents ON Pays.client_id  = Counteragents.kod " +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
     /* запрос табличной части документа
      sp параметры условий запроса
      */
