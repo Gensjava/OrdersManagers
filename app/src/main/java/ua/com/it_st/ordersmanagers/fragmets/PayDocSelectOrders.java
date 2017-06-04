@@ -13,6 +13,7 @@ import android.widget.ListView;
 import ua.com.it_st.ordersmanagers.Adapters.SelectPayDocOrdersAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocBasementAction;
 import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocSQLAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
@@ -88,10 +89,18 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
 
     @Override
     public boolean onRecord() {
+        boolean failure;
+
         PayDocBasementAction payDocBasementAction = new PayDocBasementAction(pays);
         payDocBasementAction.sum();
 
         PayDocSQLAction payDocSQLAction = new PayDocSQLAction(getActivity());
-        return payDocSQLAction.add(pays);
+
+        if (pays.getmTypeOperation() == DocTypeOperation.NEW || pays.getmTypeOperation() == DocTypeOperation.COPY) {
+            failure = payDocSQLAction.add(pays);
+        } else {
+            failure = payDocSQLAction.update(pays);
+        }
+        return failure;
     }
 }

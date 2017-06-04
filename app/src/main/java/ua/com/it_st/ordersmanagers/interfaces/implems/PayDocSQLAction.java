@@ -67,7 +67,49 @@ public class PayDocSQLAction implements SQLAction {
 
     @Override
     public boolean update(Object object) {
-        return false;
+
+        Pays pays = (Pays) object;
+         /* начинаем транзакцию */
+        mDB.beginTransaction();
+        /* Делаем запись заказа
+        * */
+        /* шапка*/
+        long inTable = mDB.update(
+                TablePays.TABLE_NAME,
+                TablePays.getContentValuesUpdata(pays),
+                "Pays.view_id = ?",
+                new String[]{pays.getId()});
+
+        if (inTable == -1) {
+            InfoUtil.showErrorAlertDialog(mContext.getString(R.string.eror_save_cap_doc), mContext.getString(R.string.eror_add_new_order), mContext);
+            mDB.endTransaction();
+            return false;
+        }
+
+         /* табличная часть*/
+        /*чистим табличную часть*/
+        long inTableLines = mDB.delete(
+                TablePaysLines.TABLE_NAME,
+                "PaysLines.doc_id = ?",
+                new String[]{pays.getId()});
+
+        /*обновляем позиции заказа (создаем новые)*/
+        for (final Pays.PaysLines pay : pays.getPaysLines()) {
+
+            long inTableLinesNew = mDB.insert(TablePaysLines.TABLE_NAME,
+                    null,
+                    TablePaysLines.getContentValues(pay));
+
+            if (inTableLines == -1 || inTableLinesNew == -1) {
+                InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);
+                mDB.endTransaction();
+                return false;
+            }
+        }
+        /* заканчиваем транзакцию */
+        mDB.setTransactionSuccessful();
+        mDB.endTransaction();
+        return true;
     }
 
     @Override

@@ -96,6 +96,10 @@ public class Pays extends Documents {
         this.total = total;
     }
 
+    public DocTypeOperation getmTypeOperation() {
+        return mTypeOperation;
+    }
+
     //табличная часть
     public static class PaysLines extends TableLines {
         private String dateDoc;
