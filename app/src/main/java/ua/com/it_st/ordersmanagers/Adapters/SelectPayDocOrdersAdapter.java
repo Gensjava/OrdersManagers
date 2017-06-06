@@ -46,7 +46,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_DATE));
         final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_NUMBER));
         final double cDebet = itemCursor.getDouble(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DEBT));
-        final String сСurrency = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_NAME));
+        final String сСurrency = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_KOD));
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
 
         if (convertView == null) {
@@ -63,7 +63,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
             viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
 
-            viewHolder.payLines = new Pays.PaysLines(pays.getId(), viewHolder.date.getText().toString(), viewHolder.number.getText().toString(), 0, сСurrency);
+            viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrency);
 
             convertView.setTag(viewHolder);
         } else {

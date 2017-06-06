@@ -5,12 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ua.com.it_st.ordersmanagers.models.Pays;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class TablePaysLines {
     public static final String TABLE_NAME = "PaysLines";
     public static final String FILE_NAME = "doc_pay_lines.csv";
-    public static final String sHeader = "DocId,currency_id,Amount,";
+    public static final String sHeader = "DocId,CurrencyId,Amount,DocDate,DocNumber,";
     public static final String HEADER_NAME = "табличной части оплаты";
 
     public static final String COLUMN_DOC_ID = "doc_id";
@@ -52,8 +56,21 @@ public class TablePaysLines {
         return data;
     }
 
+    public static List<Object> getValueForUpload() {
+
+        List<Object> list = new ArrayList<>();
+        list.add(FILE_NAME);
+        list.add(sHeader.split(","));
+        list.add(HEADER_NAME);
+        list.add(SQLQuery.queryPaysLinesFilesCsv("Pays.type  <> ?"));
+        list.add(new String[]{"NO_HELD"});
+
+        return list;
+    }
+
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");
         db.execSQL("DELETE FROM " + TABLE_NAME + ";");
     }
+
 }

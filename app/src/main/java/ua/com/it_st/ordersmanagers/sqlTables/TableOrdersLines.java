@@ -5,7 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ua.com.it_st.ordersmanagers.models.Orders;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class TableOrdersLines {
     public static final String TABLE_NAME = "OrdersLines";
@@ -52,6 +56,18 @@ public class TableOrdersLines {
         return data;
     }
 
+    public static List<Object> getValueForUpload() {
+
+        List<Object> list = new ArrayList<>();
+        list.add(FILE_NAME);
+        list.add(sHeader.split(","));
+        list.add(HEADER_NAME);
+        list.add(SQLQuery.queryOrdersLinesFilesCsv("Orders.type  <> ?"));
+        list.add(new String[]{"NO_HELD"});
+
+
+        return list;
+    }
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");

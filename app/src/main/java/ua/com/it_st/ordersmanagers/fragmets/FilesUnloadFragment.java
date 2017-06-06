@@ -1,10 +1,8 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 
@@ -14,15 +12,15 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
-import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.AsyncHttpClientUtil;
 import ua.com.it_st.ordersmanagers.utils.ConnectServer;
+import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
-import ua.com.it_st.ordersmanagers.utils.SQLQuery;
+import ua.com.it_st.ordersmanagers.utils.WorkFiles;
 import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 /* Класс предназначен для отправки данных (файлы в формате csv) на сервер*/
@@ -35,6 +33,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     private int mProgress;
     private double pProgressDiscrete;
     private double pProgressPie;
+    private int fileSize;
 
     @Override
     public void onResume() {
@@ -93,8 +92,9 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         mUtilAsyncHttpClient = connectData.getAsyncHttpClientUtil();
         mWayCatalog = lWorkSharedPreferences.getWayCatalog();
 
-        for (byte i = 0; i < 3; i++) {
-            getActivity().getSupportLoaderManager().destroyLoader(i);
+        fileSize = WorkFiles.getFileUnloadName().size();
+
+        for (byte i = 0; i < WorkFiles.getFileUnloadName().size(); i++) {
             getActivity().getSupportLoaderManager().initLoader(i, null, this);
         }
     }
@@ -103,72 +103,38 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     public void onPause() {
         super.onPause();
         /* выходим из загрузчкика*/
-        for (byte i = 0; i < 3; i++) {
+        for (byte i = 0; i < fileSize; i++) {
             getActivity().getSupportLoaderManager().destroyLoader(i);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        switch (id) {
-            case 0:
-                return new MyCursorLoaderLinesAmount(getActivity());
-            case 1:
-                return new MyCursorLoaderHeader(getActivity());
-            case 2:
-                return new MyCursorLoaderLines(getActivity());
-            default:
-                return null;
-        }
-    }
 
-    /*получаем количество строк двух таблиц*/
-    private void getCountLineTamle(final Cursor data) {
+        ArrayList objectList = WorkFiles.getFileUnloadName().get(id);
 
-        data.moveToNext();
-                /*получаем количество строк двух таблиц*/
-        mAcuont = data.getInt(data.getColumnIndex(getString(R.string.sum)));
-        if (mAcuont > 0) {
-                    /*устанавливаем максимальное количество бара*/
-            getProgressPieView().setMax(mAcuont);
-        } else {
-            InfoUtil.setmLogLine(getString(R.string.unload_file), getString(R.string.order_unload_no), true, getTEG());
-                    /*информаци о выгрузке*/
-            getLoadFiles().setText(getString(R.string.order_unload_no));
-            getUi_bar().setVisibility(View.INVISIBLE);
-                    /*мигаем иконкой для вывода лога*/
-            if (InfoUtil.isErrors) {
-                InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-            } else {
-                InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-            }
-        }
+        String query = (String) objectList.get(3);
+        String[] paramsQuery = (String[]) objectList.get(4);
+
+        return new GlobalCursorLoader(getActivity(), query, paramsQuery, mDb);
     }
 
     /*формируем документ заказ шапку*/
-    private void NewCreateDocOrder(final Cursor data, final String nameFile, final String[] headerLines, String headerName) {
+    private void unloadFiles(final Cursor data, final String nameFile, final String[] headerLines, String headerName) {
 
         /*формируем документ заказ шапку*/
-        if (mAcuont > 0) {
+        if (data.getCount() > 0) {
+
+            getProgressPieView().setMax(getProgressPieView().getMax() + data.getCount());
             /*информаци о выгрузке*/
             getLoadFiles().setText(getString(R.string.unload) + headerName);
             try {
-                getAllOrdersHeaderLines(data, nameFile, headerLines);
-                //Log
-                InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                //Log
-                InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
-                         /*информаци о выгрузке*/
-                getLoadFiles().setText(R.string.unload_eror);
-                getUi_bar().setVisibility(View.INVISIBLE);
-                        /*мигаем иконкой для вывода лога*/
-                if (InfoUtil.isErrors) {
-                    InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                } else {
-                    InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-                }
+
+                String path = createTempFiles(data, nameFile, headerLines);
+                sendFileToServer(path, nameFile);
+
+            } catch (Exception e) {
+                error(nameFile, e);
             }
         }
     }
@@ -176,33 +142,13 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
 
-        final String nameFile;
-        final String[] headerLines;
-        final String headerName;
+        ArrayList objectList = WorkFiles.getFileUnloadName().get(loader.getId());
 
-        switch (loader.getId()) {
-            case 0:
-                getCountLineTamle(data);
-                break;
-            case 1:
-                nameFile = TableOrders.FILE_NAME;
-                headerLines = TableOrders.sHeader.split(",");
-                headerName = TableOrders.HEADER_NAME;
+        String nameFile = (String) objectList.get(0);
+        String[] headerLines = (String[]) objectList.get(1);
+        String headerName = (String) objectList.get(2);
 
-                NewCreateDocOrder(data, nameFile, headerLines, headerName);
-                break;
-            case 2:
-
-                nameFile = TableOrdersLines.FILE_NAME;
-                headerLines = TableOrdersLines.sHeader.split(",");
-                headerName = TableOrdersLines.HEADER_NAME;
-
-                NewCreateDocOrder(data, nameFile, headerLines, headerName);
-
-                break;
-            default:
-                break;
-        }
+        unloadFiles(data, nameFile, headerLines, headerName);
     }
 
     @Override
@@ -211,7 +157,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     }
 
     /*получаем все заказы (шапку заказов)*/
-    private void getAllOrdersHeaderLines(final Cursor itemCursor, String nameFile, final String[] headerLines) throws IOException {
+    private String createTempFiles(final Cursor itemCursor, String nameFile, final String[] headerLines) throws IOException {
 
         String path = null;
         /* получаем количество строк в каждой таблице отдельно*/
@@ -251,24 +197,36 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         myFile.flush();
         myFile.close();
 
-        RequestParams params = new RequestParams();
+        return path;
+    }
+
+    private void sendFileToServer(String path, String nameFile) {
+
+        final RequestParams params = new RequestParams();
 
         try {
             params.put(mWayCatalog + "received\\" + nameFile, new File(path));
             mUtilAsyncHttpClient.postUnloadFiles(params, nameFile);
+            //Log
+            InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile);
         } catch (Exception e) {
             e.printStackTrace();
             //Log
-            InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
-                        /*информаци о выгрузке*/
-            getLoadFiles().setText(getString(R.string.unload_eror));
-            getUi_bar().setVisibility(View.INVISIBLE);
-            /*мигаем иконкой для вывода лога*/
-            if (InfoUtil.isErrors) {
-                InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-            } else {
-                InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
-            }
+            error(nameFile, e);
+        }
+    }
+
+    private void error(String nameFile, Exception e) {
+        //Log
+        InfoUtil.setmLogLine(getString(R.string.unload_file), nameFile, true, getTEG() + " " + e.toString());
+                         /*информаци о выгрузке*/
+        getLoadFiles().setText(R.string.unload_eror);
+        getUi_bar().setVisibility(View.INVISIBLE);
+                        /*мигаем иконкой для вывода лога*/
+        if (InfoUtil.isErrors) {
+            InfoUtil.getFleshImage(R.mipmap.ic_info_red, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
+        } else {
+            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, getImageViewInfo(), (MainActivity) getActivity());
         }
     }
 
@@ -287,51 +245,4 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         getProgressPieView().setText(String.valueOf((int) getProgress()) + "%");
     }
 
-    /* создаем класс для выгрузки данных заказов шапки из БД
-               * загрузка происходит в фоне */
-    private static class MyCursorLoaderHeader extends CursorLoader {
-
-        public MyCursorLoaderHeader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-
-            return getDb()
-                    .rawQuery(SQLQuery.queryOrdersHeaderFilesCsv("Orders.type  <> ?"), new String[]{"NO_HELD"});
-        }
-    }
-
-    /* создаем класс для выгрузки данных заказов табличной части из БД
-              * загрузка происходит в фоне */
-    private static class MyCursorLoaderLines extends CursorLoader {
-
-        public MyCursorLoaderLines(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-
-            return getDb()
-                    .rawQuery(SQLQuery.queryOrdersLinesFilesCsv("Orders.type  <> ?"), new String[]{"NO_HELD"});
-        }
-    }
-
-    /* создаем класс для выгрузки данных считаем сколько стирок в двух таблицах
-             * загрузка происходит в фоне */
-    private static class MyCursorLoaderLinesAmount extends CursorLoader {
-
-        public MyCursorLoaderLinesAmount(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-
-            return getDb()
-                    .rawQuery(SQLQuery.queryOrdersLinesAmount(), null);
-        }
-    }
 }

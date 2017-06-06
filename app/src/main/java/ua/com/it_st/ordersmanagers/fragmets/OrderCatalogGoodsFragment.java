@@ -271,8 +271,6 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
         setHasOptionsMenu(true);
     }
 
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 

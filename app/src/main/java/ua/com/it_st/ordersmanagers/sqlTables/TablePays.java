@@ -5,9 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
+import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 public class TablePays {
     public static final String TABLE_NAME = "Pays";
@@ -92,6 +96,17 @@ public class TablePays {
         return data;
     }
 
+    public static List<Object> getValueForUpload() {
+
+        List<Object> list = new ArrayList<>();
+        list.add(FILE_NAME);
+        list.add(sHeader.split(","));
+        list.add(HEADER_NAME);
+        list.add(SQLQuery.queryPaysHeaderFilesCsv("Pays.type  <> ?"));
+        list.add(new String[]{"NO_HELD"});
+
+        return list;
+    }
 
     public static void onDeleteValueTable(final SQLiteDatabase db) {
         Log.i(TAG, "DeleteTable");

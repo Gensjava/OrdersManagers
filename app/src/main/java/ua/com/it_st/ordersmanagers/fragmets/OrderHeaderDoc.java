@@ -31,6 +31,8 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 public class OrderHeaderDoc extends HeaderDoc {
 
     private Orders orders;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

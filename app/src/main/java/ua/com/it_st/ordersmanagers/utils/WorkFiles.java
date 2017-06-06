@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -22,6 +24,10 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCursCurrencies;
 import ua.com.it_st.ordersmanagers.sqlTables.TableGoodsByStores;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePays;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePaysLines;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePrices;
 import ua.com.it_st.ordersmanagers.sqlTables.TableProducts;
 import ua.com.it_st.ordersmanagers.sqlTables.TableStores;
@@ -107,6 +113,18 @@ public abstract class WorkFiles {
         lTableName.put(TableCounteragentsDebtDocs.FILE_NAME, TableCounteragentsDebtDocs.HEADER_NAME);
         lTableName.put(TableCursCurrencies.FILE_NAME, TableCursCurrencies.HEADER_NAME);
         lTableName.put(TableCurrencies.FILE_NAME, TableCurrencies.HEADER_NAME);
+
+        return lTableName;
+    }
+
+    public static List<ArrayList> getFileUnloadName() {
+
+        List<ArrayList> lTableName = new ArrayList<>();
+
+        lTableName.add((ArrayList) TableOrders.getValueForUpload());
+        lTableName.add((ArrayList) TableOrdersLines.getValueForUpload());
+        lTableName.add((ArrayList) TablePays.getValueForUpload());
+        lTableName.add((ArrayList) TablePaysLines.getValueForUpload());
 
         return lTableName;
     }

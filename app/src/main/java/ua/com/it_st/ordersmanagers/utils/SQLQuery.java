@@ -104,6 +104,22 @@ public class SQLQuery {
     }
 
     /*
+    запрос журнал заказов для выгрузки в файл csv
+    sp параметры условий запроса
+    */
+    public static String queryPaysHeaderFilesCsv(final String sp) {
+
+        String sq;
+        sq = "Select Pays.view_id, Pays.type,  Pays.date, Pays.number, Pays.completed, Pays.agent_id," +
+                "Pays.company_id, Pays.client_id, Pays.total, Pays.note\n" +
+                "FROM Pays\n" +
+                "WHERE " + sp + "\n";
+
+        return sq;
+    }
+
+
+    /*
     запрос шапки документа
     sp параметры условий запроса
     */
@@ -172,6 +188,19 @@ public class SQLQuery {
         return sq;
     }
 
+    /* запрос табличной части документа  для выгрузки в файл csv
+     sp параметры условий запроса
+     */
+    public static String queryPaysLinesFilesCsv(final String sp) {
+
+        String sq;
+        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.doc_date,  PaysLines.doc_number \n" +
+                "FROM Pays\n" +
+                "LEFT OUTER JOIN PaysLines ON Pays.view_id  = PaysLines.doc_id\n" +
+                "WHERE " + sp + "\n";
+        return sq;
+    }
+
     /* запрос считам сколько строк в табличной части документа
      и в шапке для выгрузки в файл csv
     sp параметры условий запроса
@@ -211,7 +240,7 @@ public class SQLQuery {
     public static String queryCounteragentsDebtDocs(final String sp) {
 
         String sq;
-        sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.name, CounteragentsDebtDocs._id \n" +
+        sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.kod, CounteragentsDebtDocs._id \n" +
                 "From CounteragentsDebtDocs\n" +
                 "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod \n" +
                 "WHERE " + sp + ";";
@@ -221,21 +250,10 @@ public class SQLQuery {
     /* запрос считам сколько документов
    sp параметры условий запроса
    */
-    public static String queryOrdersDocsAmount(String sp) {
+    public static String queryDocsAmount(String sp, String tableName) {
 
         String sq;
-        sq = "select  Orders.view_id from Orders " +
-                "WHERE " + sp + ";";
-        return sq;
-    }
-
-    /* запрос считам сколько документов
-   sp параметры условий запроса
-   */
-    public static String queryPaysDocsAmount(final String sp) {
-
-        String sq;
-        sq = "select  COUNT(*) from Pays " +
+        sq = "select  COUNT(*) from " + tableName + " " +
                 "WHERE " + sp + ";";
         return sq;
     }

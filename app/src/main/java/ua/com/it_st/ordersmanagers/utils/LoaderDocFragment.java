@@ -42,6 +42,7 @@ public abstract class LoaderDocFragment extends CursorLoderFragment implements L
     private short nextNumberDoc;
     private Class aClass;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

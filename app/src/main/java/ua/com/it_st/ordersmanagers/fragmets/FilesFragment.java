@@ -31,7 +31,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
 public class FilesFragment extends Fragment implements View.OnClickListener {
 
-    private static SQLiteDatabase mDb;
+    protected static SQLiteDatabase mDb;
     private final String TEG = FilesLoadFragment.class.getSimpleName();
     private ProgressPieView mProgressPieView;
     private DiscreteSeekBar mDiscreteSeekBar;
@@ -202,9 +202,28 @@ public class FilesFragment extends Fragment implements View.OnClickListener {
         this.ui_bar = ui_bar;
     }
 
+    public void setmProgressPieView(ProgressPieView mProgressPieView) {
+        this.mProgressPieView = mProgressPieView;
+    }
+
+    public void setmDiscreteSeekBar(DiscreteSeekBar mDiscreteSeekBar) {
+        this.mDiscreteSeekBar = mDiscreteSeekBar;
+    }
+
+    public void setmTextProgress(TextView mTextProgress) {
+        this.mTextProgress = mTextProgress;
+    }
+
+    public void setmProgress(double mProgress) {
+        this.mProgress = mProgress;
+    }
+
+    public void setmProgressDiscrete(double mProgressDiscrete) {
+        this.mProgressDiscrete = mProgressDiscrete;
+    }
+
     /* создаем класс - интефейс для открытия фрагментов */
     public interface onEventListener {
         void onOpenFragmentClass(Class<?> fClass);
     }
-
 }

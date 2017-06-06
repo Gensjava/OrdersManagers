@@ -47,6 +47,7 @@ public abstract class HeaderDoc extends CursorLoderFragment implements View.OnCl
     private List<Map<String, ?>> listDataHeader;
     private Documents documents;
 
+
     public abstract void setHeaderSelection(int position, Object item);
     public abstract void fillHeaderFromCursor(Cursor data);
     public abstract void onCreateHeader(Bundle bundle);
