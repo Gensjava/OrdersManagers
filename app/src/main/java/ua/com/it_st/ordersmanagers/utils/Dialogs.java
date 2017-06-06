@@ -124,7 +124,7 @@ public class Dialogs {
                             final OrderCartFragment fragment = (OrderCartFragment) mAk.getSupportFragmentManager().findFragmentByTag(OrderCartFragment.class.toString());
                             if (fragment != null) {
                             /*передаем данные сумма, количество*/
-                                fragment.setDialogAmount(amountInDialog, sumInDialog, (TreeProductCategoryHolder.TreeItem) product);
+                                fragment.setDialogAmount(amountInDialog, sumInDialog, product);
                             }
                         }
 

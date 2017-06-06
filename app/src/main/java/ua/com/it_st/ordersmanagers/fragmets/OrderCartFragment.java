@@ -23,7 +23,6 @@ import ua.com.it_st.ordersmanagers.interfaces.implems.OrderDocAction;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Orders.OrdersLines;
-import ua.com.it_st.ordersmanagers.models.TreeProductCategoryHolder;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
@@ -57,7 +56,7 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
         String numberDoc = "";
         String dateDoc = "";
 
-        mCurrentOrder = (Orders) ((MainActivity) getActivity()).getmCurrentOrder();
+        mCurrentOrder = ((MainActivity) getActivity()).getmCurrentOrder();
 
         if (mCurrentOrder != null) {
             numberDoc = mCurrentOrder.getDocNumber();
@@ -125,10 +124,10 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
     }
 
     /*обновление после выбора к-во товара в списке товаров*/
-    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final TreeProductCategoryHolder.TreeItem product) {
+    public void setDialogAmount(final double numberInDialog, final double sumInDialog, final OrdersLines product) {
 
         /* делаем проверку товара на остатке */
-        if (product.getBalance() >= numberInDialog) {
+        // if (product.getBalance() >= numberInDialog) {
             if (numberInDialog > 0) {
                  /* строка ТЧ заказа */
                 /* к-во заказа, сумма */
@@ -138,10 +137,10 @@ public class OrderCartFragment extends Fragment implements View.OnClickListener 
                 OrderListAction lUpDateOrderList = new OrderListAction();
                 lUpDateOrderList.update(product);
             }
-        } else {
+        // } else {
             //
-            InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
-        }
+        //   InfoUtil.Tost(getString(R.string.not_goods_store_number), getActivity());
+        // }
         /*перезаписываем список товаров*/
         mListItems = OrderListAction.getItemsGoods();
         /*обновляем*/
