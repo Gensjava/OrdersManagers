@@ -56,6 +56,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         if (pays.getmTypeOperation() == DocTypeOperation.EDIT
                 || pays.getmTypeOperation() == DocTypeOperation.COPY) {
             cPay = itemCursor.getString(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT));
+            System.out.println(" cPay " + cPay);
         }
 
         if (convertView == null) {
@@ -88,13 +89,19 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
 
         if (cPay != null) {
             viewHolder.pay_checkBox.setChecked(true);
-            viewHolder.pay_summa_pay.setText(cPay);
+            addpayLines(viewHolder, cPay);
         }
 
         //
         OnClickChekBox(viewHolder);
 
         return convertView;
+    }
+
+    private void addpayLines(ViewHolder viewHolder, String cPay) {
+        viewHolder.pay_summa_pay.setText(cPay);
+        viewHolder.payLines.setSum(Double.valueOf(cPay));
+        payListDocAction.add(viewHolder.payLines);
     }
 
     private void OnClickChekBox(final ViewHolder viewHolder) {

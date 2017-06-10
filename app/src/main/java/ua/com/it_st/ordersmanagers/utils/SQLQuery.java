@@ -190,7 +190,7 @@ public class SQLQuery {
                 "                FROM PaysLines\n" +
                 "                LEFT OUTER JOIN Pays ON PaysLines.doc_id  = Pays.view_id\n" +
                 "                Where PaysLines.doc_id = \"" + sp2 + "\"\n" +
-                "                GROUP by PaysLines.doc_id) as  OrdersLinesD ON OrdersLinesD.doc_date = CounteragentsDebtDocs.DocDate  \n" +
+                "                ) as  OrdersLinesD ON OrdersLinesD.doc_date = CounteragentsDebtDocs.DocDate  \n" +
                 " and CounteragentsDebtDocs.DocName = OrdersLinesD.doc_number\n" +
                 "WHERE " + sp + "\n";
         ;
