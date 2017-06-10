@@ -17,13 +17,13 @@ import android.widget.TextView;
 import ua.com.it_st.ordersmanagers.Adapters.LoaderDocCursorAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
-import ua.com.it_st.ordersmanagers.fragmets.CursorLoderFragment;
+import ua.com.it_st.ordersmanagers.fragmets.CursorLoaderFragment;
 
 /**
  * Created by Gena on 2017-05-13.
  */
 
-public abstract class LoaderDocFragment extends CursorLoderFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public abstract class LoaderDocFragment extends CursorLoaderFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     public static final String NUMBER_DOC = "NUMBER_DOC";
     public static final String DATE_DOC = "DATE_DOC";

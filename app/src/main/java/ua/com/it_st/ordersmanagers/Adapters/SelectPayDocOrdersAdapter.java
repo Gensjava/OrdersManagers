@@ -12,10 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.R;
+import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.PayListDocAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragentsDebtDocs;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCurrencies;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePaysLines;
 
 /**
  * Created by Gena on 2017-05-14.
@@ -46,8 +48,15 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_DATE));
         final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DOC_NUMBER));
         final double cDebet = itemCursor.getDouble(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_DEBT));
-        final String сСurrency = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_KOD));
+        final String сСurrencyKod = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_KOD));
+        final String сСurrencyName = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_NAME));
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
+
+        String cPay = null;
+        if (pays.getmTypeOperation() == DocTypeOperation.EDIT
+                || pays.getmTypeOperation() == DocTypeOperation.COPY) {
+            cPay = itemCursor.getString(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT));
+        }
 
         if (convertView == null) {
 
@@ -63,7 +72,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
             viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
 
-            viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrency);
+            viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrencyKod);
 
             convertView.setTag(viewHolder);
         } else {
@@ -72,10 +81,16 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
 
         viewHolder.date.setText(cDate);
         viewHolder.total.setText(cTotal);
-        viewHolder.currency.setText(сСurrency);
+        viewHolder.currency.setText(сСurrencyName);
         viewHolder.number.setText(cNumber);
         viewHolder.debet.setText(String.valueOf(cDebet));
         viewHolder.pay_number.setText(sPosition);
+
+        if (cPay != null) {
+            viewHolder.pay_checkBox.setChecked(true);
+            viewHolder.pay_summa_pay.setText(cPay);
+        }
+
         //
         OnClickChekBox(viewHolder);
 

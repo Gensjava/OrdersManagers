@@ -24,7 +24,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
  * Created by Gena on 2017-05-22.
  */
 
-public class PayDocSelectOrders extends CursorLoderFragment implements View.OnClickListener {
+public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnClickListener {
 
     private SelectPayDocOrdersAdapter scAdapter;
     private Pays pays;
@@ -39,8 +39,7 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
         pays = ((MainActivity) getActivity()).getmCurrentPay();
 
         setCountLoad((byte) 1);
-        setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
-        setParamsQuery(new String[]{pays.getCounteragent().getKod()});
+        selectQuery();
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -57,9 +56,25 @@ public class PayDocSelectOrders extends CursorLoderFragment implements View.OnCl
         return rootView;
     }
 
+    private void selectQuery() {
+
+        switch (pays.getmTypeOperation()) {
+
+            case NEW:
+                setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
+                setParamsQuery(new String[]{pays.getCounteragent().getKod()});
+                break;
+            case EDIT:
+            case COPY:
+                setQuery(SQLQuery.queryPaysLinesEdit("CounteragentsDebtDocs.ClientId = ?", pays.getId()));
+                setParamsQuery(new String[]{pays.getCounteragent().getKod()});
+                break;
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new GlobalCursorLoader(getActivity(), getQuery(), getParamsQuery(), CursorLoderFragment.sDb);
+        return new GlobalCursorLoader(getActivity(), getQuery(), getParamsQuery(), CursorLoaderFragment.sDb);
     }
 
     @Override

@@ -16,7 +16,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
  * Created by Gena on 2017-05-22.
  */
 
-public abstract class CursorLoderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class CursorLoaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static SQLiteDatabase sDb;
     private String query;

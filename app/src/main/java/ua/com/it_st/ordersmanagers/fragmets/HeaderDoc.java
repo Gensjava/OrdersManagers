@@ -28,7 +28,7 @@ import ua.com.it_st.ordersmanagers.models.Documents;
  * Created by Gena on 2017-05-14.
  */
 
-public abstract class HeaderDoc extends CursorLoderFragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class HeaderDoc extends CursorLoaderFragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String NAME_TABLE = "NAME_TABLE";
     public static final String NAME_TAG = "NAME_TAG";

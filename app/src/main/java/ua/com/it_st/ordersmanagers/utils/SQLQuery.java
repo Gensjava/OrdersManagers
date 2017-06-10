@@ -175,6 +175,29 @@ public class SQLQuery {
         return sq;
     }
 
+    /* запрос табличной части документа
+     sp параметры условий запроса
+     */
+
+    public static String queryPaysLinesEdit(final String sp, final String sp2) {
+
+        String sq;
+        sq = "select CounteragentsDebtDocs._id, CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName,CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, OrdersLinesD.amount, Currencies.name, Currencies.kod\n" +
+                " From CounteragentsDebtDocs\n" +
+                "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod\n" +
+                "LEFT OUTER JOIN (\n" +
+                "                Select *\n" +
+                "                FROM PaysLines\n" +
+                "                LEFT OUTER JOIN Pays ON PaysLines.doc_id  = Pays.view_id\n" +
+                "                Where PaysLines.doc_id = \"" + sp2 + "\"\n" +
+                "                GROUP by PaysLines.doc_id) as  OrdersLinesD ON OrdersLinesD.doc_date = CounteragentsDebtDocs.DocDate  \n" +
+                " and CounteragentsDebtDocs.DocName = OrdersLinesD.doc_number\n" +
+                "WHERE " + sp + "\n";
+        ;
+
+        return sq;
+    }
+
     /* запрос табличной части документа  для выгрузки в файл csv
      sp параметры условий запроса
      */
@@ -240,7 +263,7 @@ public class SQLQuery {
     public static String queryCounteragentsDebtDocs(final String sp) {
 
         String sq;
-        sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.kod, CounteragentsDebtDocs._id \n" +
+        sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.kod, Currencies.name, CounteragentsDebtDocs._id \n" +
                 "From CounteragentsDebtDocs\n" +
                 "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod \n" +
                 "WHERE " + sp + ";";
