@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.UUID;
 
@@ -38,6 +39,8 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
         /* макет фрагмента */
         View rootView = inflater.inflate(R.layout.pay_dogs_select_container, container, false);
 
+        TextView totalSum = (TextView) rootView.findViewById(R.id.pay_dogs_sum);
+
         pays = ((MainActivity) getActivity()).getmCurrentPay();
 
         setCountLoad((byte) 1);
@@ -46,7 +49,7 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
         super.onCreateView(inflater, container, savedInstanceState);
 
         /* создааем адаптер и настраиваем список */
-        scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, new String[]{}, new int[]{}, 0, pays);
+        scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, new String[]{}, new int[]{}, 0, pays, totalSum);
          /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.pay_select_dogs);
         lvData.setAdapter(scAdapter);
@@ -67,6 +70,9 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
                 setParamsQuery(new String[]{pays.getCounteragent().getKod()});
                 break;
             case EDIT:
+                setQuery(SQLQuery.queryPaysLinesEdit("CounteragentsDebtDocs.ClientId = ?", pays.getId()));
+                setParamsQuery(new String[]{pays.getCounteragent().getKod()});
+                break;
             case COPY:
                 setQuery(SQLQuery.queryPaysLinesEdit("CounteragentsDebtDocs.ClientId = ?", pays.getId()));
                 setParamsQuery(new String[]{pays.getCounteragent().getKod()});

@@ -41,6 +41,7 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
     private SimpleCursorAdapter scAdapter;
     private short nextNumberDoc;
     private Class aClass;
+    private String tableName;
 
 
     @Override
@@ -155,6 +156,14 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
 
     public void setaClass(Class aClass) {
         this.aClass = aClass;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

@@ -13,6 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.interfaces.implems.PayListDocAction;
@@ -29,20 +32,24 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
     private PayListDocAction payListDocAction;
     private Pays pays;
+    private TextView totalSum;
+    private double totalPays;
 
-    public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, Pays pays) {
+    public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, Pays pays, TextView totalSum) {
         super(context, layout, c, from, to, flags);
         this.mLInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         this.payListDocAction = new PayListDocAction(pays.getPaysLines());
         this.pays = pays;
+        this.totalSum = totalSum;
     }
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         final ViewHolder viewHolder;
+
             /*позиция*/
         Cursor itemCursor = (Cursor) getItem(position);
         String sPosition = String.valueOf(position + 1);
@@ -73,10 +80,11 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
 
         if (cPay != null) {
             viewHolder.pay_checkBox.setChecked(true);
-            addpayLines(viewHolder, cPay);
+            addPayLines(viewHolder, cPay);
         }
 
         OnClickChekBox(viewHolder);
+
         return convertView;
     }
 
@@ -107,15 +115,27 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         return viewHolder;
     }
 
-    private void addpayLines(ViewHolder viewHolder, String cPay) {
+    private void addPayLines(ViewHolder viewHolder, String cPay) {
+
+        double tPay = Double.valueOf(cPay);
+        viewHolder.payLines.setSum(tPay);
         viewHolder.pay_summa_pay.setText(cPay);
-        viewHolder.payLines.setSum(Double.valueOf(cPay));
+
         payListDocAction.add(viewHolder.payLines);
+        addTotal(tPay);
     }
 
-    private void remove(ViewHolder viewHolder) {
+    private void removePayLines(ViewHolder viewHolder) {
         viewHolder.pay_summa_pay.setText("");
         payListDocAction.delete(viewHolder.payLines);
+
+        addTotal(-viewHolder.payLines.getSum());
+    }
+
+    private void addTotal(double tPay) {
+        totalPays = totalPays + tPay;
+        double newSum = new BigDecimal(totalPays).setScale(2, RoundingMode.UP).doubleValue();
+        totalSum.setText(String.valueOf(newSum));
     }
 
     private void OnClickChekBox(final ViewHolder viewHolder) {
@@ -123,9 +143,9 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    addpayLines(viewHolder, viewHolder.debet.getText().toString());
+                    addPayLines(viewHolder, viewHolder.debet.getText().toString());
                 } else {
-                    remove(viewHolder);
+                    removePayLines(viewHolder);
                 }
             }
         });

@@ -146,7 +146,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                         /*меняем статус у документов (проведен, не проведен)*/
                     if (!cId.equals("") & selectedItemPosition == 1 || selectedItemPosition == 2) {
 
-                        LoaderDocFragment.sDb.update(TableOrders.TABLE_NAME, data, "view_id = ?", new String[]{cId});
+                        LoaderDocFragment.sDb.update(loaderDocFragment.getTableName(), data, "view_id = ?", new String[]{cId});
                         String[] choose = loaderDocFragment.getResources().getStringArray(R.array.spinner_orders_menu);
 
                         Toast toast = Toast.makeText(mContext,

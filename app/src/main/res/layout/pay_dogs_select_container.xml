@@ -8,9 +8,8 @@
         android:id="@+id/pay_relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignBottom="@+id/main_heander_text_Jurnal"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="bottom"
         android:background="@android:color/background_light"
         android:clickable="true"
@@ -18,25 +17,47 @@
         android:gravity="center"
         tools:ignore="UnknownIdInLayout">
 
-        <TextView
-            android:id="@+id/pay_heander"
+        <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="30dp"
-            android:text="@string/header_date" />
+            android:layout_alignTop="@+id/textView4"
+            android:layout_marginEnd="12dp"
+            android:layout_toStartOf="@+id/pay_heander_lient"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pay_heander"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="30dp"
+                android:text="@string/header_date"
+                tools:ignore="ObsoleteLayoutParam" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="58dp"
+                android:text="Номер"
+                tools:ignore="ObsoleteLayoutParam" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/pay_heander_lient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/linearLayout4"
+            android:layout_marginEnd="22dp"
+            android:layout_toStartOf="@+id/pay_heander_text_sum"
             android:paddingRight="10dp"
-            android:text="@string/header_client"
+            android:text="Сумма          Долг"
             tools:ignore="RtlSymmetry" />
 
         <TextView
@@ -48,7 +69,18 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="25dp"
             android:layout_marginRight="25dp"
-            android:text="@string/header_sum" />
+            android:text="Оплата" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/linearLayout4"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="76dp"
+            android:layout_marginLeft="20dp"
+            android:text="№"
+            tools:ignore="ObsoleteLayoutParam" />
 
     </RelativeLayout>
 
@@ -79,7 +111,7 @@
                 android:textSize="22dp" />
 
             <TextView
-                android:id="@+id/pay_dogs_container_sum"
+                android:id="@+id/pay_dogs_sum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
@@ -100,8 +132,8 @@
             android:id="@+id/pay_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
             <ImageView
                 android:id="@+id/pay_dogs_container_image"

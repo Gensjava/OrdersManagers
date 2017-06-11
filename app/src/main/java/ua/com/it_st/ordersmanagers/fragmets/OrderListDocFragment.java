@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
@@ -30,6 +31,7 @@ public class OrderListDocFragment extends LoaderDocFragment {
         setmQueryList(SQLQuery.queryOrders("Orders._id  <> ?"));
         setParamsQuery(new String[]{"null"});
         setaClass(OrderHeaderDoc.class);
+        setTableName(TableOrders.TABLE_NAME);
 
         super.onCreateView(inflater, container, savedInstanceState);
         header_journal.setText(R.string.JurnalOrders);
