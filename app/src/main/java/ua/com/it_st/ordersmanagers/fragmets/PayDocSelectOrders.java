@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.util.UUID;
+
 import ua.com.it_st.ordersmanagers.Adapters.SelectPayDocOrdersAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
@@ -68,6 +70,9 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
             case COPY:
                 setQuery(SQLQuery.queryPaysLinesEdit("CounteragentsDebtDocs.ClientId = ?", pays.getId()));
                 setParamsQuery(new String[]{pays.getCounteragent().getKod()});
+
+                /* сгениророваный номер документа заказа ИД для 1с */
+                pays.setId(String.valueOf(UUID.randomUUID()));
                 break;
         }
     }

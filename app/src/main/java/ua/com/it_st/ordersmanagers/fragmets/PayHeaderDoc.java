@@ -153,15 +153,12 @@ public class PayHeaderDoc extends HeaderDoc {
 
                 setQuery(SQLQuery.queryPaysHeader("Pays.view_id = ?"));
                 setParamsQuery(new String[]{id_order});
+                pays.setId(id_order);
 
                 /*номер документа*/
                 numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
                  /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
-                /*создаем новый заказ*/
-                /* сгениророваный номер документа заказа ИД для 1с */
-                uniqueKey = UUID.randomUUID();
-                pays.setId(String.valueOf(uniqueKey));
                 break;
         }
 

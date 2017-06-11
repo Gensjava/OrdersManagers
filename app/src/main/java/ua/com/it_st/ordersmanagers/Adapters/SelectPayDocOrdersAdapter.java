@@ -2,6 +2,8 @@ package ua.com.it_st.ordersmanagers.Adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,29 +54,11 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         final String сСurrencyName = itemCursor.getString(itemCursor.getColumnIndex(TableCurrencies.COLUMN_NAME));
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
 
-        String cPay = null;
-        if (pays.getmTypeOperation() == DocTypeOperation.EDIT
-                || pays.getmTypeOperation() == DocTypeOperation.COPY) {
-            cPay = itemCursor.getString(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT));
-            System.out.println(" cPay " + cPay);
-        }
+        String cPay = getPay(itemCursor);
 
         if (convertView == null) {
-
             convertView = mLInflater.inflate(R.layout.pay_list_item, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.date = (TextView) convertView.findViewById(R.id.pay_doc_data);
-            viewHolder.total = (TextView) convertView.findViewById(R.id.pay_summa);
-            viewHolder.currency = (TextView) convertView.findViewById(R.id.pay_currency);
-            viewHolder.number = (TextView) convertView.findViewById(R.id.pay_doc_number);
-            viewHolder.debet = (TextView) convertView.findViewById(R.id.pay_summa_debet);
-            viewHolder.pay_number = (TextView) convertView.findViewById(R.id.pay_number);
-            viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
-            viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
-
-            viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrencyKod);
-
+            viewHolder = getViewHolder(convertView, cDate, cNumber, сСurrencyKod);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -92,10 +76,35 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
             addpayLines(viewHolder, cPay);
         }
 
-        //
         OnClickChekBox(viewHolder);
-
         return convertView;
+    }
+
+    @Nullable
+    private String getPay(Cursor itemCursor) {
+        String cPay = null;
+        if (pays.getmTypeOperation() == DocTypeOperation.EDIT
+                || pays.getmTypeOperation() == DocTypeOperation.COPY) {
+            cPay = itemCursor.getString(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT));
+        }
+        return cPay;
+    }
+
+    @NonNull
+    private ViewHolder getViewHolder(View convertView, String cDate, String cNumber, String сСurrencyKod) {
+        ViewHolder viewHolder;
+        viewHolder = new ViewHolder();
+        viewHolder.date = (TextView) convertView.findViewById(R.id.pay_doc_data);
+        viewHolder.total = (TextView) convertView.findViewById(R.id.pay_summa);
+        viewHolder.currency = (TextView) convertView.findViewById(R.id.pay_currency);
+        viewHolder.number = (TextView) convertView.findViewById(R.id.pay_doc_number);
+        viewHolder.debet = (TextView) convertView.findViewById(R.id.pay_summa_debet);
+        viewHolder.pay_number = (TextView) convertView.findViewById(R.id.pay_number);
+        viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
+        viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
+
+        viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrencyKod);
+        return viewHolder;
     }
 
     private void addpayLines(ViewHolder viewHolder, String cPay) {
@@ -104,20 +113,19 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         payListDocAction.add(viewHolder.payLines);
     }
 
-    private void OnClickChekBox(final ViewHolder viewHolder) {
+    private void remove(ViewHolder viewHolder) {
+        viewHolder.pay_summa_pay.setText("");
+        payListDocAction.delete(viewHolder.payLines);
+    }
 
+    private void OnClickChekBox(final ViewHolder viewHolder) {
         viewHolder.pay_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    viewHolder.pay_summa_pay.setText(viewHolder.debet.getText());
-
-                    viewHolder.payLines.setSum(Double.valueOf(viewHolder.pay_summa_pay.getText().toString()));
-                    payListDocAction.add(viewHolder.payLines);
-
+                    addpayLines(viewHolder, viewHolder.debet.getText().toString());
                 } else {
-                    viewHolder.pay_summa_pay.setText("");
-                    payListDocAction.delete(viewHolder.payLines);
+                    remove(viewHolder);
                 }
             }
         });
