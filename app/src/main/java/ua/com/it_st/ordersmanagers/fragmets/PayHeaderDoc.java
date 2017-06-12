@@ -20,7 +20,6 @@ import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.InfoUtil;
-import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
@@ -127,7 +126,7 @@ public class PayHeaderDoc extends HeaderDoc {
                 uniqueKey = UUID.randomUUID();
                 pays.setId(String.valueOf(uniqueKey));
                 /*номер документа*/
-                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
+                numberDoc = bundle.getString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC);
                 /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 break;
@@ -142,9 +141,9 @@ public class PayHeaderDoc extends HeaderDoc {
 
                 pays.setId(id_order);
                /*номер документа*/
-                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
+                numberDoc = bundle.getString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC);
                 /*дата док*/
-                dateDoc = bundle.getString(LoaderDocFragment.DATE_DOC);
+                dateDoc = bundle.getString(PayDocSelectOrders.LoaderDocFragment.DATE_DOC);
                 break;
 
             case COPY:
@@ -156,7 +155,7 @@ public class PayHeaderDoc extends HeaderDoc {
                 pays.setId(id_order);
 
                 /*номер документа*/
-                numberDoc = bundle.getString(LoaderDocFragment.NUMBER_DOC);
+                numberDoc = bundle.getString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC);
                  /*нтекущая дата*/
                 dateDoc = ConstantsUtil.getDate();
                 break;

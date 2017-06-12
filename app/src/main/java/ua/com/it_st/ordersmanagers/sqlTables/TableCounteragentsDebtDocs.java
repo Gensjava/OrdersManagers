@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class TableCounteragentsDebtDocs {
     public static final String TABLE_NAME = "CounteragentsDebtDocs";
-    public static final String FILE_NAME = "ref_debtext.csv";
+    public static final String FILE_NAME = "ref_debt_docs.csv";
     public static final String HEADER_NAME = "долг контрагентов по документам";
 
     public static final String COLUMN_CLIENT_ID = "ClientId";

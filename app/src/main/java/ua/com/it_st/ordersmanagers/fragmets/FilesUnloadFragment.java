@@ -29,8 +29,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     private final String TEG = FilesUnloadFragment.class.getSimpleName();
     private AsyncHttpClientUtil mUtilAsyncHttpClient;
     private String mWayCatalog;
-    private int mAcuont;
-    private int mProgress;
     private double pProgressDiscrete;
     private double pProgressPie;
     private int fileSize;
@@ -70,7 +68,7 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     public void UnloadFilesOfServer() {
        /*чистим все параметры */
         nullableValues();
-        mProgress = 0;
+
         pProgressPie = 0;
         //Log
         InfoUtil.setmLogLine(getString(R.string.start_on_load));
@@ -124,14 +122,13 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
 
         /*формируем документ заказ шапку*/
         if (data.getCount() > 0) {
-
-            getProgressPieView().setMax(getProgressPieView().getMax() + data.getCount());
             /*информаци о выгрузке*/
             getLoadFiles().setText(getString(R.string.unload) + headerName);
             try {
 
                 String path = createTempFiles(data, nameFile, headerLines);
                 sendFileToServer(path, nameFile);
+                System.out.println(" path " + path);
 
             } catch (Exception e) {
                 error(nameFile, e);
@@ -164,9 +161,11 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
         int sizeBar = itemCursor.getCount();
         int n = 0;/*счетчики*/
         pProgressDiscrete = 0;
+        pProgressPie = 0;
 
         /*устанавливаем максимальное количество бара*/
         getDiscreteSeekBar().setProgress(sizeBar);
+        getProgressPieView().setMax(sizeBar);
 
         try {
             path = getDataDir(getActivity()) + "/" + nameFile;
@@ -190,7 +189,6 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
             }
             myFile.writeNext(entries);
             n++;
-            mProgress++;
            /*двигаем бар */
             onProgressBar(n, sizeBar);
         }
@@ -233,14 +231,15 @@ public class FilesUnloadFragment extends FilesFragment implements LoaderManager.
     /*двигаем бар и вычисляем процент выполнения */
     private void onProgressBar(int DprogressSeekBar, final int sizeBar) {
 
+        /*линия бара*/
         getDiscreteSeekBar().setProgress(DprogressSeekBar);
         pProgressDiscrete += (100 / (double) sizeBar);
         setProgressDiscrete(pProgressDiscrete);
-         /*надпись бара*/
         getTextProgress().setText(String.valueOf((int) getProgressDiscrete()) + "%");
+
         /* Круг прогресс */
-        getProgressPieView().setProgress(mProgress);
-        pProgressPie += (100 / (double) mAcuont);
+        getProgressPieView().setProgress(DprogressSeekBar);
+        pProgressPie += (100 / (double) sizeBar);
         setProgress(pProgressPie);
         getProgressPieView().setText(String.valueOf((int) getProgress()) + "%");
     }

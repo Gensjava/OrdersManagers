@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.sqlTables.TablePays;
-import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /**
  * Created by Gena on 2017-05-04.
  */
-public class PayDocListDocFragment extends LoaderDocFragment {
+public class PayDocListDocFragment extends PayDocSelectOrders.LoaderDocFragment {
 
     @Override
     public boolean onRecord() {
@@ -43,8 +42,8 @@ public class PayDocListDocFragment extends LoaderDocFragment {
         switch (view.getId()) {
             case R.id.main_heander_image_plus:
                 Bundle bundleItem = new Bundle();
-                bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.NEW.toString());
-                bundleItem.putString(LoaderDocFragment.NUMBER_DOC, String.valueOf(getNextNumberDoc()));
+                bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.NEW.toString());
+                bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC, String.valueOf(getNextNumberDoc()));
 
                 final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
                 someEventListener.onOpenFragmentClassBundle(PayHeaderDoc.class, bundleItem);

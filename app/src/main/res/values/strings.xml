@@ -32,7 +32,7 @@
         <item>ref_firms.csv</item>
         <item>ref_stores.csv</item>
         <item>ref_debt.csv</item>
-        <item>ref_debtext.csv</item>
+        <item>ref_debt_docs.csv</item>
         <item>ref_currency.csv</item>
         <item>ref_curs_currency.csv</item>
     </string-array>

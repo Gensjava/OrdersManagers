@@ -25,18 +25,18 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
+import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderDocFragment.onLoaderDocListener,
+        PayDocSelectOrders.LoaderDocFragment.onLoaderDocListener,
         OrderHeaderDoc.onEventListener,
         OrderCatalogGoodsFragment.onEventListener,
         OrderSelectHeaderFragment.OnFragmentSelectListener,

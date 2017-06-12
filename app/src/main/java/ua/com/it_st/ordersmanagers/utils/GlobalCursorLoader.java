@@ -24,6 +24,7 @@ public class GlobalCursorLoader extends CursorLoader {
 
     @Override
     public Cursor loadInBackground() {
+
         return sDb
                 .rawQuery(querySQL, params);
     }

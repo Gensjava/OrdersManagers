@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
-import ua.com.it_st.ordersmanagers.utils.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /* Класс отображает список заказов сделанные курьером
 *  В списке есть контекстное меню построенное на  Spinner */
 
-public class OrderListDocFragment extends LoaderDocFragment {
+public class OrderListDocFragment extends PayDocSelectOrders.LoaderDocFragment {
 
     public static final String ID_ORDER = "ID_DOC";
     public static final String DOC_TYPE_OPERATION = "TYPE_OPERATION_DOC";
@@ -46,8 +45,8 @@ public class OrderListDocFragment extends LoaderDocFragment {
         switch (view.getId()) {
             case R.id.main_heander_image_plus:
                 Bundle bundleItem = new Bundle();
-                bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.NEW.toString());
-                bundleItem.putString(LoaderDocFragment.NUMBER_DOC, String.valueOf(getNextNumberDoc()));
+                bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.NEW.toString());
+                bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC, String.valueOf(getNextNumberDoc()));
 
                 final onLoaderDocListener someEventListener = (onLoaderDocListener) getActivity();
                 someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);
