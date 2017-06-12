@@ -78,7 +78,7 @@ public abstract class HeaderDoc extends CursorLoaderFragment implements View.OnC
             onCreateHeader(bundle);
 
             /*стктус докуента*/
-            header.setText(docTypeOperation.toString());
+            header.setText(DocTypeOperation.valueFor(docTypeOperation));
 
             /*выводим данные дату и номер в шапку*/
             period = (TextView) rootView.findViewById(R.id.order_new_heander_period);

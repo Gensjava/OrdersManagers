@@ -1,37 +1,20 @@
 package ua.com.it_st.ordersmanagers.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum DocTypeOperation {
     NEW, EDIT, COPY;
-    // NEW("Новый"), EDIT("EDIT"), COPY("COPY");
 
+    private static final Map<DocTypeOperation, String> map = new HashMap<>();
 
-//    private final String description;
-//
-//    DocTypeOperation(String description) {
-//        this.description = description;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//    public static DocTypeOperation getFragmentNameByText(String text) {
-//        for (DocTypeOperation fragment : values()) {
-//            if (fragment.description.equals(text)) {
-//                return fragment;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    private static final Map<String, DocTypeOperation> map = new HashMap<>();
-//    static {
-//        for (DocTypeOperation en : values()) {
-//            map.put(en.description, en);
-//        }
-//    }
-//
-//    public static DocTypeOperation valueFor(String name) {
-//        return map.get(name);
-//    }
+    static {
+        map.put(NEW, "Новый");
+        map.put(EDIT, "Редактирование");
+        map.put(COPY, "Копировать");
+    }
 
+    public static String valueFor(DocTypeOperation name) {
+        return map.get(name);
+    }
 }
