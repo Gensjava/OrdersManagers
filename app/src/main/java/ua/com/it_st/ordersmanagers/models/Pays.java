@@ -106,12 +106,14 @@ public class Pays extends Documents {
         private String numberDoc;
         private double sum;
         private String currency;
+        private String lineId;
 
-        public PaysLines(String docId, String dateDoc, String numberDoc, double sum, String currency) {
+        public PaysLines(String docId, String dateDoc, String numberDoc, double sum, String currency, String lineId) {
             this.dateDoc = dateDoc;
             this.numberDoc = numberDoc;
             this.sum = sum;
             this.currency = currency;
+            this.lineId = lineId;
             setDocId(docId);
         }
 
@@ -133,6 +135,10 @@ public class Pays extends Documents {
 
         public String getCurrency() {
             return currency;
+        }
+
+        public String getLineId() {
+            return lineId;
         }
     }
 }

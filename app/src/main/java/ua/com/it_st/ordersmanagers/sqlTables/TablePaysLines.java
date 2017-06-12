@@ -14,7 +14,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 public class TablePaysLines {
     public static final String TABLE_NAME = "PaysLines";
     public static final String FILE_NAME = "doc_pay_lines.csv";
-    public static final String sHeader = "DocId,CurrencyId,Amount,DocDate,DocNumber,";
+    public static final String sHeader = "DocId,CurrencyId,Amount,DocDate,DocNumber,line_id,";
     public static final String HEADER_NAME = "табличной части оплаты";
 
     public static final String COLUMN_DOC_ID = "doc_id";
@@ -22,6 +22,7 @@ public class TablePaysLines {
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_DOC_DATE = "doc_date";
     public static final String COLUMN_NUMBER_DOC = "doc_number";
+    public static final String COLUMN_LINE_ID = "line_id";
 
     private static final String TAG = TablePaysLines.class.getSimpleName();
 
@@ -34,6 +35,7 @@ public class TablePaysLines {
                 + " ," + COLUMN_AMOUNT + " real"
                 + " ," + COLUMN_DOC_DATE + " text"
                 + " ," + COLUMN_NUMBER_DOC + " text"
+                + " ," + COLUMN_LINE_ID + " integer"
                 + ");");
     }
 
@@ -52,6 +54,7 @@ public class TablePaysLines {
         data.put(COLUMN_AMOUNT, sData.getSum());
         data.put(COLUMN_DOC_DATE, sData.getDateDoc());
         data.put(COLUMN_NUMBER_DOC, sData.getNumberDoc());
+        data.put(COLUMN_LINE_ID, sData.getLineId());
 
         return data;
     }

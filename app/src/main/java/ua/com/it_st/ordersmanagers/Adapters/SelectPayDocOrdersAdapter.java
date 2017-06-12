@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.UUID;
 
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
@@ -62,10 +63,11 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragentsDebtDocs.COLUMN_SUMMA));
 
         String cPay = getPay(itemCursor);
+        String LineId = getLineId(itemCursor);
 
         if (convertView == null) {
             convertView = mLInflater.inflate(R.layout.pay_list_item, parent, false);
-            viewHolder = getViewHolder(convertView, cDate, cNumber, сСurrencyKod);
+            viewHolder = getViewHolder(convertView, cDate, cNumber, сСurrencyKod, LineId);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -98,8 +100,20 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         return cPay;
     }
 
+    @Nullable
+    private String getLineId(Cursor itemCursor) {
+        String cLineId;
+        if (pays.getmTypeOperation() == DocTypeOperation.EDIT
+                || pays.getmTypeOperation() == DocTypeOperation.COPY) {
+            cLineId = itemCursor.getString(itemCursor.getColumnIndex(TablePaysLines.COLUMN_LINE_ID));
+        } else {
+            cLineId = String.valueOf(UUID.randomUUID());
+        }
+        return cLineId;
+    }
+
     @NonNull
-    private ViewHolder getViewHolder(View convertView, String cDate, String cNumber, String сСurrencyKod) {
+    private ViewHolder getViewHolder(View convertView, String cDate, String cNumber, String сСurrencyKod, String lineId) {
         ViewHolder viewHolder;
         viewHolder = new ViewHolder();
         viewHolder.date = (TextView) convertView.findViewById(R.id.pay_doc_data);
@@ -111,7 +125,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         viewHolder.pay_checkBox = (CheckBox) convertView.findViewById(R.id.pay_checkBox);
         viewHolder.pay_summa_pay = (EditText) convertView.findViewById(R.id.pay_summa_pay);
 
-        viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrencyKod);
+        viewHolder.payLines = new Pays.PaysLines(pays.getId(), cDate, cNumber, 0, сСurrencyKod, lineId);
         return viewHolder;
     }
 

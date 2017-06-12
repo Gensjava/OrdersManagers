@@ -182,7 +182,7 @@ public class SQLQuery {
     public static String queryPaysLinesEdit(final String sp, final String sp2) {
 
         String sq;
-        sq = "select CounteragentsDebtDocs._id, CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName,CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, OrdersLinesD.amount, Currencies.name, Currencies.kod\n" +
+        sq = "select CounteragentsDebtDocs._id, CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName,CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, PaysLinesD.amount, PaysLinesD.line_id, Currencies.name, Currencies.kod\n" +
                 " From CounteragentsDebtDocs\n" +
                 "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod\n" +
                 "LEFT OUTER JOIN (\n" +
@@ -190,8 +190,8 @@ public class SQLQuery {
                 "                FROM PaysLines\n" +
                 "                LEFT OUTER JOIN Pays ON PaysLines.doc_id  = Pays.view_id\n" +
                 "                Where PaysLines.doc_id = \"" + sp2 + "\"\n" +
-                "                ) as  OrdersLinesD ON OrdersLinesD.doc_date = CounteragentsDebtDocs.DocDate  \n" +
-                " and CounteragentsDebtDocs.DocName = OrdersLinesD.doc_number\n" +
+                "                ) as  PaysLinesD ON PaysLinesD.doc_date = CounteragentsDebtDocs.DocDate  \n" +
+                " and CounteragentsDebtDocs.DocName = PaysLinesD.doc_number\n" +
                 "WHERE " + sp + "\n";
         ;
 
@@ -217,7 +217,7 @@ public class SQLQuery {
     public static String queryPaysLinesFilesCsv(final String sp) {
 
         String sq;
-        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.doc_date,  PaysLines.doc_number \n" +
+        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.doc_date,  PaysLines.doc_number, PaysLines.line_id \n" +
                 "FROM Pays\n" +
                 "LEFT OUTER JOIN PaysLines ON Pays.view_id  = PaysLines.doc_id\n" +
                 "WHERE " + sp + "\n";

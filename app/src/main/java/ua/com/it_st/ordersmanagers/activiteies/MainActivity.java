@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements
             db.execSQL("ALTER TABLE PayDoc RENAME TO Pays");
             db.execSQL("ALTER TABLE TypeStores RENAME TO Stores");
             db.execSQL("ALTER TABLE PayDogLines RENAME TO PaysLines");
+
         } catch (Exception e) {
 
         }
