@@ -53,7 +53,7 @@ public class HeaderDocAdapter extends SimpleAdapter {
         final Map<String, ?> itemsCatalogs = (Map<String, ?>) mHeaderOrders.get(position);
                /*устанвливаем аватар для каждого параметра шапки*/
         ImageView imageView = (ImageView) convertView.findViewById(R.id.order_header_list_item_image_avatar);
-        //  imageView.setImageResource((Integer) itemsCatalogs.get(R.string.imageAvatar));
+        ///  imageView.setImageResource((Integer) itemsCatalogs.get(R.string.imageAvatar));
 
         /* позиция шапки */
         final Object object = itemsCatalogs.get(String.valueOf(position));

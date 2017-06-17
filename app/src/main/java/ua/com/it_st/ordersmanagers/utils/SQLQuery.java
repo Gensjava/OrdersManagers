@@ -217,7 +217,7 @@ public class SQLQuery {
     public static String queryPaysLinesFilesCsv(final String sp) {
 
         String sq;
-        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.doc_date,  PaysLines.doc_number, PaysLines.line_id \n" +
+        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.Amount, PaysLines.doc_date, PaysLines.doc_number, PaysLines.line_id \n" +
                 "FROM Pays\n" +
                 "LEFT OUTER JOIN PaysLines ON Pays.view_id  = PaysLines.doc_id\n" +
                 "WHERE " + sp + "\n";

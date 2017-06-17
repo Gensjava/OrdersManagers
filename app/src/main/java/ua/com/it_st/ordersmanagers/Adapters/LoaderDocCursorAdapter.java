@@ -17,7 +17,7 @@ import android.widget.Toast;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
-import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
+import ua.com.it_st.ordersmanagers.fragmets.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
@@ -28,9 +28,9 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
 public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
-    private PayDocSelectOrders.LoaderDocFragment loaderDocFragment;
+    private LoaderDocFragment loaderDocFragment;
 
-    public LoaderDocCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, PayDocSelectOrders.LoaderDocFragment loaderDocFragment) {
+    public LoaderDocCursorAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, LoaderDocFragment loaderDocFragment) {
         super(context, layout, c, from, to, flags);
         mLInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -117,20 +117,20 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                             switch (selectedItemPosition) {
                                 case 0:
                                   /*чистим док заказ и редактируем заказ*/
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.EDIT.toString());
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC, cNumber);
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.DATE_DOC, cDate);
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.ID_DOC, cId);
+                                    bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.EDIT.toString());
+                                    bundleItem.putString(LoaderDocFragment.NUMBER_DOC, cNumber);
+                                    bundleItem.putString(LoaderDocFragment.DATE_DOC, cDate);
+                                    bundleItem.putString(LoaderDocFragment.ID_DOC, cId);
                                     break;
                                 case 3:
                                   /*чистим док заказ и копируем заказ*/
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.COPY.toString());
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.NUMBER_DOC, String.valueOf(loaderDocFragment.getNextNumberDoc()));
-                                    bundleItem.putString(PayDocSelectOrders.LoaderDocFragment.ID_DOC, cId);
+                                    bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.COPY.toString());
+                                    bundleItem.putString(LoaderDocFragment.NUMBER_DOC, String.valueOf(loaderDocFragment.getNextNumberDoc()));
+                                    bundleItem.putString(LoaderDocFragment.ID_DOC, cId);
                                     break;
                             }
 
-                            final PayDocSelectOrders.LoaderDocFragment.onLoaderDocListener someEventListener = (PayDocSelectOrders.LoaderDocFragment.onLoaderDocListener) mContext;
+                            final LoaderDocFragment.onLoaderDocListener someEventListener = (LoaderDocFragment.onLoaderDocListener) mContext;
                             someEventListener.onOpenFragmentClassBundle(loaderDocFragment.getaClass(), bundleItem);
                         case 1:
                                 /*проводим док*/
@@ -146,7 +146,7 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                         /*меняем статус у документов (проведен, не проведен)*/
                     if (!cId.equals("") & selectedItemPosition == 1 || selectedItemPosition == 2) {
 
-                        PayDocSelectOrders.LoaderDocFragment.sDb.update(loaderDocFragment.getTableName(), data, "view_id = ?", new String[]{cId});
+                        LoaderDocFragment.sDb.update(loaderDocFragment.getTableName(), data, "view_id = ?", new String[]{cId});
                         String[] choose = loaderDocFragment.getResources().getStringArray(R.array.spinner_orders_menu);
 
                         Toast toast = Toast.makeText(mContext,

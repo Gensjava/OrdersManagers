@@ -1,11 +1,11 @@
 package ua.com.it_st.ordersmanagers.activiteies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +18,7 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.HeaderDoc;
+import ua.com.it_st.ordersmanagers.fragmets.LoaderDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.MainPreferenceFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCartFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderCatalogGoodsFragment;
@@ -25,18 +26,16 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
-import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Orders;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.services.GPSMonitor;
 import ua.com.it_st.ordersmanagers.utils.Dialogs;
-import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 import ua.com.it_st.ordersmanagers.utils.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        PayDocSelectOrders.LoaderDocFragment.onLoaderDocListener,
+        LoaderDocFragment.onLoaderDocListener,
         OrderHeaderDoc.onEventListener,
         OrderCatalogGoodsFragment.onEventListener,
         OrderSelectHeaderFragment.OnFragmentSelectListener,
@@ -44,26 +43,30 @@ public class MainActivity extends AppCompatActivity implements
         FilesLoadFragment.onEventListener
 {
 
+    // имя файла настройки
+    public static final String APP_PREFERENCES = "mysettings";
+    public static final String APP_PREFERENCES_COUNTER = "counter";
     public static boolean chickMainFragment;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
-
     private Orders mCurrentOrder;
     private Pays mCurrentPay;
+    private SharedPreferences mSettings;
+    private int mCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            SQLiteDatabase db = SQLiteOpenHelperUtil.getInstance().getDatabase();
-            db.execSQL("ALTER TABLE Сompanys RENAME TO Companies");
-            db.execSQL("ALTER TABLE PayDoc RENAME TO Pays");
-            db.execSQL("ALTER TABLE TypeStores RENAME TO Stores");
-            db.execSQL("ALTER TABLE PayDogLines RENAME TO PaysLines");
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        mCounter = mSettings.getInt(APP_PREFERENCES_COUNTER, 0);
 
-        } catch (Exception e) {
+        if (mCounter == 0) {
+            deleteDatabase("db_courier_orders.db");
 
+            SharedPreferences.Editor editor = mSettings.edit();
+            editor.putInt(APP_PREFERENCES_COUNTER, 1);
+            editor.apply();
         }
 
         setContentView(R.layout.activity_main);
@@ -85,9 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         setupDrawerContent(nvDrawerN);
         ActionBarDrawerToggle drawerToggle = setupDrawerToggle();
         mDrawer.setDrawerListener(drawerToggle);
-
         chickMainFragment = true;//поумолчанию открывается ящик
-        //Disables onClick toggle listener (onClick)
 
         drawerToggle.setDrawerIndicatorEnabled(false);
         drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
@@ -103,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements
 
         //Открываем главный фрагмент
         WorkFragment.onNewInstanceFragment(OrderListDocFragment.class, this);
-
-
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -185,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements
         WorkFragment.onNewInstanceFragment(fClass, bundleItem, this);
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -208,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements
                 if (Dialogs.editNumber.getText().toString().trim().length() == 0) {
                     Dialogs.editNumber.setText(R.string.zero_text);
                 }
-
                 break;
             case R.id.but_dumping:
                 Dialogs.editNumber.setText(R.string.zero_text);
@@ -227,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     Dialogs.editNumber.setText(Dialogs.editNumber.getText() + view.getContentDescription().toString());
                 }
-
                 break;
         }
         Dialogs.calculationSum(Double.parseDouble(String.valueOf(Dialogs.editNumber.getText())), Dialogs.product.getPrice(), view, Dialogs.animScale);
@@ -236,25 +232,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        OrderListDocFragment mainFragment = (OrderListDocFragment) getSupportFragmentManager().findFragmentByTag(OrderListDocFragment.class.toString());
-
-        if (checkFragment(mainFragment)) {
-            chickMainFragment = true;
-            mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
-        } else {
-            chickMainFragment = false;
-        }
-    }
-
-    /*делаем проверку на текущий фрагмент*/
-    private boolean checkFragment(Fragment fragment) {
-        boolean checkMain = false;
-
-        if (fragment != null) {
-            checkMain = fragment.isVisible();
-        }
-        return checkMain;
     }
 
     @Override
@@ -280,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements
             //Открываем фрагмент
             fragment.setSelectUpdate(link, id);
         }
-
     }
 
     public Orders getmCurrentOrder() {

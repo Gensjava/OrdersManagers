@@ -24,7 +24,7 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 13;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
@@ -67,6 +67,14 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
     /* чистим таблицы */
     public static void onDeleteValueTables(final SQLiteDatabase mDb) {
 
+//            SQLiteDatabase db = SQLiteOpenHelperUtil.getInstance().getDatabase();
+//
+//            db.execSQL("ALTER TABLE Сompanys RENAME TO Companies");
+//            db.execSQL("ALTER TABLE TypeStores RENAME TO Stores");
+//            db.execSQL("ALTER TABLE PayDoc RENAME TO Pays");
+//            db.execSQL("ALTER TABLE PayDogLines RENAME TO PaysLines");
+//
+
         TableCompanies.onDeleteValueTable(mDb);
         TableCounteragents.onDeleteValueTable(mDb);
         TablePrices.onDeleteValueTable(mDb);
@@ -108,22 +116,11 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-        if (oldVersion == 1 & newVersion == 2) {
-            TableCounteragentsDebt.createTable(db);
-        }
 
-        if (oldVersion == 2 & newVersion == 3) {
-            db.execSQL("CREATE INDEX \"kod_GoodsByStores\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
-            db.execSQL("CREATE INDEX \"kod_Products\" ON \"Products\" (\"kod\" ASC)");
-            db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
-        }
-
-        if (newVersion < 9) {
-            TableCounteragentsDebtDocs.createTable(db);
-            TableCurrencies.createTable(db);
-            TableCursCurrencies.createTable(db);
-            TablePays.createTable(db);
-            TablePaysLines.createTable(db);
+        if (newVersion < 13) {
+            // db.execSQL("CREATE INDEX \"kod_GoodsByStores\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
+            // db.execSQL("CREATE INDEX \"kod_Products\" ON \"Products\" (\"kod\" ASC)");
+            // db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
         }
     }
 
