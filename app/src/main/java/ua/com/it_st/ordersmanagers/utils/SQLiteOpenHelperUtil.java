@@ -67,14 +67,6 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
     /* чистим таблицы */
     public static void onDeleteValueTables(final SQLiteDatabase mDb) {
 
-//            SQLiteDatabase db = SQLiteOpenHelperUtil.getInstance().getDatabase();
-//
-//            db.execSQL("ALTER TABLE Сompanys RENAME TO Companies");
-//            db.execSQL("ALTER TABLE TypeStores RENAME TO Stores");
-//            db.execSQL("ALTER TABLE PayDoc RENAME TO Pays");
-//            db.execSQL("ALTER TABLE PayDogLines RENAME TO PaysLines");
-//
-
         TableCompanies.onDeleteValueTable(mDb);
         TableCounteragents.onDeleteValueTable(mDb);
         TablePrices.onDeleteValueTable(mDb);

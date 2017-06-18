@@ -88,28 +88,7 @@ public class AsyncHttpClientUtil extends com.loopj.android.http.AsyncHttpClient 
         post(mBaseUrl, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(final int statusCode, final cz.msebera.android.httpclient.Header[] headers, final byte[] responseBody) {
-                // handle success response
-                if (statusCode == HttpStatus.SC_OK) {
-                    //Log
-                    InfoUtil.setmLogLine("Файл доставлен ", fileName);
-
-                    if (fileName.equals(TableOrdersLines.FILE_NAME)) {
-
-                        FilesFragment fragment = (FilesUnloadFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(FilesUnloadFragment.class.toString());
-                        if (fragment != null) {
-                            /**/
-                            fragment.getLoadFiles().setText("Выгрузка завершена!");
-                            /*мигаем иконкой для вывода лога*/
-                            InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, fragment.getImageViewInfo(), mMainActivity);
-                            fragment.getUi_bar().setVisibility(View.INVISIBLE);
-                        }
-                        //Log
-                        InfoUtil.setmLogLine("Выгрузка завершена!");
-                    }
-                } else {
-                    //Log
-                    InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
-                }
+                Unload(statusCode, fileName);
             }
 
             @Override
@@ -133,6 +112,31 @@ public class AsyncHttpClientUtil extends com.loopj.android.http.AsyncHttpClient 
             }
 
         });
+    }
+
+    private void Unload(int statusCode, String fileName) {
+        // handle success response
+        if (statusCode == HttpStatus.SC_OK) {
+            //Log
+            InfoUtil.setmLogLine("Файл доставлен ", fileName);
+
+            if (fileName.equals(TableOrdersLines.FILE_NAME)) {
+
+                FilesFragment fragment = (FilesUnloadFragment) mMainActivity.getSupportFragmentManager().findFragmentByTag(FilesUnloadFragment.class.toString());
+                if (fragment != null) {
+                    /**/
+                    fragment.getLoadFiles().setText("Выгрузка завершена!");
+                    /*мигаем иконкой для вывода лога*/
+                    InfoUtil.getFleshImage(R.mipmap.ic_info_ok, R.anim.scale_image, fragment.getImageViewInfo(), mMainActivity);
+                    fragment.getUi_bar().setVisibility(View.INVISIBLE);
+                }
+                //Log
+                InfoUtil.setmLogLine("Выгрузка завершена!");
+            }
+        } else {
+            //Log
+            InfoUtil.setmLogLine("Выгрузка файла ", fileName, true, TEG + "Success: Код ошибки " + statusCode);
+        }
     }
 
     public void postUnloadParams(final RequestParams params) throws Exception {
