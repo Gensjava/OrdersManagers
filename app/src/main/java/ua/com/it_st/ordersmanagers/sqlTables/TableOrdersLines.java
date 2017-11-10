@@ -22,6 +22,7 @@ public class TableOrdersLines {
     public static final String COLUMN_RATE = "rate";
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_PRICE = "price";
+    public static final String COLUMN_TYPE = "type";
 
     private static final String TAG = TableOrdersLines.class.getSimpleName();
 
@@ -34,38 +35,32 @@ public class TableOrdersLines {
                 + " ," + COLUMN_RATE + " integer"
                 + " ," + COLUMN_AMOUNT + " real"
                 + " ," + COLUMN_PRICE + " real"
+                + " ," + COLUMN_TYPE + " text"
                 + ");");
     }
 
     public static void upgradeTable(final SQLiteDatabase db,
                                     final int oldVersion, final int newVersion) {
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
-
     }
 
     public static ContentValues getContentValues(Orders.OrdersLines sData, String idDoc) {
-
         final ContentValues data = new ContentValues();
-
         data.put(COLUMN_DOC_ID, idDoc);
         data.put(COLUMN_GOODS_ID, sData.getProduct().getKod());
         data.put(COLUMN_RATE, sData.getRate());
         data.put(COLUMN_AMOUNT, sData.getAmount());
         data.put(COLUMN_PRICE, sData.getPrice());
-
         return data;
     }
 
     public static List<Object> getValueForUpload() {
-
         List<Object> list = new ArrayList<>();
         list.add(FILE_NAME);
         list.add(sHeader.split(","));
         list.add(HEADER_NAME);
         list.add(SQLQuery.queryOrdersLinesFilesCsv("Orders.type  <> ?"));
         list.add(new String[]{"NO_HELD"});
-
-
         return list;
     }
 

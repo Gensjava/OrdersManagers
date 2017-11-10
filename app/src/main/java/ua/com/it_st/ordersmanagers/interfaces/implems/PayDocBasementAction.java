@@ -6,9 +6,6 @@ import java.math.RoundingMode;
 import ua.com.it_st.ordersmanagers.interfaces.DocBasementAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 
-/**
- * Created by Gena on 2017-05-29.
- */
 
 public class PayDocBasementAction implements DocBasementAction {
 
@@ -25,15 +22,19 @@ public class PayDocBasementAction implements DocBasementAction {
 
     @Override
     public double sum() {
-        double total = 0;
+        double total_nat = 0;
+        double total_usd = 0;
 
         for (final Pays.PaysLines paysLines : pays.getPaysLines()) {
-            total = total + paysLines.getSum();
+            total_nat = total_nat + paysLines.getSum_nat();
+            total_usd = total_usd + paysLines.getSum_usd();
         }
-        total = new BigDecimal(total).setScale(2, RoundingMode.UP).doubleValue();
+        total_nat = new BigDecimal(total_nat).setScale(2, RoundingMode.UP).doubleValue();
+        total_usd = new BigDecimal(total_usd).setScale(2, RoundingMode.UP).doubleValue();
 
-        pays.setTotal(total);
-        return total;
+        pays.setTotal_nut(total_nat);
+        pays.setTotal_usd(total_usd);
+        return total_usd;
     }
 
     @Override

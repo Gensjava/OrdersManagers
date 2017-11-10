@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TableOrdersLines;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 /* Класс отображает список заказов сделанные курьером
@@ -25,16 +26,14 @@ public class OrderListDocFragment extends LoaderDocFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         setmQuerySum(SQLQuery.queryOrdersSum("Orders.type  <> ?"));
         setmQueryList(SQLQuery.queryOrders("Orders._id  <> ?"));
         setParamsQuery(new String[]{"null"});
         setaClass(OrderHeaderDoc.class);
         setTableName(TableOrders.TABLE_NAME);
-
+        setTableNameLines(TableOrdersLines.TABLE_NAME);
         super.onCreateView(inflater, container, savedInstanceState);
         header_journal.setText(R.string.JurnalOrders);
-
         return rootView;
     }
 
@@ -47,10 +46,8 @@ public class OrderListDocFragment extends LoaderDocFragment {
                 Bundle bundleItem = new Bundle();
                 bundleItem.putString(LoaderDocFragment.TYPE_OPERATION_DOC, DocTypeOperation.NEW.toString());
                 bundleItem.putString(LoaderDocFragment.NUMBER_DOC, String.valueOf(getNextNumberDoc()));
-
                 final LoaderDocFragment.onLoaderDocListener someEventListener = (LoaderDocFragment.onLoaderDocListener) getActivity();
                 someEventListener.onOpenFragmentClassBundle(OrderHeaderDoc.class, bundleItem);
-
                 break;
             default:
                 break;

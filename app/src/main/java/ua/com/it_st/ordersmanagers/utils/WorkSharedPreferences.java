@@ -18,7 +18,6 @@ public class WorkSharedPreferences {
     }
 
     public String getMloginServer() {
-
         String loginServer = mSettings.getString(mContext.getString(R.string.login_server), null);
             /*проверка*/
         if (loginServer == null) {
@@ -26,12 +25,12 @@ public class WorkSharedPreferences {
             //Log
             InfoUtil.setmLogLine("Введите в настройках логин!", true, TEG);
             return null;
+        } else {
+            return loginServer.trim();
         }
-        return loginServer;
     }
 
     public String getPasswordServer() {
-
         String passwordServer = mSettings.getString(mContext.getString(R.string.password_server), null);
 
         if (passwordServer == null) {
@@ -39,12 +38,12 @@ public class WorkSharedPreferences {
             //Log
             InfoUtil.setmLogLine("Введите в настройках пароль!", true, TEG);
             return null;
+        } else {
+            return passwordServer.trim();
         }
-        return passwordServer;
     }
 
     public String getModeServer() {
-         /*режим сервера*/
         String modeServer = mSettings.getString(mContext.getString(R.string.mode_server), null);
 
         if (modeServer == null) {
@@ -52,14 +51,12 @@ public class WorkSharedPreferences {
             //Log
             InfoUtil.setmLogLine("Установите в настройках режим сервера!", true, TEG);
             return null;
+        } else {
+            return modeServer.trim();
         }
-        return modeServer;
     }
 
     public String getIdServer() {
-
-        /* ид сервер удаленны или локальный*/
-
         String idServer = null;
         if (getModeServer() == null) {
             InfoUtil.Tost("Введите в настройках путь к серверу!", mContext);
@@ -76,32 +73,29 @@ public class WorkSharedPreferences {
                 InfoUtil.setmLogLine("Введите в настройках путь к серверу!", true, TEG);
             }
         }
-
         return idServer;
     }
 
     public String getWayCatalog() {
-
-            /*каталог на сервере пользователя*/
         String wayCatalog = mSettings.getString(mContext.getString(R.string.way_catalog), null);
-
         if (wayCatalog == null || wayCatalog.equals("")) {
             InfoUtil.Tost("Введите в настройках каталог пользователя!", mContext);
             //Log
             InfoUtil.setmLogLine("Введите в настройках каталог пользователя!", true, TEG);
+        } else {
+            return wayCatalog.trim();
         }
         return wayCatalog;
     }
 
     public String getIDUser() {
-
-            /*ИД пользователя*/
         String IDUser = mSettings.getString(mContext.getString(R.string.id_user), null);
-
         if (IDUser == null || IDUser.equals("")) {
             InfoUtil.Tost("Введите в настройках ID пользователя!", mContext);
             //Log
             InfoUtil.setmLogLine("Введите в настройках ID пользователя!", true, TEG);
+        } else {
+            return IDUser.trim();
         }
         return IDUser;
     }

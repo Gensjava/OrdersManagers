@@ -18,13 +18,12 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.enums.DocTypeOperation;
 import ua.com.it_st.ordersmanagers.fragmets.LoaderDocFragment;
+import ua.com.it_st.ordersmanagers.fragmets.PayHeaderDoc;
 import ua.com.it_st.ordersmanagers.sqlTables.TableCounteragents;
 import ua.com.it_st.ordersmanagers.sqlTables.TableOrders;
+import ua.com.it_st.ordersmanagers.sqlTables.TablePays;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 
-/**
- * Created by Gena on 2017-05-14.
- */
 
 public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
     private LayoutInflater mLInflater;
@@ -48,10 +47,18 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
         final String cDate = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_DATE));
         final String cClient = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_NAME));
         final String cAdress = itemCursor.getString(itemCursor.getColumnIndex(TableCounteragents.COLUMN_ADDRESS));
-        final String cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TOTAL));
+
         final String cNumber = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_NUMBER));
         final String cStatus = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TYPE));
 
+        String cTotal;
+        if (this.loaderDocFragment.getaClass().equals(PayHeaderDoc.class)) {
+            final String cTotal_nat = itemCursor.getString(itemCursor.getColumnIndex(TablePays.COLUMN_TOTAL_NAT));
+            final String cTotal_usd = itemCursor.getString(itemCursor.getColumnIndex(TablePays.COLUMN_TOTAL_USD));
+            cTotal = ConstantsUtil.getFormatSum(cTotal_nat, cTotal_usd);
+        } else {
+            cTotal = itemCursor.getString(itemCursor.getColumnIndex(TableOrders.COLUMN_TOTAL));
+        }
             /*дата */
         final TextView date = (TextView) convertView.findViewById(R.id.main_list_item_text_date);
         date.setText(cDate);
@@ -145,14 +152,18 @@ public class LoaderDocCursorAdapter extends SimpleCursorAdapter {
                     }
                         /*меняем статус у документов (проведен, не проведен)*/
                     if (!cId.equals("") & selectedItemPosition == 1 || selectedItemPosition == 2) {
-
-                        LoaderDocFragment.sDb.update(loaderDocFragment.getTableName(), data, "view_id = ?", new String[]{cId});
+                        String message = "";
+                        try {
+                            LoaderDocFragment.sDb.update(loaderDocFragment.getTableName(), data, "view_id = ?", new String[]{cId});
+                            LoaderDocFragment.sDb.update(loaderDocFragment.getTableNameLines(), data, "doc_id = ?", new String[]{cId});
+                            message = "Операция выполнена: ";
+                        } catch (Exception e) {
+                            message = "Операция не выполнена: " + e.getMessage();
+                        }
                         String[] choose = loaderDocFragment.getResources().getStringArray(R.array.spinner_orders_menu);
-
                         Toast toast = Toast.makeText(mContext,
-                                "Операция выполнена: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                                message + choose[selectedItemPosition], Toast.LENGTH_SHORT);
                         toast.show();
-
                         loaderDocFragment.getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                     }
                 } else {

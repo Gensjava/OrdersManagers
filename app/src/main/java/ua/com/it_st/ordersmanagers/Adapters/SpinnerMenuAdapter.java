@@ -1,6 +1,7 @@
 package ua.com.it_st.ordersmanagers.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,10 @@ import android.widget.TextView;
 
 import ua.com.it_st.ordersmanagers.R;
 
-/**
- * Created by Gena on 2017-05-14.
- */
 
 public class SpinnerMenuAdapter extends ArrayAdapter {
-    private String[] objects;
-    private LayoutInflater mLInflater;
+    protected String[] objects;
+    protected LayoutInflater mLInflater;
 
     public SpinnerMenuAdapter(Context context, int textViewResourceId,
                               String[] objects) {
@@ -33,13 +31,14 @@ public class SpinnerMenuAdapter extends ArrayAdapter {
         return getCustomView(position, convertView, parent);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // TODO Auto-generated method stub
         return getCustomView(position, convertView, parent);
     }
 
-    public View getCustomView(final int position, View convertView, ViewGroup parent) {
+    private View getCustomView(final int position, View convertView, ViewGroup parent) {
 
         convertView = mLInflater.inflate(R.layout.spinner_row, parent, false);
 

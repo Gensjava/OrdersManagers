@@ -47,18 +47,18 @@ public class PayDocSQLAction implements SQLAction {
          /* табличная часть*/
         /*создаем новые позиции*/
         for (final Pays.PaysLines pay : pays.getPaysLines()) {
-            long inTableLines = mDB.insert(
-                    TablePaysLines.TABLE_NAME,
-                    null,
-                    TablePaysLines.getContentValues(pay));
-
-            if (inTableLines == -1) {
-                InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);
-                mDB.endTransaction();
-                return false;
+            if (pay.getSum_nat() != 0 || pay.getSum_usd() != 0) {
+                long inTableLines = mDB.insert(
+                        TablePaysLines.TABLE_NAME,
+                        null,
+                        TablePaysLines.getContentValues(pay));
+                if (inTableLines == -1) {
+                    InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);
+                    mDB.endTransaction();
+                    return false;
+                }
             }
         }
-
         /* заканчиваем транзакцию */
         mDB.setTransactionSuccessful();
         mDB.endTransaction();
@@ -67,7 +67,6 @@ public class PayDocSQLAction implements SQLAction {
 
     @Override
     public boolean update(Object object) {
-
         Pays pays = (Pays) object;
          /* начинаем транзакцию */
         mDB.beginTransaction();

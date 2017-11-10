@@ -65,7 +65,6 @@ public class OrderDocAction implements DocAction {
 
     @Override
     public boolean update(Documents documents) {
-
         Orders orders = (Orders) documents;
          /* начинаем транзакцию */
         mDB.beginTransaction();

@@ -68,7 +68,6 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
     private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener() {
         @Override
         public void onClick(final TreeNode node, final Object value) {
-
             final TreeItem item = (TreeItem) value;
             outState = null;
             /* Текущая позиция дерева */
@@ -184,7 +183,6 @@ public class OrderCatalogGoodsFragment extends FilesFragment implements LoaderMa
     если больше 0 тогда показываем
     */
     public void updateCartCount() {
-
         if (ui_cart == null) return;
 
         OrderListAction lUpDateOrderList = new OrderListAction();

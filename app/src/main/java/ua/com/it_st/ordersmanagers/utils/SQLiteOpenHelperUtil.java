@@ -1,7 +1,6 @@
 package ua.com.it_st.ordersmanagers.utils;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -23,27 +22,16 @@ import ua.com.it_st.ordersmanagers.sqlTables.TableTypePrices;
 
 public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "db_courier_orders.db";
-    public static final int DATABASE_VERSION = 13;
+    private static final String DATABASE_NAME = "db_courier_orders.db";
+    private static final int DATABASE_VERSION = 13;
 
     private static volatile SQLiteOpenHelperUtil sInstance = null;
 
     private SQLiteDatabase mDatabase;
 
-    public SQLiteOpenHelperUtil(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version) {
-        super(context, name, factory, version);
-    }
-
-    public SQLiteOpenHelperUtil(final Context context, final String name, final SQLiteDatabase.CursorFactory factory, final int version, final DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
-    }
-
     public SQLiteOpenHelperUtil(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
         mDatabase = getWritableDatabase();
-        // mDatabase.compileStatement()
-
     }
 
     public static SQLiteOpenHelperUtil getInstance() {
@@ -66,7 +54,6 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
 
     /* чистим таблицы */
     public static void onDeleteValueTables(final SQLiteDatabase mDb) {
-
         TableCompanies.onDeleteValueTable(mDb);
         TableCounteragents.onDeleteValueTable(mDb);
         TablePrices.onDeleteValueTable(mDb);
@@ -82,12 +69,10 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableCursCurrencies.onDeleteValueTable(mDb);
         TablePays.onDeleteValueTable(mDb);
         TablePaysLines.onDeleteValueTable(mDb);
-
     }
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-
         TableCounteragents.createTable(db);
         TableOrders.createTable(db);
         TableOrdersLines.createTable(db);
@@ -103,17 +88,11 @@ public class SQLiteOpenHelperUtil extends SQLiteOpenHelper {
         TableCursCurrencies.createTable(db);
         TablePays.createTable(db);
         TablePaysLines.createTable(db);
-
     }
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
 
-        if (newVersion < 13) {
-            // db.execSQL("CREATE INDEX \"kod_GoodsByStores\" ON \"GoodsByStores\" (\"kod_coods\" ASC)");
-            // db.execSQL("CREATE INDEX \"kod_Products\" ON \"Products\" (\"kod\" ASC)");
-            // db.execSQL("CREATE INDEX \"kod_Prices\" ON \"Prices\" (\"kod\" ASC)");
-        }
     }
 
     public SQLiteDatabase getDatabase() {

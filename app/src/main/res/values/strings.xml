@@ -59,6 +59,14 @@
         <item>заглушка</item>
     </string-array>
 
+    <string-array name="spinner_orders_menu_pay">
+        <item>Pедактировать</item>
+        <item>Провести</item>
+        <item>Снять с проведения</item>
+        <item>Копировать</item>
+        <item>заглушка</item>
+    </string-array>
+
     <string-array name="spinner_cart_menu">
         <item>Удалить</item>
         <item>Изменить количество</item>

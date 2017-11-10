@@ -1,6 +1,5 @@
 package ua.com.it_st.ordersmanagers.fragmets;
 
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -22,12 +21,7 @@ import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.SQLiteOpenHelperUtil;
 
-/**
- * Created by Gena on 2017-05-13.
- */
-
 public abstract class LoaderDocFragment extends CursorLoaderFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
-
     public static final String NUMBER_DOC = "NUMBER_DOC";
     public static final String DATE_DOC = "DATE_DOC";
     public static final String ID_DOC = "ID_DOC";
@@ -45,6 +39,7 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
     private short nextNumberDoc;
     private Class aClass;
     private String tableName;
+    private String tableNameLines;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,11 +50,9 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
         sDb = SQLiteOpenHelperUtil.getInstance().getDatabase();
             /* открываем подключение к БД */
         setCountLoad((byte) 2);
-
             /*устанавливаем период журнала*/
         periodDoc = (TextView) rootView.findViewById(R.id.main_heander_period);
         setPeriodDoc(getString(R.string.with) + ConstantsUtil.getDate() + getString(R.string.on) + ConstantsUtil.getDate());
-        //
         header_journal = (TextView) rootView.findViewById(R.id.main_heander_text_Jurnal);
               /*подвал журнал заказов */
         summaDoc = (TextView) rootView.findViewById(R.id.main_header_list_velue_text);
@@ -73,11 +66,9 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
             /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.main_heander_list_position);
         lvData.setAdapter(scAdapter);
-
             /**/
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_drawer);
         MainActivity.chickMainFragment = true;
-
         return rootView;
     }
 
@@ -103,7 +94,6 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
     /*функция отрабатывает после выполнения*/
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-
         switch (loader.getId()) {
             case 0:
                 scAdapter.swapCursor(data);
@@ -111,9 +101,19 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
                 setNextNumberDoc((short) (data.getCount() + 1));
                 break;
             case 1:
-                final int cSumIndex = data.getColumnIndex("sum_orders");
-                data.moveToFirst();
-                final String cSum = data.getString(cSumIndex);
+                String cSum = "0.00";
+                if (aClass.equals(PayHeaderDoc.class)) {
+                    final int cSumIndex_nat = data.getColumnIndex("sum_nat");
+                    final int cSumIndex_usd = data.getColumnIndex("sum_usd");
+                    data.moveToFirst();
+                    final String cSum_nat = data.getString(cSumIndex_nat);
+                    final String cSum_usd = data.getString(cSumIndex_usd);
+                    cSum = ConstantsUtil.getFormatSum(String.valueOf(cSum_nat), String.valueOf(cSum_usd));
+                } else {
+                    final int cSumIndex = data.getColumnIndex("sum_orders");
+                    data.moveToFirst();
+                    cSum = data.getString(cSumIndex);
+                }
                 updataSumOrders(cSum);
                 break;
             default:
@@ -167,6 +167,14 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getTableNameLines() {
+        return tableNameLines;
+    }
+
+    public void setTableNameLines(String tableNameLines) {
+        this.tableNameLines = tableNameLines;
     }
 
     /* создаем класс - интефейс для открытия фрагментов */

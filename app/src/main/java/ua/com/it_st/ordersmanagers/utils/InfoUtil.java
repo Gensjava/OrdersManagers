@@ -19,7 +19,6 @@ import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.activiteies.MainActivity;
 
 public class InfoUtil {
-
     private static final String TEG_ERROR_INFO = "ErrorInfo:";
     private static final String TEG_INFO = "Info:";
     private static final String TEG_ERROR = "Error:";
@@ -43,7 +42,6 @@ public class InfoUtil {
         if (alert != null) {
             alert.show();
         }
-
     }
 
     /*делаем чтоб картинка мигала*/

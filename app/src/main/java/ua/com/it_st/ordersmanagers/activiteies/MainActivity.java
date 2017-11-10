@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import ua.com.it_st.ordersmanagers.Adapters.SelectPayDocOrdersAdapter;
 import ua.com.it_st.ordersmanagers.R;
 import ua.com.it_st.ordersmanagers.fragmets.FilesLoadFragment;
 import ua.com.it_st.ordersmanagers.fragmets.FilesUnloadFragment;
@@ -26,6 +27,8 @@ import ua.com.it_st.ordersmanagers.fragmets.OrderHeaderDoc;
 import ua.com.it_st.ordersmanagers.fragmets.OrderListDocFragment;
 import ua.com.it_st.ordersmanagers.fragmets.OrderSelectHeaderFragment;
 import ua.com.it_st.ordersmanagers.fragmets.PayDocListDocFragment;
+import ua.com.it_st.ordersmanagers.fragmets.PayDocSelectOrders;
+import ua.com.it_st.ordersmanagers.fragmets.dialogs.DetailsPays;
 import ua.com.it_st.ordersmanagers.interfaces.implems.OrderListAction;
 import ua.com.it_st.ordersmanagers.models.Catalogs;
 import ua.com.it_st.ordersmanagers.models.Orders;
@@ -40,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements
         OrderCatalogGoodsFragment.onEventListener,
         OrderSelectHeaderFragment.OnFragmentSelectListener,
         OrderCartFragment.onEventListener,
-        FilesLoadFragment.onEventListener
-{
+        FilesLoadFragment.onEventListener,
+        SelectPayDocOrdersAdapter.OnItemClickListener,
+        DetailsPays.OnDetailsPaysFragmentListener {
 
-    // имя файла настройки
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
     public static boolean chickMainFragment;
@@ -51,15 +54,12 @@ public class MainActivity extends AppCompatActivity implements
     private Toolbar mToolbar;
     private Orders mCurrentOrder;
     private Pays mCurrentPay;
-    private SharedPreferences mSettings;
-    private int mCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        mCounter = mSettings.getInt(APP_PREFERENCES_COUNTER, 0);
+        SharedPreferences mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        int mCounter = mSettings.getInt(APP_PREFERENCES_COUNTER, 0);
 
         if (mCounter == 0) {
             deleteDatabase("db_courier_orders.db");
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set a Toolbar to replace the ActionBar.
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -254,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements
     public void OnFragmentSelectListener(Catalogs link, String nameTegFragment, String id) {
         HeaderDoc fragment = (HeaderDoc) getSupportFragmentManager().findFragmentByTag(nameTegFragment);
         if (fragment != null) {
-            //Открываем фрагмент
             fragment.setSelectUpdate(link, id);
         }
     }
@@ -275,4 +273,16 @@ public class MainActivity extends AppCompatActivity implements
         this.mCurrentPay = mCurrentPay;
     }
 
+    @Override
+    public void onItemClick(Bundle bundle) {
+        WorkFragment.showDialogFragment(DetailsPays.class, bundle, this);
+    }
+
+    @Override
+    public void onDetailsPaysOKListener() {
+        PayDocSelectOrders fragment = (PayDocSelectOrders) getSupportFragmentManager().findFragmentByTag(PayDocSelectOrders.class.toString());
+        if (fragment != null) {
+            fragment.updateAdapter();
+        }
+    }
 }

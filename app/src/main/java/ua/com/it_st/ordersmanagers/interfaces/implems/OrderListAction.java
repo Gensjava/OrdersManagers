@@ -19,9 +19,7 @@ public class OrderListAction implements ua.com.it_st.ordersmanagers.interfaces.D
     /*заполняем корзину в ArrayList*/
     public static ArrayList<Orders.OrdersLines> getItemsGoods() {
         ArrayList<Orders.OrdersLines> lCartOrders = new ArrayList<Orders.OrdersLines>();
-
         Orders.OrdersLines[] cartOrders = OrderListAction.mCart.toArray(new Orders.OrdersLines[mCart.size()]);
-
         Collections.addAll(lCartOrders, cartOrders);
         return lCartOrders;
     }
@@ -49,7 +47,6 @@ public class OrderListAction implements ua.com.it_st.ordersmanagers.interfaces.D
         //если есть такой уже добавляем кол-во и делаем пересчет суммы
         for (Orders.OrdersLines iC : mCart) {
             if (iC.getProduct().getKod().equals(itemOrder.getProduct().getKod())) {
-
                 iC.setAmount(itemOrder.getAmount());
                 double newSum = new BigDecimal(iC.getAmount() * iC.getPrice()).setScale(2, RoundingMode.UP).doubleValue();
                 iC.setSum(newSum);
@@ -63,7 +60,6 @@ public class OrderListAction implements ua.com.it_st.ordersmanagers.interfaces.D
     @Override
     public boolean delete(TableLines item) {
         Orders.OrdersLines itemOrder = (Orders.OrdersLines) item;
-
         if (mCart.contains(itemOrder)) {
             return mCart.remove(itemOrder);
         }
@@ -83,7 +79,6 @@ public class OrderListAction implements ua.com.it_st.ordersmanagers.interfaces.D
     @Override
     public double sum() {
         double iNumber = 0;
-
         for (final Orders.OrdersLines aMCart : mCart) {
             iNumber = iNumber + aMCart.getSum();
         }

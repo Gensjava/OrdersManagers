@@ -13,33 +13,19 @@
         android:orientation="horizontal"
         tools:ignore="DisableBaselineAlignment">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/pay_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_weight="0.1"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/pay_checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/pay_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:visibility="visible" />
-
-        </LinearLayout>
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingTop="5dp">
 
@@ -50,7 +36,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:gravity="center"
                 android:text="Номер"
                 android:textSize="12dp"
                 tools:ignore="ObsoleteLayoutParam" />
@@ -61,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/main_list_item_image_status"
                 android:layout_toRightOf="@+id/main_list_item_image_status"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="@string/header_date"
                 android:textIsSelectable="true"
                 android:textSize="12sp"
@@ -74,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
             android:layout_weight="0.5"
             android:orientation="horizontal"
             tools:ignore="ObsoleteLayoutParam">
@@ -83,13 +69,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/main_list_item_text_client"
-                android:layout_marginTop="5dp"
                 android:layout_toLeftOf="@+id/main_list_item_image_menu"
                 android:layout_toStartOf="@+id/main_list_item_image_menu"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="center"
-                android:paddingTop="12dp"
+                android:gravity="right|center"
                 android:text="@string/header_sum"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -99,15 +83,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/main_list_item_text_client"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_toLeftOf="@+id/main_list_item_image_menu"
                 android:layout_toStartOf="@+id/main_list_item_image_menu"
                 android:layout_weight="1"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="left"
-                android:paddingTop="12dp"
+                android:paddingLeft="5dp"
                 android:text="Валюта"
                 android:textSize="12sp" />
 
@@ -116,14 +98,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/main_list_item_text_client"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
                 android:layout_toLeftOf="@+id/main_list_item_image_menu"
                 android:layout_toStartOf="@+id/main_list_item_image_menu"
                 android:layout_weight="1"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="center"
+                android:gravity="left|center"
                 android:text="Долг"
                 android:textColor="@color/red_indicator"
                 android:textSize="12sp"
@@ -134,25 +115,45 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="false"
             android:layout_weight="0.1"
-            android:gravity="right|center_horizontal"
-            android:orientation="horizontal"
-            tools:ignore="ObsoleteLayoutParam">
+            android:orientation="horizontal">
 
-            <EditText
+            <LinearLayout
                 android:id="@+id/pay_summa_pay"
-                android:layout_width="65dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:ems="10"
-                android:gravity="center"
-                android:inputType="number"
-                android:textColor="@color/new_green"
-                android:textSize="12sp"
-                tools:ignore="InefficientWeight,LabelFor" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pay_summa_pay_nat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="0.00"
+                    android:textColor="@color/textview_end_gradient"
+                    android:textSize="12sp"
+                    tools:ignore="InefficientWeight,LabelFor" />
+
+                <TextView
+                    android:id="@+id/pay_summa_pay_usd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="0.00"
+                    android:textColor="@color/new_green"
+                    android:textSize="12sp"
+                    tools:ignore="InefficientWeight,LabelFor" />
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

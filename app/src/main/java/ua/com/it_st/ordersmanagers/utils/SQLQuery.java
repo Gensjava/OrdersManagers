@@ -63,7 +63,7 @@ public class SQLQuery {
     public static String queryPays(final String sp) {
 
         String sq;
-        sq = "Select  Pays._id, Pays.type,  Pays.view_id, Pays.date, Pays.number, Pays.total," +
+        sq = "Select  Pays._id, Pays.type,  Pays.view_id, Pays.date, Pays.number, Pays.total_nat, Pays.total_usd," +
                 "Counteragents.name, Counteragents.address\n" +
                 "FROM Pays\n" +
                 "LEFT OUTER JOIN Counteragents ON Pays.client_id  = Counteragents.kod " +
@@ -80,7 +80,7 @@ public class SQLQuery {
     public static String queryPayDocSum(final String sp) {
 
         String sq;
-        sq = "Select Sum(Pays.total) as sum_orders " +
+        sq = "Select Sum(Pays.total_nat) as sum_nat,Sum(Pays.total_usd) as sum_usd  " +
                 "FROM Pays\n" +
                 "WHERE " + sp + "\n";
 

@@ -23,9 +23,6 @@ import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
-/**
- * Created by Gena on 2017-05-22.
- */
 
 public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnClickListener {
 
@@ -35,36 +32,26 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         /* макет фрагмента */
         View rootView = inflater.inflate(R.layout.pay_dogs_select_container, container, false);
-
         TextView totalSum = (TextView) rootView.findViewById(R.id.pay_dogs_sum);
-
         pays = ((MainActivity) getActivity()).getmCurrentPay();
-
         setCountLoad((byte) 1);
         selectQuery();
-
         super.onCreateView(inflater, container, savedInstanceState);
-
         /* создааем адаптер и настраиваем список */
         scAdapter = new SelectPayDocOrdersAdapter(getActivity(), R.layout.pay_list_item, null, new String[]{}, new int[]{}, 0, pays, totalSum);
          /* сам список */
         ListView lvData = (ListView) rootView.findViewById(R.id.pay_select_dogs);
         lvData.setAdapter(scAdapter);
-
          /*кнопка далее к следующему этапу*/
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.pay_dogs_container_image);
         imViewAdd.setOnClickListener(this);
-
         return rootView;
     }
 
     private void selectQuery() {
-
         switch (pays.getmTypeOperation()) {
-
             case NEW:
                 setQuery(SQLQuery.queryCounteragentsDebtDocs("CounteragentsDebtDocs.ClientId = ?"));
                 setParamsQuery(new String[]{pays.getCounteragent().getKod()});
@@ -76,11 +63,14 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
             case COPY:
                 setQuery(SQLQuery.queryPaysLinesEdit("CounteragentsDebtDocs.ClientId = ?", pays.getId()));
                 setParamsQuery(new String[]{pays.getCounteragent().getKod()});
-
                 /* сгениророваный номер документа заказа ИД для 1с */
                 pays.setId(String.valueOf(UUID.randomUUID()));
                 break;
         }
+    }
+
+    public void updateAdapter() {
+        scAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -116,10 +106,8 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
     @Override
     public boolean onRecord() {
         boolean failure;
-
         PayDocBasementAction payDocBasementAction = new PayDocBasementAction(pays);
         payDocBasementAction.sum();
-
         PayDocSQLAction payDocSQLAction = new PayDocSQLAction(getActivity());
 
         if (pays.getmTypeOperation() == DocTypeOperation.NEW || pays.getmTypeOperation() == DocTypeOperation.COPY) {
