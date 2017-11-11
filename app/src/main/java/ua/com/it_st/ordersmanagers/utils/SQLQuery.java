@@ -2,13 +2,11 @@ package ua.com.it_st.ordersmanagers.utils;
 
 /*клас предназначен для запросов к БД*/
 public class SQLQuery {
-
     /*
     запрос товаров
     sp - параметры условий запроса
     */
     public static String queryGoods(final String sp) {
-
         String sq;
         sq = "Select Products.name, Products.kod, Products.id_category, Products.is_category,\n" +
                 "Prices.price,(GoodsByStores.Amount - IFNULL(OrdersLinesD.amount,0)) as amount\n" +
@@ -30,7 +28,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryOrders(final String sp) {
-
         String sq;
         sq = "Select Orders._id, Orders.type,  Orders.view_id, Orders.date, Orders.number, Orders.total, " +
                 "Counteragents.name, Counteragents.address\n" +
@@ -47,7 +44,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryOrdersSum(final String sp) {
-
         String sq;
         sq = "Select Sum(Orders.total) as sum_orders " +
                 "FROM Orders\n" +
@@ -61,7 +57,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryPays(final String sp) {
-
         String sq;
         sq = "Select  Pays._id, Pays.type,  Pays.view_id, Pays.date, Pays.number, Pays.total_nat, Pays.total_usd," +
                 "Counteragents.name, Counteragents.address\n" +
@@ -78,7 +73,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryPayDocSum(final String sp) {
-
         String sq;
         sq = "Select Sum(Pays.total_nat) as sum_nat,Sum(Pays.total_usd) as sum_usd  " +
                 "FROM Pays\n" +
@@ -93,7 +87,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryOrdersHeaderFilesCsv(final String sp) {
-
         String sq;
         sq = "Select Orders.view_id, Orders.type,  Orders.date, Orders.number, Orders.completed, Orders.agent_id," +
                 "Orders.company_id, Orders.store_id,  Orders.client_id, Orders.price_id, Orders.total, Orders.note\n" +
@@ -108,10 +101,9 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryPaysHeaderFilesCsv(final String sp) {
-
         String sq;
         sq = "Select Pays.view_id, Pays.type,  Pays.date, Pays.number, Pays.completed, Pays.agent_id," +
-                "Pays.company_id, Pays.client_id, Pays.total, Pays.note\n" +
+                "Pays.company_id, Pays.client_id, Pays.total_usd, Pays.total_nat,Pays.note\n" +
                 "FROM Pays\n" +
                 "WHERE " + sp + "\n";
 
@@ -124,7 +116,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryOrdersHeader(final String sp) {
-
         String sq;
         sq = "Select Orders._id, Orders.note, Orders.agent_id," +
                 "Companies.name as name_comp, Companies.kod as kod_comp,\n" +
@@ -146,7 +137,6 @@ public class SQLQuery {
         sp параметры условий запроса
         */
     public static String queryPaysHeader(final String sp) {
-
         String sq;
         sq = "Select Pays._id, Pays.note, Pays.agent_id,\n" +
                 "Companies.name as name_comp, Companies.kod as kod_comp,\n" +
@@ -158,11 +148,11 @@ public class SQLQuery {
 
         return sq;
     }
+
     /* запрос табличной части документа
      sp параметры условий запроса
      */
     public static String queryOrdersLinesEdit(final String sp) {
-
         String sq;
         sq = "Select OrdersLines.goods_id, OrdersLines.rate, OrdersLines.price, OrdersLines.amount ,\n" +
                 "GoodsByStores.amount as amount_stores,\n" +
@@ -180,9 +170,8 @@ public class SQLQuery {
      */
 
     public static String queryPaysLinesEdit(final String sp, final String sp2) {
-
         String sq;
-        sq = "select CounteragentsDebtDocs._id, CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName,CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, PaysLinesD.amount, PaysLinesD.line_id, Currencies.name, Currencies.kod\n" +
+        sq = "select CounteragentsDebtDocs._id, CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName,CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, PaysLinesD.amount_nat, PaysLinesD.amount_usd, PaysLinesD.line_id, Currencies.name, Currencies.kod\n" +
                 " From CounteragentsDebtDocs\n" +
                 "LEFT OUTER JOIN Currencies ON CounteragentsDebtDocs.currency  = Currencies.kod\n" +
                 "LEFT OUTER JOIN (\n" +
@@ -202,7 +191,6 @@ public class SQLQuery {
      sp параметры условий запроса
      */
     public static String queryOrdersLinesFilesCsv(final String sp) {
-
         String sq;
         sq = "Select OrdersLines.doc_id, OrdersLines.goods_id, OrdersLines.rate,  OrdersLines.amount ,OrdersLines.price\n" +
                 "FROM Orders\n" +
@@ -215,9 +203,8 @@ public class SQLQuery {
      sp параметры условий запроса
      */
     public static String queryPaysLinesFilesCsv(final String sp) {
-
         String sq;
-        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.Amount, PaysLines.doc_date, PaysLines.doc_number, PaysLines.line_id \n" +
+        sq = "Select PaysLines.doc_id, PaysLines.currency_id, PaysLines.Amount_nat, PaysLines.Amount_usd,PaysLines.doc_date, PaysLines.doc_number, PaysLines.line_id \n" +
                 "FROM Pays\n" +
                 "LEFT OUTER JOIN PaysLines ON Pays.view_id  = PaysLines.doc_id\n" +
                 "WHERE " + sp + "\n";
@@ -229,7 +216,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryOrdersLinesAmount() {
-
         String sq;
         sq = "SELECT (a.count + b.count) as sum\n" +
                 "FROM\n" +
@@ -247,7 +233,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryCounteragentsDebt(final String sp) {
-
         String sq;
         sq = "Select Counteragents._id, Counteragents.kod,Counteragents.name, Counteragents.address, CounteragentsDebt.debt\n" +
                 "From Counteragents\n" +
@@ -261,7 +246,6 @@ public class SQLQuery {
     sp параметры условий запроса
     */
     public static String queryCounteragentsDebtDocs(final String sp) {
-
         String sq;
         sq = "Select CounteragentsDebtDocs.DocDate, CounteragentsDebtDocs.DocName, CounteragentsDebtDocs.summa, CounteragentsDebtDocs.Debt, Currencies.kod, Currencies.name, CounteragentsDebtDocs._id \n" +
                 "From CounteragentsDebtDocs\n" +
@@ -274,7 +258,6 @@ public class SQLQuery {
    sp параметры условий запроса
    */
     public static String queryDocsAmount(String sp, String tableName) {
-
         String sq;
         sq = "select  COUNT(*) from " + tableName + " " +
                 "WHERE " + sp + ";";

@@ -60,7 +60,6 @@ public abstract class LoaderDocFragment extends CursorLoaderFragment implements 
         ImageView imViewAdd = (ImageView) rootView.findViewById(R.id.main_heander_image_plus);
             /* слушатель кнопки далее */
         imViewAdd.setOnClickListener(this);
-
            /* создааем адаптер и настраиваем список */
         scAdapter = new LoaderDocCursorAdapter(getActivity(), R.layout.main_list_item, null, new String[]{}, new int[]{}, 0, this);
             /* сам список */

@@ -38,6 +38,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
     private OnItemClickListener onItemClickListener;
     private double cPay_nat;
     private double cPay_usd;
+    private boolean modeInsertData;
 
     public SelectPayDocOrdersAdapter(final Context context, final int layout, final Cursor c, final String[] from, final int[] to, final int flags, Pays pays, TextView totalSum) {
         super(context, layout, c, from, to, flags);
@@ -46,6 +47,7 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         this.payListDocAction = new PayListDocAction(pays.getPaysLines());
         this.pays = pays;
         this.totalSum = totalSum;
+        this.modeInsertData = true;
         this.onItemClickListener = (SelectPayDocOrdersAdapter.OnItemClickListener) context;
         if (pays.getPaysLines().size() > 0) {
             pays.getPaysLines().clear();
@@ -62,7 +64,6 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder viewHolder;
-            /*позиция*/
         Cursor itemCursor = (Cursor) getItem(position);
         String sPosition = String.valueOf(position + 1);
             /*получаем колонки*/
@@ -96,10 +97,9 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
         return convertView;
     }
 
-
     private void getPay(Cursor itemCursor, ViewHolder viewHolder, final int position) {
-        if (pays.getmTypeOperation() == DocTypeOperation.EDIT
-                || pays.getmTypeOperation() == DocTypeOperation.COPY) {
+        if (pays.getmTypeOperation() == DocTypeOperation.EDIT && modeInsertData
+                || pays.getmTypeOperation() == DocTypeOperation.COPY && modeInsertData) {
             cPay_nat = itemCursor.getDouble(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT_NAT));
             cPay_usd = itemCursor.getDouble(itemCursor.getColumnIndex(TablePaysLines.COLUMN_AMOUNT_USD));
         } else {
@@ -176,6 +176,10 @@ public class SelectPayDocOrdersAdapter extends SimpleCursorAdapter {
                 onItemClickListener.onItemClick(bundle);
             }
         });
+    }
+
+    public void setModeInsertData(boolean modeInsertData) {
+        this.modeInsertData = modeInsertData;
     }
 
     public interface OnItemClickListener {

@@ -14,7 +14,7 @@ import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 public class TablePaysLines {
     public static final String TABLE_NAME = "PaysLines";
     public static final String FILE_NAME = "doc_pay_lines.csv";
-    public static final String sHeader = "DocId,CurrencyId,Amount,DocDate,DocNumber,line_id,";
+    public static final String sHeader = "DocId,CurrencyId,Amount_usd,Amount_nut,DocDate,DocNumber,line_id,";
     public static final String HEADER_NAME = "табличной части оплаты";
 
     public static final String COLUMN_DOC_ID = "doc_id";

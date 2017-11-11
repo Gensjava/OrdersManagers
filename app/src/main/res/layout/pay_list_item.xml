@@ -36,6 +36,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:gravity="left|center"
                 android:text="Номер"
                 android:textSize="12dp"
                 tools:ignore="ObsoleteLayoutParam" />
@@ -46,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/main_list_item_image_status"
                 android:layout_toRightOf="@+id/main_list_item_image_status"
-                android:gravity="left"
+                android:gravity="left|center_vertical|center"
                 android:text="@string/header_date"
                 android:textIsSelectable="true"
                 android:textSize="12sp"
@@ -64,34 +65,44 @@
             android:orientation="horizontal"
             tools:ignore="ObsoleteLayoutParam">
 
-            <TextView
-                android:id="@+id/pay_summa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/main_list_item_text_client"
-                android:layout_toLeftOf="@+id/main_list_item_image_menu"
-                android:layout_toStartOf="@+id/main_list_item_image_menu"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="right|center"
-                android:text="@string/header_sum"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/pay_currency"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/main_list_item_text_client"
-                android:layout_toLeftOf="@+id/main_list_item_image_menu"
-                android:layout_toStartOf="@+id/main_list_item_image_menu"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="left"
-                android:paddingLeft="5dp"
-                android:text="Валюта"
-                android:textSize="12sp" />
+                android:gravity="right|center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pay_summa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/main_list_item_text_client"
+                    android:layout_toLeftOf="@+id/main_list_item_image_menu"
+                    android:layout_toStartOf="@+id/main_list_item_image_menu"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="right|center"
+                    android:text="@string/header_sum"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pay_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/main_list_item_text_client"
+                    android:layout_toLeftOf="@+id/main_list_item_image_menu"
+                    android:layout_toStartOf="@+id/main_list_item_image_menu"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:text="Валюта"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/pay_summa_debet"
@@ -104,7 +115,7 @@
                 android:layout_weight="1"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:gravity="left|center"
+                android:gravity="right|center"
                 android:text="Долг"
                 android:textColor="@color/red_indicator"
                 android:textSize="12sp"
@@ -120,7 +131,7 @@
 
             <LinearLayout
                 android:id="@+id/pay_summa_pay"
-                android:layout_width="match_parent"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">

@@ -27,7 +27,6 @@ public class PayDocSQLAction implements SQLAction {
 
     @Override
     public boolean add(Object object) {
-
         Pays pays = (Pays) object;
         /* начинаем транзакцию */
         mDB.beginTransaction();
@@ -94,15 +93,16 @@ public class PayDocSQLAction implements SQLAction {
 
         /*обновляем позиции заказа (создаем новые)*/
         for (final Pays.PaysLines pay : pays.getPaysLines()) {
+            if (pay.getSum_nat() != 0 || pay.getSum_usd() != 0) {
+                long inTableLinesNew = mDB.insert(TablePaysLines.TABLE_NAME,
+                        null,
+                        TablePaysLines.getContentValues(pay));
 
-            long inTableLinesNew = mDB.insert(TablePaysLines.TABLE_NAME,
-                    null,
-                    TablePaysLines.getContentValues(pay));
-
-            if (inTableLines == -1 || inTableLinesNew == -1) {
-                InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);
-                mDB.endTransaction();
-                return false;
+                if (inTableLines == -1 || inTableLinesNew == -1) {
+                    InfoUtil.Tost(mContext.getString(R.string.error_position) + pays.getId() + ")", mContext);
+                    mDB.endTransaction();
+                    return false;
+                }
             }
         }
         /* заканчиваем транзакцию */

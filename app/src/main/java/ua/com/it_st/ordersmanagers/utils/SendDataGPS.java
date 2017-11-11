@@ -6,12 +6,10 @@ import com.loopj.android.http.RequestParams;
 
 //отправляем данные на сервер
 public class SendDataGPS {
-
     private String mTime, mLat, mLon, mStatus, mBat;
     private Context mContext;
 
     public SendDataGPS(String time, String lat, String lon, String status, Context context, String pBat) {
-
         mTime = time;
         mLat = lat;
         mLon = lon;
@@ -22,10 +20,8 @@ public class SendDataGPS {
 
     //отправляем данные на сервер
     public void sendDataOnServer() {
-
         /*подключаемся к серверу*/
         ConnectServer connectData = new ConnectServer(mContext, (byte) 1);
-
         /*подключились к базе или нет*/
         boolean lConnect = connectData.isMlConnect();
         //передаем данные

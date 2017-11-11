@@ -21,6 +21,7 @@ import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocBasementAction;
 import ua.com.it_st.ordersmanagers.interfaces.implems.PayDocSQLAction;
 import ua.com.it_st.ordersmanagers.models.Pays;
 import ua.com.it_st.ordersmanagers.utils.GlobalCursorLoader;
+import ua.com.it_st.ordersmanagers.utils.InfoUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
 
 
@@ -71,6 +72,7 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
 
     public void updateAdapter() {
         scAdapter.notifyDataSetChanged();
+        scAdapter.setModeInsertData(false);
     }
 
     @Override
@@ -108,6 +110,12 @@ public class PayDocSelectOrders extends CursorLoaderFragment implements View.OnC
         boolean failure;
         PayDocBasementAction payDocBasementAction = new PayDocBasementAction(pays);
         payDocBasementAction.sum();
+
+        if (pays.getTotal_nut() == 0 || pays.getTotal_usd() == 0) {
+            InfoUtil.Tost("Оплата не может быть = 0!", getActivity());
+            return false;
+        }
+
         PayDocSQLAction payDocSQLAction = new PayDocSQLAction(getActivity());
 
         if (pays.getmTypeOperation() == DocTypeOperation.NEW || pays.getmTypeOperation() == DocTypeOperation.COPY) {

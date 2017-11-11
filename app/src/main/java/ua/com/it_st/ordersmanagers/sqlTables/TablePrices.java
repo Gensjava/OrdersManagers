@@ -40,7 +40,6 @@ public class TablePrices {
     public static void upgradeTable(final SQLiteDatabase db,
                                     final int oldVersion, final int newVersion) {
         Log.i(TAG, "upgradeTable, old: " + oldVersion + ", new: " + newVersion);
-
     }
 
     public static ContentValues getContentValues(String sData[]) {

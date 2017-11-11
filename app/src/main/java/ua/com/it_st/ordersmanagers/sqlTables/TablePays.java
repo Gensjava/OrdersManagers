@@ -10,8 +10,10 @@ import java.util.List;
 
 import ua.com.it_st.ordersmanagers.enums.DocType;
 import ua.com.it_st.ordersmanagers.models.Pays;
+import ua.com.it_st.ordersmanagers.utils.AppDeliveriMan;
 import ua.com.it_st.ordersmanagers.utils.ConstantsUtil;
 import ua.com.it_st.ordersmanagers.utils.SQLQuery;
+import ua.com.it_st.ordersmanagers.utils.WorkSharedPreferences;
 
 public class TablePays {
     public static final String TABLE_NAME = "Pays";
@@ -19,7 +21,7 @@ public class TablePays {
     public static final String HEADER_NAME = "шапка оплат";
     public static final String COLUMN_TOTAL_NAT = "total_nat";
     public static final String COLUMN_TOTAL_USD = "total_usd";
-    private static final String sHeader = "Id, DocType, DocDate, DocNumber, Completed, AgentId, FirmId, ClientId, Total, Note,";
+    private static final String sHeader = "Id, DocType, DocDate, DocNumber, Completed, AgentId, FirmId, ClientId, Total_nat,Total_usd, Note,";
     private static final String COLUMN_VIEW_ID = "view_id";
     private static final String COLUMN_TYPE = "type";
     private static final String COLUMN_DATE = "date";
@@ -64,13 +66,14 @@ public class TablePays {
     }
 
     public static ContentValues getContentValues(Pays sData) {
+        WorkSharedPreferences lWorkSharedPreferences = new WorkSharedPreferences(AppDeliveriMan.getApp());
         final ContentValues data = new ContentValues();
         data.put(COLUMN_VIEW_ID, sData.getId());
         data.put(COLUMN_TYPE, DocType.HELD.toString());
         data.put(COLUMN_DATE, sData.getDocDate());
         data.put(COLUMN_NUMBER, sData.getDocNumber());
         data.put(COLUMN_COMPLETED, "");
-        data.put(COLUMN_AGENT_ID, "");
+        data.put(COLUMN_AGENT_ID, lWorkSharedPreferences.getIDUser());
         data.put(COLUMN_COMPANY_ID, sData.getCompany().getKod());
         data.put(COLUMN_CLIENT_ID, sData.getCounteragent().getKod());
         data.put(COLUMN_TOTAL_NAT, sData.getTotal_nut());
